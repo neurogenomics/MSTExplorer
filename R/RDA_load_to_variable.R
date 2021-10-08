@@ -1,9 +1,13 @@
 #' Load RDA file and assign to specific variable
+#' Can be useful, but sort of pointless now as we have decided to only use .rds
 #'
-#' Can be useful, but sort of pointles now as we have decided to only use \code{.rds}
+#' @param file file path to rda <string>
+#' @examples
 #'
-#' @param file the path to a .rda file <string>
-#' @example \dontrun{RDA_assign_load("data/results.rda")}
+#' \dontrun{
+#' files = "results.rds"
+#' RDA_assign_load(file)}
+#'
 #' @returns the data contained in the .rda file
 #' @export
 RDA_assign_load <- function(file) {

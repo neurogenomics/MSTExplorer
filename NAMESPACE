@@ -2,5 +2,11 @@
 
 export(RDA_assign_load)
 export(ewce.plot)
+export(ewce_para)
 export(gen_results)
+export(get_unfinished_list_names)
+export(is_not_analysed)
+export(merge_results)
+import(EWCE)
 import(ggplot2)
+import(parallel)

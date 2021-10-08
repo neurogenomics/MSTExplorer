@@ -2,16 +2,25 @@
 % Please edit documentation in R/RDA_load_to_variable.R
 \name{RDA_assign_load}
 \alias{RDA_assign_load}
-\title{Load RDA file and assign to specific variable}
+\title{Load RDA file and assign to specific variable
+Can be useful, but sort of pointless now as we have decided to only use .rds}
 \usage{
 RDA_assign_load(file)
 }
 \arguments{
-\item{file}{the path to a .rda file <string>}
+\item{file}{file path to rda <string>}
 }
 \value{
 the data contained in the .rda file
 }
 \description{
-Can be useful, but sort of pointles now as we have decided to only use \code{.rds}
+Load RDA file and assign to specific variable
+Can be useful, but sort of pointless now as we have decided to only use .rds
+}
+\examples{
+
+\dontrun{
+files = "results.rds"
+RDA_assign_load(file)}
+
 }
