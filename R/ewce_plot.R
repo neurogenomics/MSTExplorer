@@ -8,7 +8,7 @@
 #' \dontrun{ewce.plot(results_dataframe,"bonferroni",CTD)}
 #' @returns A bar chart with dendrogram of EWCE results in each cell type.
 #' @export
-ewce.plot <-function (total_res, mtc_method = "bonferroni", ctd = NULL)
+ewce_plot <-function (total_res, mtc_method = "bonferroni", ctd = NULL)
 {
   if (!mtc_method %in% c("holm", "hochberg", "hommel",
                          "bonferroni", "BH", "BY", "fdr",
