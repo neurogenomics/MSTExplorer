@@ -9,7 +9,7 @@ is_not_analysed(list_name, results_dir)
 \arguments{
 \item{list_name}{The name of a gene list e.g. "Phenotypic abnormality"}
 
-\item{results_dir}{The path to results directory (with "/" at the end)}
+\item{results_dir}{The path to results directory}
 }
 \value{
 True or false <bool>

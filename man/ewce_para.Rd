@@ -6,7 +6,9 @@
 \usage{
 ewce_para(
   list_names,
-  gene_lists,
+  gene_data,
+  list_name_column = "Phenotype",
+  gene_column = "Gene",
   results_directory,
   ctd_file,
   background_genes,
@@ -20,7 +22,11 @@ ewce_para(
 \arguments{
 \item{list_names}{character vector of gene list names}
 
-\item{gene_lists}{<list> of character vectors of gene lists, indexed by list_name}
+\item{gene_data}{data frame of gene list names and genes (see ?get_gene_list)}
+
+\item{list_name_column}{The name of the gene_data column that has the gene list names}
+
+\item{gene_column}{The name of the gene_data column that contains the genes}
 
 \item{results_directory}{The desired output filepath for results to be saved}
 

@@ -4,12 +4,12 @@
 \alias{merge_results}
 \title{merge results}
 \usage{
-merge_results(results_dir = "results", description_col = "phenotype")
+merge_results(results_dir = "results", list_name_column = "phenotype")
 }
 \arguments{
 \item{results_dir}{The filepath to results .rds files}
 
-\item{description_col}{The column name for gene list_names (e.g. phenotypes)}
+\item{list_name_column}{The column name for gene list_names (e.g. phenotypes)}
 }
 \value{
 dataframe
