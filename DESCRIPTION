@@ -17,3 +17,7 @@ Imports:
     EWCE,
     parallel,
     stringr
+Suggests: 
+    rmarkdown,
+    knitr
+VignetteBuilder: knitr
