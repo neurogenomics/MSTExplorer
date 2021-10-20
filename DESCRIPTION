@@ -16,7 +16,8 @@ Imports:
     data.table,
     EWCE,
     parallel,
-    stringr
+    stringr,
+    devtools
 Suggests: 
     rmarkdown,
     knitr

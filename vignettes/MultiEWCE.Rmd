@@ -177,7 +177,7 @@ print(plot1)
 If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the `merge_results` function manually. The `results_dir` argument is the path to your results directory and the `list_name_column` argument is the name of the column containing gene list names. In this case we used "Phenotype" as this column name when we generated the results.
 
 ```{r merge}
-all_results_2 <- MultiEWCE::merge_results(results_dir = "results",
+all_results_2 <- merge_results(results_dir = "results",
                                           list_name_column = "Phenotype")
 ```
 
@@ -197,7 +197,7 @@ cat(paste("5 genes associated with poor eye contact:",paste(eye_contact_genes[1:
 This function is used to find which gene lists you have not yet analysed 
 
 ```{r get_unfinished} 
-unfinished <- MultiEWCE::get_unfinished_list_names(list_names = unique(gene_data$Phenotype)[1:15],
+unfinished <- get_unfinished_list_names(list_names = unique(gene_data$Phenotype)[1:15],
                                         results_dir = "results")
 cat(paste0("Gene lists not yet analysed:\n",paste(unfinished, collapse = ",\n")))
 ```
