@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Expression Weighted Celltype Enrichment on Multiple Gene Lists With MultiEWCE</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Expression Weighted Celltype Enrichment on Multiple Gene Lists With MultiEWCE</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MultiEWCE)</span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The MultiEWCE package is an extension of the <a href="https://nathanskene.github.io/EWCE/articles/EWCE.html">EWCE</a> package. It is designed to run expression weighted celltype enrichment (EWCE) on multiple gene lists in parallel. The results are then stored both as separate <code>.rds</code> files, one for each individual EWCE analysis, as well as a in a single dataframe containing all the results.</p>
+<p>This package is useful in cases where you have a large number of related, but separate, gene lists. In this vignette we will use an example from the Human Phenotype Ontology (HPO). The HPO contains over 9000 clinically relevant phenotypes annotated with lists of genes that have been found to be associated with the particular phenotype.</p>
+</div>
+<div id="installation" class="section level1">
+<h1>Installation</h1>
+<p>This tutorial will require the MultiEWCE package and a few additional packages related to the particular dataset we will be using. Install and load these with the following R code:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;devtools&quot;</span>)) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;devtools&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;HPOExplorer&quot;</span>)) {</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ovrhuman/HPOExplorer&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">&quot;MultiEWCE&quot;</span>)) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;ovrhuman/MultiEWCE&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+</div>
+<div id="loading-phenotype-associated-gene-lists-from-the-hpo" class="section level1">
+<h1>Loading Phenotype Associated Gene Lists from the HPO</h1>
+<p>The MultiEWCE package requires the gene data to be in a particular format. It must be a data.frame that includes one column of gene list names, and another column of genes. For example:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Phenotype</th>
+<th>Gene</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>“Abnormal heart”</td>
+<td>gene X</td>
+</tr>
+<tr class="even">
+<td>“Abnormal heart”</td>
+<td>gene Y</td>
+</tr>
+<tr class="odd">
+<td>“Poor vision”</td>
+<td>gene Z</td>
+</tr>
+<tr class="even">
+<td>“Poor vision”</td>
+<td>gene Y</td>
+</tr>
+<tr class="odd">
+<td>“Poor vision”</td>
+<td>gene W</td>
+</tr>
+<tr class="even">
+<td>“Short stature”</td>
+<td>gene V</td>
+</tr>
+</tbody>
+</table>
+<p><em>etc…</em></p>
+<p>Now we will get a dataset like this from the HPO.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Download phenotype associated gene data</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>HPOExplorer<span class="sc">::</span><span class="fu">download_phenotype_to_genes</span>(<span class="st">&quot;phenotype_to_genes.txt&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;file \&quot;phenotype_to_genes.txt\&quot; already exists&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Load data into the environment</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>gene_data <span class="ot">&lt;-</span> HPOExplorer<span class="sc">::</span><span class="fu">load_phenotype_to_genes</span>(<span class="st">&quot;phenotype_to_genes.txt&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(gene_data))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           ID                  Phenotype EntrezID     Gene Additional    Source</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1 HP:0000002 Abnormality of body height     5073     PARN            orphadata</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 HP:0000002 Abnormality of body height    10084    PQBP1            orphadata</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 HP:0000002 Abnormality of body height    50485 SMARCAL1          -  mim2gene</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 HP:0000002 Abnormality of body height     2317     FLNB            orphadata</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 HP:0000002 Abnormality of body height    79648    MCPH1          -  mim2gene</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 HP:0000002 Abnormality of body height      523  ATP6V1A          -  mim2gene</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        LinkID</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 1  ORPHA:1775</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 2 ORPHA:93950</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 3 OMIM:242900</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4   ORPHA:503</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 OMIM:251200</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 OMIM:617403</span></span></code></pre></div>
+<p>In this example our <strong>gene list names</strong> column is called <code>Phenotype</code> and our column of genes is called <code>Gene</code>. However, different column names can be specified to the MultiEWCE package.</p>
+</div>
+<div id="setting-up-input-arguments-for-the-gen_results-function" class="section level1">
+<h1>Setting up input arguments for the gen_results function</h1>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>ctd <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;CTD_Descartes_withplot.rds&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>list_names <span class="ot">&lt;-</span> <span class="fu">unique</span>(gene_data<span class="sc">$</span>Phenotype)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>background_genes <span class="ot">&lt;-</span> <span class="fu">unique</span>(gene_data<span class="sc">$</span>Gene)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>list_name_column <span class="ot">&lt;-</span> <span class="st">&quot;Phenotype&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>gene_column <span class="ot">&lt;-</span> <span class="st">&quot;Gene&quot;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>results_dir <span class="ot">&lt;-</span> <span class="st">&quot;results&quot;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>overwrite_past_analysis <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>MergeResults <span class="ot">&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>reps <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>annotLevel <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>genelistSpecies <span class="ot">&lt;-</span> <span class="st">&quot;human&quot;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>sctSpecies <span class="ot">&lt;-</span> <span class="st">&quot;human&quot;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>cores <span class="ot">&lt;-</span> <span class="dv">1</span></span></code></pre></div>
+<div id="ctd" class="section level2">
+<h2>ctd</h2>
+<p>The <code>ctd</code> (cell type data) file contains the single cell RNA sequence data that is required for EWCE. for further information about generating a <code>ctd</code> please see the <a href="https://nathanskene.github.io/EWCE/articles/EWCE.html">EWCE</a> documentation. In this example we will use a CTD of human gene expression data, generated from the Descartes Human Cell Atlas. Replace this with your own CTD file.</p>
+</div>
+<div id="gene_data" class="section level2">
+<h2>gene_data</h2>
+<p>Gene data is the dataframe containin gene list names and genes, in this case we have already loaded it and assigned it to the variable <code>gene_data</code>.</p>
+</div>
+<div id="list_names" class="section level2">
+<h2>list_names</h2>
+<p>This is a character vector containing all the gene list names. This can be obtained from your <code>gene_data</code> as follows. To save time in this example analysis we will only use the first 10 gene lists (<code>[1:10]</code>)</p>
+</div>
+<div id="background_genes" class="section level2">
+<h2>background_genes</h2>
+<p>This is a character vector of genes to be used as the background genes. See EWCE package docs for more details on background genes.</p>
+</div>
+<div id="column-names" class="section level2">
+<h2>Column names</h2>
+<p><code>list_name_column</code> is the name of the column in gene_data that contains the gene list names and <code>gene_column</code> contains the genes.</p>
+</div>
+<div id="processing-results-arguments" class="section level2">
+<h2>Processing results arguments</h2>
+<p>The <code>results_dir</code> argument is the path to the directory where the individual EWCE results will be saved.</p>
+<p>The <code>overwrite_past_analysis</code> argument can be set to <code>TRUE</code> or <code>FALSE</code> and states if you want to redo and overwrite analysis of gene lists that have already been saved to the <code>results_dir</code>. Setting this to <code>FALSE</code> is useful in cases where you stopped an analysis midway and would like to carry on from where you left off.</p>
+<p><code>MergeResults</code> is another <code>TRUE</code>/<code>FALSE</code> argument. If <code>TRUE</code>, <code>gen_results</code> will also return a single dataframe containing all of the results from all gene lists. A <code>.rds</code> file of these merged results will also be saved to your current working directory in a file called “<code>results_&lt;datetime_of_analysis&gt;.rds</code>” ## Number of cores The <code>cores</code> argument is the number of cores you would like to run in parallel. This is dependent on what is available to you on your computer. In this case we will just run it on one core, no parallelism.</p>
+</div>
+<div id="ewcebootstrap_enrichment_test-arguments" class="section level2">
+<h2>EWCE::bootstrap_enrichment_test arguments</h2>
+<p>The <code>gen_results</code> function calls the EWCE <code>bootstrap_enrichment_test</code> function. Here we set the input parameters related to this.</p>
+<p><code>reps</code> is the number of bootstrap reps to run, for this tutorial we will only do 10 to save time, but typically you would want to do closer to 100,000.</p>
+<p><code>annotLevel</code> is the level of cell type specificity to use from the <code>ctd</code> file. <code>genelistSpecies</code> can be “human” or “mouse” and is the species of the genes in the gene lists.</p>
+<p><code>sctSpecies</code> is the species of the CTD data, also can be “human” or “mouse”.</p>
+</div>
+</div>
+<div id="run-analysis" class="section level1">
+<h1>Run analysis</h1>
+<p>Now we have set up all our desired inputs, we can run the analysis.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>all_results <span class="ot">&lt;-</span> <span class="fu">gen_results</span>(ctd,</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                           gene_data,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                           list_names,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                           background_genes,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                           list_name_column,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                           gene_column,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                           results_dir,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>                           overwrite_past_analysis,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>                           reps,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>                           annotLevel,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>                           genelistSpecies,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>                           sctSpecies,</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>                           cores,</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>                           MergeResults) </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Abnormality of body height&quot;</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Multicystic kidney dysplasia&quot;</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Autosomal dominant inheritance&quot;</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Autosomal recessive inheritance&quot;</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Abnormal morphology of female internal genitalia&quot;</span></span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Functional abnormality of the bladder&quot;</span></span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Recurrent urinary tract infections&quot;</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Neurogenic bladder&quot;</span></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Urinary urgency&quot;</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Hypoplasia of the uterus&quot;</span></span></code></pre></div>
+</div>
+<div id="adjust-for-multiple-comparisons" class="section level1">
+<h1>Adjust for multiple comparisons</h1>
+<p>Seeing as we have ran EWCE on multiple gene lists, we need to make adjustments for multiple comparisons. We can use Benjamini-Hochberg procedure to false discovery rate adjusted p values (which we will call q values here).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>all_results<span class="sc">$</span>q <span class="ot">&lt;-</span> stats<span class="sc">::</span><span class="fu">p.adjust</span>(all_results<span class="sc">$</span>p, <span class="at">method =</span> <span class="st">&quot;BH&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(all_results))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                          CellType annotLevel   p fold_change</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; AFP_ALB_positive_cells     AFP_ALB_positive_cells          1 1.0   0.4653825</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Acinar_cells                         Acinar_cells          1 1.0   0.5997081</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Adrenocortical_cells         Adrenocortical_cells          1 0.8   0.9206343</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Amacrine_cells                     Amacrine_cells          1 1.0   0.6909674</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Antigen_presenting_cells Antigen_presenting_cells          1 1.0   0.5873668</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Astrocytes                             Astrocytes          1 0.7   0.9510525</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                          sd_from_mean</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; AFP_ALB_positive_cells     -9.2589861</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Acinar_cells               -2.6419540</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Adrenocortical_cells       -0.7595912</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Amacrine_cells             -8.7323295</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Antigen_presenting_cells   -6.1964998</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Astrocytes                 -0.6105448</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                                                                 Phenotype q</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; AFP_ALB_positive_cells   Abnormal morphology of female internal genitalia 1</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Acinar_cells             Abnormal morphology of female internal genitalia 1</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Adrenocortical_cells     Abnormal morphology of female internal genitalia 1</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Amacrine_cells           Abnormal morphology of female internal genitalia 1</span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Antigen_presenting_cells Abnormal morphology of female internal genitalia 1</span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Astrocytes               Abnormal morphology of female internal genitalia 1</span></span></code></pre></div>
+</div>
+<div id="visualise-the-results" class="section level1">
+<h1>Visualise the results</h1>
+<p>Just as an example, we will create a plot showing the number of significant enrichments per phenotype in the all_results data.frame. We will use q &lt;= 0.05 as the significance threshold.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>n_signif <span class="ot">&lt;-</span> <span class="fu">data.frame</span>()</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (p <span class="cf">in</span> <span class="fu">unique</span>(all_results<span class="sc">$</span>Phenotype)) {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  n_signif <span class="ot">&lt;-</span> <span class="fu">rbind</span>(n_signif, </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">data.frame</span>(<span class="st">&quot;Phenotype&quot;</span> <span class="ot">=</span> p</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                               ,<span class="st">&quot;signif_enrichments&quot;</span><span class="ot">=</span><span class="fu">length</span>(</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>                                 all_results<span class="sc">$</span>q[all_results<span class="sc">$</span>Phenotype <span class="sc">==</span> p <span class="sc">&amp;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                                                 all_results<span class="sc">$</span>q <span class="sc">&lt;=</span> <span class="fl">0.05</span>])))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span>  <span class="fu">ggplot</span>(n_signif, <span class="fu">aes</span>(Phenotype,signif_enrichments)) <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">xlab</span>(<span class="st">&quot;Phenotype&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylab</span>(<span class="st">&quot;Enrichments (n)&quot;</span>) <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">90</span>,<span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(plot1)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="other-functions-in-multiewce" class="section level1">
+<h1>Other functions in MultiEWCE</h1>
+<div id="merge_results" class="section level2">
+<h2>merge_results</h2>
+<p>If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the <code>merge_results</code> function manually. The <code>results_dir</code> argument is the path to your results directory and the <code>list_name_column</code> argument is the name of the column containing gene list names. In this case we used “Phenotype” as this column name when we generated the results.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>all_results_2 <span class="ot">&lt;-</span> <span class="fu">merge_results</span>(<span class="at">results_dir =</span> <span class="st">&quot;results&quot;</span>,</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">list_name_column =</span> <span class="st">&quot;Phenotype&quot;</span>)</span></code></pre></div>
+</div>
+<div id="get_gene_list" class="section level2">
+<h2>get_gene_list</h2>
+<p>This function gets a character vector of genes assocaited with a particular gene list name.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>eye_contact_genes <span class="ot">&lt;-</span> MultiEWCE<span class="sc">::</span><span class="fu">get_gene_list</span>(<span class="at">list_name =</span> <span class="st">&quot;Poor eye contact&quot;</span>, </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">gene_data =</span> gene_data,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">list_name_column =</span> <span class="st">&quot;Phenotype&quot;</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">gene_column =</span> <span class="st">&quot;Gene&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste</span>(<span class="st">&quot;5 genes associated with poor eye contact:&quot;</span>,<span class="fu">paste</span>(eye_contact_genes[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>],<span class="at">collapse =</span> <span class="st">&quot; &quot;</span>)))</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 genes associated with poor eye contact: TWNK PIGP CDKL5 NDUFAF4 NDUFC2</span></span></code></pre></div>
+</div>
+<div id="get_unfinished_list_names" class="section level2">
+<h2>get_unfinished_list_names</h2>
+<p>This function is used to find which gene lists you have not yet analysed</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>unfinished <span class="ot">&lt;-</span> <span class="fu">get_unfinished_list_names</span>(<span class="at">list_names =</span> <span class="fu">unique</span>(gene_data<span class="sc">$</span>Phenotype)[<span class="dv">1</span><span class="sc">:</span><span class="dv">15</span>],</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">results_dir =</span> <span class="st">&quot;results&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">paste0</span>(<span class="st">&quot;Gene lists not yet analysed:</span><span class="sc">\n</span><span class="st">&quot;</span>,<span class="fu">paste</span>(unfinished, <span class="at">collapse =</span> <span class="st">&quot;,</span><span class="sc">\n</span><span class="st">&quot;</span>)))</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Gene lists not yet analysed:</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Abnormality of the bladder,</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Bladder diverticulum,</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Urinary retention,</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Nocturia,</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Migrating focal seizure</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
