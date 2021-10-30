@@ -34,5 +34,8 @@ get_gene_list <- function(list_name,
                           gene_data,
                           list_name_column = "Phenotype",
                           gene_column = "Gene"){
+  if (!list_name %in% unique(gene_data[,list_name_column])) {
+    warning(paste("gene list", list_name, "is not present in" ,list_name_column))
+  }
   return(paste(gene_data[,gene_column][gene_data[,list_name_column] == list_name]))
 }
