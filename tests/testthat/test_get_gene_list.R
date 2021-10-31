@@ -9,9 +9,9 @@ test_that("returns correct genes",{
   expect_equal(get_gene_list("b",geneData, "list_name","Gene"),geneData[geneData$list_name == "b","Gene"])
   expect_equal(get_gene_list("c",geneData, "list_name","Gene"),geneData[geneData$list_name == "c","Gene"])
   expect_equal(get_gene_list("d",geneData, "list_name","Gene"),geneData[geneData$list_name == "d","Gene"])
-  expect_equal(get_gene_list("e",geneData, "list_name","Gene"),geneData[geneData$list_name == "e","Gene"], options(warn = -1))
-  expect_warning(get_gene_list("e",geneData, "list_name","Gene"),paste("gene list", "e", "is not present in" ,"list_name"))
-
+  expect_equal(get_gene_list("e",geneData, "list_name","Gene"),geneData[geneData$list_name == "e","Gene"])
+  expect_warning(get_gene_list("e",geneData, "list_name","Gene"),paste("gene list", "e", "is not present in" ,"list_name", "column"))
+  options(warn = -1)
 })
 
 test_that("error when nonexistant columns are selected", {

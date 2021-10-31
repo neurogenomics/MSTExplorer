@@ -44,7 +44,8 @@
 #' @param genelistSpecies The species ("human"/"mouse") of the gene lists <string>
 #' @param sctSpecies The species ("human"/"mouse") of the CTD data
 #' @param cores The number of cores to run in parallel <int>
-#' @param MergeResults Return a single dataframe of all results merged <bool>
+#' @param MergeResults Save all results merged to single data.frame as a .rds.
+#' Note: The function will return merged dataframe even if FALSE <bool>
 #' @examples \dontrun{
 #' ctd <- readRDS("data/descartes_ctd.rds")
 #' gene_data <- read.delim("data/phenotype_to_genes.txt",skip=1,header=FALSE)
@@ -120,6 +121,10 @@ gen_results <- function(ctd,
     results_final <- merge_results(results_dir = results_dir,
                                    list_name_column = list_name_column)
     saveRDS(results_final,paste0("results_",stringr::str_replace_all(Sys.time(),":","-"),".rds"))
+    return(results_final)
+  } else {
+    results_final <- merge_results(results_dir = results_dir,
+                                   list_name_column = list_name_column)
     return(results_final)
   }
 }

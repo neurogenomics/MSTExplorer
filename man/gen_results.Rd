@@ -54,7 +54,8 @@ See EWCE docs <int>}
 
 \item{cores}{The number of cores to run in parallel <int>}
 
-\item{MergeResults}{Return a single dataframe of all results merged <bool>}
+\item{MergeResults}{Save all results merged to single data.frame as a .rds.
+Note: The function will return merged dataframe even if FALSE <bool>}
 }
 \value{
 If MergeResults == TRUE, it will return all results as a datframe. If
