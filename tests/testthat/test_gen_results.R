@@ -1,3 +1,4 @@
+skip("Dont run")
 library(HPOExplorer)
 
 if (!dir.exists("data")) {
