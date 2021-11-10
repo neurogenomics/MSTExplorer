@@ -27,15 +27,15 @@ This package is useful in cases where you have a large number of related, but se
 This tutorial will require the MultiEWCE package and a few additional packages related to the particular dataset we will be using. Install and load these with the following R code:
 
 ```{r install, message = FALSE, warning = FALSE, eval = FALSE} 
-if (!require("devtools")) {
-  install.packages("devtools")
-}
+# if (!require("devtools")) {
+#   install.packages("devtools")
+# }
 if (!require("HPOExplorer")) {
   devtools::install_github("ovrhuman/HPOExplorer")
 }
-if (!require("MultiEWCE")) {
-  devtools::install_github("ovrhuman/MultiEWCE")
-}
+#if (!require("MultiEWCE")) {
+#  devtools::install_github("ovrhuman/MultiEWCE")
+#}
 ```
 
 # Loading Phenotype Associated Gene Lists from the HPO
@@ -55,7 +55,7 @@ Now we will get a dataset like this from the HPO.
 
 ```{r get_HPO_data, message = FALSE, warning = FALSE, eval = FALSE}
 # Download phenotype associated gene data
-HPOExplorer::download_phenotype_to_genes("phenotype_to_genes.txt")
+#HPOExplorer::download_phenotype_to_genes("phenotype_to_genes.txt")
 
 # Load data into the environment
 gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
@@ -118,8 +118,8 @@ The `gen_results` function calls the EWCE `bootstrap_enrichment_test` function. 
 # Run analysis
 Now we have set up all our desired inputs, we can run the analysis. 
 
-```{r run, warning = FALSE, message = FALSE, eval = FALSE} 
-all_results <- gen_results(ctd,
+```{r run, warning = FALSE, message = FALSE, eval = FALSE}
+all_results <-MultiEWCE::gen_results(ctd,
                            gene_data,
                            list_names,
                            background_genes,
@@ -177,7 +177,7 @@ print(plot1)
 If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the `merge_results` function manually. The `results_dir` argument is the path to your results directory and the `list_name_column` argument is the name of the column containing gene list names. In this case we used "Phenotype" as this column name when we generated the results.
 
 ```{r merge, eval = FALSE}
-all_results_2 <- merge_results(results_dir = "results",
+all_results_2 <- MultiEWCE::merge_results(results_dir = "results",
                                           list_name_column = "Phenotype")
 ```
 
@@ -197,7 +197,7 @@ cat(paste("5 genes associated with poor eye contact:",paste(eye_contact_genes[1:
 This function is used to find which gene lists you have not yet analysed 
 
 ```{r get_unfinished, eval = FALSE} 
-unfinished <- get_unfinished_list_names(list_names = unique(gene_data$Phenotype)[1:15],
+unfinished <- MultiEWCE::get_unfinished_list_names(list_names = unique(gene_data$Phenotype)[1:15],
                                         results_dir = "results")
 cat(paste0("Gene lists not yet analysed:\n",paste(unfinished, collapse = ",\n")))
 ```

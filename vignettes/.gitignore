@@ -1,2 +1,4 @@
 *.html
 *.R
+CTD_Descartes_withplot.rds
+phenotype_to_genes.txt
