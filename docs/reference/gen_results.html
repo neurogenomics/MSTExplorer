@@ -76,7 +76,7 @@ less than 4 unique genes (which cause errors in ewce analysis)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
 
@@ -96,7 +96,12 @@ less than 4 unique genes (which cause errors in ewce analysis)." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/neurogenomics/MultiEWCE/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -111,7 +116,7 @@ less than 4 unique genes (which cause errors in ewce analysis)." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Generate results</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/neurogenomics/MultiEWCE/blob/master/R/gen_results.R'><code>R/gen_results.R</code></a></small>
     <div class="hidden name"><code>gen_results.Rd</code></div>
     </div>
 
@@ -137,7 +142,7 @@ less than 4 unique genes (which cause errors in ewce analysis).</p>
   genelistSpecies <span class='op'>=</span> <span class='st'>"human"</span>,
   sctSpecies <span class='op'>=</span> <span class='st'>"human"</span>,
   cores <span class='op'>=</span> <span class='fl'>1</span>,
-  MergeResults <span class='op'>=</span> <span class='cn'>TRUE</span>
+  MergeResults <span class='op'>=</span> <span class='cn'>FALSE</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -178,20 +183,20 @@ dataframe. Typically this column is called "Gene"</p></td>
     </tr>
     <tr>
       <th>overwrite_past_analysis</th>
-      <td><p>overwrite previous results in the results dir &lt;bool&gt;</p></td>
+      <td><p>overwrite previous results in the results dir (bool)</p></td>
     </tr>
     <tr>
       <th>reps</th>
-      <td><p>The number of bootstrap reps for EWCE (see ewce docs) &lt;int&gt;</p></td>
+      <td><p>The number of bootstrap reps for EWCE (see ewce docs) (int)</p></td>
     </tr>
     <tr>
       <th>annotLevel</th>
       <td><p>The level of cell specificity to select from the CTD,
-See EWCE docs &lt;int&gt;</p></td>
+See EWCE docs (int)</p></td>
     </tr>
     <tr>
       <th>genelistSpecies</th>
-      <td><p>The species ("human"/"mouse") of the gene lists &lt;string&gt;</p></td>
+      <td><p>The species ("human"/"mouse") of the gene lists (string)</p></td>
     </tr>
     <tr>
       <th>sctSpecies</th>
@@ -199,18 +204,18 @@ See EWCE docs &lt;int&gt;</p></td>
     </tr>
     <tr>
       <th>cores</th>
-      <td><p>The number of cores to run in parallel &lt;int&gt;</p></td>
+      <td><p>The number of cores to run in parallel (int)</p></td>
     </tr>
     <tr>
       <th>MergeResults</th>
-      <td><p>Save all results merged to single data.frame as a .rds.
-Note: The function will return merged dataframe even if FALSE &lt;bool&gt;</p></td>
+      <td><p>return merged to single data.frame as a .rds.
+Note: The function will return merged dataframe even if FALSE (bool)</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>If MergeResults == TRUE, it will return all results as a datframe. If
+    <p>If MergeResults is TRUE, it will return all results as a datframe. If
 FALSE nothing will be returned, but the individual results will still be saved
 in the results directory.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
@@ -234,6 +239,30 @@ No multiple testing corrections are applied to this so it is recommended that
 they are done after, for example:
 <code>all_results$q &lt;- stats::p.adjust(all_results$p, method = "BH")</code></p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>gene_data</span> <span class='op'>&lt;-</span> <span class='fu'>HPOExplorer</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html'>load_phenotype_to_genes</a></span><span class='op'>(</span><span class='st'>"phenotype_to_genes.txt"</span><span class='op'>)</span>
+<span class='va'>ctd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_example_CTD.html'>load_example_CTD</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in load_example_CTD(): could not find function "load_example_CTD"</span></div><div class='input'><span class='va'>list_names</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>gene_data</span><span class='op'>$</span><span class='va'>Phenotype</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>]</span>
+<span class='va'>background_genes</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>gene_data</span><span class='op'>$</span><span class='va'>Gene</span><span class='op'>)</span>
+<span class='va'>list_name_column</span> <span class='op'>&lt;-</span> <span class='st'>"Phenotype"</span>
+<span class='va'>gene_column</span> <span class='op'>&lt;-</span> <span class='st'>"Gene"</span>
+<span class='va'>results_dir</span> <span class='op'>&lt;-</span> <span class='st'>"results"</span>
+<span class='va'>overwrite_past_analysis</span> <span class='op'>&lt;-</span> <span class='cn'>FALSE</span>
+<span class='va'>MergeResults</span> <span class='op'>&lt;-</span> <span class='cn'>TRUE</span>
+<span class='va'>reps</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
+<span class='va'>annotLevel</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
+<span class='va'>genelistSpecies</span> <span class='op'>&lt;-</span> <span class='st'>"human"</span>
+<span class='va'>sctSpecies</span> <span class='op'>&lt;-</span> <span class='st'>"human"</span>
+<span class='va'>cores</span> <span class='op'>&lt;-</span> <span class='fl'>1</span>
+
+<span class='va'>all_results</span> <span class='op'>&lt;-</span><span class='fu'>MultiEWCE</span><span class='fu'>::</span><span class='fu'>gen_results</span><span class='op'>(</span><span class='va'>ctd</span>, <span class='va'>gene_data</span>, <span class='va'>list_names</span>, <span class='va'>background_genes</span>,
+                                     <span class='va'>list_name_column</span>, <span class='va'>gene_column</span>, <span class='va'>results_dir</span>,
+                                     <span class='va'>overwrite_past_analysis</span>, <span class='va'>reps</span>, <span class='va'>annotLevel</span>,
+                                     <span class='va'>genelistSpecies</span>, <span class='va'>sctSpecies</span>, <span class='va'>cores</span>,
+                                     <span class='va'>MergeResults</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in rownames(ctd[[1]]$specificity_quantiles): object 'ctd' not found</span></div><div class='input'>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -245,7 +274,7 @@ they are done after, for example:
 
       <footer>
       <div class="copyright">
-  <p>Developed by First Last.</p>
+  <p>Developed by Robert Gordon-Smith, Brian Schilder, Nathan Skene.</p>
 </div>
 
 <div class="pkgdown">

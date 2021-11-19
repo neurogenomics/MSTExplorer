@@ -15,19 +15,22 @@
 #'
 #' In the example above, if we wanted to extract genes related to "Abnormal heart",
 #' we would run the following example:
-#' @examples \dontrun{
-#' heart_genes <- get_gene_list(list_name = "Abnormal heart",
+#' @examples
+#'
+#' phenotype_to_genes <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
+#'
+#' height_genes <- get_gene_list(list_name = "Abnormality of body height",
 #'                              gene_data = phenotype_to_genes,
 #'                              list_name_column = "Phenotype",
 #'                              gene_column = "Gene")
-#' }
-#' @param list_name The name of the gene list of interest <string>
+#'
+#' @param list_name The name of the gene list of interest (string)
 #' @param gene_data The data frame of gene list names and associated
-#' genes <data.frame>
+#' genes (data.frame)
 #' @param list_name_column The name of the column in gene_data that contains
-#' gene list names <string>
+#' gene list names (string)
 #' @param gene_column The name of the column in gene_data that contains
-#' the genes <string>
+#' the genes (string)
 #' @returns A charcter vector of genes associated with the selected list_name
 #' @export
 get_gene_list <- function(list_name,

@@ -15,14 +15,14 @@ get_valid_gene_lists(
 \arguments{
 \item{ctd}{CTD (cell type data file) see EWCE docs}
 
-\item{list_names}{Vector of gene list names <character vector>}
+\item{list_names}{Vector of gene list names (character vector)}
 
 \item{gene_data}{data frame containing a gene column and a column of list_names}
 
 \item{list_name_column}{The name of the column that contains
-gene list_names <string>}
+gene list_names (string)}
 
-\item{gene_column}{The name of the gene column (e.g. "Gene") <string>}
+\item{gene_column}{The name of the gene column (e.g. "Gene") (string)}
 }
 \value{
 A character vector of list_names that are associated with a valid

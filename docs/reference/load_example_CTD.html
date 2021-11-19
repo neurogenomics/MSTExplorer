@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>merge results — merge_results • MultiEWCE</title>
+<title>Load example CTD (Descartes) — load_example_CTD • MultiEWCE</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="merge results — merge_results" />
-<meta property="og:description" content="merges individual .rds files from the results output directory into one
-dataframe." />
+<meta property="og:title" content="Load example CTD (Descartes) — load_example_CTD" />
+<meta property="og:description" content="This loads a example CTD for vignettes and testing purposes. It is Descartes
+human cell atlas data at annotation level 1." />
 
 
 
@@ -112,35 +112,24 @@ dataframe." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>merge results</h1>
-    <small class="dont-index">Source: <a href='https://github.com/neurogenomics/MultiEWCE/blob/master/R/merge_results.R'><code>R/merge_results.R</code></a></small>
-    <div class="hidden name"><code>merge_results.Rd</code></div>
+    <h1>Load example CTD (Descartes)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/neurogenomics/MultiEWCE/blob/master/R/load_example_CTD.R'><code>R/load_example_CTD.R</code></a></small>
+    <div class="hidden name"><code>load_example_CTD.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>merges individual .rds files from the results output directory into one
-dataframe.</p>
+    <p>This loads a example CTD for vignettes and testing purposes. It is Descartes
+human cell atlas data at annotation level 1.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>merge_results</span><span class='op'>(</span>results_dir <span class='op'>=</span> <span class='st'>"results"</span>, list_name_column <span class='op'>=</span> <span class='st'>"phenotype"</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>load_example_CTD</span><span class='op'>(</span><span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>results_dir</th>
-      <td><p>The filepath to results .rds files</p></td>
-    </tr>
-    <tr>
-      <th>list_name_column</th>
-      <td><p>The column name for gene list_names (e.g. phenotypes)</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>dataframe</p>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>CTD</span> <span class='op'>&lt;-</span> <span class='fu'>load_example_CTD</span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in load_example_CTD(): could not find function "load_example_CTD"</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

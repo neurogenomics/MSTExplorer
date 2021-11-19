@@ -18,7 +18,7 @@ gen_results(
   genelistSpecies = "human",
   sctSpecies = "human",
   cores = 1,
-  MergeResults = TRUE
+  MergeResults = FALSE
 )
 }
 \arguments{
@@ -41,24 +41,24 @@ dataframe. Typically this column is called "Gene"}
 
 \item{results_dir}{the desired direcory to save results (e.g. "results")}
 
-\item{overwrite_past_analysis}{overwrite previous results in the results dir <bool>}
+\item{overwrite_past_analysis}{overwrite previous results in the results dir (bool)}
 
-\item{reps}{The number of bootstrap reps for EWCE (see ewce docs) <int>}
+\item{reps}{The number of bootstrap reps for EWCE (see ewce docs) (int)}
 
 \item{annotLevel}{The level of cell specificity to select from the CTD,
-See EWCE docs <int>}
+See EWCE docs (int)}
 
-\item{genelistSpecies}{The species ("human"/"mouse") of the gene lists <string>}
+\item{genelistSpecies}{The species ("human"/"mouse") of the gene lists (string)}
 
 \item{sctSpecies}{The species ("human"/"mouse") of the CTD data}
 
-\item{cores}{The number of cores to run in parallel <int>}
+\item{cores}{The number of cores to run in parallel (int)}
 
-\item{MergeResults}{Save all results merged to single data.frame as a .rds.
-Note: The function will return merged dataframe even if FALSE <bool>}
+\item{MergeResults}{return merged to single data.frame as a .rds.
+Note: The function will return merged dataframe even if FALSE (bool)}
 }
 \value{
-If MergeResults == TRUE, it will return all results as a datframe. If
+If MergeResults is TRUE, it will return all results as a datframe. If
 FALSE nothing will be returned, but the individual results will still be saved
 in the results directory.
 }
@@ -88,4 +88,28 @@ If \code{MergeResutls == TURE}, the function will return a dataframe of all resu
 No multiple testing corrections are applied to this so it is recommended that
 they are done after, for example:
 \code{all_results$q <- stats::p.adjust(all_results$p, method = "BH")}
+}
+\examples{
+gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
+ctd <- load_example_CTD()
+list_names <- unique(gene_data$Phenotype)[1:20]
+background_genes <- unique(gene_data$Gene)
+list_name_column <- "Phenotype"
+gene_column <- "Gene"
+results_dir <- "results"
+overwrite_past_analysis <- FALSE
+MergeResults <- TRUE
+reps <- 10
+annotLevel <- 1
+genelistSpecies <- "human"
+sctSpecies <- "human"
+cores <- 1
+
+all_results <-MultiEWCE::gen_results(ctd, gene_data, list_names, background_genes,
+                                     list_name_column, gene_column, results_dir,
+                                     overwrite_past_analysis, reps, annotLevel,
+                                     genelistSpecies, sctSpecies, cores,
+                                     MergeResults)
+
+
 }
