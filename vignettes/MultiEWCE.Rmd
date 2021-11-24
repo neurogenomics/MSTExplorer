@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, eval = FALSE}
+```{r setup}
 library(MultiEWCE)
 ```
 
@@ -26,16 +26,16 @@ This package is useful in cases where you have a large number of related, but se
 # Installation
 This tutorial will require the MultiEWCE package and a few additional packages related to the particular dataset we will be using. Install and load these with the following R code:
 
-```{r install, message = FALSE, warning = FALSE, eval = FALSE} 
-# if (!require("devtools")) {
-#   install.packages("devtools")
-# }
+```{r install, message = FALSE, warning = FALSE} 
+
 if (!require("HPOExplorer")) {
   devtools::install_github("ovrhuman/HPOExplorer")
 }
-#if (!require("MultiEWCE")) {
-#  devtools::install_github("ovrhuman/MultiEWCE")
-#}
+
+if (!require("ewceData")) {
+  install.packages("ewceData")
+}
+
 ```
 
 # Loading Phenotype Associated Gene Lists from the HPO
@@ -53,27 +53,40 @@ The MultiEWCE package requires the gene data to be in a particular format. It mu
 
 Now we will get a dataset like this from the HPO.
 
-```{r get_HPO_data, message = FALSE, warning = FALSE, eval = FALSE}
-# Download phenotype associated gene data
-#HPOExplorer::download_phenotype_to_genes("phenotype_to_genes.txt")
+```{r get_HPO_data, message = FALSE, warning = FALSE}
 
-# Load data into the environment
 gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
-
 print(head(gene_data))
 ```
 
 In this example our **gene list names** column is called `Phenotype` and our column of genes is called `Gene`. However, different column names can be specified to the MultiEWCE package. 
 
 # Setting up input arguments for the gen_results function
-```{r setup_args, eval = FALSE}
-ctd <- readRDS("CTD_Descartes_withplot.rds")
+```{r echo=FALSE, results="hide", message = FALSE, warning = FALSE}
+load_example_CTD <- function() {
+  if (! file.exists("CTD_Descartes_example.rds")) {
+    piggyback::pb_download(repo="neurogenomics/MultiEWCE",
+                           tag = "v0.0.1")
+
+    return(readRDS("CTD_Descartes_example.rds"))
+  } else {
+    return (readRDS("CTD_Descartes_example.rds"))
+  }
+}
+
+
+```
+
+```{r setup_args}
+# Loading CTD file (had to change all rownames to uppercase as the genelists are all upper)
+
+ctd <- load_example_CTD()
 list_names <- unique(gene_data$Phenotype)[1:10]
 background_genes <- unique(gene_data$Gene)
 list_name_column <- "Phenotype"
 gene_column <- "Gene"
 results_dir <- "results"
-overwrite_past_analysis <- FALSE
+overwrite_past_analysis <- TRUE
 MergeResults <- TRUE
 reps <- 10
 annotLevel <- 1
@@ -118,7 +131,7 @@ The `gen_results` function calls the EWCE `bootstrap_enrichment_test` function. 
 # Run analysis
 Now we have set up all our desired inputs, we can run the analysis. 
 
-```{r run, warning = FALSE, message = FALSE, eval = FALSE}
+```{r run, warning = FALSE, message = FALSE}
 all_results <-MultiEWCE::gen_results(ctd,
                            gene_data,
                            list_names,
@@ -138,7 +151,7 @@ all_results <-MultiEWCE::gen_results(ctd,
 # Adjust for multiple comparisons 
 Seeing as we have ran EWCE on multiple gene lists, we need to make adjustments for multiple comparisons. We can use Benjamini-Hochberg procedure to false discovery rate adjusted p values (which we will call q values here).
 
-```{r FDR, eval = FALSE}
+```{r FDR}
 all_results$q <- stats::p.adjust(all_results$p, method = "BH")
 
 print(head(all_results))
@@ -146,9 +159,8 @@ print(head(all_results))
 
 # Visualise the results 
 Just as an example, we will create a plot showing the number of significant enrichments per phenotype in the all_results data.frame. We will use q <= 0.05 as the significance threshold. 
-```{r plot, eval = FALSE}
+```{r plot}
 library(ggplot2)
-
 n_signif <- data.frame()
 for (p in unique(all_results$Phenotype)) {
   n_signif <- rbind(n_signif, 
@@ -168,7 +180,7 @@ plot1 <-  ggplot(n_signif, aes(Phenotype,signif_enrichments)) +
 
 ```
 
-```{r display, fig.width = 7, fig.height = 6, eval = FALSE}
+```{r display, fig.width = 7, fig.height = 6}
 print(plot1)
 ```
 
@@ -176,7 +188,7 @@ print(plot1)
 ## merge_results 
 If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the `merge_results` function manually. The `results_dir` argument is the path to your results directory and the `list_name_column` argument is the name of the column containing gene list names. In this case we used "Phenotype" as this column name when we generated the results.
 
-```{r merge, eval = FALSE}
+```{r merge}
 all_results_2 <- MultiEWCE::merge_results(results_dir = "results",
                                           list_name_column = "Phenotype")
 ```
@@ -184,7 +196,7 @@ all_results_2 <- MultiEWCE::merge_results(results_dir = "results",
 ## get_gene_list 
 This function gets a character vector of genes assocaited with a particular gene list name. 
 
-```{r get_gene_list, eval = FALSE}
+```{r get_gene_list}
 eye_contact_genes <- MultiEWCE::get_gene_list(list_name = "Poor eye contact", 
                                       gene_data = gene_data,
                                       list_name_column = "Phenotype",
@@ -196,7 +208,7 @@ cat(paste("5 genes associated with poor eye contact:",paste(eye_contact_genes[1:
 ## get_unfinished_list_names
 This function is used to find which gene lists you have not yet analysed 
 
-```{r get_unfinished, eval = FALSE} 
+```{r get_unfinished} 
 unfinished <- MultiEWCE::get_unfinished_list_names(list_names = unique(gene_data$Phenotype)[1:15],
                                         results_dir = "results")
 cat(paste0("Gene lists not yet analysed:\n",paste(unfinished, collapse = ",\n")))

@@ -2,7 +2,7 @@
 #'
 #' @param total_res Results to be plotted ?
 #' @param mtc_method Multiple comparison adjustment method
-#' @param ctd Cell type data object <list>
+#' @param ctd Cell type data object (list)
 #' @import ggplot2
 #' @examples
 #' \dontrun{ewce.plot(results_dataframe,"bonferroni",CTD)}

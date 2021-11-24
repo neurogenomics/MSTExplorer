@@ -37,39 +37,39 @@
 #' @param gene_column The name of the column containing genes in the gene_data
 #' dataframe. Typically this column is called "Gene"
 #' @param results_dir the desired direcory to save results (e.g. "results")
-#' @param overwrite_past_analysis overwrite previous results in the results dir <bool>
-#' @param reps The number of bootstrap reps for EWCE (see ewce docs) <int>
+#' @param overwrite_past_analysis overwrite previous results in the results dir (bool)
+#' @param reps The number of bootstrap reps for EWCE (see ewce docs) (int)
 #' @param annotLevel The level of cell specificity to select from the CTD,
-#' See EWCE docs <int>
-#' @param genelistSpecies The species ("human"/"mouse") of the gene lists <string>
+#' See EWCE docs (int)
+#' @param genelistSpecies The species ("human"/"mouse") of the gene lists (string)
 #' @param sctSpecies The species ("human"/"mouse") of the CTD data
-#' @param cores The number of cores to run in parallel <int>
-#' @param MergeResults Save all results merged to single data.frame as a .rds.
-#' Note: The function will return merged dataframe even if FALSE <bool>
-#' @examples \dontrun{
-#' ctd <- readRDS("data/descartes_ctd.rds")
-#' gene_data <- read.delim("data/phenotype_to_genes.txt",skip=1,header=FALSE)
-#' colnames(gene_data) = c("ID", "Phenotype", "EntrezID", "Gene", "Additional",
-#'                          Source", "LinkID")
-#' list_names <- unique(gene_data$Phenotype)
+#' @param cores The number of cores to run in parallel (int)
+#' @param MergeResults return merged to single data.frame as a .rds.
+#' Note: The function will return merged dataframe even if FALSE (bool)
+#' @examples
+#' gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
+#' ctd <- load_example_CTD()
+#' list_names <- unique(gene_data$Phenotype)[1:20]
 #' background_genes <- unique(gene_data$Gene)
 #' list_name_column <- "Phenotype"
 #' gene_column <- "Gene"
 #' results_dir <- "results"
-#' overwrite_past_analysis = FALSE
-#' reps = 100000
-#' annotlevel = 1
-#' genelistSpecies = "human"
-#' sctSpecies = "human"
-#' cores = 8
-#' MergeResults = TRUE
-#' all_results <- gen_results(ctd,gene_data,list_names,background_genes,
-#'                            list_name_column,gene_column,results_dir,
-#'                            overwrite_past_analysis, reps, annotLevel,
-#'                            genelistSpecies, sctSpecies, cores, MergeResults)
+#' overwrite_past_analysis <- FALSE
+#' MergeResults <- TRUE
+#' reps <- 10
+#' annotLevel <- 1
+#' genelistSpecies <- "human"
+#' sctSpecies <- "human"
+#' cores <- 1
 #'
-#' }
-#' @returns If MergeResults == TRUE, it will return all results as a datframe. If
+#' all_results <-MultiEWCE::gen_results(ctd, gene_data, list_names, background_genes,
+#'                                      list_name_column, gene_column, results_dir,
+#'                                      overwrite_past_analysis, reps, annotLevel,
+#'                                      genelistSpecies, sctSpecies, cores,
+#'                                      MergeResults)
+#'
+#'
+#' @returns If MergeResults is TRUE, it will return all results as a datframe. If
 #' FALSE nothing will be returned, but the individual results will still be saved
 #' in the results directory.
 #' @export
@@ -86,7 +86,7 @@ gen_results <- function(ctd,
                         genelistSpecies = "human",
                         sctSpecies = "human",
                         cores = 1,
-                        MergeResults = TRUE) {
+                        MergeResults = FALSE) {
 
   # remove gene lists that do not have enough valid genes (>= 4)
   list_names <- get_valid_gene_lists(ctd,

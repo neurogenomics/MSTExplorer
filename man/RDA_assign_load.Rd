@@ -8,10 +8,10 @@ Can be useful, but sort of pointless now as we have decided to only use .rds}
 RDA_assign_load(file)
 }
 \arguments{
-\item{file}{file path to rda <string>}
+\item{file}{file path to rda (string)}
 }
 \value{
-the data contained in the .rda file
+the data contained in the rda file
 }
 \description{
 Load RDA file and assign to specific variable
