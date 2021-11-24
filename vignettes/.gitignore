@@ -2,3 +2,7 @@
 *.R
 CTD_Descartes_withplot.rds
 phenotype_to_genes.txt
+CTD_Descartes_example.rds
+*.rds
+*.Rds
+results/

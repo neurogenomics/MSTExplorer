@@ -1,7 +1,7 @@
 #' Load RDA file and assign to specific variable
 #' Can be useful, but sort of pointless now as we have decided to only use .rds
 #'
-#' @param file file path to rda (string)
+#' @param file file path to rda \<string\>
 #' @examples
 #'
 #' \dontrun{

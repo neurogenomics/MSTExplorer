@@ -10,11 +10,11 @@
 #' @param results_directory The desired output filepath for results to be saved
 #' @param ctd_file The cell type data object for EWCE analysis (see EWCE docs)
 #' @param background_genes The background geneset for EWCE analysis (see EWCE docs)
-#' @param bootstrap_reps The number of bootstrap reps (int) (e.g. 100000)
+#' @param bootstrap_reps The number of bootstrap reps \<int\> (e.g. 100000)
 #' @param annotation_Level The level of desired cell resolution from the CTD
-#' @param genes_Species The species of gene lists (string) "human" or "mouse"
-#' @param ctd_Species "human" or "mouse" (string)
-#' @param cores The number of cores to run in parallel (e.g. 8) (int)
+#' @param genes_Species The species of gene lists \<string\> "human" or "mouse"
+#' @param ctd_Species "human" or "mouse" \<string\>
+#' @param cores The number of cores to run in parallel (e.g. 8) \<int\>
 #' @return True if analysis was sucessful. The results will then be saved
 #' at "(results_directory)/(list_name).rds"
 #'

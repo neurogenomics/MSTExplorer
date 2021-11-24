@@ -8,11 +8,11 @@
 #' present in the CTD file.
 #'
 #' @param ctd CTD (cell type data file) see EWCE docs
-#' @param list_names Vector of gene list names (character vector)
+#' @param list_names Vector of gene list names \<character vector\>
 #' @param gene_data data frame containing a gene column and a column of list_names
 #' @param list_name_column The name of the column that contains
-#' gene list_names (string)
-#' @param gene_column The name of the gene column (e.g. "Gene") (string)
+#' gene list_names \<string\>
+#' @param gene_column The name of the gene column (e.g. "Gene") \<string\>
 #' @examples \dontrun{
 #' remove_invalid_gene_lists(ctd,
 #'                           list_names,

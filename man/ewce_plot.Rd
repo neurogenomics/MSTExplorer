@@ -11,7 +11,7 @@ ewce_plot(total_res, mtc_method = "bonferroni", ctd = NULL)
 
 \item{mtc_method}{Multiple comparison adjustment method}
 
-\item{ctd}{Cell type data object (list)}
+\item{ctd}{Cell type data object \<list\>}
 }
 \value{
 A bar chart with dendrogram of EWCE results in each cell type.

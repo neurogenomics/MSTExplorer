@@ -21,9 +21,8 @@ This means you can pause the analysis of multiple gene lists and it will not
 re-analyse the already completed ones when you start again.
 }
 \examples{
-\dontrun{
-list_names <- unique(data$phenotypes)
-results_dir <- "output/"
+list_names <- HPOExplorer::load_phenotype_to_genes(tempfile())$Phenotype[1:5]
+results_dir <- tempdir()
 get_unfinished_list_names(list_names,results_dir)
-}
+
 }

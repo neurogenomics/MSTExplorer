@@ -55,7 +55,7 @@ Now we will get a dataset like this from the HPO.
 
 ```{r get_HPO_data, message = FALSE, warning = FALSE}
 
-gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
+gene_data <- HPOExplorer::load_phenotype_to_genes(tempfile())
 print(head(gene_data))
 ```
 
@@ -77,7 +77,7 @@ load_example_CTD <- function() {
 
 ```
 
-```{r setup_args}
+```{r setup_args, message = FALSE, warning = FALSE}
 # Loading CTD file (had to change all rownames to uppercase as the genelists are all upper)
 
 ctd <- load_example_CTD()

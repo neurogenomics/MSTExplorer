@@ -142,7 +142,7 @@
 <p>Now we will get a dataset like this from the HPO.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html">load_phenotype_to_genes</a></span><span class="op">(</span><span class="st">"phenotype_to_genes.txt"</span><span class="op">)</span>
+<span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html">load_phenotype_to_genes</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;           ID                  Phenotype EntrezID     Gene Additional    Source</span>
 <span class="co">#&gt; 1 HP:0000002 Abnormality of body height     5073     PARN            orphadata</span>
@@ -259,19 +259,19 @@
 
 <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">all_results</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;                                          CellType annotLevel   p fold_change</span>
-<span class="co">#&gt; AFP_ALB_positive_cells     AFP_ALB_positive_cells          1 1.0   0.4144038</span>
-<span class="co">#&gt; Acinar_cells                         Acinar_cells          1 1.0   0.5988287</span>
-<span class="co">#&gt; Adrenocortical_cells         Adrenocortical_cells          1 0.6   0.9766661</span>
-<span class="co">#&gt; Amacrine_cells                     Amacrine_cells          1 1.0   0.7058772</span>
-<span class="co">#&gt; Antigen_presenting_cells Antigen_presenting_cells          1 1.0   0.6254524</span>
-<span class="co">#&gt; Astrocytes                             Astrocytes          1 0.6   0.9621059</span>
+<span class="co">#&gt; AFP_ALB_positive_cells     AFP_ALB_positive_cells          1 1.0   0.4588512</span>
+<span class="co">#&gt; Acinar_cells                         Acinar_cells          1 1.0   0.5756441</span>
+<span class="co">#&gt; Adrenocortical_cells         Adrenocortical_cells          1 0.7   0.9802214</span>
+<span class="co">#&gt; Amacrine_cells                     Amacrine_cells          1 1.0   0.7019276</span>
+<span class="co">#&gt; Antigen_presenting_cells Antigen_presenting_cells          1 1.0   0.5978526</span>
+<span class="co">#&gt; Astrocytes                             Astrocytes          1 0.8   0.9615212</span>
 <span class="co">#&gt;                          sd_from_mean</span>
-<span class="co">#&gt; AFP_ALB_positive_cells     -4.2555692</span>
-<span class="co">#&gt; Acinar_cells               -2.0946056</span>
-<span class="co">#&gt; Adrenocortical_cells       -0.2326728</span>
-<span class="co">#&gt; Amacrine_cells             -6.6130234</span>
-<span class="co">#&gt; Antigen_presenting_cells   -5.7828662</span>
-<span class="co">#&gt; Astrocytes                 -0.4510730</span>
+<span class="co">#&gt; AFP_ALB_positive_cells      -5.201180</span>
+<span class="co">#&gt; Acinar_cells                -2.846407</span>
+<span class="co">#&gt; Adrenocortical_cells        -0.358941</span>
+<span class="co">#&gt; Amacrine_cells              -7.090250</span>
+<span class="co">#&gt; Antigen_presenting_cells    -3.857144</span>
+<span class="co">#&gt; Astrocytes                  -1.022004</span>
 <span class="co">#&gt;                                                                 Phenotype q</span>
 <span class="co">#&gt; AFP_ALB_positive_cells   Abnormal morphology of female internal genitalia 1</span>
 <span class="co">#&gt; Acinar_cells             Abnormal morphology of female internal genitalia 1</span>

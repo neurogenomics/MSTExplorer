@@ -12,7 +12,7 @@ get_gene_list(
 )
 }
 \arguments{
-\item{list_name}{The name of the gene list of interest (string)}
+\item{list_name}{The name of the gene list of interest \<string\>}
 
 \item{gene_data}{The data frame of gene list names and associated
 genes (data.frame)}

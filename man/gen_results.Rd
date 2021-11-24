@@ -41,21 +41,21 @@ dataframe. Typically this column is called "Gene"}
 
 \item{results_dir}{the desired direcory to save results (e.g. "results")}
 
-\item{overwrite_past_analysis}{overwrite previous results in the results dir (bool)}
+\item{overwrite_past_analysis}{overwrite previous results in the results dir \<bool\>}
 
-\item{reps}{The number of bootstrap reps for EWCE (see ewce docs) (int)}
+\item{reps}{The number of bootstrap reps for EWCE (see ewce docs) \<int\>}
 
 \item{annotLevel}{The level of cell specificity to select from the CTD,
-See EWCE docs (int)}
+See EWCE docs \<int\>}
 
-\item{genelistSpecies}{The species ("human"/"mouse") of the gene lists (string)}
+\item{genelistSpecies}{The species ("human"/"mouse") of the gene lists \<string\>}
 
 \item{sctSpecies}{The species ("human"/"mouse") of the CTD data}
 
-\item{cores}{The number of cores to run in parallel (int)}
+\item{cores}{The number of cores to run in parallel \<int\>}
 
 \item{MergeResults}{return merged to single data.frame as a .rds.
-Note: The function will return merged dataframe even if FALSE (bool)}
+Note: The function will return merged dataframe even if FALSE \<bool\>}
 }
 \value{
 If MergeResults is TRUE, it will return all results as a datframe. If

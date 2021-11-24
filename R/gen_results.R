@@ -37,15 +37,15 @@
 #' @param gene_column The name of the column containing genes in the gene_data
 #' dataframe. Typically this column is called "Gene"
 #' @param results_dir the desired direcory to save results (e.g. "results")
-#' @param overwrite_past_analysis overwrite previous results in the results dir (bool)
-#' @param reps The number of bootstrap reps for EWCE (see ewce docs) (int)
+#' @param overwrite_past_analysis overwrite previous results in the results dir \<bool\>
+#' @param reps The number of bootstrap reps for EWCE (see ewce docs) \<int\>
 #' @param annotLevel The level of cell specificity to select from the CTD,
-#' See EWCE docs (int)
-#' @param genelistSpecies The species ("human"/"mouse") of the gene lists (string)
+#' See EWCE docs \<int\>
+#' @param genelistSpecies The species ("human"/"mouse") of the gene lists \<string\>
 #' @param sctSpecies The species ("human"/"mouse") of the CTD data
-#' @param cores The number of cores to run in parallel (int)
+#' @param cores The number of cores to run in parallel \<int\>
 #' @param MergeResults return merged to single data.frame as a .rds.
-#' Note: The function will return merged dataframe even if FALSE (bool)
+#' Note: The function will return merged dataframe even if FALSE \<bool\>
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
 #' ctd <- load_example_CTD()

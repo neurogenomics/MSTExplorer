@@ -14,6 +14,6 @@ load_example_CTD <- function() {
 
     return(readRDS("CTD_Descartes_example.rds"))
   } else {
-    return (readRDS("CTD_Descartes_example.rds"))
+    return(readRDS("CTD_Descartes_example.rds"))
   }
 }

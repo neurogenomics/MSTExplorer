@@ -8,11 +8,11 @@
 #' @param list_names A char vector of gene list names
 #' @param results_dir The directory containing analysed results.
 #' @return A character vector of list_names that still need to be analysed.
-#' @examples \dontrun{
-#' list_names <- unique(data$phenotypes)
-#' results_dir <- "output/"
+#' @examples
+#' list_names <- HPOExplorer::load_phenotype_to_genes(tempfile())$Phenotype[1:5]
+#' results_dir <- tempdir()
 #' get_unfinished_list_names(list_names,results_dir)
-#' }
+#'
 #' @export
 get_unfinished_list_names <- function (list_names, results_dir) {
   list_names_2 = c()

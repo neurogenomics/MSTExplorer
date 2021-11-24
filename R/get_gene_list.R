@@ -24,7 +24,7 @@
 #'                              list_name_column = "Phenotype",
 #'                              gene_column = "Gene")
 #'
-#' @param list_name The name of the gene list of interest (string)
+#' @param list_name The name of the gene list of interest \<string\>
 #' @param gene_data The data frame of gene list names and associated
 #' genes (data.frame)
 #' @param list_name_column The name of the column in gene_data that contains
