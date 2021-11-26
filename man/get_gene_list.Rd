@@ -12,16 +12,16 @@ get_gene_list(
 )
 }
 \arguments{
-\item{list_name}{The name of the gene list of interest \<string\>}
+\item{list_name}{The name of the gene list of interest \code{string}}
 
 \item{gene_data}{The data frame of gene list names and associated
 genes (data.frame)}
 
 \item{list_name_column}{The name of the column in gene_data that contains
-gene list names (string)}
+gene list names \code{string}}
 
 \item{gene_column}{The name of the column in gene_data that contains
-the genes (string)}
+the genes \code{string}}
 }
 \value{
 A charcter vector of genes associated with the selected list_name

@@ -12,7 +12,7 @@ is_not_analysed(list_name, results_dir)
 \item{results_dir}{The path to results directory}
 }
 \value{
-True or false \<bool\>
+True or false \code{bool}
 }
 \description{
 Takes a gene list name and checks the output results directory to see if that

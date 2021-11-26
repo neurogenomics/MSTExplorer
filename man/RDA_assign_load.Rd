@@ -8,7 +8,7 @@ Can be useful, but sort of pointless now as we have decided to only use .rds}
 RDA_assign_load(file)
 }
 \arguments{
-\item{file}{file path to rda \<string\>}
+\item{file}{file path to rda \code{string}}
 }
 \value{
 the data contained in the rda file
@@ -20,7 +20,7 @@ Can be useful, but sort of pointless now as we have decided to only use .rds
 \examples{
 
 \dontrun{
-files = "results.rds"
-RDA_assign_load(file)}
+files = "results.rda"
+results = RDA_assign_load(file)}
 
 }

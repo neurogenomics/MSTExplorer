@@ -34,15 +34,15 @@ ewce_para(
 
 \item{background_genes}{The background geneset for EWCE analysis (see EWCE docs)}
 
-\item{bootstrap_reps}{The number of bootstrap reps \<int\> (e.g. 100000)}
+\item{bootstrap_reps}{The number of bootstrap reps \code{int} (e.g. 100000)}
 
 \item{annotation_Level}{The level of desired cell resolution from the CTD}
 
-\item{genes_Species}{The species of gene lists \<string\> "human" or "mouse"}
+\item{genes_Species}{The species of gene lists \code{string} "human" or "mouse"}
 
-\item{ctd_Species}{"human" or "mouse" \<string\>}
+\item{ctd_Species}{"human" or "mouse" \code{string}}
 
-\item{cores}{The number of cores to run in parallel (e.g. 8) \<int\>}
+\item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}}
 }
 \value{
 True if analysis was sucessful. The results will then be saved
@@ -52,14 +52,13 @@ at "(results_directory)/(list_name).rds"
 Runs EWCE in parallel on multiple gene lists.
 }
 \examples{
-\dontrun{
 gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
-ctd <- load_example_CTD()
+ctd <- MultiEWCE::load_example_CTD()
 list_names <- unique(gene_data$Phenotype)[1:10]
-ewce_para(list_names, gene_data, results_directory ="results",ctd_file = ctd,
+results <- ewce_para(list_names, gene_data, results_directory ="results",ctd_file = ctd,
           background_genes = unique(gene_data$Gene), bootstrap_reps = 10,
           annotation_Level = 1, genes_Species = "human", ctd_Species = "human",
           cores = 1)
 
-}
+
 }

@@ -24,13 +24,13 @@
 #'                              list_name_column = "Phenotype",
 #'                              gene_column = "Gene")
 #'
-#' @param list_name The name of the gene list of interest \<string\>
+#' @param list_name The name of the gene list of interest `string`
 #' @param gene_data The data frame of gene list names and associated
 #' genes (data.frame)
 #' @param list_name_column The name of the column in gene_data that contains
-#' gene list names (string)
+#' gene list names `string`
 #' @param gene_column The name of the column in gene_data that contains
-#' the genes (string)
+#' the genes `string`
 #' @returns A charcter vector of genes associated with the selected list_name
 #' @export
 get_gene_list <- function(list_name,

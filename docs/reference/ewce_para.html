@@ -168,7 +168,7 @@
     </tr>
     <tr>
       <th>bootstrap_reps</th>
-      <td><p>The number of bootstrap reps \&lt;int\&gt; (e.g. 100000)</p></td>
+      <td><p>The number of bootstrap reps <code>int</code> (e.g. 100000)</p></td>
     </tr>
     <tr>
       <th>annotation_Level</th>
@@ -176,15 +176,15 @@
     </tr>
     <tr>
       <th>genes_Species</th>
-      <td><p>The species of gene lists \&lt;string\&gt; "human" or "mouse"</p></td>
+      <td><p>The species of gene lists <code>string</code> "human" or "mouse"</p></td>
     </tr>
     <tr>
       <th>ctd_Species</th>
-      <td><p>"human" or "mouse" \&lt;string\&gt;</p></td>
+      <td><p>"human" or "mouse" <code>string</code></p></td>
     </tr>
     <tr>
       <th>cores</th>
-      <td><p>The number of cores to run in parallel (e.g. 8) \&lt;int\&gt;</p></td>
+      <td><p>The number of cores to run in parallel (e.g. 8) <code>int</code></p></td>
     </tr>
     </table>
 
@@ -194,16 +194,25 @@
 at "(results_directory)/(list_name).rds"</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='va'>gene_data</span> <span class='op'>&lt;-</span> <span class='fu'>HPOExplorer</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html'>load_phenotype_to_genes</a></span><span class='op'>(</span><span class='st'>"phenotype_to_genes.txt"</span><span class='op'>)</span>
-<span class='va'>ctd</span> <span class='op'>&lt;-</span> <span class='fu'><a href='load_example_CTD.html'>load_example_CTD</a></span><span class='op'>(</span><span class='op'>)</span>
-<span class='va'>list_names</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>gene_data</span><span class='op'>$</span><span class='va'>Phenotype</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>
-<span class='fu'>ewce_para</span><span class='op'>(</span><span class='va'>list_names</span>, <span class='va'>gene_data</span>, results_directory <span class='op'>=</span><span class='st'>"results"</span>,ctd_file <span class='op'>=</span> <span class='va'>ctd</span>,
+    <pre class="examples"><div class='input'><span class='va'>gene_data</span> <span class='op'>&lt;-</span> <span class='fu'>HPOExplorer</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html'>load_phenotype_to_genes</a></span><span class='op'>(</span><span class='st'>"phenotype_to_genes.txt"</span><span class='op'>)</span>
+<span class='va'>ctd</span> <span class='op'>&lt;-</span> <span class='fu'>MultiEWCE</span><span class='fu'>::</span><span class='fu'><a href='load_example_CTD.html'>load_example_CTD</a></span><span class='op'>(</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error: 'load_example_CTD' is not an exported object from 'namespace:MultiEWCE'</span></div><div class='input'><span class='va'>list_names</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>gene_data</span><span class='op'>$</span><span class='va'>Phenotype</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span><span class='op'>]</span>
+<span class='va'>results</span> <span class='op'>&lt;-</span> <span class='fu'>ewce_para</span><span class='op'>(</span><span class='va'>list_names</span>, <span class='va'>gene_data</span>, results_directory <span class='op'>=</span><span class='st'>"results"</span>,ctd_file <span class='op'>=</span> <span class='va'>ctd</span>,
           background_genes <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>gene_data</span><span class='op'>$</span><span class='va'>Gene</span><span class='op'>)</span>, bootstrap_reps <span class='op'>=</span> <span class='fl'>10</span>,
           annotation_Level <span class='op'>=</span> <span class='fl'>1</span>, genes_Species <span class='op'>=</span> <span class='st'>"human"</span>, ctd_Species <span class='op'>=</span> <span class='st'>"human"</span>,
           cores <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Abnormality of body height"
+#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Multicystic kidney dysplasia"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Autosomal dominant inheritance"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Autosomal recessive inheritance"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Abnormal morphology of female internal genitalia"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Functional abnormality of the bladder"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Recurrent urinary tract infections"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Neurogenic bladder"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Urinary urgency"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found
+#&gt; [1] "Hypoplasia of the uterus"</div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in unique(is.na(sct_data)) : object 'ctd' not found</div><div class='input'>
 
-<span class='op'>}</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

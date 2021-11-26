@@ -1,12 +1,12 @@
 #' Load RDA file and assign to specific variable
 #' Can be useful, but sort of pointless now as we have decided to only use .rds
 #'
-#' @param file file path to rda \<string\>
+#' @param file file path to rda `string`
 #' @examples
 #'
 #' \dontrun{
-#' files = "results.rds"
-#' RDA_assign_load(file)}
+#' files = "results.rda"
+#' results = RDA_assign_load(file)}
 #'
 #' @returns the data contained in the rda file
 #' @export
