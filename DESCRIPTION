@@ -28,7 +28,7 @@ Imports:
     ggplot2,
     cowplot, 
     data.table,
-    EWCE,
+    EWCE (<= 1.0.0),
     parallel,
     stringr,
     devtools,
