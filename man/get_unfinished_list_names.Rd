@@ -4,25 +4,33 @@
 \alias{get_unfinished_list_names}
 \title{Get unfinished list names}
 \usage{
-get_unfinished_list_names(list_names, results_dir)
+get_unfinished_list_names(list_names, save_dir_tmp)
 }
 \arguments{
-\item{list_names}{A char vector of gene list names}
+\item{list_names}{character vector of gene list names.}
 
-\item{results_dir}{The directory containing analysed results.}
+\item{save_dir_tmp}{Folder to save intermediate results files to
+(one file per gene list). Set to \code{NULL} to skip saving temporary files.}
 }
 \value{
 A character vector of list_names that still need to be analysed.
 }
 \description{
 Gets the unfinished gene list names. It reads the file names in the results
-directory and uses this to deduce which gene lists have already been analysed.
+directory and uses this to deduce which gene lists
+have already been analysed.
 This means you can pause the analysis of multiple gene lists and it will not
 re-analyse the already completed ones when you start again.
 }
 \examples{
-list_names <- HPOExplorer::load_phenotype_to_genes(tempfile())$Phenotype[1:5]
-results_dir <- tempdir()
-get_unfinished_list_names(list_names,results_dir)
-
+gene_data <- HPOExplorer::load_phenotype_to_genes()
+list_names <- unique(gene_data$Phenotype)[seq_len(3)]
+save_dir_tmp <- file.path(tempdir(),"results")
+res_files <- ewce_para(ctd = ctd,
+                       gene_data = gene_data,
+                       list_names = list_names,
+                       reps = 10,
+                       save_dir_tmp = save_dir_tmp)
+unfinished <- get_unfinished_list_names(list_names = list_names,
+                                        save_dir_tmp = save_dir_tmp)
 }

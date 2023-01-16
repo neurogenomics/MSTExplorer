@@ -9,42 +9,39 @@ get_valid_gene_lists(
   list_names,
   gene_data,
   list_name_column = "Phenotype",
-  gene_column = "Gene"
+  gene_column = "Gene",
+  annotLevel = 1
 )
 }
 \arguments{
-\item{ctd}{CTD (cell type data file) see EWCE docs}
+\item{ctd}{Cell Type Data List generated using
+\link[EWCE]{generate_celltype_data}.}
 
-\item{list_names}{Vector of gene list names \verb{character vector}}
+\item{list_names}{character vector of gene list names.}
 
-\item{gene_data}{data frame containing a gene column and a column of list_names}
+\item{gene_data}{data frame of gene list names and genes
+(see \link[MultiEWCE]{get_gene_list}).}
 
-\item{list_name_column}{The name of the column that contains
-gene list_names \code{string}}
+\item{list_name_column}{The name of the gene_data column
+that has the gene list names.}
 
-\item{gene_column}{The name of the gene column (e.g. "Gene") \code{string}}
+\item{gene_column}{The name of the gene_data column that contains the genes.}
+
+\item{annotLevel}{An integer indicating which level of \code{sct_data} to
+analyse (\emph{Default: 1}).}
 }
 \value{
 A character vector of list_names that are associated with a valid
 number of genes
 }
 \description{
-Gene lists for EWCE must have 4 or more genes. These genes must also be present
+Gene lists for EWCE must have 4 or more genes.
+These genes must also be present
 in the CTD file (see EWCE docs), and must be unique (occasionally a gene list
 may contain the same gene repeated. This would cause an error).
 }
 \details{
-This function gets gene lists that have atleast four unique genes that are also
-present in the CTD file.
+This function gets gene lists that have at least four unique genes
+that are also present in the CTD file.
 }
-\examples{
-gene_data <- HPOExplorer::load_phenotype_to_genes(tempfile())
-list_names <- unique(gene_data$Phenotype)[1:10]
-ctd <- load_example_CTD()
-get_valid_gene_lists(ctd,
-                          list_names,
-                          gene_data,
-                          list_name_column = "Phenotype",
-                          gene_column = "Gene")
-
-}
+\keyword{internal}

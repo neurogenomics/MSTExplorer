@@ -2,19 +2,39 @@
 % Please edit documentation in R/merge_results.R
 \name{merge_results}
 \alias{merge_results}
-\title{merge results}
+\title{Merge results}
 \usage{
-merge_results(results_dir = "results", list_name_column = "phenotype")
+merge_results(
+  save_dir = NULL,
+  res_files = NULL,
+  list_name_column = "Phenotype"
+)
 }
 \arguments{
-\item{results_dir}{The filepath to results .rds files}
+\item{save_dir}{Folder to save merged results in.}
 
-\item{list_name_column}{The column name for gene list_names (e.g. phenotypes)}
+\item{res_files}{The output of \link[MultiEWCE]{ewce_para}
+(can be either a list of file names, or a nested list of results).}
+
+\item{list_name_column}{The name of the gene_data column
+that has the gene list names.}
 }
 \value{
-dataframe
+dataframe and merged results.
 }
 \description{
-merges individual .rds files from the results output directory into one
-dataframe.
+Merges individual .rds files from the results output directory into one.
+dataframe. Can also handle results lists directly.
+Alternatively, can simply provide \code{save_dir} and \emph{.rds}
+files will be searched for and imported.
+}
+\examples{
+gene_data <- HPOExplorer::load_phenotype_to_genes()
+ctd <- MultiEWCE::load_example_ctd()
+list_names <- unique(gene_data$Phenotype)[seq_len(3)]
+res_files <- ewce_para(ctd = ctd,
+                       gene_data = gene_data,
+                       list_names = list_names,
+                       reps = 10)
+all_results <- merge_results(res_files=res_files)
 }

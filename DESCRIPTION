@@ -1,6 +1,6 @@
 Package: MultiEWCE
 Title: EWCE for Multiple Gene Lists
-Version: 0.1.0
+Version: 0.1.1
 Authors@R:
     c(person(given = "Robert",
            family = "Gordon-Smith",
@@ -17,31 +17,41 @@ Authors@R:
            role = c("aut"),
            email = "nathan.skene@gmail.com",
            comment = c(ORCID = "0000-0002-6807-3180"))) 
-Description: This package allows you to run EWCE on multiple gene lists in parallel. It has functions for processing the data and running the analyss. Finally you can merge the results in to one large dataframe. Each individual gene list analysis will also be saved in the results directory to allow you to pause the analysis mid way and not lose anything. 
-License: GPL-3 + file LICENSE
+Description: This package allows you to run EWCE on multiple gene lists in parallel. 
+  It has functions for processing the data and running the analyss. 
+  Finally you can merge the results in to one large dataframe. 
+  Each individual gene list analysis will also be saved in the results
+  directory to allow you to pause the analysis mid way and not lose anything. 
+License: GPL-3
 Encoding: UTF-8
 URL: https://github.com/neurogenomics/MultiEWCE
 BugReports: https://github.com/neurogenomics/MultiEWCE/issues
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Imports:
-    ggplot2,
-    cowplot, 
     data.table,
-    EWCE (<= 1.0.0),
+    EWCE (>= 1.0.0),
     parallel,
     stringr,
-    devtools,
-    ewceData,
     piggyback,
-    HPOExplorer
+    HPOExplorer,
+    stats,
+    tools
 Suggests: 
+    ggplot2,
+    BiocStyle,
     rmarkdown,
     knitr,
     qpdf,
-    testthat (>= 3.0.0)
-Remotes: neurogenomics/HPOExplorer
+    testthat (>= 3.0.0),
+    rworkflows
+Remotes: 
+  github::neurogenomics/HPOExplorer
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 biocViews:
-    Genetics, Preprocessing, GeneTarget, SystemsBiology, BiomedicalInformatics, DifferentialExpression, FunctionalGenomics, GeneExpression, GeneSetEnrichment, Genetics, Microarray, OneChannel, Proteomics, RNASeq, SingleCell, Software, Transcription, Visualization, mRNAMicroarray
+    Genetics, Preprocessing, GeneTarget, SystemsBiology, 
+    BiomedicalInformatics, DifferentialExpression, FunctionalGenomics, 
+    GeneExpression, GeneSetEnrichment, Genetics, Microarray, OneChannel, 
+    Proteomics, RNASeq, SingleCell, Software, Transcription, Visualization, 
+    mRNAMicroarray

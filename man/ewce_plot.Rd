@@ -2,23 +2,45 @@
 % Please edit documentation in R/ewce_plot.R
 \name{ewce_plot}
 \alias{ewce_plot}
-\title{Modification to ewce.plot function to automatically align the dendrogram}
+\title{EWCE plot}
 \usage{
-ewce_plot(total_res, mtc_method = "bonferroni", ctd = NULL)
+ewce_plot(total_res, mtc_method = "bonferroni", ctd = NULL, ...)
 }
 \arguments{
-\item{total_res}{Results to be plotted ?}
+\item{total_res}{Results data.frame generated using
+\link[EWCE]{bootstrap_enrichment_test} or
+\link[EWCE]{ewce_expression_data} functions.
+Multiple results tables can be
+merged into one results table, as long as the 'list' column is set to
+distinguish them.
+Multiple testing correction is then applied across all merged results.}
 
-\item{mtc_method}{Multiple comparison adjustment method}
+\item{mtc_method}{Method to be used for multiple testing correction.
+Argument is passed to \link[stats]{p.adjust} (DEFAULT: "bonferroni).}
 
-\item{ctd}{Cell type data object \code{list}}
+\item{ctd}{CellTypeDataset object.
+Should be provided so that the dendrogram can be taken from it
+and added to plots}
+
+\item{...}{
+  Arguments passed on to \code{\link[EWCE:ewce_plot]{EWCE::ewce_plot}}
+  \describe{
+    \item{\code{align}}{(optional) Specifies whether graphs in the grid should be horizontally ("h") or
+vertically ("v") aligned. Options are "none" (default), "hv" (align in both directions), "h", and "v".}
+    \item{\code{rel_heights}}{(optional) Numerical vector of relative rows heights. Works just as
+\code{rel_widths} does, but for rows rather than columns.}
+    \item{\code{axis}}{(optional) Specifies whether graphs should be aligned by the left ("l"), right ("r"), top ("t"), or bottom ("b")
+margins. Options are "none" (default), or a string of any combination of l, r, t, and b in any order (e.g. "tblr" or "rlbt" for aligning all margins).
+Must be specified if any of the graphs are complex (e.g. faceted) and alignment is specified and desired. See \code{\link[cowplot:align_plots]{align_plots()}} for details.}
+  }}
 }
 \value{
 A bar chart with dendrogram of EWCE results in each cell type.
 }
 \description{
-Modification to ewce.plot function to automatically align the dendrogram
+A shallow wrapper for the \link[EWCE]{ewce_plot} function.
 }
 \examples{
-\dontrun{ewce.plot(results_dataframe,"bonferroni",CTD)}
+full_results <- EWCE::example_bootstrap_results()
+plt <- MultiEWCE::ewce_plot(total_res = full_results$results)
 }

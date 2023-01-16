@@ -7,67 +7,78 @@
 gen_results(
   ctd,
   gene_data,
-  list_names,
-  background_genes,
   list_name_column = "Phenotype",
   gene_column = "Gene",
-  results_dir = "results",
+  list_names = unique(gene_data[[list_name_column]]),
+  bg = unique(gene_data[[gene_column]]),
   overwrite_past_analysis = FALSE,
-  reps = 10,
+  reps = 100,
   annotLevel = 1,
   genelistSpecies = "human",
   sctSpecies = "human",
+  seed = 2022,
   cores = 1,
-  MergeResults = FALSE
+  save_dir_tmp = NULL,
+  save_dir = tempdir(),
+  verbose = FALSE
 )
 }
 \arguments{
-\item{ctd}{The Cell type data file for EWCE analysis (see EWCE docs)}
+\item{ctd}{Cell Type Data List generated using
+\link[EWCE]{generate_celltype_data}.}
 
-\item{gene_data}{The dataframe containing gene list names and associated genes
-(see docs for get_gene_list for more info).}
+\item{gene_data}{data frame of gene list names and genes
+(see \link[MultiEWCE]{get_gene_list}).}
 
-\item{list_names}{The names of each gene list (e.g. "Abnormality of nervous system
-may be the name of a phenotype assocated gene list)}
+\item{list_name_column}{The name of the gene_data column
+that has the gene list names.}
 
-\item{background_genes}{A character vector of background genes (see EWCE docs)}
+\item{gene_column}{The name of the gene_data column that contains the genes.}
 
-\item{list_name_column}{The name of the column in gene_data that contains the
-gene list names, (e.g. the column may be called "Phenotype" if dealing with
-phenotype associated gene lists)}
+\item{list_names}{character vector of gene list names.}
 
-\item{gene_column}{The name of the column containing genes in the gene_data
-dataframe. Typically this column is called "Gene"}
+\item{bg}{List of gene symbols containing the background gene list
+(including hit genes). If \code{bg=NULL},
+ an appropriate gene background will be created automatically.}
 
-\item{results_dir}{the desired direcory to save results (e.g. "results")}
+\item{overwrite_past_analysis}{overwrite previous results
+in the results dir \code{bool}.}
 
-\item{overwrite_past_analysis}{overwrite previous results in the results dir \code{bool}}
+\item{reps}{Number of random gene lists to generate (\emph{Default: 100},
+but should be >=10,000 for publication-quality results).}
 
-\item{reps}{The number of bootstrap reps for EWCE (see ewce docs) \code{int}}
+\item{annotLevel}{An integer indicating which level of \code{sct_data} to
+analyse (\emph{Default: 1}).}
 
-\item{annotLevel}{The level of cell specificity to select from the CTD,
-See EWCE docs \code{int}}
+\item{genelistSpecies}{Species that \code{hits} genes came from
+(no longer limited to just "mouse" and "human").
+See \link[EWCE]{list_species} for all available species.}
 
-\item{genelistSpecies}{The species ("human"/"mouse") of the gene lists \code{string}}
+\item{sctSpecies}{Species that \code{sct_data} came from
+(no longer limited to just "mouse" and "human").
+See \link[EWCE]{list_species} for all available species.}
 
-\item{sctSpecies}{The species ("human"/"mouse") of the CTD data}
+\item{seed}{Used to set the seed for replicable results.}
 
-\item{cores}{The number of cores to run in parallel \code{int}}
+\item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 
-\item{MergeResults}{return merged to single data.frame as a .rds.
-Note: The function will return merged dataframe even if FALSE \code{bool}}
+\item{save_dir_tmp}{Folder to save intermediate results files to
+(one file per gene list). Set to \code{NULL} to skip saving temporary files.}
+
+\item{save_dir}{Folder to save merged results in.}
+
+\item{verbose}{Print messages.}
 }
 \value{
-If MergeResults is TRUE, it will return all results as a datframe. If
-FALSE nothing will be returned, but the individual results will still be saved
-in the results directory.
+All results as a dataframe.
 }
 \description{
 Generates EWCE results on multiple gene lists in parallel by calling
 \code{ewce_para}. It allows you to stop the analysis and then continue later
-from where you left off as it checks the results output directory for finished
-gene lists and removes them from the input. It also excludes gene lists with
-less than 4 unique genes (which cause errors in ewce analysis).
+from where you left off as it checks the results output directory for
+finished gene lists and removes them from the input.
+It also excludes gene lists with
+less than 4 unique genes (which cause errors in EWCE analysis).
 }
 \details{
 The gene_data should be a data frame that contains a column of gene
@@ -82,34 +93,15 @@ genes (e.g. "Gene"). For example:\tabular{ll}{
 }
 
 
-For more information on this see docs for get_gene_list (\code{?get_gene_list})
-
-If \code{MergeResutls == TURE}, the function will return a dataframe of all results.
-No multiple testing corrections are applied to this so it is recommended that
-they are done after, for example:
-\code{all_results$q <- stats::p.adjust(all_results$p, method = "BH")}
+For more information on this see docs for get_gene_list
+(\link[MultiEWCE]{get_gene_list}).
 }
 \examples{
-gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
-ctd <- load_example_CTD()
-list_names <- unique(gene_data$Phenotype)[1:20]
-background_genes <- unique(gene_data$Gene)
-list_name_column <- "Phenotype"
-gene_column <- "Gene"
-results_dir <- "results"
-overwrite_past_analysis <- FALSE
-MergeResults <- TRUE
-reps <- 10
-annotLevel <- 1
-genelistSpecies <- "human"
-sctSpecies <- "human"
-cores <- 1
-
-all_results <-MultiEWCE::gen_results(ctd, gene_data, list_names, background_genes,
-                                     list_name_column, gene_column, results_dir,
-                                     overwrite_past_analysis, reps, annotLevel,
-                                     genelistSpecies, sctSpecies, cores,
-                                     MergeResults)
-
-
+gene_data <- HPOExplorer::load_phenotype_to_genes()
+ctd <- load_example_ctd()
+list_names <- unique(gene_data$Phenotype)[seq_len(3)]
+all_results <- gen_results(ctd = ctd,
+                           gene_data = gene_data,
+                           list_names = list_names,
+                           reps = 10)
 }

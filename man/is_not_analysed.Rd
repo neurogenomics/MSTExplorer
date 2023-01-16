@@ -4,18 +4,22 @@
 \alias{is_not_analysed}
 \title{Is not analysed?}
 \usage{
-is_not_analysed(list_name, results_dir)
+is_not_analysed(list_name, save_dir_tmp)
 }
 \arguments{
-\item{list_name}{The name of a gene list e.g. "Phenotypic abnormality"}
+\item{list_name}{The name of a gene list (e.g. "Phenotypic abnormality").}
 
-\item{results_dir}{The path to results directory}
+\item{save_dir_tmp}{Folder to save intermediate results files to
+(one file per gene list). Set to \code{NULL} to skip saving temporary files.}
 }
 \value{
-True or false \code{bool}
+TRUE or FALSE \code{bool}.
 }
 \description{
 Takes a gene list name and checks the output results directory to see if that
-gene list has been analysed yet. The ewce_para function outputs the results
-for each gene list in to the results directory with name format list_name.rds
+gene list has been analysed yet.
+The \link[MultiEWCE]{ewce_para} function outputs the results
+for each gene list in to the results directory (\code{save_dir_tmp})
+with name format \emph{list_name.rds}.
 }
+\keyword{internal}

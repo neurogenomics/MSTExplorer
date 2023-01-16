@@ -1,19 +1,29 @@
 #' Load example CTD (Descartes)
 #'
-#' This loads a example CTD for vignettes and testing purposes. It is Descartes
-#' human cell atlas data at annotation level 1.
-#'
-#' @examples
-#' CTD <- load_example_CTD()
+#' This loads a example CTD for vignettes and testing purposes.
+#' It is \href{https://descartes.brotmanbaty.org/}{Descartes} Gene Expression
+#' During Development single-cell RNA-seq atlas at annotation level 1.
+#' @param file Name of a remotely stored file.
+#' @param save_dir Where to store the file locally.
+#' @inheritParams piggyback::pb_download
 #'
 #' @export
-load_example_CTD <- function() {
-  if (! file.exists("CTD_Descartes_example.rds")) {
-    piggyback::pb_download(repo="neurogenomics/MultiEWCE",
-                           tag = "v0.0.1")
+#' @importFrom piggyback pb_download
+#' @importFrom tools R_user_dir
+#' @examples
+#' CTD <- load_example_ctd()
+load_example_ctd <- function(file="CTD_Descartes_example.rds",
+                             tag = "v0.0.1",
+                             save_dir=tools::R_user_dir(package = "MultiEWCE")
+                             ) {
 
-    return(readRDS("CTD_Descartes_example.rds"))
-  } else {
-    return(readRDS("CTD_Descartes_example.rds"))
+  dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
+  save_path <- file.path(save_dir,file)
+  if (!file.exists(file)) {
+    piggyback::pb_download(repo = "neurogenomics/MultiEWCE",
+                           tag = tag,
+                           dest = save_dir,
+                           overwrite = TRUE)
   }
+  return(readRDS(save_path))
 }

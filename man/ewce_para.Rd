@@ -5,60 +5,77 @@
 \title{EWCE parallel}
 \usage{
 ewce_para(
-  list_names,
+  ctd,
   gene_data,
   list_name_column = "Phenotype",
   gene_column = "Gene",
-  results_directory,
-  ctd_file,
-  background_genes,
-  bootstrap_reps,
-  annotation_Level,
-  genes_Species,
-  ctd_Species,
-  cores
+  list_names = unique(gene_data[[list_name_column]]),
+  bg = unique(gene_data[[gene_column]]),
+  reps = 100,
+  annotLevel = 1,
+  genelistSpecies = "human",
+  sctSpecies = "human",
+  save_dir_tmp = tempdir(),
+  seed = 2022,
+  cores = 1,
+  verbose = FALSE
 )
 }
 \arguments{
-\item{list_names}{character vector of gene list names}
+\item{ctd}{Cell Type Data List generated using
+\link[EWCE]{generate_celltype_data}.}
 
-\item{gene_data}{data frame of gene list names and genes (see ?get_gene_list)}
+\item{gene_data}{data frame of gene list names and genes
+(see \link[MultiEWCE]{get_gene_list}).}
 
-\item{list_name_column}{The name of the gene_data column that has the gene list names}
+\item{list_name_column}{The name of the gene_data column
+that has the gene list names.}
 
-\item{gene_column}{The name of the gene_data column that contains the genes}
+\item{gene_column}{The name of the gene_data column that contains the genes.}
 
-\item{results_directory}{The desired output filepath for results to be saved}
+\item{list_names}{character vector of gene list names.}
 
-\item{ctd_file}{The cell type data object for EWCE analysis (see EWCE docs)}
+\item{bg}{List of gene symbols containing the background gene list
+(including hit genes). If \code{bg=NULL},
+ an appropriate gene background will be created automatically.}
 
-\item{background_genes}{The background geneset for EWCE analysis (see EWCE docs)}
+\item{reps}{Number of random gene lists to generate (\emph{Default: 100},
+but should be >=10,000 for publication-quality results).}
 
-\item{bootstrap_reps}{The number of bootstrap reps \code{int} (e.g. 100000)}
+\item{annotLevel}{An integer indicating which level of \code{sct_data} to
+analyse (\emph{Default: 1}).}
 
-\item{annotation_Level}{The level of desired cell resolution from the CTD}
+\item{genelistSpecies}{Species that \code{hits} genes came from
+(no longer limited to just "mouse" and "human").
+See \link[EWCE]{list_species} for all available species.}
 
-\item{genes_Species}{The species of gene lists \code{string} "human" or "mouse"}
+\item{sctSpecies}{Species that \code{sct_data} came from
+(no longer limited to just "mouse" and "human").
+See \link[EWCE]{list_species} for all available species.}
 
-\item{ctd_Species}{"human" or "mouse" \code{string}}
+\item{save_dir_tmp}{Folder to save intermediate results files to
+(one file per gene list). Set to \code{NULL} to skip saving temporary files.}
 
-\item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}}
+\item{seed}{Used to set the seed for replicable results.}
+
+\item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
+
+\item{verbose}{Print messages.}
 }
 \value{
-True if analysis was sucessful. The results will then be saved
-at "(results_directory)/(list_name).rds"
+Paths to saved results at "(save_dir)/(list_name).rds"
+(when \code{save_dir!=NULL}), or a nested list of results
+(when \code{save_dir==NULL}).
 }
 \description{
 Runs EWCE in parallel on multiple gene lists.
 }
 \examples{
-gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
-ctd <- MultiEWCE::load_example_CTD()
-list_names <- unique(gene_data$Phenotype)[1:10]
-results <- ewce_para(list_names, gene_data, results_directory ="results",ctd_file = ctd,
-          background_genes = unique(gene_data$Gene), bootstrap_reps = 10,
-          annotation_Level = 1, genes_Species = "human", ctd_Species = "human",
-          cores = 1)
-
-
+gene_data <- HPOExplorer::load_phenotype_to_genes()
+ctd <- MultiEWCE::load_example_ctd()
+list_names <- unique(gene_data$Phenotype)[seq_len(3)]
+res_files <- ewce_para(ctd = ctd,
+                       gene_data = gene_data,
+                       list_names = list_names,
+                       reps = 10)
 }

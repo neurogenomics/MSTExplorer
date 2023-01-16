@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_gene_list.R
 \name{get_gene_list}
 \alias{get_gene_list}
-\title{get_gene_list}
+\title{Get gene list}
 \usage{
 get_gene_list(
   list_name,
@@ -12,19 +12,18 @@ get_gene_list(
 )
 }
 \arguments{
-\item{list_name}{The name of the gene list of interest \code{string}}
+\item{list_name}{Names of one or more gene lists.}
 
-\item{gene_data}{The data frame of gene list names and associated
-genes (data.frame)}
+\item{gene_data}{data frame of gene list names and genes
+(see \link[MultiEWCE]{get_gene_list}).}
 
-\item{list_name_column}{The name of the column in gene_data that contains
-gene list names \code{string}}
+\item{list_name_column}{The name of the gene_data column
+that has the gene list names.}
 
-\item{gene_column}{The name of the column in gene_data that contains
-the genes \code{string}}
+\item{gene_column}{The name of the gene_data column that contains the genes.}
 }
 \value{
-A charcter vector of genes associated with the selected list_name
+A character vector of genes associated with the selected list_name
 }
 \description{
 This returns a character vector of genes (a gene list). The gene_data should
@@ -39,20 +38,10 @@ lets call the following data frame \code{phenotype_to_genes}:
    "Abnormal heart" \tab gene Y \cr
    "Poor vision" \tab gene Z \cr
    "Poor vision" \tab gene Y \cr
-   etc... \tab  \cr
 }
-
-
-In the example above, if we wanted to extract genes related to "Abnormal heart",
-we would run the following example:
 }
 \examples{
-
-phenotype_to_genes <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
-
-height_genes <- get_gene_list(list_name = "Abnormality of body height",
-                             gene_data = phenotype_to_genes,
-                             list_name_column = "Phenotype",
-                             gene_column = "Gene")
-
+gene_data <- HPOExplorer::load_phenotype_to_genes()
+gene_list <- get_gene_list(list_name="Focal non-motor seizure",
+                           gene_data = gene_data)
 }

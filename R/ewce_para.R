@@ -1,68 +1,87 @@
 #' EWCE parallel
 #'
 #' Runs EWCE in parallel on multiple gene lists.
-#' @import parallel
-#' @import EWCE
-#' @param list_names character vector of gene list names
-#' @param gene_data data frame of gene list names and genes (see ?get_gene_list)
-#' @param list_name_column The name of the gene_data column that has the gene list names
-#' @param gene_column The name of the gene_data column that contains the genes
-#' @param results_directory The desired output filepath for results to be saved
-#' @param ctd_file The cell type data object for EWCE analysis (see EWCE docs)
-#' @param background_genes The background geneset for EWCE analysis (see EWCE docs)
-#' @param bootstrap_reps The number of bootstrap reps `int` (e.g. 100000)
-#' @param annotation_Level The level of desired cell resolution from the CTD
-#' @param genes_Species The species of gene lists `string` "human" or "mouse"
-#' @param ctd_Species "human" or "mouse" `string`
-#' @param cores The number of cores to run in parallel (e.g. 8) `int`
-#' @return True if analysis was sucessful. The results will then be saved
-#' at "(results_directory)/(list_name).rds"
-#'
-#' @examples
-#' gene_data <- HPOExplorer::load_phenotype_to_genes("phenotype_to_genes.txt")
-#' ctd <- MultiEWCE::load_example_CTD()
-#' list_names <- unique(gene_data$Phenotype)[1:10]
-#' results <- ewce_para(list_names, gene_data, results_directory ="results",ctd_file = ctd,
-#'           background_genes = unique(gene_data$Gene), bootstrap_reps = 10,
-#'           annotation_Level = 1, genes_Species = "human", ctd_Species = "human",
-#'           cores = 1)
-#'
+#' @param ctd Cell Type Data List generated using
+#'  \link[EWCE]{generate_celltype_data}.
+#' @param list_names character vector of gene list names.
+#' @param gene_data data frame of gene list names and genes
+#' (see \link[MultiEWCE]{get_gene_list}).
+#' @param list_name_column The name of the gene_data column
+#' that has the gene list names.
+#' @param gene_column The name of the gene_data column that contains the genes.
+#' @param save_dir_tmp Folder to save intermediate results files to
+#' (one file per gene list). Set to \code{NULL} to skip saving temporary files.
+#' @param cores The number of cores to run in parallel (e.g. 8) \code{int}.
+#' @param seed Used to set the seed for replicable results.
+#' @inheritParams EWCE::bootstrap_enrichment_test
+#' @returns Paths to saved results at "(save_dir)/(list_name).rds"
+#' (when \code{save_dir!=NULL}), or a nested list of results
+#' (when \code{save_dir==NULL}).
 #'
 #' @export
-ewce_para <- function( list_names,
-                       gene_data,
-                       list_name_column = "Phenotype",
-                       gene_column = "Gene",
-                       results_directory,
-                       ctd_file,
-                       background_genes,
-                       bootstrap_reps,
-                       annotation_Level,
-                       genes_Species,
-                       ctd_Species,
-                       cores) {
-  parallel::mclapply(list_names,FUN=function(p,
-                                             gene_associations= gene_data,
-                                             lst_nm_col = list_name_column,
-                                             gn_col = gene_column,
-                                             results_dir = results_directory,
-                                             ctd = ctd_file,
-                                             background = background_genes,
-                                             reps=bootstrap_reps,
-                                             annotLevel = annotation_Level,
-                                             genelistSpecies = genes_Species,
-                                             sctSpecies = ctd_Species){
-    print(p)
-    genes = get_gene_list(p,gene_associations,lst_nm_col, gn_col)
-    try({
-      results = EWCE::bootstrap_enrichment_test(sct_data = ctd,
-                                          hits = genes,
-                                          bg = background,
-                                          reps = reps,
-                                          annotLevel = annotLevel,
-                                          genelistSpecies=genelistSpecies,
-                                          sctSpecies=sctSpecies)
-      saveRDS(results, paste0(results_dir,"/",p, ".rds"))
-      return(TRUE)})
+#' @importFrom HPOExplorer load_phenotype_to_genes
+#' @importFrom stats setNames
+#' @importFrom parallel mclapply
+#' @importFrom EWCE bootstrap_enrichment_test
+#' @examples
+#' gene_data <- HPOExplorer::load_phenotype_to_genes()
+#' ctd <- MultiEWCE::load_example_ctd()
+#' list_names <- unique(gene_data$Phenotype)[seq_len(3)]
+#' res_files <- ewce_para(ctd = ctd,
+#'                        gene_data = gene_data,
+#'                        list_names = list_names,
+#'                        reps = 10)
+ewce_para <- function(ctd,
+                      gene_data,
+                      list_name_column = "Phenotype",
+                      gene_column = "Gene",
+                      list_names = unique(gene_data[[list_name_column]]),
+                      bg = unique(gene_data[[gene_column]]),
+                      reps=100,
+                      annotLevel=1,
+                      genelistSpecies="human",
+                      sctSpecies="human",
+                      save_dir_tmp = tempdir(),
+                      seed=2022,
+                      cores=1,
+                      verbose=FALSE) {
+  # templateR:::source_all()
+  # templateR:::args2vars(ewce_para)
+
+  set.seed(seed)
+  if(!is.null(save_dir_tmp)){
+    dir.create(save_dir_tmp, showWarnings = FALSE, recursive = TRUE)
+  }
+  list_names <- unique(list_names)
+  res_files <- parallel::mclapply(stats::setNames(list_names,
+                                                  list_names),
+                     FUN=function(p){
+    i <- which(list_names==p)
+    message_parallel("Analysing: ",p," (",i,"/",length(list_names),")")
+    genes <- get_gene_list(list_name=p,
+                           gene_data=gene_data,
+                           list_name_column=list_name_column,
+                           gene_column=gene_column)
+    tryCatch({
+      results <- EWCE::bootstrap_enrichment_test(
+        sct_data = ctd,
+        hits = genes,
+        bg = bg,
+        reps = reps,
+        annotLevel = annotLevel,
+        genelistSpecies = genelistSpecies,
+        sctSpecies = sctSpecies,
+        verbose = verbose)
+      if(!is.null(save_dir_tmp)){
+        save_path <- make_save_path(save_dir = save_dir_tmp,
+                                    list_name = p)
+        saveRDS(results, save_path)
+        return(save_path)
+      } else {
+        return(results)
+      }
+      },
+      error=function(e){message(e);NULL})
   },mc.cores=cores)
+  return(res_files)
 }

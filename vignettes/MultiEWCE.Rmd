@@ -1,42 +1,26 @@
 ---
-title: "Expression Weighted Celltype Enrichment on Multiple Gene Lists With MultiEWCE"
-output: rmarkdown::html_vignette
+title: "Getting Started" 
+author: "<h4>Authors: <i>`r auths <- eval(parse(text = gsub('person','c',read.dcf('../DESCRIPTION', fields = 'Authors@R'))));paste(auths[names(auths)=='given'],auths[names(auths)=='family'], collapse = ', ')`</i></h4>" 
+date: "<h4>Vignette updated: <i>`r format( Sys.Date(), '%b-%d-%Y')`</i></h4>"
+output:
+  BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{MultiEWCE}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+--- 
 
 ```{r setup}
 library(MultiEWCE)
 ```
 
 # Introduction
-The MultiEWCE package is an extension of the [EWCE](https://nathanskene.github.io/EWCE/articles/EWCE.html) package. It is designed to run expression weighted celltype enrichment (EWCE) on multiple gene lists in parallel. The results are then stored both as separate `.rds` files, one for each individual EWCE analysis, as well as a in a single dataframe containing all the results.  
+The `MultiEWCE` package is an extension of the [EWCE](https://nathanskene.github.io/EWCE/articles/EWCE.html) package. 
+It is designed to run expression weighted celltype enrichment (`EWCE`) on multiple gene lists in parallel. 
+The results are then stored both as separate *.rds* files, one for each individual `EWCE` analysis, 
+as well as a in a single dataframe containing all the results.  
 
 This package is useful in cases where you have a large number of related, but separate, gene lists. In this vignette we will use an example from the Human Phenotype Ontology (HPO). The HPO contains over 9000 clinically relevant phenotypes annotated with lists of genes that have been found to be associated with the particular phenotype.
-
-# Installation
-This tutorial will require the MultiEWCE package and a few additional packages related to the particular dataset we will be using. Install and load these with the following R code:
-
-```{r install, message = FALSE, warning = FALSE} 
-
-if (!require("HPOExplorer")) {
-  devtools::install_github("ovrhuman/HPOExplorer")
-}
-
-if (!require("ewceData")) {
-  install.packages("ewceData")
-}
-
-```
 
 # Loading Phenotype Associated Gene Lists from the HPO
 The MultiEWCE package requires the gene data to be in a particular format. It must be a data.frame that includes one column of gene list names, and another column of genes. For example: 
@@ -53,144 +37,97 @@ The MultiEWCE package requires the gene data to be in a particular format. It mu
 
 Now we will get a dataset like this from the HPO.
 
-```{r get_HPO_data, message = FALSE, warning = FALSE}
-
-gene_data <- HPOExplorer::load_phenotype_to_genes(tempfile())
+```{r get_HPO_data}
+gene_data <- HPOExplorer::load_phenotype_to_genes()
 print(head(gene_data))
 ```
 
-In this example our **gene list names** column is called `Phenotype` and our column of genes is called `Gene`. However, different column names can be specified to the MultiEWCE package. 
+In this example our **gene list names** column is called `Phenotype` and our column of genes is called `Gene`. However, different column names can be specified to the `MultiEWCE` package. 
 
 # Setting up input arguments for the gen_results function
-```{r echo=FALSE, results="hide", message = FALSE, warning = FALSE}
-load_example_CTD <- function() {
-  if (! file.exists("CTD_Descartes_example.rds")) {
-    piggyback::pb_download(repo="neurogenomics/MultiEWCE",
-                           tag = "v0.0.1")
 
-    return(readRDS("CTD_Descartes_example.rds"))
-  } else {
-    return (readRDS("CTD_Descartes_example.rds"))
-  }
-}
-
-
-```
-
-```{r setup_args, message = FALSE, warning = FALSE}
-# Loading CTD file (had to change all rownames to uppercase as the genelists are all upper)
-
-ctd <- load_example_CTD()
-list_names <- unique(gene_data$Phenotype)[1:10]
-background_genes <- unique(gene_data$Gene)
-list_name_column <- "Phenotype"
-gene_column <- "Gene"
-results_dir <- "results"
-overwrite_past_analysis <- TRUE
-MergeResults <- TRUE
-reps <- 10
-annotLevel <- 1
-genelistSpecies <- "human"
-sctSpecies <- "human"
-cores <- 1
+```{r setup_args}
+# Loading CTD file 
+ctd <- load_example_ctd()
+list_names <- unique(gene_data$Phenotype)[seq_len(5)] 
+reps <- 10 # in practice would use more reps
+cores <- 1 # in practice would use more cores
+save_dir <- tempdir()
+save_dir_tmp <- file.path(save_dir,"results")
 ```
 
 ## ctd 
 The `ctd` (cell type data) file contains the single cell RNA sequence data that is required for EWCE. for further information about generating a `ctd` please see the [EWCE](https://nathanskene.github.io/EWCE/articles/EWCE.html) documentation. In this example we will use a CTD of human gene expression data, generated from the Descartes Human Cell Atlas. Replace this with your own CTD file.
 
 ## gene_data
-Gene data is the dataframe containin gene list names and genes, in this case we have already loaded it and assigned it to the variable `gene_data`.
+Gene data is the dataframe containing gene list names and genes, in this case we have already loaded it and assigned it to the variable `gene_data`.
 
 ## list_names
 This is a character vector containing all the gene list names. This can be obtained from your `gene_data` as follows. To save time in this example analysis we will only use the first 10 gene lists (`[1:10]`)
 
-## background_genes
-This is a character vector of genes to be used as the background genes. See EWCE package docs for more details on background genes. 
+## bg
+This is a character vector of genes to be used as the background genes. 
+See `EWCE` package docs for more details on background genes. 
 
 ## Column names
 `list_name_column` is the name of the column in gene_data that contains the gene list names and `gene_column` contains the genes.   
 
 ## Processing results arguments
-The `results_dir` argument is the path to the directory where the individual EWCE results will be saved.  
+The `save_dir` argument is the path to the directory where the individual EWCE results will be saved.  
 
-The `overwrite_past_analysis` argument can be set to `TRUE` or `FALSE` and states if you want to redo and overwrite analysis of gene lists that have already been saved to the `results_dir`. Setting this to `FALSE` is useful in cases where you stopped an analysis midway and would like to carry on from where you left off.  
-
-`MergeResults` is another `TRUE`/`FALSE` argument. If `TRUE`, `gen_results` will also return a single dataframe containing all of the results from all gene lists. A `.rds` file of these merged results will also be saved to your current working directory in a file called "`results_<datetime_of_analysis>.rds`" 
+The `overwrite_past_analysis` argument can be set to `TRUE` or `FALSE` and 
+states if you want to redo and overwrite analysis of gene lists that have already been saved to the `save_dir`. 
+Setting this to `FALSE` is useful in cases where you stopped an analysis midway 
+and would like to carry on from where you left off.  
+ 
 ## Number of cores
 The `cores` argument is the number of cores you would like to run in parallel. This is dependent on what is available to you on your computer. In this case we will just run it on one core, no parallelism.
 
 ## EWCE::bootstrap_enrichment_test arguments
-The `gen_results` function calls the EWCE `bootstrap_enrichment_test` function. Here we set the input parameters related to this. 
+The `gen_results` function calls the `EWCE::bootstrap_enrichment_test` function. 
+Here we set the input parameters related to this. 
 
-`reps` is the number of bootstrap reps to run, for this tutorial we will only do 10 to save time, but typically you would want to do closer to 100,000.  
-
-`annotLevel` is the level of cell type specificity to use from the `ctd` file. `genelistSpecies` can be "human" or "mouse" and is the species of the genes in the gene lists.  
-
-`sctSpecies` is the species of the CTD data, also can be "human" or "mouse". 
+`reps` is the number of bootstrap reps to run, for this tutorial we will only do 10 to save time, but typically you would want to do closer to 100,000.   
 
 # Run analysis
 Now we have set up all our desired inputs, we can run the analysis. 
 
-```{r run, warning = FALSE, message = FALSE}
-all_results <-MultiEWCE::gen_results(ctd,
-                           gene_data,
-                           list_names,
-                           background_genes,
-                           list_name_column,
-                           gene_column,
-                           results_dir,
-                           overwrite_past_analysis,
-                           reps,
-                           annotLevel,
-                           genelistSpecies,
-                           sctSpecies,
-                           cores,
-                           MergeResults) 
-```
-
-# Adjust for multiple comparisons 
-Seeing as we have ran EWCE on multiple gene lists, we need to make adjustments for multiple comparisons. We can use Benjamini-Hochberg procedure to false discovery rate adjusted p values (which we will call q values here).
-
-```{r FDR}
-all_results$q <- stats::p.adjust(all_results$p, method = "BH")
-
-print(head(all_results))
+```{r run} 
+all_results <- MultiEWCE::gen_results(ctd = ctd,
+                                      gene_data = gene_data,
+                                      list_names = list_names, 
+                                      reps = reps,
+                                      cores = cores,
+                                      save_dir = save_dir, 
+                                      save_dir_tmp = save_dir_tmp) 
 ```
 
 # Visualise the results 
 Just as an example, we will create a plot showing the number of significant enrichments per phenotype in the all_results data.frame. We will use q <= 0.05 as the significance threshold. 
 ```{r plot}
 library(ggplot2)
-n_signif <- data.frame()
-for (p in unique(all_results$Phenotype)) {
-  n_signif <- rbind(n_signif, 
-                    data.frame("Phenotype" = p
-                               ,"signif_enrichments"=length(
-                                 all_results$q[all_results$Phenotype == p &
-                                                 all_results$q <= 0.05])))
-}
-
-
-plot1 <-  ggplot(n_signif, aes(Phenotype,signif_enrichments)) +
+library(data.table)
+#### Aggregate results ####
+n_signif <- all_results[q<=0.05 & !is.na(q), .(sig_enrichments = .N), by="Phenotype"]
+#### Plot #### 
+plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(Phenotype,width = 10),
+                               y = sig_enrichments,
+                               fill = sig_enrichments)) +
     geom_col() +
-    xlab("Phenotype") +
-    ylab("Enrichments (n)") +
-    theme_bw() +
-    theme(axis.text.x = element_text(angle=90,vjust = 0.5, hjust = 1))
-
+    labs(x="Phenotype",y="Enrichments (n)") + 
+    theme_bw() 
 ```
 
 ```{r display, fig.width = 7, fig.height = 6}
-print(plot1)
+methods::show(plot1)
 ```
 
 # Other functions in MultiEWCE
 ## merge_results 
-If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the `merge_results` function manually. The `results_dir` argument is the path to your results directory and the `list_name_column` argument is the name of the column containing gene list names. In this case we used "Phenotype" as this column name when we generated the results.
+If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the `merge_results` function manually. The `save_dir` argument is the path to your results directory and the `list_name_column` argument is the name of the column containing gene list names. In this case we used "Phenotype" as this column name when we generated the results.
 
 ```{r merge}
-all_results_2 <- MultiEWCE::merge_results(results_dir = "results",
-                                          list_name_column = "Phenotype")
+all_results_2 <- MultiEWCE::merge_results(save_dir = save_dir_tmp)
 ```
 
 ## get_gene_list 
@@ -198,20 +135,32 @@ This function gets a character vector of genes assocaited with a particular gene
 
 ```{r get_gene_list}
 eye_contact_genes <- MultiEWCE::get_gene_list(list_name = "Poor eye contact", 
-                                      gene_data = gene_data,
-                                      list_name_column = "Phenotype",
-                                      gene_column = "Gene")
+                                              gene_data = gene_data)
 
-cat(paste("5 genes associated with poor eye contact:",paste(eye_contact_genes[1:5],collapse = " ")))
+cat(paste("5 genes associated with poor eye contact:",
+          paste(eye_contact_genes[seq_len(5)],collapse = ", ")))
 ```
 
 ## get_unfinished_list_names
 This function is used to find which gene lists you have not yet analysed 
 
 ```{r get_unfinished} 
-unfinished <- MultiEWCE::get_unfinished_list_names(list_names = unique(gene_data$Phenotype)[1:15],
-                                        results_dir = "results")
-cat(paste0("Gene lists not yet analysed:\n",paste(unfinished, collapse = ",\n")))
+all_phenotypes <- unique(gene_data$Phenotype)
+unfinished <- MultiEWCE::get_unfinished_list_names(list_names = all_phenotypes,
+                                                   save_dir_tmp = save_dir_tmp)
+
+methods::show(paste(length(unfinished),"/",length(all_phenotypes),
+                    "gene lists not yet analysed"))
 ```
 
 
+# Session info
+
+<details>
+
+```{r}
+utils::sessionInfo()
+```
+
+</details>
+<hr>
