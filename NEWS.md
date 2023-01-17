@@ -1,3 +1,18 @@
+# MultiEWCE 0.1.2
+
+## New features
+
+* New functions:
+  - `load_example_results`
+  - `ontology_plot`
+  - various support functions
+* Add `ontologyPlot` as new *Import*. 
+
+## Bug fixes
+
+* `load_example_ctd`
+  - Pass `file` to `piggyback::pb_download`
+
 # MultiEWCE 0.1.1
 
 ## New features

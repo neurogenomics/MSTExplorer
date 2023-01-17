@@ -1,6 +1,6 @@
 Package: MultiEWCE
 Title: EWCE for Multiple Gene Lists
-Version: 0.1.1
+Version: 0.1.2
 Authors@R:
     c(person(given = "Robert",
            family = "Gordon-Smith",
@@ -35,14 +35,17 @@ Imports:
     stringr,
     piggyback,
     HPOExplorer,
+    ontologyPlot,
     stats,
-    tools
+    tools,
+    scales
 Suggests: 
     ggplot2,
     BiocStyle,
     rmarkdown,
     knitr,
     qpdf,
+    DT,
     testthat (>= 3.0.0),
     rworkflows
 Remotes: 

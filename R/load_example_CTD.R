@@ -19,8 +19,9 @@ load_example_ctd <- function(file="CTD_Descartes_example.rds",
 
   dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
   save_path <- file.path(save_dir,file)
-  if (!file.exists(file)) {
-    piggyback::pb_download(repo = "neurogenomics/MultiEWCE",
+  if (!file.exists(save_path)) {
+    piggyback::pb_download(file = basename(file),
+                           repo = "neurogenomics/MultiEWCE",
                            tag = tag,
                            dest = save_dir,
                            overwrite = TRUE)
