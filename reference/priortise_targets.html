@@ -70,6 +70,7 @@ Include only terminally differentiated cells.
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  fold_threshold <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  keep_celltypes <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep_onsets <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_tiers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>  phenotype_to_genes <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  hpo <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/get_hpo.html" class="external-link">get_hpo</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -105,6 +106,10 @@ to subset the <code>results</code> by.</p></dd>
 
 <dt>keep_celltypes</dt>
 <dd><p>Cell type to keep.</p></dd>
+
+
+<dt>keep_onsets</dt>
+<dd><p>The age of onset associated with each HPO ID to keep.</p></dd>
 
 
 <dt>keep_tiers</dt>

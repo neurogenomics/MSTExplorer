@@ -68,7 +68,7 @@ to creating the final interactive plot.</p>
 <span>  columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Phenotype <span class="op">=</span> <span class="st">"Phenotype"</span>, ID <span class="op">=</span> <span class="st">"HPO_ID"</span>, ontLvl_genes <span class="op">=</span></span>
 <span>    <span class="st">"ontLvl_geneCount_ratio"</span>, Description <span class="op">=</span> <span class="st">"description"</span>, CellType <span class="op">=</span> <span class="st">"CellType"</span>, p <span class="op">=</span></span>
 <span>    <span class="st">"p"</span>, q <span class="op">=</span> <span class="st">"q"</span>, fold_change <span class="op">=</span> <span class="st">"fold_change"</span><span class="op">)</span>,</span>
-<span>  colour_column <span class="op">=</span> <span class="st">"fold_change"</span>,</span>
+<span>  colour_var <span class="op">=</span> <span class="st">"fold_change"</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -110,7 +110,7 @@ to subset the <code>results</code> by.</p></dd>
 to add to the hoverdata via <a href="https://rdrr.io/pkg/HPOExplorer/man/make_hoverboxes.html" class="external-link">make_hoverboxes</a>.</p></dd>
 
 
-<dt>colour_column</dt>
+<dt>colour_var</dt>
 <dd><p>column name of the variable to be mapped
 to colour \&lt;string\&gt;</p></dd>
 
@@ -140,9 +140,10 @@ of results from RD EWCE analysis.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> get_cell_ontology</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: /github/home/.cache/R/HPOExplorer/data/phenotype_to_genes.txt</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 9 associations remain after filtering.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> adjacency_matrix</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating adjacency matrix for 9 terms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Making hoverboxes from: 'Phenotype', 'HPO_ID', 'description', 'CellType', 'p', 'q', 'fold_change'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Making phenotype network object.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting ontology level for 9 HPO IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating ggnetwork plot.</span>
 </code></pre></div>
     </div>
