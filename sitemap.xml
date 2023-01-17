@@ -19,6 +19,12 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/count_results.html</loc>
+  </url>
+  <url>
+    <loc>/reference/create_dt.html</loc>
+  </url>
+  <url>
     <loc>/reference/ewce_para.html</loc>
   </url>
   <url>
@@ -26,6 +32,9 @@
   </url>
   <url>
     <loc>/reference/gen_results.html</loc>
+  </url>
+  <url>
+    <loc>/reference/get_cell_ontology.html</loc>
   </url>
   <url>
     <loc>/reference/get_gene_list.html</loc>
@@ -37,6 +46,9 @@
     <loc>/reference/get_valid_gene_lists.html</loc>
   </url>
   <url>
+    <loc>/reference/ggnetwork_plot_full.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -46,6 +58,9 @@
     <loc>/reference/load_example_CTD.html</loc>
   </url>
   <url>
+    <loc>/reference/load_example_results.html</loc>
+  </url>
+  <url>
     <loc>/reference/merge_results.html</loc>
   </url>
   <url>
@@ -53,5 +68,14 @@
   </url>
   <url>
     <loc>/reference/messager.html</loc>
+  </url>
+  <url>
+    <loc>/reference/ontology_plot.html</loc>
+  </url>
+  <url>
+    <loc>/reference/priortise_targets.html</loc>
+  </url>
+  <url>
+    <loc>/reference/subset_phenos.html</loc>
   </url>
 </urlset>
