@@ -37,7 +37,7 @@ ggnetwork_plot_full <- function(cell_type,
                                   p="p",
                                   q="q",
                                   fold_change="fold_change"),
-                                colour_column = "fold_change",
+                                colour_var = "fold_change",
                                 interactive = TRUE,
                                 verbose = TRUE){
   # templateR:::source_all()
@@ -51,10 +51,12 @@ ggnetwork_plot_full <- function(cell_type,
                           q_threshold = q_threshold,
                           fold_threshold = fold_threshold,
                           verbose = verbose)
-  adjacency <- HPOExplorer::adjacency_matrix(pheno_ids = unique(phenos$HPO_ID),
-                                             hpo = hpo)
+  adjacency <- HPOExplorer::adjacency_matrix(terms = unique(phenos$HPO_ID),
+                                             hpo = hpo,
+                                             verbose = verbose)
   if(!"description" %in% names(phenos)){
-    phenos$description <- HPOExplorer::get_term_definition(ontologyId = phenos$HPO_ID)
+    phenos$description <- HPOExplorer::get_term_definition(
+      ontologyId = phenos$HPO_ID)
   }
   if(!"hover" %in% names(phenos)){
     phenos <- HPOExplorer::make_hoverboxes(phenos = phenos,
@@ -65,10 +67,10 @@ ggnetwork_plot_full <- function(cell_type,
   phenoNet <- HPOExplorer::make_network_object(phenos = phenos,
                                                hpo = hpo,
                                                adjacency = adjacency,
-                                               colour_column = colour_column,
+                                               colour_var = colour_var,
                                                verbose = verbose)
   network_plot <- HPOExplorer::ggnetwork_plot(phenoNet = phenoNet,
-                                              colour_column = colour_column,
+                                              colour_var = colour_var,
                                               interactive = interactive,
                                               verbose = verbose)
   return(list(plot=network_plot,

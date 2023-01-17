@@ -8,6 +8,7 @@
 #' }
 #' @param keep_celltypes Cell type to keep.
 #' @param keep_tiers Tiers from \link[HPOExplorer]{hpo_tiers} to keep.
+#' @param keep_onsets The age of onset associated with each HPO ID to keep.
 #' @inheritParams ewce_para
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
@@ -23,12 +24,13 @@ priortise_targets <- function(results,
                               q_threshold = .05,
                               fold_threshold = 1,
                               keep_celltypes = NULL,
+                              keep_onsets = NULL,
                               keep_tiers = c(1,2),
                               phenotype_to_genes =
                                         HPOExplorer::load_phenotype_to_genes(),
                               hpo = HPOExplorer::get_hpo()){
   # templateR:::source_all()
-  # templateR:::args2vars(priortise_target)
+  # templateR:::args2vars(priortise_targets)
 
   q <- fold_change <- CellType <- Phenotype <- Gene <- tier <- HPO_ID <- NULL;
 

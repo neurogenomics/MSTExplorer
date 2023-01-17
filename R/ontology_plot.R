@@ -7,7 +7,6 @@
 #' colors the nodes by their fold change or q value
 #' (see the \code{color_var} param).
 #'
-#'
 #' \emph{Developer notes:}
 #' The ontologyPlot package did not have prebuilt options to create the heatmap,
 #' so the colours are assigned manually to each phenotype in this function.
@@ -25,6 +24,7 @@
 #' @export
 #' @importFrom scales col_numeric
 #' @importFrom ontologyPlot onto_plot
+#' @importFrom HPOExplorer get_hpo load_phenotype_to_genes
 #' @examples
 #' plt <- ontology_plot(cell_type="Amacrine cells")
 ontology_plot <- function(cell_type,

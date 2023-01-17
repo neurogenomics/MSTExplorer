@@ -14,7 +14,7 @@ ggnetwork_plot_full(
   columns = list(Phenotype = "Phenotype", ID = "HPO_ID", ontLvl_genes =
     "ontLvl_geneCount_ratio", Description = "description", CellType = "CellType", p =
     "p", q = "q", fold_change = "fold_change"),
-  colour_column = "fold_change",
+  colour_var = "fold_change",
   interactive = TRUE,
   verbose = TRUE
 )
@@ -40,7 +40,7 @@ to subset the \code{results} by.}
 \item{columns}{A named vector of columns in \code{phenos}
 to add to the hoverdata via \link[HPOExplorer]{make_hoverboxes}.}
 
-\item{colour_column}{column name of the variable to be mapped
+\item{colour_var}{column name of the variable to be mapped
 to colour \\<string\\>}
 
 \item{interactive}{Make the plot interactive with \link[plotly]{ggplotly}.}

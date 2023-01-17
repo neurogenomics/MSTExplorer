@@ -11,6 +11,7 @@ priortise_targets(
   q_threshold = 0.05,
   fold_threshold = 1,
   keep_celltypes = NULL,
+  keep_onsets = NULL,
   keep_tiers = c(1, 2),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   hpo = HPOExplorer::get_hpo()
@@ -33,6 +34,8 @@ analyse (\emph{Default: 1}).}
 to subset the \code{results} by.}
 
 \item{keep_celltypes}{Cell type to keep.}
+
+\item{keep_onsets}{The age of onset associated with each HPO ID to keep.}
 
 \item{keep_tiers}{Tiers from \link[HPOExplorer]{hpo_tiers} to keep.}
 
