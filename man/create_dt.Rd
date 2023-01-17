@@ -4,12 +4,19 @@
 \alias{create_dt}
 \title{Interactive DT}
 \usage{
-create_dt(dat, caption = "", scrollY = 400)
+create_dt(
+  dat,
+  caption = "",
+  buttons = c("copy", "csv", "excel", "pdf", "print"),
+  scrollY = 400
+)
 }
 \arguments{
 \item{dat}{Data to show.}
 
 \item{caption}{Table caption.}
+
+\item{buttons}{Download button types to include in table.}
 
 \item{scrollY}{Maximum height (in pixels) before defaulting to scrolling.}
 }
