@@ -19,7 +19,7 @@ get_valid_gene_lists <- function(ctd,
                                  gene_data,
                                  annotLevel = 1,
                                  verbose = TRUE){
-  Gene <- count <- NULL;
+  Gene <- count <- . <- NULL;
 
   messager("Validating gene lists..",v=verbose)
   ctd_genes <- rownames(ctd[[annotLevel]]$specificity_quantiles)

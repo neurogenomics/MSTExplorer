@@ -49,7 +49,7 @@ In this example our **gene list names** column is called `Phenotype` and our col
 ```{r setup_args}
 # Loading CTD file 
 ctd <- load_example_ctd()
-list_names <- unique(gene_data$Phenotype)[seq_len(5)] 
+list_names <- unique(gene_data$Phenotype)[seq_len(3)] 
 reps <- 10 # in practice would use more reps
 cores <- 1 # in practice would use more cores
 save_dir <- tempdir()
