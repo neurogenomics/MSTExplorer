@@ -8,9 +8,8 @@ get_valid_gene_lists(
   ctd,
   list_names,
   gene_data,
-  list_name_column = "Phenotype",
-  gene_column = "Gene",
-  annotLevel = 1
+  annotLevel = 1,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -20,15 +19,12 @@ get_valid_gene_lists(
 \item{list_names}{character vector of gene list names.}
 
 \item{gene_data}{data frame of gene list names and genes
-(see \link[MultiEWCE]{get_gene_list}).}
-
-\item{list_name_column}{The name of the gene_data column
-that has the gene list names.}
-
-\item{gene_column}{The name of the gene_data column that contains the genes.}
+(see \link[HPOExplorer]{get_gene_lists}).}
 
 \item{annotLevel}{An integer indicating which level of \code{sct_data} to
 analyse (\emph{Default: 1}).}
+
+\item{verbose}{Print messages.}
 }
 \value{
 A character vector of list_names that are associated with a valid

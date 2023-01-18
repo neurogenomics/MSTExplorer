@@ -16,11 +16,10 @@ gen_results(
   annotLevel = 1,
   genelistSpecies = "human",
   sctSpecies = "human",
-  seed = 2022,
   cores = 1,
   save_dir_tmp = NULL,
   save_dir = tempdir(),
-  verbose = FALSE
+  verbose = 1
 )
 }
 \arguments{
@@ -28,7 +27,7 @@ gen_results(
 \link[EWCE]{generate_celltype_data}.}
 
 \item{gene_data}{data frame of gene list names and genes
-(see \link[MultiEWCE]{get_gene_list}).}
+(see \link[HPOExplorer]{get_gene_lists}).}
 
 \item{list_name_column}{The name of the gene_data column
 that has the gene list names.}
@@ -57,8 +56,6 @@ See \link[EWCE]{list_species} for all available species.}
 \item{sctSpecies}{Species that \code{sct_data} came from
 (no longer limited to just "mouse" and "human").
 See \link[EWCE]{list_species} for all available species.}
-
-\item{seed}{Used to set the seed for replicable results.}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 
@@ -94,12 +91,12 @@ genes (e.g. "Gene"). For example:\tabular{ll}{
 
 
 For more information on this see docs for get_gene_list
-(\link[MultiEWCE]{get_gene_list}).
+(\link[HPOExplorer]{get_gene_lists}).
 }
 \examples{
 gene_data <- HPOExplorer::load_phenotype_to_genes()
+list_names <- unique(gene_data$Phenotype)[seq_len(5)]
 ctd <- load_example_ctd()
-list_names <- unique(gene_data$Phenotype)[seq_len(3)]
 all_results <- gen_results(ctd = ctd,
                            gene_data = gene_data,
                            list_names = list_names,

@@ -16,7 +16,6 @@ ewce_para(
   genelistSpecies = "human",
   sctSpecies = "human",
   save_dir_tmp = tempdir(),
-  seed = 2022,
   cores = 1,
   verbose = FALSE
 )
@@ -26,7 +25,7 @@ ewce_para(
 \link[EWCE]{generate_celltype_data}.}
 
 \item{gene_data}{data frame of gene list names and genes
-(see \link[MultiEWCE]{get_gene_list}).}
+(see \link[HPOExplorer]{get_gene_lists}).}
 
 \item{list_name_column}{The name of the gene_data column
 that has the gene list names.}
@@ -55,8 +54,6 @@ See \link[EWCE]{list_species} for all available species.}
 
 \item{save_dir_tmp}{Folder to save intermediate results files to
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}
-
-\item{seed}{Used to set the seed for replicable results.}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 

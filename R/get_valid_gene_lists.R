@@ -11,26 +11,26 @@
 #' @inheritParams EWCE::bootstrap_enrichment_test
 #' @returns A character vector of list_names that are associated with a valid
 #' number of genes
+#'
 #' @keywords internal
+#' @importFrom data.table uniqueN :=
 get_valid_gene_lists <- function(ctd,
                                  list_names,
                                  gene_data,
-                                 list_name_column = "Phenotype",
-                                 gene_column = "Gene",
-                                 annotLevel = 1){
+                                 annotLevel = 1,
+                                 verbose = TRUE){
+  Gene <- count <- NULL;
 
+  messager("Validating gene lists..",v=verbose)
   ctd_genes <- rownames(ctd[[annotLevel]]$specificity_quantiles)
-  validLists <- lapply(list_names, function(p){
-    if (sum(unique(
-      get_gene_list(list_name = p,
-                    gene_data = gene_data,
-                    list_name_column = list_name_column,
-                    gene_column = gene_column)
-    ) %in% ctd_genes) >= 4) {
-      return(p)
-    } else {
-      return(NULL)
-    }
-  }) |> unlist()
+  shared_genes <- intersect(unique(gene_data$Gene),ctd_genes)
+  gene_counts <- gene_data[Phenotype %in% list_names,
+                           ][Gene %in% shared_genes,
+                             ][,.(count=data.table::uniqueN(Gene)),
+                               by=c("ID","Phenotype")]
+  validLists <- unique(gene_counts[count>=4,]$Phenotype)
+  messager(formatC(length(validLists),big.mark = ","),"/",
+           formatC(length(list_names),big.mark = ","),
+           "gene lists are valid.",v=verbose)
   return(validLists)
 }

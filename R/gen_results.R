@@ -20,7 +20,7 @@
 #' etc...
 #'
 #' For more information on this see docs for get_gene_list
-#' (\link[MultiEWCE]{get_gene_list}).
+#' (\link[HPOExplorer]{get_gene_lists}).
 #' @param overwrite_past_analysis overwrite previous results
 #'  in the results dir \code{bool}.
 #' @param save_dir Folder to save merged results in.
@@ -33,8 +33,8 @@
 #' @importFrom stringr str_replace_all
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
+#' list_names <- unique(gene_data$Phenotype)[seq_len(5)]
 #' ctd <- load_example_ctd()
-#' list_names <- unique(gene_data$Phenotype)[seq_len(3)]
 #' all_results <- gen_results(ctd = ctd,
 #'                            gene_data = gene_data,
 #'                            list_names = list_names,
@@ -50,11 +50,10 @@ gen_results <- function(ctd,
                         annotLevel = 1,
                         genelistSpecies = "human",
                         sctSpecies = "human",
-                        seed = 2022,
                         cores = 1,
                         save_dir_tmp = NULL,
                         save_dir = tempdir(),
-                        verbose = FALSE) {
+                        verbose = 1) {
   # templateR:::source_all()
   # templateR:::args2vars(gen_results)
 
@@ -63,20 +62,21 @@ gen_results <- function(ctd,
                                      annotLevel = annotLevel,
                                      list_names = list_names,
                                      gene_data = gene_data,
-                                     list_name_column = list_name_column,
-                                     gene_column = gene_column)
+                                     verbose = verbose)
 
   #### Create results directory and remove finished gene lists ####
   if (!file.exists(save_dir)) {
     dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
   }
-  if (!overwrite_past_analysis) {
-    list_names <- get_unfinished_list_names(list_names = list_names,
-                                            save_dir_tmp = save_dir_tmp)
+  list_names_unfinished <- if (!overwrite_past_analysis) {
+    get_unfinished_list_names(list_names = list_names,
+                              save_dir_tmp = save_dir_tmp)
+  } else {
+    list_names
   }
   #### Run analysis ####
   res_files <- ewce_para(ctd = ctd,
-                         list_names = list_names,
+                         list_names = list_names_unfinished,
                          gene_data = gene_data,
                          list_name_column = list_name_column,
                          gene_column = gene_column,
@@ -85,7 +85,6 @@ gen_results <- function(ctd,
                          annotLevel= annotLevel,
                          genelistSpecies = genelistSpecies,
                          sctSpecies = sctSpecies,
-                         seed = seed,
                          cores = cores,
                          save_dir_tmp = save_dir_tmp,
                          verbose = verbose)
@@ -100,7 +99,7 @@ gen_results <- function(ctd,
         paste0("results_",stringr::str_replace_all(Sys.time(),":","-"),".rds")
       )
       )
-    messager("Saving results ==>",save_path,v=verbose)
+    messager("\nSaving results ==>",save_path,v=verbose)
     saveRDS(results_final,save_path)
   }
   return(results_final)

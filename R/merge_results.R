@@ -36,7 +36,9 @@ merge_results <- function(save_dir=NULL,
   }
   lapply(seq_len(length(res_files)),
          function(i){
-   if(is.list(res_files[[i]])){
+   if(is.null(res_files[[i]])){
+     return(NULL)
+   } else if(is.list(res_files[[i]])){
      cur <- res_files[[i]]$results
    } else{
      cur <- readRDS(res_files[[i]])$results

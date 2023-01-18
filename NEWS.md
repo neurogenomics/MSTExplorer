@@ -5,13 +5,21 @@
 * New functions:
   - `load_example_results`
   - `ontology_plot`
+  - `terminal_celltypes`
   - various support functions
 * Add `ontologyPlot` as new *Import*. 
+* Was able to replicate Momoko's results!!!
 
 ## Bug fixes
 
 * `load_example_ctd`
   - Pass `file` to `piggyback::pb_download`
+* Remove redundant `get_gene_list` function 
+  (now handled by `HPOExplorer::get_gene_lists`).
+* Make `get_valid_gene_lists` much more efficient and consider 
+  the intersect between ctd/gene_data genes.
+* `merge_results`:
+  - Handle `NULL` results in list.
 
 # MultiEWCE 0.1.1
 
@@ -23,8 +31,7 @@
   - Harmonize arguments with `EWCE`
   - Set default `list_names` arg
   - Output named list of saved files instead of `TRUE`.
-  - Add messages that appear in parallel. Make EWCE message silent.
-  - Allow users to set seed.
+  - Add messages that appear in parallel. Make EWCE message silent. 
 * `ewce_plot`:
   - Simply make this a shallow wrapper for `EWCE::ewce_plot` 
   as the latter function has since been fixed.

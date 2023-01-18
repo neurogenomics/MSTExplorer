@@ -131,14 +131,14 @@ all_results_2 <- MultiEWCE::merge_results(save_dir = save_dir_tmp)
 ```
 
 ## get_gene_list 
-This function gets a character vector of genes assocaited with a particular gene list name. 
+This function gets a character vector of genes associated with a particular gene list name. 
 
 ```{r get_gene_list}
-eye_contact_genes <- MultiEWCE::get_gene_list(list_name = "Poor eye contact", 
-                                              gene_data = gene_data)
+eye_contact_genes <- HPOExplorer::get_gene_lists(phenotypes = "Poor eye contact", 
+                                                 phenotype_to_genes = gene_data)
 
 cat(paste("5 genes associated with poor eye contact:",
-          paste(eye_contact_genes[seq_len(5)],collapse = ", ")))
+          paste(eye_contact_genes$Gene[seq_len(5)],collapse = ", ")))
 ```
 
 ## get_unfinished_list_names

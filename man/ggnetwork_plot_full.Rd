@@ -40,8 +40,7 @@ to subset the \code{results} by.}
 \item{columns}{A named vector of columns in \code{phenos}
 to add to the hoverdata via \link[HPOExplorer]{make_hoverboxes}.}
 
-\item{colour_var}{column name of the variable to be mapped
-to colour \\<string\\>}
+\item{colour_var}{Column  to be mapped to node colour.}
 
 \item{interactive}{Make the plot interactive with \link[plotly]{ggplotly}.}
 
