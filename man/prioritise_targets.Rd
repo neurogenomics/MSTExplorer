@@ -48,7 +48,14 @@ to subset the \code{results} by.}
 
 \item{keep_tiers}{Tiers from \link[HPOExplorer]{hpo_tiers} to keep.}
 
+\item{gene_size}{Min/max gene size (important for therapeutics design).}
+
 \item{keep_seqnames}{Chromosomes to keep.}
+
+\item{keep_biotypes}{Which gene biotypes to keep.}
+
+\item{keep_specificity_quantiles}{Which cell type
+specificity quantiles to keep (max specificity quantile is 40).}
 
 \item{sort_cols}{How to sort the rows using \link[data.table]{setorderv}.
 \code{names(sort_cols)} will be supplied to the \code{cols=} argument

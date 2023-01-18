@@ -18,6 +18,10 @@
 #' and values will be supplied to the \code{order=} argument.
 #' @param top_n Top N genes to keep when grouping by \code{group_vars}.
 #' @param group_vars Columns to group by when selecting \code{top_n} genes.
+#' @param gene_size Min/max gene size (important for therapeutics design).
+#' @param keep_biotypes Which gene biotypes to keep.
+#' @param keep_specificity_quantiles Which cell type
+#' specificity quantiles to keep (max specificity quantile is 40).
 #' @inheritParams ewce_para
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
