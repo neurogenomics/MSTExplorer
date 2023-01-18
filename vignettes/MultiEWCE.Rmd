@@ -92,7 +92,7 @@ Here we set the input parameters related to this.
 # Run analysis
 Now we have set up all our desired inputs, we can run the analysis. 
 
-```{r run, error=TRUE} 
+```{r run} 
 all_results <- MultiEWCE::gen_results(ctd = ctd,
                                       gene_data = gene_data,
                                       list_names = list_names, 
