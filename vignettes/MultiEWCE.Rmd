@@ -75,7 +75,7 @@ See `EWCE` package docs for more details on background genes.
 ## Processing results arguments
 The `save_dir` argument is the path to the directory where the individual EWCE results will be saved.  
 
-The `overwrite_past_analysis` argument can be set to `TRUE` or `FALSE` and 
+The `force_new` argument can be set to `TRUE` or `FALSE` and 
 states if you want to redo and overwrite analysis of gene lists that have already been saved to the `save_dir`. 
 Setting this to `FALSE` is useful in cases where you stopped an analysis midway 
 and would like to carry on from where you left off.  

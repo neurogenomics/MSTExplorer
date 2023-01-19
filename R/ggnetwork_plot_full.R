@@ -42,6 +42,7 @@ ggnetwork_plot_full <- function(cell_type,
                                 verbose = TRUE){
   # templateR:::source_all()
   # templateR:::args2vars(ggnetwork_plot_full)
+  # cell_type <- "Chromaffin cells"; q_threshold <- 0.005
 
   messager("ggnetwork_plot_full",v=verbose)
   phenos <- subset_phenos(phenotype_to_genes = phenotype_to_genes,

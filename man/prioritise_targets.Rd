@@ -81,8 +81,12 @@ Prioritise target genes based on a procedure:
 \item{Phenotype-level: }{Keep only phenotypes with high severity Tiers}
 \item{Phenotype-level: }{Keep only phenotypes with postnatal age of onsets.}
 \item{Cell type-level: }{Keep only terminally differentiated cell types.}
-\item{Gene-level: }{Keep only genes <4.7kb in length.}
-\item{Gene-level: }{Sort genes by cell type-specificity.}
+\item{Gene-level: }{Remove genes on non-standard chromosomes.}
+\item{Gene-level: }{Keep only genes <4.3kb in length.}
+\item{Gene-level: }{Keep only genes in top specificity quantiles
+from the cell type dataset (\code{ctd}).}
+\item{Gene-level: }{Sort genes by cell type specificity and mean expression
+from the cell type dataset (\code{ctd}).}
 }
 }
 \examples{

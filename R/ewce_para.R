@@ -11,6 +11,8 @@
 #' @param gene_column The name of the gene_data column that contains the genes.
 #' @param save_dir_tmp Folder to save intermediate results files to
 #' (one file per gene list). Set to \code{NULL} to skip saving temporary files.
+#' @param force_new Overwrite previous results
+#'  in the \code{save_dir_tmp}.
 #' @param cores The number of cores to run in parallel (e.g. 8) \code{int}.
 #' @inheritParams EWCE::bootstrap_enrichment_test
 #' @returns Paths to saved results at "(save_dir)/(list_name).rds"
@@ -41,6 +43,7 @@ ewce_para <- function(ctd,
                       genelistSpecies="human",
                       sctSpecies="human",
                       save_dir_tmp = tempdir(),
+                      force_new=FALSE,
                       cores=1,
                       verbose=FALSE) {
   # templateR:::source_all()
@@ -49,15 +52,29 @@ ewce_para <- function(ctd,
   if(!is.null(save_dir_tmp)){
     dir.create(save_dir_tmp, showWarnings = FALSE, recursive = TRUE)
   }
-  list_names <- unique(list_names)
+  #### remove gene lists that do not have enough valid genes (>= 4) ####
+  gene_lists <- get_valid_gene_lists(ctd = ctd,
+                                     annotLevel = annotLevel,
+                                     list_names =  unique(list_names),
+                                     gene_data = gene_data,
+                                     verbose = verbose)
+
+  #### Create results directory and remove finished gene lists ####
+  list_names <- if (isFALSE(force_new)) {
+    get_unfinished_list_names(list_names = names(gene_lists),
+                              save_dir_tmp = save_dir_tmp)
+  } else {
+    names(gene_lists)
+  }
+  #### Iterate EWCE ####
   res_files <- parallel::mclapply(stats::setNames(list_names,
                                                   list_names),
                      FUN=function(p){
     i <- which(list_names==p)
-    message_parallel("Analysing: ",p," (",i,"/",length(list_names),")")
-    genes <- HPOExplorer::get_gene_lists(
-      phenotypes = p,
-      phenotype_to_genes = gene_data)[["Gene"]]
+    genes <- gene_lists[[p]]
+    message_parallel("Analysing: ",shQuote(p),
+                     " (",i,"/",length(list_names),"):",
+                     formatC(length(genes),big.mark = ",")," genes")
     tryCatch({
       results <- EWCE::bootstrap_enrichment_test(
         sct_data = ctd,

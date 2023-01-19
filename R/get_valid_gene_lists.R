@@ -19,18 +19,25 @@ get_valid_gene_lists <- function(ctd,
                                  gene_data,
                                  annotLevel = 1,
                                  verbose = TRUE){
-  Gene <- count <- . <- NULL;
+  Gene <- count <- . <- Phenotype <- NULL;
 
   messager("Validating gene lists..",v=verbose)
   ctd_genes <- rownames(ctd[[annotLevel]]$specificity_quantiles)
   shared_genes <- intersect(unique(gene_data$Gene),ctd_genes)
-  gene_counts <- gene_data[Phenotype %in% list_names,
+  gene_data <- gene_data[Phenotype %in% list_names,
                            ][Gene %in% shared_genes,
-                             ][,.(count=data.table::uniqueN(Gene)),
-                               by=c("ID","Phenotype")]
+                             ]
+  gene_counts <- gene_data[,.(count=data.table::uniqueN(Gene)),
+                           by=c("ID","Phenotype")]
   validLists <- unique(gene_counts[count>=4,]$Phenotype)
-  messager(formatC(length(validLists),big.mark = ","),"/",
+  gene_data <- gene_data[Phenotype %in% validLists,]
+  gene_lists <- lapply(stats::setNames(unique(gene_data$Phenotype),
+                         unique(gene_data$Phenotype)),
+         function(pheno_i){
+      unique(gene_data[Phenotype == pheno_i,]$Gene)
+  })
+  messager(formatC(length(gene_lists),big.mark = ","),"/",
            formatC(length(list_names),big.mark = ","),
            "gene lists are valid.",v=verbose)
-  return(validLists)
+  return(gene_lists)
 }

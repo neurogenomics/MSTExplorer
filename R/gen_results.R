@@ -21,8 +21,6 @@
 #'
 #' For more information on this see docs for get_gene_list
 #' (\link[HPOExplorer]{get_gene_lists}).
-#' @param overwrite_past_analysis overwrite previous results
-#'  in the results dir \code{bool}.
 #' @param save_dir Folder to save merged results in.
 #' @inheritParams ewce_para
 #' @inheritParams EWCE::bootstrap_enrichment_test
@@ -45,7 +43,7 @@ gen_results <- function(ctd,
                         gene_column = "Gene",
                         list_names = unique(gene_data[[list_name_column]]),
                         bg = unique(gene_data[[gene_column]]),
-                        overwrite_past_analysis = FALSE,
+                        force_new = FALSE,
                         reps = 100,
                         annotLevel = 1,
                         genelistSpecies = "human",
@@ -57,23 +55,6 @@ gen_results <- function(ctd,
   # templateR:::source_all()
   # templateR:::args2vars(gen_results)
 
-  #### remove gene lists that do not have enough valid genes (>= 4) ####
-  list_names <- get_valid_gene_lists(ctd = ctd,
-                                     annotLevel = annotLevel,
-                                     list_names = list_names,
-                                     gene_data = gene_data,
-                                     verbose = verbose)
-
-  #### Create results directory and remove finished gene lists ####
-  if (!file.exists(save_dir)) {
-    dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
-  }
-  list_names_unfinished <- if (!overwrite_past_analysis) {
-    get_unfinished_list_names(list_names = list_names,
-                              save_dir_tmp = save_dir_tmp)
-  } else {
-    list_names
-  }
   #### Run analysis ####
   res_files <- ewce_para(ctd = ctd,
                          list_names = list_names_unfinished,
@@ -99,6 +80,9 @@ gen_results <- function(ctd,
         paste0("results_",stringr::str_replace_all(Sys.time(),":","-"),".rds")
       )
       )
+    if (!file.exists(save_dir)) {
+      dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
+    }
     messager("\nSaving results ==>",save_path,v=verbose)
     saveRDS(results_final,save_path)
   }

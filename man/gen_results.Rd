@@ -11,7 +11,7 @@ gen_results(
   gene_column = "Gene",
   list_names = unique(gene_data[[list_name_column]]),
   bg = unique(gene_data[[gene_column]]),
-  overwrite_past_analysis = FALSE,
+  force_new = FALSE,
   reps = 100,
   annotLevel = 1,
   genelistSpecies = "human",
@@ -40,8 +40,8 @@ that has the gene list names.}
 (including hit genes). If \code{bg=NULL},
  an appropriate gene background will be created automatically.}
 
-\item{overwrite_past_analysis}{overwrite previous results
-in the results dir \code{bool}.}
+\item{force_new}{Overwrite previous results
+in the \code{save_dir_tmp}.}
 
 \item{reps}{Number of random gene lists to generate (\emph{Default: 100},
 but should be >=10,000 for publication-quality results).}

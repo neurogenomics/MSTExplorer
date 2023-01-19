@@ -16,6 +16,7 @@ ewce_para(
   genelistSpecies = "human",
   sctSpecies = "human",
   save_dir_tmp = tempdir(),
+  force_new = FALSE,
   cores = 1,
   verbose = FALSE
 )
@@ -54,6 +55,9 @@ See \link[EWCE]{list_species} for all available species.}
 
 \item{save_dir_tmp}{Folder to save intermediate results files to
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}
+
+\item{force_new}{Overwrite previous results
+in the \code{save_dir_tmp}.}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 

@@ -14,20 +14,4 @@ test_that("prioritise_targets works", {
                            top_n = NULL)
   testthat::expect_gte(nrow(df), 430)
 
-  # df_agg <- dplyr::group_by(df, HPO_ID,Phenotype) |>
-  #   dplyr::summarise(n_genes=data.table::uniqueN(Gene),
-  #                    genes=list(unique(Gene)),
-  #                    n_celltypes=length(unique(CellType)),
-  #                    celltypes=list(unique(CellType))
-  #                    ) |>
-  #   dplyr::arrange(n_genes, celltypes) |>
-  #   data.table::data.table()
-  #  data.table::fwrite(df_agg,"~/Downloads/df_agg.csv")
-  #
-  # df_intel <- df[disease_characteristic=="Intellectual disability" & (!Phenotype %in% c("Choreoathetosis","Coma")),]
-  # top_genes <- sort(table(df_intel$Gene),decreasing = TRUE)
-#
-#     sort(table(unique(df_intel[,c("Phenotype","HPO_ID","CellType")])$CellType),
-#          decreasing = TRUE)
-
 })
