@@ -45,7 +45,7 @@ ontology_plot <- function(cell_type,
   HPO_term_valid <- NULL;
 
   message("Generating ontology plot.")
-  cells <- get_cell_ontology(cell_type = cell_type,
+  cells <- subset_results(cell_type = cell_type,
                              results = results,
                              q_threshold = q_threshold,
                              fold_threshold = fold_threshold,

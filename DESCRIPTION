@@ -38,9 +38,10 @@ Imports:
     ontologyPlot,
     stats,
     tools,
-    scales
-Suggests: 
+    scales,
     ggplot2,
+    plotly
+Suggests:  
     BiocStyle,
     rmarkdown,
     knitr,

@@ -7,11 +7,16 @@
 #'  \link[MultiEWCE]{gen_results}
 #'  and merged together with \link[MultiEWCE]{merge_results}.
 #' @param cell_type The cell type of interest to be plotted.
+#' Can be a single string (e.g. \code{"Astrocytes"}) or a character vector
+#' of multiple cell types (e..g. \code{c("Astrocytes","Microglia")}).
+#' Set to \code{NULL} if you wish to include all cell-types that are available
+#' (after \code{q_threshold} and \code{fold_threshold} filtering).
 #' @param q_threshold The q value threshold to subset the \code{results} by.
 #' @param fold_threshold The minimum fold change in specific expression
 #'  to subset the \code{results} by.
 #' @inheritParams HPOExplorer::make_phenos_dataframe
 #' @inheritParams HPOExplorer::ggnetwork_plot
+#' @inheritParams HPOExplorer::subset_descendants
 #' @returns A named list of outputs,
 #'  including a interactive network plot of the selected subset
 #' of results from RD EWCE analysis.
@@ -20,8 +25,9 @@
 #' @importFrom HPOExplorer get_hpo load_phenotype_to_genes adjacency_matrix
 #' @importFrom HPOExplorer make_hoverboxes make_network_object ggnetwork_plot
 #' @examples
-#' res_list <- ggnetwork_plot_full(cell_type = "Microglia")
+#' res <- ggnetwork_plot_full(cell_type = "Microglia")
 ggnetwork_plot_full <- function(cell_type,
+                                ancestor = NULL,
                                 results = load_example_results(),
                                 hpo = HPOExplorer::get_hpo(),
                                 phenotype_to_genes =
@@ -46,6 +52,7 @@ ggnetwork_plot_full <- function(cell_type,
 
   messager("ggnetwork_plot_full",v=verbose)
   phenos <- subset_phenos(phenotype_to_genes = phenotype_to_genes,
+                          ancestor = ancestor,
                           results = results,
                           hpo = hpo,
                           cell_type = cell_type,
