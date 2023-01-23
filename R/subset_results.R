@@ -27,14 +27,20 @@ subset_results <- function(cell_type,
   #### Check that celltype is available ####
   if(length(cell_type)==0){
     messager("Skipping cell_type filter.",v=verbose)
+  } else if(nrow(results_sig)==0){
+    stop("No results remain after filtering")
   } else if(any(cell_type %in% unique(results_sig$CellType))){
     messager("Subsetting results by cell_type",v=verbose)
     results_sig <- results_sig[CellType %in% cell_type,]
   } else {
     cell_orig <- cell_type
-    cell_type <- unique(results_sig$CellType)
-    messager("WARNING!: CellType",shQuote(cell_orig),"not found in results.\n ",
-            "Defaulting to first CellType available:",shQuote(cell_type))
+    cell_type <- unique(results_sig$CellType)[[1]]
+    messager("WARNING!: CellType",
+             substr(paste(shQuote(cell_orig),collapse = ";"),
+                    start = 1, stop = 50),
+             "...",
+             "not found in results.\n ",
+             "Defaulting to first CellType available:",shQuote(cell_type))
     results_sig <- results_sig[CellType %in% cell_type,]
   }
   #### Check that the table isn't empty after filtering ####
