@@ -1,3 +1,17 @@
+# MultiEWCE 0.1.3
+
+## New features
+
+* `ggnetwork_plot_full`:
+  - Handles multiple celltypes by aggregation.
+* New internal function: `agg_results`.
+
+## Bug fixes
+
+* Remove unused function: `count_results`
+* Make `get_unfinished_list_names` much more efficient.
+
+
 # MultiEWCE 0.1.2
 
 ## New features

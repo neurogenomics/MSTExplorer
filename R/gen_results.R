@@ -57,7 +57,7 @@ gen_results <- function(ctd,
 
   #### Run analysis ####
   res_files <- ewce_para(ctd = ctd,
-                         list_names = list_names_unfinished,
+                         list_names = list_names,
                          gene_data = gene_data,
                          list_name_column = list_name_column,
                          gene_column = gene_column,
@@ -68,6 +68,7 @@ gen_results <- function(ctd,
                          sctSpecies = sctSpecies,
                          cores = cores,
                          save_dir_tmp = save_dir_tmp,
+                         force_new = force_new,
                          verbose = verbose)
   #### Merge results into one dataframe ####
   results_final <- merge_results(res_files = res_files,

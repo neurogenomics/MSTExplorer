@@ -12,10 +12,13 @@ ggnetwork_plot_full(
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   q_threshold = 5e-04,
   fold_threshold = 1,
-  columns = list(Phenotype = "Phenotype", ID = "HPO_ID", ontLvl_genes =
-    "ontLvl_geneCount_ratio", Description = "description", CellType = "CellType", p =
-    "p", q = "q", fold_change = "fold_change"),
+  columns = list(Phenotype = "Phenotype", ID = "HPO_ID", ontLvl = "ontLvl", ontLvl_genes
+    = "ontLvl_geneCount_ratio", Definition = "definition", CellType = "CellType", p =
+    "p", q = "q", fold_change = "fold_change", celltype_count = "celltype_count",
+    celltype_values = "celltype_values", mean_p = "mean_p", mean_q = "mean_q",
+    mean_fold_change = "mean_fold_change"),
   colour_var = "fold_change",
+  add_ontLvl = TRUE,
   interactive = TRUE,
   verbose = TRUE
 )
@@ -25,7 +28,9 @@ ggnetwork_plot_full(
 Can be a single string (e.g. \code{"Astrocytes"}) or a character vector
 of multiple cell types (e..g. \code{c("Astrocytes","Microglia")}).
 Set to \code{NULL} if you wish to include all cell-types that are available
-(after \code{q_threshold} and \code{fold_threshold} filtering).}
+(after \code{q_threshold} and \code{fold_threshold} filtering).
+If >1 cell-type remains, results will be aggregated automatically
+such that there is only 1 node per phenotype.}
 
 \item{ancestor}{The ancestor to get all descendants of. If \code{NULL},
 returns the entirely ontology.}
@@ -49,6 +54,9 @@ to subset the \code{results} by.}
 to add to the hoverdata via \link[HPOExplorer]{make_hoverboxes}.}
 
 \item{colour_var}{Column  to be mapped to node colour.}
+
+\item{add_ontLvl}{Add the "ontLvl" (ontology level)
+column if not already present.}
 
 \item{interactive}{Make the plot interactive with \link[plotly]{ggplotly}.}
 

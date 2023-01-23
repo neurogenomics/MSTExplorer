@@ -26,11 +26,12 @@ re-analyse the already completed ones when you start again.
 gene_data <- HPOExplorer::load_phenotype_to_genes()
 list_names <- unique(gene_data$Phenotype)[seq_len(3)]
 save_dir_tmp <- file.path(tempdir(),"results")
+ctd <- load_example_ctd()
 res_files <- ewce_para(ctd = ctd,
                        gene_data = gene_data,
                        list_names = list_names,
                        reps = 10,
                        save_dir_tmp = save_dir_tmp)
-unfinished <- get_unfinished_list_names(list_names = list_names,
+unfinished <- get_unfinished_list_names(list_names = gene_data$Phenotype,
                                         save_dir_tmp = save_dir_tmp)
 }

@@ -4,16 +4,16 @@
 \alias{is_not_analysed}
 \title{Is not analysed?}
 \usage{
-is_not_analysed(list_name, save_dir_tmp)
+is_not_analysed(list_names, save_dir_tmp)
 }
 \arguments{
-\item{list_name}{The name of a gene list (e.g. "Phenotypic abnormality").}
+\item{list_names}{character vector of gene list names.}
 
 \item{save_dir_tmp}{Folder to save intermediate results files to
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}
 }
 \value{
-TRUE or FALSE \code{bool}.
+Vector of TRUE or FALSE.
 }
 \description{
 Takes a gene list name and checks the output results directory to see if that

@@ -16,17 +16,21 @@ subset_results <- function(cell_type,
                            fold_threshold = 1,
                            hpo = HPOExplorer::get_hpo(),
                            phenotype_to_genes =
-                             HPOExplorer::load_phenotype_to_genes()){
-  CellType <- fold_change <- NULL;
+                             HPOExplorer::load_phenotype_to_genes(),
+                           verbose = TRUE){
+  CellType <- fold_change <-  HPO_ID <- HPO_ID <- HPO_term_valid <- NULL;
 
-  message("subset_results")
+  messager("Subsetting results by q_threshold and fold_change.",v=verbose)
   #### Filter to sig results only ####
   results_sig <- results[(q<=q_threshold) &
                            (fold_change>=fold_threshold),]
   #### Check that celltype is available ####
   if(length(cell_type)==0){
-    messager("Skipping cell_type filter.")
-  } else if(!any(cell_type %in% unique(results_sig$CellType))){
+    messager("Skipping cell_type filter.",v=verbose)
+  } else if(any(cell_type %in% unique(results_sig$CellType))){
+    messager("Subsetting results by cell_type",v=verbose)
+    results_sig <- results_sig[CellType %in% cell_type,]
+  } else {
     cell_orig <- cell_type
     cell_type <- unique(results_sig$CellType)
     messager("WARNING!: CellType",shQuote(cell_orig),"not found in results.\n ",
@@ -37,9 +41,14 @@ subset_results <- function(cell_type,
   if(nrow(results_sig)==0){
     stop("ERROR!: phenos table is empty.")
   }
+  #### Add HPO IDs ####
   results_sig <- HPOExplorer::add_hpo_id(
     phenos = results_sig,
     phenotype_to_genes = phenotype_to_genes,
-    hpo = hpo)
+    hpo = hpo,
+    verbose = verbose)
+  results_sig <- results_sig[(!is.na(HPO_ID)) & (HPO_term_valid),]
+  messager(formatC(nrow(results_sig),big.mark = ","),
+           "associations remain after filtering.",v=verbose)
   return(results_sig)
 }

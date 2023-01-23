@@ -22,19 +22,14 @@ subset_phenos <- function(cell_type,
   # templateR:::source_all()
   # templateR:::args2vars(subset_phenos)
 
-  HPO_ID <- HPO_ID <- HPO_term_valid <- NULL;
-
-  messager("Subsetting results by phenotype.",v=verbose)
-  #### Subset by q and fold_change ####
+  #### Subset by q, fold_change, and celltype ####
   phenos <- subset_results(cell_type = cell_type,
                            results = results,
                            q_threshold = q_threshold,
                            fold_threshold = fold_threshold,
                            phenotype_to_genes = phenotype_to_genes,
-                           hpo = hpo)
-  phenos <- phenos[(!is.na(HPO_ID)) & (HPO_term_valid),]
-  messager(formatC(nrow(phenos),big.mark = ","),
-           "associations remain after filtering.",v=verbose)
+                           hpo = hpo,
+                           verbose = verbose)
   #### Subset by ancestor ####
   phenos <- HPOExplorer::subset_descendants(phenos = phenos,
                                             ancestor = ancestor,

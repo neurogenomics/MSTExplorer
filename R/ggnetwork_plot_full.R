@@ -11,12 +11,15 @@
 #' of multiple cell types (e..g. \code{c("Astrocytes","Microglia")}).
 #' Set to \code{NULL} if you wish to include all cell-types that are available
 #' (after \code{q_threshold} and \code{fold_threshold} filtering).
+#' If >1 cell-type remains, results will be aggregated automatically
+#' such that there is only 1 node per phenotype.
 #' @param q_threshold The q value threshold to subset the \code{results} by.
 #' @param fold_threshold The minimum fold change in specific expression
 #'  to subset the \code{results} by.
 #' @inheritParams HPOExplorer::make_phenos_dataframe
 #' @inheritParams HPOExplorer::ggnetwork_plot
 #' @inheritParams HPOExplorer::subset_descendants
+#' @inheritParams HPOExplorer::make_network_object
 #' @returns A named list of outputs,
 #'  including a interactive network plot of the selected subset
 #' of results from RD EWCE analysis.
@@ -24,6 +27,7 @@
 #' @export
 #' @importFrom HPOExplorer get_hpo load_phenotype_to_genes adjacency_matrix
 #' @importFrom HPOExplorer make_hoverboxes make_network_object ggnetwork_plot
+#' @importFrom HPOExplorer add_hpo_definition
 #' @examples
 #' res <- ggnetwork_plot_full(cell_type = "Microglia")
 ggnetwork_plot_full <- function(cell_type,
@@ -37,18 +41,27 @@ ggnetwork_plot_full <- function(cell_type,
                                 columns = list(
                                   Phenotype="Phenotype",
                                   ID="HPO_ID",
+                                  ontLvl="ontLvl",
                                   ontLvl_genes="ontLvl_geneCount_ratio",
-                                  Description="description",
+                                  Definition="definition",
                                   CellType="CellType",
                                   p="p",
                                   q="q",
-                                  fold_change="fold_change"),
+                                  fold_change="fold_change",
+                                  #### Aggregated cols ####
+                                  celltype_count="celltype_count",
+                                  celltype_values="celltype_values",
+                                  mean_p="mean_p",
+                                  mean_q="mean_q",
+                                  mean_fold_change="mean_fold_change"),
                                 colour_var = "fold_change",
+                                add_ontLvl = TRUE,
                                 interactive = TRUE,
                                 verbose = TRUE){
   # templateR:::source_all()
-  # templateR:::args2vars(ggnetwork_plot_full)
-  # cell_type <- "Chromaffin cells"; q_threshold <- 0.005
+  # templateR:::args2vars(ggnetwork_plot_full);
+  # cell_type = "Microglia";
+  # cell_type = NULL; ancestor = "Neurodevelopmental delay"
 
   messager("ggnetwork_plot_full",v=verbose)
   phenos <- subset_phenos(phenotype_to_genes = phenotype_to_genes,
@@ -59,12 +72,25 @@ ggnetwork_plot_full <- function(cell_type,
                           q_threshold = q_threshold,
                           fold_threshold = fold_threshold,
                           verbose = verbose)
-  adjacency <- HPOExplorer::adjacency_matrix(terms = unique(phenos$HPO_ID),
+  #### Aggregate across multiple celltypes ####
+  phenos <- agg_results(phenos = phenos,
+                        count_var = "CellType",
+                        group_var = "Phenotype",
+                        verbose = verbose)
+  #### Make adjacency matrix ####
+  adjacency <- HPOExplorer::adjacency_matrix(terms = phenos$HPO_ID,
                                              hpo = hpo,
                                              verbose = verbose)
-  if(!"description" %in% names(phenos)){
-    phenos$description <- HPOExplorer::get_term_definition(
-      ontologyId = phenos$HPO_ID)
+  #### Add metadata ####
+  if(isTRUE(add_ontLvl)){
+    phenos <- HPOExplorer::add_ont_lvl(phenos = phenos,
+                                       hpo = hpo,
+                                       adjacency = adjacency,
+                                       verbose = verbose)
+  }
+  if(!"definition" %in% names(phenos)){
+    phenos <- HPOExplorer::add_hpo_definition(phenos = phenos,
+                                              verbose = verbose)
   }
   if(!"hover" %in% names(phenos)){
     phenos <- HPOExplorer::make_hoverboxes(phenos = phenos,
@@ -72,15 +98,28 @@ ggnetwork_plot_full <- function(cell_type,
                                            interactive = interactive,
                                            verbose = verbose)
   }
+  #### Fix colour var for aggregated data ####
+  colour_var2 <- paste0("mean_",colour_var)
+  if(!colour_var %in% names(phenos) &&
+     colour_var2 %in% names(phenos)){
+    colour_var <- colour_var2
+    size_var <- "celltype_count"
+  } else {
+    size_var <- "ontLvl"
+  }
+  #### Make network ####
   phenoNet <- HPOExplorer::make_network_object(phenos = phenos,
                                                hpo = hpo,
                                                adjacency = adjacency,
                                                colour_var = colour_var,
                                                verbose = verbose)
+  #### Make plot ####
   network_plot <- HPOExplorer::ggnetwork_plot(phenoNet = phenoNet,
                                               colour_var = colour_var,
+                                              size_var = size_var,
                                               interactive = interactive,
                                               verbose = verbose)
+  #### Return ####
   return(list(plot=network_plot,
               phenos=phenos,
               phenoNet=phenoNet,
