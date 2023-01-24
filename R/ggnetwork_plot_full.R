@@ -27,7 +27,7 @@
 #' @export
 #' @importFrom HPOExplorer get_hpo load_phenotype_to_genes adjacency_matrix
 #' @importFrom HPOExplorer make_hoverboxes make_network_object ggnetwork_plot
-#' @importFrom HPOExplorer add_hpo_definition
+#' @importFrom HPOExplorer add_hpo_definition list_columns
 #' @examples
 #' res <- ggnetwork_plot_full(cell_type = "Microglia")
 ggnetwork_plot_full <- function(cell_type,
@@ -38,23 +38,9 @@ ggnetwork_plot_full <- function(cell_type,
                                   HPOExplorer::load_phenotype_to_genes(),
                                 q_threshold = 0.0005,
                                 fold_threshold = 1,
-                                columns = list(
-                                  Phenotype="Phenotype",
-                                  ID="HPO_ID",
-                                  ontLvl="ontLvl",
-                                  ontLvl_genes="ontLvl_geneCount_ratio",
-                                  Definition="definition",
-                                  CellType="CellType",
-                                  p="p",
-                                  q="q",
-                                  fold_change="fold_change",
-                                  #### Aggregated cols ####
-                                  celltype_count="celltype_count",
-                                  celltype_values="celltype_values",
-                                  mean_p="mean_p",
-                                  mean_q="mean_q",
-                                  mean_fold_change="mean_fold_change"),
+                                columns = HPOExplorer::list_columns(),
                                 colour_var = "fold_change",
+                                size_var = "ontLvl",
                                 add_ontLvl = TRUE,
                                 interactive = TRUE,
                                 verbose = TRUE){
@@ -103,9 +89,6 @@ ggnetwork_plot_full <- function(cell_type,
   if(!colour_var %in% names(phenos) &&
      colour_var2 %in% names(phenos)){
     colour_var <- colour_var2
-    size_var <- "celltype_count"
-  } else {
-    size_var <- "ontLvl"
   }
   #### Make network ####
   phenoNet <- HPOExplorer::make_network_object(phenos = phenos,

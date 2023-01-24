@@ -5,8 +5,8 @@
 \title{Prioritise target genes}
 \usage{
 prioritise_targets(
-  results,
-  ctd,
+  results = load_example_results(),
+  ctd = load_example_ctd(),
   annotLevel = 1,
   q_threshold = 0.05,
   fold_threshold = 1,
@@ -16,9 +16,10 @@ prioritise_targets(
   gene_size = list(min = 0, max = 4300),
   keep_seqnames = c(seq_len(22), "X", "Y"),
   keep_biotypes = NULL,
-  keep_specificity_quantiles = seq(38, 40),
-  sort_cols = c(tier = 1, q = 1, fold_change = -1, specificity_quantile = -1, specificity
-    = -1, mean_exp = -1, width = 1),
+  keep_specificity_quantiles = seq(39, 40),
+  keep_mean_exp_quantiles = keep_specificity_quantiles,
+  sort_cols = c(tier = 1, q = 1, fold_change = -1, specificity_quantile = -1,
+    mean_exp_quantile = -1, specificity = -1, mean_exp = -1, width = 1),
   top_n = 3,
   group_vars = c("HPO_ID", "CellType"),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
@@ -55,7 +56,10 @@ to subset the \code{results} by.}
 \item{keep_biotypes}{Which gene biotypes to keep.}
 
 \item{keep_specificity_quantiles}{Which cell type
-specificity quantiles to keep (max specificity quantile is 40).}
+specificity quantiles to keep (max quantile is 40).}
+
+\item{keep_mean_exp_quantiles}{Which cell type
+mean expression quantiles to keep (max quantile is 40).}
 
 \item{sort_cols}{How to sort the rows using \link[data.table]{setorderv}.
 \code{names(sort_cols)} will be supplied to the \code{cols=} argument
@@ -84,6 +88,8 @@ Prioritise target genes based on a procedure:
 \item{Gene-level: }{Remove genes on non-standard chromosomes.}
 \item{Gene-level: }{Keep only genes <4.3kb in length.}
 \item{Gene-level: }{Keep only genes in top specificity quantiles
+from the cell type dataset (\code{ctd}).}
+\item{Gene-level: }{Keep only genes in top mean expression quantiles
 from the cell type dataset (\code{ctd}).}
 \item{Gene-level: }{Sort genes by cell type specificity and mean expression
 from the cell type dataset (\code{ctd}).}

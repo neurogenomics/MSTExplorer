@@ -6,12 +6,12 @@ test_that("prioritise_targets works", {
   #### Top only ####
   top_targets <- prioritise_targets(results = results,
                                     ctd = ctd)
-  testthat::expect_gte(nrow(top_targets), 90)
+  testthat::expect_gte(nrow(top_targets), 80)
 
   #### All results ####
   df <- prioritise_targets(results = results,
                            ctd = ctd,
                            top_n = NULL)
-  testthat::expect_gte(nrow(df), 430)
+  testthat::expect_gte(nrow(df), 335)
 
 })

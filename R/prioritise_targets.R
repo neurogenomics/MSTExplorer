@@ -11,6 +11,8 @@
 #' \item{Gene-level: }{Keep only genes <4.3kb in length.}
 #' \item{Gene-level: }{Keep only genes in top specificity quantiles
 #' from the cell type dataset (\code{ctd}).}
+#' \item{Gene-level: }{Keep only genes in top mean expression quantiles
+#' from the cell type dataset (\code{ctd}).}
 #' \item{Gene-level: }{Sort genes by cell type specificity and mean expression
 #' from the cell type dataset (\code{ctd}).}
 #' }
@@ -25,7 +27,9 @@
 #' @param gene_size Min/max gene size (important for therapeutics design).
 #' @param keep_biotypes Which gene biotypes to keep.
 #' @param keep_specificity_quantiles Which cell type
-#' specificity quantiles to keep (max specificity quantile is 40).
+#' specificity quantiles to keep (max quantile is 40).
+#' @param keep_mean_exp_quantiles Which cell type
+#' mean expression quantiles to keep (max quantile is 40).
 #' @inheritParams ewce_para
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
@@ -43,8 +47,8 @@
 #' ctd <- load_example_ctd()
 #' top_targets <- prioritise_targets(results = results,
 #'                                   ctd = ctd)
-prioritise_targets <- function(results,
-                               ctd,
+prioritise_targets <- function(results = load_example_results(),
+                               ctd = load_example_ctd(),
                                annotLevel = 1,
                                q_threshold = 0.05,
                                fold_threshold = 1,
@@ -56,11 +60,15 @@ prioritise_targets <- function(results,
                                                 "max"=4300),
                                keep_seqnames = c(seq_len(22),"X","Y"),
                                keep_biotypes = NULL,
-                               keep_specificity_quantiles = seq(30,40),
+                               keep_specificity_quantiles =
+                                 seq(39,40),
+                               keep_mean_exp_quantiles =
+                                 keep_specificity_quantiles,
                                sort_cols = c("tier"=1,
                                              "q"=1,
                                              "fold_change"=-1,
                                              "specificity_quantile"=-1,
+                                             "mean_exp_quantile"=-1,
                                              "specificity"=-1,
                                              "mean_exp"=-1,
                                              "width"=1),
@@ -74,7 +82,8 @@ prioritise_targets <- function(results,
   # templateR:::args2vars(prioritise_targets)
 
   q <- fold_change <- CellType <- Gene <- tier <- HPO_ID <-
-    HPO_term_valid <- Onset <- specificity_quantile <- celltype_fixed <- NULL;
+    HPO_term_valid <- Onset <- specificity_quantile <- mean_exp_quantile <-
+    celltype_fixed <- NULL;
 
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
@@ -162,20 +171,32 @@ prioritise_targets <- function(results,
                                  annotLevel = annotLevel,
                                  shared_genes = shared_genes,
                                  metric = "mean_exp")
-
+  expq_df <- make_specificity_dt(ctd = ctd,
+                                annotLevel = annotLevel,
+                                shared_genes = shared_genes,
+                                metric = "mean_exp_quantiles")
+  #### Filter by specificity #####
+  if(!is.null(keep_specificity_quantiles)){
+    messager("Filtering by specificity_quantile.",v=verbose)
+    specq_df <- specq_df[specificity_quantile %in% keep_specificity_quantiles,]
+  }
+  #### Filter by specificity #####
+  if(!is.null(keep_mean_exp_quantiles)){
+    messager("Filtering by mean_exp_quantile.",v=verbose)
+    expq_df <- expq_df[mean_exp_quantile %in% keep_mean_exp_quantiles,]
+  }
   ##### Filter by genes  previously identified ####
   specq_df <- specq_df[Gene %in% gr$Gene,]
+  expq_df <- expq_df[Gene %in% gr$Gene,]
+  shared_genes <- intersect(intersect(specq_df$Gene,
+                                      expq_df$Gene),
+                            shared_genes)
   ##### Filter by cell types  previously identified ####
   keep_celltypes2 <- unique(results$CellType)[
     EWCE::fix_celltype_names(unique(results$CellType)) %in%
       specq_df$celltype_fixed
   ]
   results <- results[CellType %in% keep_celltypes2,]
-  #### Filter by specificity #####
-  messager("Filtering by specificity_quantile.",v=verbose)
-  if(!is.null(keep_specificity_quantiles)){
-    specq_df <- specq_df[specificity_quantile %in% keep_specificity_quantiles,]
-  }
   #### Merge with main results ####
   gr_df <- data.table::as.data.table(gr)[Gene %in% shared_genes,]
   data.table::setnames(gr_df,"ID","HPO_ID")
@@ -203,11 +224,13 @@ prioritise_targets <- function(results,
   df_merged[,celltype_fixed:=ct_dict[CellType]]
   #### Add specificity / mean expression metrics ####
   df_merged <- df_merged |>
-    data.table::merge.data.table(y = specq_df,
-                                 by = c("Gene","celltype_fixed")) |>
     data.table::merge.data.table(y = spec_df,
                                  by = c("Gene","celltype_fixed")) |>
+    data.table::merge.data.table(y = specq_df,
+                                 by = c("Gene","celltype_fixed")) |>
     data.table::merge.data.table(y = exp_df,
+                                 by = c("Gene","celltype_fixed")) |>
+    data.table::merge.data.table(y = expq_df,
                                  by = c("Gene","celltype_fixed"))
   report(dt = df_merged,
          verbose = verbose)

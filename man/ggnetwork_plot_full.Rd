@@ -12,12 +12,9 @@ ggnetwork_plot_full(
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   q_threshold = 5e-04,
   fold_threshold = 1,
-  columns = list(Phenotype = "Phenotype", ID = "HPO_ID", ontLvl = "ontLvl", ontLvl_genes
-    = "ontLvl_geneCount_ratio", Definition = "definition", CellType = "CellType", p =
-    "p", q = "q", fold_change = "fold_change", celltype_count = "celltype_count",
-    celltype_values = "celltype_values", mean_p = "mean_p", mean_q = "mean_q",
-    mean_fold_change = "mean_fold_change"),
+  columns = HPOExplorer::list_columns(),
   colour_var = "fold_change",
+  size_var = "ontLvl",
   add_ontLvl = TRUE,
   interactive = TRUE,
   verbose = TRUE
@@ -54,6 +51,8 @@ to subset the \code{results} by.}
 to add to the hoverdata via \link[HPOExplorer]{make_hoverboxes}.}
 
 \item{colour_var}{Column  to be mapped to node colour.}
+
+\item{size_var}{Column name to be mapped  to node size.}
 
 \item{add_ontLvl}{Add the "ontLvl" (ontology level)
 column if not already present.}

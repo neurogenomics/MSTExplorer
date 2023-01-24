@@ -17,7 +17,7 @@
 #' @importFrom plotly ggplotly
 #' @importFrom scales pretty_breaks
 #' @examples
-#' #' ancestor <- "Neurodevelopmental delay"
+#' ancestor <- "Neurodevelopmental delay"
 #' plt_pheno_count <- summary_plot(count_var = "Phenotype",
 #'                                 group_var = "CellType",
 #'                                 ancestor = ancestor)
@@ -62,16 +62,20 @@ summary_plot <- function(results = load_example_results(),
   ## so need to append it to the title.
   subtitle <-  paste0(
     if(!is.null(keywords)){shQuote(paste(keywords,collapse = ", "))},
-    " (",formatC(length(unique(phenos$Phenotype)),big.mark = ","),
-    " ",tolower(count_var),"s)")
+    "  ",formatC(length(unique(phenos$Phenotype)),big.mark = ","),
+    " ",tolower(count_var),"s")
+
+  n_count_var <- paste("n",tolower(count_var),sep="_")
   #### Make plot ####
   plt <- ggplot(counts_df,
                 aes_string(x = group_var,
-                           y = "count",
+                           y = n_count_var,
                            fill = "mean_fold_change",
                            mean_q = "mean_q",
                            mean_sd_from_mean = "mean_sd_from_mean",
-                           values = "values")) +
+                           values = tolower(count_var)
+                           )
+                ) +
     geom_col() +
     labs(title = paste0("Enrichment results associated with:\n",
                         subtitle
