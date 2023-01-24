@@ -10,6 +10,8 @@
 
 * Remove unused function: `count_results`
 * Make `get_unfinished_list_names` much more efficient.
+* Add leeway to `gen_results` test, as the number of sig results 
+  varies from run to run.
 
 
 # MultiEWCE 0.1.2
