@@ -16,6 +16,8 @@
 #' @param top_targets output of \link[MultiEWCE]{prioritise_targets}.
 #' @param vertex_vars Columns within \code{top_targets}
 #' to include as vertices/nodes within the network.
+#' @param group_var Variable to group nodes by.
+#' @param edge_var Variable to color edges by.
 #' @param show_plot Print the plot after it has been created.
 #' @param save_path Path to save HTML version of network to.
 #' @param verbose Print messages.

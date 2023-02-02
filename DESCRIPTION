@@ -37,6 +37,7 @@ Imports:
     HPOExplorer,
     ontologyPlot,
     stats,
+    methods,
     tools,
     scales,
     ggplot2,
@@ -52,7 +53,8 @@ Suggests:
     rworkflows,
     igraph,
     visNetwork,
-    edgebundle
+    edgebundle,
+    ComplexHeatmap
 Remotes: 
   github::neurogenomics/HPOExplorer
 VignetteBuilder: knitr

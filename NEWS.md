@@ -5,6 +5,10 @@
 * `ggnetwork_plot_full`:
   - Handles multiple celltypes by aggregation.
 * New internal function: `agg_results`.
+* New functions:
+  - `prioritise_targets`
+  - `prioritise_targets_heatmap`
+  - `prioritise_targets_network`
 
 ## Bug fixes
 

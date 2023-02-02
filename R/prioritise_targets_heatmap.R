@@ -33,7 +33,7 @@ prioritise_targets_heatmap <- function(top_targets,
                           )
   )
   ht_list <- ComplexHeatmap::Heatmap(matrix = X,
-                     name = stringr:::str_to_sentence(gsub("_"," ",value_var)),
+                     name = stringr::str_to_sentence(gsub("_"," ",value_var)),
                      cluster_rows = FALSE,
                      col = pals::inferno(n = 100),
                      right_annotation = ra,

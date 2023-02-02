@@ -30,6 +30,10 @@ prioritise_targets_network(
 \item{vertex_vars}{Columns within \code{top_targets}
 to include as vertices/nodes within the network.}
 
+\item{group_var}{Variable to group nodes by.}
+
+\item{edge_var}{Variable to color edges by.}
+
 \item{show_plot}{Print the plot after it has been created.}
 
 \item{save_path}{Path to save HTML version of network to.}
