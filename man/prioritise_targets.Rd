@@ -20,7 +20,7 @@ prioritise_targets(
   keep_mean_exp_quantiles = keep_specificity_quantiles,
   sort_cols = c(tier = 1, q = 1, fold_change = -1, specificity_quantile = -1,
     mean_exp_quantile = -1, specificity = -1, mean_exp = -1, width = 1),
-  top_n = 3,
+  top_n = NULL,
   group_vars = c("HPO_ID", "CellType"),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   hpo = HPOExplorer::get_hpo(),

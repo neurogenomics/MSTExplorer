@@ -24,6 +24,8 @@
 #' piggyback::pb_upload(file = file.path(d,"data/tabulamuris_merged.rds"),
 #'                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
 #' }
+#' @source \href{https://github.com/neurogenomics/rare_disease_celltyping/}{
+#' Results located in 'results' folder.}
 #' @returns dataframe of enrichment results.
 #'
 #' @export
@@ -32,7 +34,7 @@
 #' @importFrom data.table setkeyv
 #' @examples
 #' res <- load_example_results()
-load_example_results <- function(file="Descartes_All_Results.rds",
+load_example_results <- function(file="Descartes_All_Results_extras.rds",
                                  tag = "v0.0.1",
                                  save_dir=tools::R_user_dir(package = "MultiEWCE")
                                  ) {

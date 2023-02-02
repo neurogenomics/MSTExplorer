@@ -11,10 +11,13 @@ piggyback::pb_upload(file = file.path(d,"data/Descartes_All_Results.rds"),
 piggyback::pb_upload(file = file.path(d,"data/tabulamuris_merged.rds"),
                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
 }
+
+\href{https://github.com/neurogenomics/rare_disease_celltyping/}{
+Results located in 'results' folder.}
 }
 \usage{
 load_example_results(
-  file = "Descartes_All_Results.rds",
+  file = "Descartes_All_Results_extras.rds",
   tag = "v0.0.1",
   save_dir = tools::R_user_dir(package = "MultiEWCE")
 )

@@ -38,7 +38,7 @@
 #' @export
 #' @importFrom HPOExplorer load_phenotype_to_genes get_hpo add_hpo_id
 #' @importFrom HPOExplorer list_onsets phenos_to_granges add_tier add_onset
-#' @importFrom HPOExplorer add_info_content
+#' @importFrom HPOExplorer add_info_content add_ancestor
 #' @importFrom data.table .SD := merge.data.table setorderv as.data.table
 #' @importFrom data.table data.table
 #' @importFrom utils head
@@ -72,7 +72,7 @@ prioritise_targets <- function(results = load_example_results(),
                                              "specificity"=-1,
                                              "mean_exp"=-1,
                                              "width"=1),
-                               top_n = 3,
+                               top_n = NULL,
                                group_vars = c("HPO_ID","CellType"),
                                phenotype_to_genes =
                                          HPOExplorer::load_phenotype_to_genes(),
@@ -97,6 +97,10 @@ prioritise_targets <- function(results = load_example_results(),
                                              hpo = hpo,
                                              verbose = verbose)
   }
+  #### Add ancestors ####
+  results <- HPOExplorer::add_ancestor(phenos = results,
+                                       hpo = hpo,
+                                       verbose = verbose)
   report(dt = results,
          verbose = verbose)
   #### Filter associations #####
@@ -237,6 +241,7 @@ prioritise_targets <- function(results = load_example_results(),
   #### Sort genes ####
   # 1=ascending, -1=descending
   messager("Sorting rows.",v=verbose)
+  sort_cols <- sort_cols[names(sort_cols) %in% names(df_merged)]
   data.table::setorderv(df_merged,
                         cols = names(sort_cols),
                         order = unname(sort_cols),
@@ -254,6 +259,8 @@ prioritise_targets <- function(results = load_example_results(),
   report(dt = top_targets,
          verbose = verbose)
   if(isTRUE(verbose)) round(difftime(Sys.time(),t1,units = "s"),0)
+
+
   #### Return ####
   return(top_targets)
 }

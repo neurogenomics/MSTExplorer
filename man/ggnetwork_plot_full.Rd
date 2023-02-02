@@ -14,8 +14,9 @@ ggnetwork_plot_full(
   fold_threshold = 1,
   columns = HPOExplorer::list_columns(),
   colour_var = "fold_change",
-  size_var = "ontLvl",
-  add_ontLvl = TRUE,
+  size_var = "ontLvl_relative",
+  add_ont_lvl_absolute = TRUE,
+  add_ont_lvl_relative = TRUE,
   interactive = TRUE,
   verbose = TRUE
 )
@@ -54,8 +55,11 @@ to add to the hoverdata via \link[HPOExplorer]{make_hoverboxes}.}
 
 \item{size_var}{Column name to be mapped  to node size.}
 
-\item{add_ontLvl}{Add the "ontLvl" (ontology level)
-column if not already present.}
+\item{add_ont_lvl_absolute}{Add the absolute ontology level of each HPO term.
+See \link[HPOExplorer]{get_ont_lvls} for more details.}
+
+\item{add_ont_lvl_relative}{Add the relative ontology level of each HPO term.
+See \link[HPOExplorer]{get_ont_lvls} for more details.}
 
 \item{interactive}{Make the plot interactive with \link[plotly]{ggplotly}.}
 

@@ -40,8 +40,9 @@ ggnetwork_plot_full <- function(cell_type,
                                 fold_threshold = 1,
                                 columns = HPOExplorer::list_columns(),
                                 colour_var = "fold_change",
-                                size_var = "ontLvl",
-                                add_ontLvl = TRUE,
+                                size_var = "ontLvl_relative",
+                                add_ont_lvl_absolute = TRUE,
+                                add_ont_lvl_relative = TRUE,
                                 interactive = TRUE,
                                 verbose = TRUE){
   # templateR:::source_all()
@@ -68,10 +69,17 @@ ggnetwork_plot_full <- function(cell_type,
                                              hpo = hpo,
                                              verbose = verbose)
   #### Add metadata ####
-  if(isTRUE(add_ontLvl)){
+  if(isTRUE(add_ont_lvl_absolute)){
+    phenos <- HPOExplorer::add_ont_lvl(phenos = phenos,
+                                       hpo = hpo,
+                                       absolute = TRUE,
+                                       verbose = verbose)
+  }
+  if(isTRUE(add_ont_lvl_relative)){
     phenos <- HPOExplorer::add_ont_lvl(phenos = phenos,
                                        hpo = hpo,
                                        adjacency = adjacency,
+                                       absolute = FALSE,
                                        verbose = verbose)
   }
   if(!"definition" %in% names(phenos)){
