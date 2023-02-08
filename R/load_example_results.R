@@ -34,11 +34,13 @@
 #' @importFrom data.table setkeyv
 #' @examples
 #' res <- load_example_results()
-load_example_results <- function(file="Descartes_All_Results_extras.rds",
+load_example_results <- function(file=c("Descartes_All_Results_extras.rds",
+                                        "tabulamuris_merged.rds"),
                                  tag = "v0.0.1",
                                  save_dir=tools::R_user_dir(package = "MultiEWCE")
                                  ) {
 
+  file <- file[[1]]
   dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
   save_path <- file.path(save_dir,file)
   if (!file.exists(save_path)) {
@@ -50,7 +52,13 @@ load_example_results <- function(file="Descartes_All_Results_extras.rds",
   }
   results <- readRDS(save_path)
   data.table::setnames(results,"list","Phenotype")
-  results <- HPOExplorer::add_hpo_id(phenos = results,
-                                     verbose = FALSE)
+  if(file=="tabulamuris_merged.rds"){
+    results$HPO_ID <- HPOExplorer::harmonise_phenotypes(
+      phenotypes = results$Phenotype,
+      as_hpo_ids = TRUE)
+  } else {
+    results <- HPOExplorer::add_hpo_id(phenos = results,
+                                       verbose = FALSE)
+  }
   return(results)
 }

@@ -25,7 +25,7 @@ prioritise_targets(
   sort_cols = c(tier = 1, tier_auto = 1, Severity_score_mean = 1, q = 1, fold_change =
     -1, specificity_quantile = -1, mean_exp_quantile = -1, specificity = -1, mean_exp =
     -1, pheno_freq_mean = -1, gene_freq_mean = -1, width = 1),
-  top_n = NULL,
+  top_n = 20,
   group_vars = c("HPO_ID", "CellType"),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   hpo = HPOExplorer::get_hpo(),
@@ -85,7 +85,9 @@ a gene that occurs 100\% of the time in a given phenotype.
 Include \code{NA} if you wish to retain genes that
 do not have any frequency data.}
 
-\item{keep_biotypes}{Which gene biotypes to keep.}
+\item{keep_biotypes}{Which gene biotypes to keep.
+(e.g. "protein_coding", "processed_transcript", "snRNA",
+"lincRNA", "snoRNA", "IG_C_gene")}
 
 \item{keep_specificity_quantiles}{Which cell type
 specificity quantiles to keep (max quantile is 40).}
@@ -119,11 +121,10 @@ celltype-specific gene targets.
 }
 \description{
 Prioritise target genes based on a procedure:
-\strong{Association-level filters:}\cr
 \enumerate{
-\item{Association-level filters: \code{q_threshold}: }{
+\item{Association-level: \code{q_threshold}: }{
 Keep only results at q<=0.05.}
-\item{fold_threshold: \code{fold_threshold}: }{
+\item{Association-level: \code{fold_threshold}: }{
 Keep only results at fold_change>=1.}
 \item{Phenotype-level: \code{keep_ont_levels}: }{
 Keep only phenotypes at certain absolute ontology levels within the HPO.}
@@ -131,32 +132,33 @@ Keep only phenotypes at certain absolute ontology levels within the HPO.}
 Keep only phenotypes with certain age of onsets.}
 \item{Phenotype-level: \code{keep_tiers}: }{
 Keep only phenotypes with high severity Tiers.}
-\item{Phenotype-level filters: \code{severity_threshold}: }{
+\item{Phenotype-level: \code{severity_threshold}: }{
 Keep only phenotypes with mean Severity equal to or below the threshold.}
-\item{Phenotype-level filters: \code{pheno_frequency_threshold}: }{
-Keep only phenotypes with mean frequency equal to or above the threshold.
+\item{Phenotype-level: \code{pheno_frequency_threshold}: }{
+Keep only phenotypes with mean frequency equal to or above the threshold
 (i.e. how frequently a phenotype is associated with any diseases in
 which it occurs).}
-\item{Cell type-level:  \code{keep_celltypes}:}{
+\item{Cell type-level:  \code{keep_celltypes}: }{
 Keep only terminally differentiated cell types.}
 \item{Gene-level: \code{keep_seqnames}: }{
 Remove genes on non-standard chromosomes.}
-\item{Gene-level: \code{gene_size}:}{
+\item{Gene-level: \code{gene_size}: }{
 Keep only genes <4.3kb in length.}
-\item{Gene-level: \code{gene_frequency_threshold}:}{
+\item{Gene-level: \code{keep_biotypes}: }{
+Keep only genes belonging to certain biotypes.}
+\item{Gene-level: \code{gene_frequency_threshold}: }{
 Keep only genes at or above a certain mean frequency threshold
 (i.e. how frequently a gene is associated with a given phenotype
 when observed within a disease).}
-\item{Gene-level: \code{keep_biotypes}:}{
-Keep only genes belonging to certain biotypes.}
 \item{Gene-level: \code{keep_specificity_quantiles}: }{
 Keep only genes in top specificity quantiles
 from the cell type dataset (\code{ctd}).}
 \item{Gene-level: \code{keep_mean_exp_quantiles}: }{
 Keep only genes in top mean expression quantiles
 from the cell type dataset (\code{ctd}).}
-\item{All levels: \code{sort_cols}}{
-Sort candidate targets by a preferred order of metrics.}
+\item{All levels: \code{top_n}: }{
+Sort candidate targets by a preferred order of metrics and
+only return the top N targets per cell type-phenotype combination.}
 }
 }
 \examples{

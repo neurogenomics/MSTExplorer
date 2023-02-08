@@ -6,10 +6,11 @@ report <- function(dt,
   if(!methods::is(dt,"data.table")){
     dt <- data.table::as.data.table(dt)
   }
+
   dict <- list(Rows="rows",
                Phenotype="phenotypes",
-               CellType="celltypes",
                DiseaseNames="diseases",
+               CellType="celltypes",
                Gene="genes")
   get_values <- function(add_text=TRUE){
     lapply(stats::setNames(names(dict),names(dict)),
@@ -35,10 +36,12 @@ report <- function(dt,
   messager("Prioritised targets:",
            if(!is.null(step))paste0("step=",shQuote(step)),
            paste("\n -",rep, collapse = " "), v=verbose)
+  ##### Construct final table ####
   if(!is.null(step)){
     rep_dt2 <- data.table::data.table(
       step=step,
-      t(vals |> `names<-`(gsub(" ","_",dict[names(vals)])))
+      t(vals |> `names<-`(gsub(" ","_",dict[names(vals)]))),
+      ids=list(unique(dt$HPO_ID))
     )
     return(data.table::rbindlist(list(rep_dt,rep_dt2), fill = TRUE))
   }

@@ -3,6 +3,8 @@ targets_to_graph <- function(top_targets,
                              group_var,
                              edge_color_var=group_var,
                              edge_size_var="fold_change",
+                             mediator_var = "Gene",
+                             format="visnetwork",
                              verbose=TRUE){
 
   requireNamespace("igraph")
@@ -41,17 +43,28 @@ targets_to_graph <- function(top_targets,
   vertices[node_type!="Phenotype",]$ancestor_name <- NA
   vertices <- unique(vertices)
   #### Merge graphs ####
-  subgraphs <- lapply(seq_len(length(vertex_vars)-1), function(i){
-    vv <- vertex_vars[c(i,i+1)]
-    dt <- unique(
-      top_targets[,c(vv,c(edge_color_var,edge_size_var)),
-                  with=FALSE][,fold_change:=mean(fold_change), by=vv]
-    )
-    igraph::graph_from_data_frame(dt)
-  })
-  g <- do.call(igraph::union, subgraphs)
+  if(!is.null(mediator_var)){
+    subgraphs <- lapply(vertex_vars[vertex_vars!=mediator_var], function(v){
+      vv <- c(v,mediator_var)
+      dt <- unique(
+        top_targets[,vv,with=FALSE]
+      )
+      igraph::graph_from_data_frame(dt)
+    })
+  } else{
+    subgraphs <- lapply(seq_len(length(vertex_vars)-1), function(i){
+      vv <- vertex_vars[c(i,i+1)]
+      dt <- unique(
+        top_targets[,c(vv,c(edge_color_var,edge_size_var)),
+                    with=FALSE][,fold_change:=mean(fold_change), by=vv]
+      )
+      igraph::graph_from_data_frame(dt)
+    })
+  }
+
+  g <- igraph::graph.union(subgraphs)
   #### Name edges ####
-  igraph::edge_attr(g,"id") <- paste0("edge",seq_len(length(igraph::E(g))))
+  # igraph::edge_attr(g,"id") <- paste0("edge",seq_len(length(igraph::E(g))))
   #### Add nodes metadata ####
   for(x in names(vertices)){
     igraph::vertex_attr(g,x) <- as.character(
@@ -101,10 +114,19 @@ targets_to_graph <- function(top_targets,
   #   unique(vertices[[group_var]]))
   # igraph::edge_attr(g,"color") <- edge_color_dict[edge_color]
   #### Add edge size ####
-  edge_size <- igraph::edge_attr(g)[grep(edge_size_var,igraph::edge_attr_names(g), value = TRUE)] |>
-    data.table::as.data.table() |>
-    data.table::fcoalesce()
-  igraph::edge_attr(g,"width") <- edge_size
+  # edge_size <- igraph::edge_attr(g)[grep(edge_size_var,igraph::edge_attr_names(g), value = TRUE)] |>
+  #   data.table::as.data.table() |>
+  #   data.table::fcoalesce()
+  # cols <- c(edge_size_var)
+  # top_targets[,c(vertex_vars,edge_color_var,edge_size_var), with=FALSE][,(cols):=lapply(.SD,mean),.SDcols=cols,by=c("Phenotype")]
+
+  # igraph::edge_attr(g,"width") <- edge_size
   # g <- igraph::simplify(g,)
-  return(g)
+  if(isTRUE(format=="ggnetwork")){
+    g2 <- ggnetwork::fortify(g)
+    rownames(g2) <- paste0("edge",seq_len(nrow(g2)))
+    return(g2)
+  } else{
+    return(g)
+  }
 }

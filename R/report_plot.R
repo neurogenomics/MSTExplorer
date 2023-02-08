@@ -6,6 +6,7 @@
 #' @param annot HPO annotations.
 #' @param show_plot Show the plot.
 #' @param save_plot Path to save the plot to.
+#' @param remove_cols Columns to remove from \code{rep_dt}.
 #' @inheritParams ggnetwork_plot_full
 #' @inheritDotParams ggplot2::ggsave
 #' @returns ggplot object
@@ -17,7 +18,8 @@
 #' @examples
 #' results <- load_example_results()
 #' res <- prioritise_targets(results=results)
-#' gp <- report_plot(rep_dt=res$report, results=results)
+#' rep_dt <- res$report
+#' gp <- report_plot(rep_dt=rep_dt, results=results)
 report_plot <- function(rep_dt,
                         results,
                         phenotype_to_genes =
@@ -25,48 +27,107 @@ report_plot <- function(rep_dt,
                         annot =
                           HPOExplorer::load_phenotype_to_genes(
                             "phenotype.hpoa"),
+                        remove_cols=c("rows","ids"),
                         show_plot=TRUE,
                         save_plot=tempfile(fileext = "_report_plot.pdf"),
                         verbose=TRUE,
                         ...){
 
-  # rep_dt <- res$report
-  # results <- load_example_results()
-
+  # templateR:::args2vars(report_plot)
   requireNamespace("ggplot2")
-  variable <- value <- step <- NULL;
+  Tier_count <- value <- step <- HPO_ID <- level <- NULL;
 
   messager("report_plot:: Preparing data.",v=verbose)
+  tier_dt <- lapply(stats::setNames(rep_dt$ids,
+                         rep_dt$step), function(x){
+    if(length(x)==0) return(NULL)
+    tcounts <- table(useNA = "always",
+      HPOExplorer::add_tier(phenos = data.table::data.table(HPO_ID=x),
+                            verbose = FALSE
+      )$tier_merge)
+    names(tcounts) <- paste0("Tier",names(tcounts))
+    data.table::as.data.table(as.list(tcounts))
+  }) |> data.table::rbindlist(fill=TRUE, use.names = TRUE, idcol = "step")
+  tier_cols <- names(tier_dt)[-1]
+  data.table::setnafill(tier_dt,fill=0, type = "const", cols = tier_cols)
+  tier_dt <- data.table::merge.data.table(rep_dt[,c("step")],
+                                          tier_dt,
+                                          all.x = TRUE, sort = FALSE)
+  data.table::setnafill(tier_dt, type = "locf",cols = seq(2,ncol(tier_dt)))
+  #### Remove cols ####
+  rep_dt <- rep_dt[,-remove_cols, with=FALSE]
+
   #### Fill missing values ####
   total_diseases <- length(unique(annot[HPO_ID %in% results$HPO_ID,]$DiseaseName))
   total_genes <- length(unique(phenotype_to_genes$Gene))
   rep_dt[step=="start",]$diseases <- total_diseases
   rep_dt[step=="start",]$genes <- total_genes
   data.table::setnafill(rep_dt, type = "locf",cols = seq(2,ncol(rep_dt)))
-  #### Make plot data ####
-  dt <- data.table::melt(rep_dt, id.vars="step")
-  dt$step <- factor(dt$step,
-                        levels = unique(dt$step), ordered = TRUE)
+  ##### Make plot data: tiers
+  dt1 <- tier_dt |>
+  data.table::melt.data.table(id.vars="step",
+                              variable.name = "Tier",
+                              value.name = "Tier_count")
+  dt1[,Tier:=gsub("TierNA",NA,Tier)]
+  dt1$step <- factor(dt1$step,
+                    levels = unique(dt1$step),
+                    labels = paste0(seq_len(length(unique(dt1$step))),". ",
+                                    unique(dt1$step)),
+                    ordered = TRUE)
+  #### Make plot: tiers ####
+  gp1 <- ggplot2::ggplot(dt1,
+                         ggplot2::aes(x=step,y=Tier_count,
+                                      fill=Tier)) +
+    ggplot2::geom_bar(stat = "identity",
+                      alpha=1,
+                      position = "fill") +
+    ggplot2::theme_minimal() +
+    ggplot2::scale_fill_viridis_d(na.value = "grey90",
+                                  option = "mako") +
+    ggplot2::scale_y_continuous(labels = scales::percent) +
+    ggplot2::labs(y="% phenotypes", x=NULL) +
+    ggplot2::theme(axis.text.x = ggplot2::element_blank())
+
+
   #### Plot ####
+  #### Add step levels/descriptions ####
+  filters <- extract_filters()
+  #### Make plot data ####
+  dt2 <- data.table::merge.data.table(x = rep_dt,
+                                     y = filters,
+                                     by="step",
+                                     all.x = TRUE,
+                                     sort = FALSE) |>
+    data.table::melt(id.vars=names(filters))
+  dt2$step <- factor(dt2$step,
+                    levels = unique(dt2$step),
+                    labels = paste0(seq_len(length(unique(dt2$step))),". ",
+                                    unique(dt2$step)),
+                    ordered = TRUE)
   messager("report_plot:: Preparing plot.",v=verbose)
-  gp <- ggplot2::ggplot(dt, ggplot2::aes(x=step,
+  gp2 <- ggplot2::ggplot(dt2, ggplot2::aes(x=step,
                                    y=value,
-                                   fill=variable,
+                                   fill=level,
                                    label=value)) +
     ggplot2::geom_bar(stat = "identity",
-                      alpha=.8,
-                      show.legend = FALSE) +
+                      alpha=1,
+                      color="grey80") +
     ggplot2::facet_grid(facets = "variable~.",
                         scales = "free") +
     ggplot2::geom_label(fill="black",
-                        color="white",alpha=.8,
+                        color="white",
+                        alpha=.8,
                         vjust = 0) +
-    ggplot2::scale_fill_viridis_d() +
+    ggplot2::scale_fill_viridis_d(na.value = "grey90",
+                                  option = "viridis") +
     ggplot2::scale_y_continuous(expand=ggplot2::expansion(mult = c(0,.2))) +
-    ggplot2::theme_bw() +
-    ggplot2::labs(y="Counts") +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+    ggplot2::theme_minimal() +
+    ggplot2::labs(x="Step", y="Counts", fill="Level") +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = -45, hjust = 0),
                    strip.background = ggplot2::element_rect(fill = "transparent"))
+
+  #### Combine plots ####
+  gp <- patchwork::wrap_plots(gp1, gp2, ncol = 1, heights = c(.3,1))
 
   if(isTRUE(show_plot)) methods::show(gp)
   if(!is.null(save_plot)){

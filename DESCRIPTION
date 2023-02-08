@@ -54,7 +54,8 @@ Suggests:
     igraph,
     visNetwork,
     edgebundle,
-    ComplexHeatmap
+    ComplexHeatmap,
+    rvest
 Remotes: 
   github::neurogenomics/HPOExplorer
 VignetteBuilder: knitr

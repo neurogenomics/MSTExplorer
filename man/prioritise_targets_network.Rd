@@ -16,7 +16,9 @@ prioritise_targets_network(
   top_targets,
   vertex_vars = c("Phenotype", "CellType", "Gene"),
   group_var = "ancestor_name",
-  edge_var = "fold_change",
+  edge_color_var = group_var,
+  edge_size_var = "fold_change",
+  mediator_var = "Gene",
   show_plot = TRUE,
   save_path = tempfile(fileext = "_prioritise_targets_network.html"),
   layout = "layout_with_kk",
@@ -25,6 +27,7 @@ prioritise_targets_network(
   forceAtlas2Based = list(avoidOverlap = 0.5, gravitationalConstant = -50),
   scaling = list(label = list(drawThreshold = 0)),
   smooth = list(enabled = TRUE, type = "cubicBezier", roundness = 0.5),
+  add_visExport = FALSE,
   height = 1000,
   width = 1300,
   randomSeed = 2023,
@@ -39,7 +42,14 @@ to include as vertices/nodes within the network.}
 
 \item{group_var}{Variable to group nodes by.}
 
-\item{edge_var}{Variable to color edges by.}
+\item{edge_color_var}{Variable to color edges by.}
+
+\item{edge_size_var}{Variable to scale edges by.}
+
+\item{mediator_var}{Variable to connect cell types and phenotypes by
+(i.e. "Gene").
+If \code{NULL}, instead will connect node hierarchically:
+ancestor_name --> Phenotype --> CellType --> Gene}
 
 \item{show_plot}{Print the plot after it has been created.}
 
@@ -62,10 +72,10 @@ to include as vertices/nodes within the network.}
  \item{"avoidOverlap"}{ : Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.}
 }}
 
-\item{scaling}{: Named list.  If the value option is specified, the size of the edges will be scaled according to the properties in this object.
+\item{scaling}{: Named list.  If the value option is specified, the size of the nodes will be scaled according to the properties in this object.
 \itemize{
- \item{"min"}{ :  Number. Default to 10. If edges have a value, their sizes are determined by the value, the scaling function and the min max values.}
- \item{"max"}{ : Number. Default to 30. This is the maximum allowed size when the edges are scaled using the value option.}
+ \item{"min"}{ :  Number. Default to 10. If nodes have a value, their sizes are determined by the value, the scaling function and the min max values.}
+ \item{"max"}{ : Number. Default to 30. This is the maximum allowed size when the nodes are scaled using the value option.}
  \item{"label"}{ : Named list or Boolean. Default to Named list. This can be false if the label is not allowed to scale with the node. If true it will scale using default settigns. For further customization, you can supply an object.
    \itemize{
      \item{"enabled"}{ : Boolean. Default to false. Toggle the scaling of the label on or off. If this option is not defined, it is set to true if any of the properties in this object are defined.}
@@ -79,6 +89,8 @@ to include as vertices/nodes within the network.}
 }}
 
 \item{smooth}{: Boolean. Default to FALSE. Use smooth edges ?}
+
+\item{add_visExport}{Add PDF download button.}
 
 \item{height}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
 
@@ -103,5 +115,6 @@ examples of each layout.
 }
 \examples{
 res <- prioritise_targets()
-vn <- prioritise_targets_network(top_targets = res$top_targets)
+top_targets <- res$top_targets
+vn <- prioritise_targets_network(top_targets = top_targets)
 }
