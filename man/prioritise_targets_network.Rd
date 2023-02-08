@@ -20,6 +20,13 @@ prioritise_targets_network(
   show_plot = TRUE,
   save_path = tempfile(fileext = "_prioritise_targets_network.html"),
   layout = "layout_with_kk",
+  solver = "forceAtlas2Based",
+  physics = FALSE,
+  forceAtlas2Based = list(avoidOverlap = 0.5, gravitationalConstant = -50),
+  scaling = list(label = list(drawThreshold = 0)),
+  smooth = list(enabled = TRUE, type = "cubicBezier", roundness = 0.5),
+  height = 1000,
+  width = 1300,
   randomSeed = 2023,
   verbose = TRUE
 )
@@ -40,6 +47,43 @@ to include as vertices/nodes within the network.}
 
 \item{layout}{: Character Name of igraph layout function to use. Default to "layout_nicely"}
 
+\item{solver}{: String. Default to 'barnesHut'.    You can select your own solver. Possible options: 'barnesHut', 'repulsion', 'hierarchicalRepulsion', 'forceAtlas2Based'. When setting the hierarchical layout, the hierarchical repulsion solver is automaticaly selected, regardless of what you fill in here.}
+
+\item{physics}{: Boolean. Default to FALSE. Enabled physics on nodes ?}
+
+\item{forceAtlas2Based}{named list of options
+\itemize{
+ \item{"theta"}{ : Number. Default to 0.5. This parameter determines the boundary between consolidated long range forces and individual short range forces. To oversimplify higher values are faster but generate more errors, lower values are slower but with less errors.}
+ \item{"gravitationalConstant"}{ : Number. Default to -50. Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).}
+ \item{"centralGravity"}{ : Number. Default to 0.01. There is a central gravity attractor to pull the entire network back to the center.}
+ \item{"springLength"}{ : Number. Default to 100. The edges are modelled as springs. This springLength here is the the rest length of the spring.}
+ \item{"springConstant"}{ : Number. Default to 0.08. This is how 'sturdy' the springs are. Higher values mean stronger springs.}
+ \item{"damping"}{ : Number. Default to 0.4. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.}
+ \item{"avoidOverlap"}{ : Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.}
+}}
+
+\item{scaling}{: Named list.  If the value option is specified, the size of the edges will be scaled according to the properties in this object.
+\itemize{
+ \item{"min"}{ :  Number. Default to 10. If edges have a value, their sizes are determined by the value, the scaling function and the min max values.}
+ \item{"max"}{ : Number. Default to 30. This is the maximum allowed size when the edges are scaled using the value option.}
+ \item{"label"}{ : Named list or Boolean. Default to Named list. This can be false if the label is not allowed to scale with the node. If true it will scale using default settigns. For further customization, you can supply an object.
+   \itemize{
+     \item{"enabled"}{ : Boolean. Default to false. Toggle the scaling of the label on or off. If this option is not defined, it is set to true if any of the properties in this object are defined.}
+     \item{"min"}{ : Number. Default to 14. The minimum font-size used for labels when scaling.}
+     \item{"max"}{ : Number. Default to 30. The maximum font-size used for labels when scaling.}
+     \item{"maxVisible"}{ :   Number. Default to 30. When zooming in, the font is drawn larger as well. You can limit the perceived font size using this option. If set to 30, the font will never look larger than size 30 zoomed at 100\%.}
+     \item{"drawThreshold"}{ : Number. Default to 5. When zooming out, the font will be drawn smaller. This defines a lower limit for when the font is drawn. When using font scaling, you can use this together with the maxVisible to first show labels of important nodes when zoomed out and only show the rest when zooming in.}
+   }
+ }
+ \item{"customScalingFunction"}{ : Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.}
+}}
+
+\item{smooth}{: Boolean. Default to FALSE. Use smooth edges ?}
+
+\item{height}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
+
+\item{width}{: Number. Default to 1. The width of the edge. If value is set, this is not used.}
+
 \item{randomSeed}{: Number. The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time.}
 
 \item{verbose}{Print messages.}
@@ -58,6 +102,6 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-top_targets <- prioritise_targets()
-vn <- prioritise_targets_network(top_targets = top_targets)
+res <- prioritise_targets()
+vn <- prioritise_targets_network(top_targets = res$top_targets)
 }

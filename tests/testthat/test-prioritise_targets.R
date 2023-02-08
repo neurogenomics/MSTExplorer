@@ -4,14 +4,14 @@ test_that("prioritise_targets works", {
   ctd <- load_example_ctd()
 
   #### Top only ####
-  top_targets <- prioritise_targets(results = results,
-                                    ctd = ctd)
-  testthat::expect_gte(nrow(top_targets), 80)
+  res1 <- prioritise_targets(results = results,
+                             ctd = ctd)
+  testthat::expect_gte(nrow(res1$top_targets), 300)
 
   #### All results ####
-  df <- prioritise_targets(results = results,
-                           ctd = ctd,
-                           top_n = NULL)
-  testthat::expect_gte(nrow(df), 335)
+  res2 <- prioritise_targets(results = results,
+                             ctd = ctd,
+                             top_n = 2)
+  testthat::expect_gte(nrow(res2$top_targets), 200)
 
 })

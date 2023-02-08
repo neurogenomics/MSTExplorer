@@ -4,3 +4,13 @@ inst/doc
 /Meta/
 tests/testthat/data/
 
+# .DS_Store
+# find . -name .DS_Store -print0 | xargs -0 git rm -f --ignore-unmatch
+.DS_Store
+./.DS_Store
+./**/.DS_Store
+./**/**/.DS_Store
+./**/**/**/.DS_Store
+./**/**/**/**/.DS_Store
+./**/**/**/**/**/.DS_Store
+./**/**/**/**/**/**/.DS_Store

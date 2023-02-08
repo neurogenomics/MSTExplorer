@@ -9,6 +9,7 @@
   - `prioritise_targets`
   - `prioritise_targets_heatmap`
   - `prioritise_targets_network`
+  - `report_plot`
 
 ## Bug fixes
 

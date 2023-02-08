@@ -24,6 +24,10 @@
 #'
 #' @inheritParams visNetwork::visIgraph
 #' @inheritParams visNetwork::visIgraphLayout
+#' @inheritParams visNetwork::visPhysics
+#' @inheritParams visNetwork::visEdges
+#' @inheritParams visNetwork::visNodes
+#' @inheritParams visNetwork::visOptions
 #' @returns A named list containing the \link[visNetwork]{visNetwork} plot
 #' and the the graph used to make the plot.
 #'
@@ -31,8 +35,8 @@
 #' @import ggplot2
 #' @importFrom stats setNames
 #' @examples
-#' top_targets <- prioritise_targets()
-#' vn <- prioritise_targets_network(top_targets = top_targets)
+#' res <- prioritise_targets()
+#' vn <- prioritise_targets_network(top_targets = res$top_targets)
 prioritise_targets_network <- function(top_targets,
                                        vertex_vars = c("Phenotype",
                                                        "CellType",
@@ -45,10 +49,22 @@ prioritise_targets_network <- function(top_targets,
                                            "_prioritise_targets_network.html"
                                          ),
                                        layout = "layout_with_kk",
+                                       solver = "forceAtlas2Based",
+                                       physics = FALSE,
+                                       forceAtlas2Based = list(
+                                         avoidOverlap=.5,
+                                         gravitationalConstant=-50),
+                                       scaling=list(label=
+                                                      list(drawThreshold=0)
+                                                    ),
+                                       smooth=list(enabled=TRUE,
+                                                   type="cubicBezier",
+                                                   roundness=.5),
+                                       height = 1000,
+                                       width = 1300,
                                        randomSeed = 2023,
                                        verbose = TRUE
                                        ){
-  # templateR:::source_all()
   # templateR:::args2vars(prioritise_targets_network)
 
   requireNamespace("ggplot2")
@@ -58,33 +74,50 @@ prioritise_targets_network <- function(top_targets,
   g <- targets_to_graph(top_targets = top_targets,
                         vertex_vars = c(group_var,vertex_vars),
                         group_var = group_var,
-                        edge_var = edge_var,
+                        edge_color_var = group_var,
                         verbose = verbose)
   #### Plot ####
   messager("Creating plot.",v=verbose)
-  visnet <- visNetwork::visIgraph(g, randomSeed = randomSeed) |>
-    visNetwork::visIgraphLayout(layout = layout) |>
+  visnet <- visNetwork::visIgraph(g,
+                                  randomSeed = randomSeed) |>
+    visNetwork::visIgraphLayout(layout = layout,
+                                physics = physics) |>
+    visNetwork::visPhysics(solver=solver,
+                           forceAtlas2Based=forceAtlas2Based,
+                           enabled = physics) |>
     visNetwork::visNodes(font = list(color="#F0FFFF",
                                      strokeWidth=2,
-                                     strokeColor="rgba(0,0,0,0.8)"
+                                     strokeColor="rgba(0,0,0,1)"
                                      ),
-                         shadow = list("enabled"=TRUE),
-                         opacity = 0.9) |>
-    visNetwork::visEdges(shadow = list("enabled"=FALSE),
-                         # smooth = list("enabled"=TRUE,
-                         #               type="straightCross",
-                         #               roundness=.5),
-                         color = list(opacity = 0.9)) |>
-    visNetwork::visLegend() |>
-    # visNetwork::visGroups(groupname = unique(igraph::vertex_attr(g,"group"))[[1]],
-    #                       color="brown")
+                         shadow = list(enabled=TRUE,
+                                       size = 10),
+                         opacity = 0.75,
+                         color = list(hover=list(background="rgba(0,0,0,.5)")
+                                      ),
+                         scaling = scaling
+                         ) |>
+    visNetwork::visEdges(shadow = list(enabled=FALSE),
+                         smooth = smooth,
+                         color = list(opacity = 0.75)) |>
+    # visNetwork::visLegend() |>
+    # visNetwork::visClusteringByConnection(nodes = unique(top_targets[[group_var]])) |>
+    # visNetwork::visGroups(groupname = unique(igraph::vertex_attr(g,"group"))[[2]],
+    #                       color="green")
     # visNetwork::visClusteringByGroup(groups = igraph::vertex_attr(g,"group"))
-    visNetwork::visExport(type = "pdf") |>
-    visNetwork::visOptions(height=700, width = 1300)
+    # visNetwork::visExport(type = "pdf") |>
+    visNetwork::visInteraction(hover = TRUE) |>
+    visNetwork::visOptions(height=height,
+                           width = width,
+                           highlightNearest = list(enabled=TRUE,
+                                                   degree=2))
+  #### Save network ####
   if(!is.null(save_path)) {
     dir.create(dirname(save_path), showWarnings = FALSE, recursive = TRUE)
     messager("Saving plot ==>",save_path,v=verbose)
-    visNetwork::visSave(visnet,file = save_path)
+    visNetwork::visSave(visnet,
+                        file = save_path,
+                        selfcontained = TRUE,
+                        background = "transparent")
     # {
     #   grDevices::pdf(file = "~/Downloads/network2.pdf")
     #   methods::show(visnet)

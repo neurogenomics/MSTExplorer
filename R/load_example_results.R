@@ -50,5 +50,7 @@ load_example_results <- function(file="Descartes_All_Results_extras.rds",
   }
   results <- readRDS(save_path)
   data.table::setnames(results,"list","Phenotype")
+  results <- HPOExplorer::add_hpo_id(phenos = results,
+                                     verbose = FALSE)
   return(results)
 }

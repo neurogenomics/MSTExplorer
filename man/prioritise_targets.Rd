@@ -10,20 +10,26 @@ prioritise_targets(
   annotLevel = 1,
   q_threshold = 0.05,
   fold_threshold = 1,
+  keep_ont_levels = NULL,
+  keep_onsets = HPOExplorer::list_onsets(exclude_onsets = c("Antenatal", "Fetal")),
+  keep_tiers = c(1, 2),
+  severity_threshold = c(2, NA),
+  pheno_frequency_threshold = 25,
   keep_celltypes = terminal_celltypes()$CellType,
-  keep_onsets = HPOExplorer::list_onsets(postnatal_only = TRUE),
-  keep_tiers = 1,
-  gene_size = list(min = 0, max = 4300),
   keep_seqnames = c(seq_len(22), "X", "Y"),
+  gene_size = list(min = 0, max = 4300),
+  gene_frequency_threshold = c(10, NA),
   keep_biotypes = NULL,
   keep_specificity_quantiles = seq(39, 40),
   keep_mean_exp_quantiles = keep_specificity_quantiles,
-  sort_cols = c(tier = 1, q = 1, fold_change = -1, specificity_quantile = -1,
-    mean_exp_quantile = -1, specificity = -1, mean_exp = -1, width = 1),
+  sort_cols = c(tier = 1, tier_auto = 1, Severity_score_mean = 1, q = 1, fold_change =
+    -1, specificity_quantile = -1, mean_exp_quantile = -1, specificity = -1, mean_exp =
+    -1, pheno_freq_mean = -1, gene_freq_mean = -1, width = 1),
   top_n = NULL,
   group_vars = c("HPO_ID", "CellType"),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   hpo = HPOExplorer::get_hpo(),
+  return_report = TRUE,
   verbose = TRUE
 )
 }
@@ -43,15 +49,41 @@ analyse (\emph{Default: 1}).}
 \item{fold_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
 
+\item{keep_ont_levels}{Only keep phenotypes at certain \emph{absolute}
+ontology levels to keep.
+See \link[HPOExplorer]{add_ont_lvl} for details.}
+
+\item{keep_onsets}{The age of onset associated with each HPO ID to keep.
+If >1 age of onset is associated with the term,
+only the earliest onset is considered.
+See \link[HPOExplorer]{add_onset} for details.}
+
+\item{keep_tiers}{Tiers from \link[HPOExplorer]{hpo_tiers} to keep.
+Include \code{NA} if you wish to retain phenotypes that
+do not have any Tier assignment.}
+
+\item{severity_threshold}{Only keep phenotypes with severity scores below the
+set threshold. The severity score ranges from 1-4 where 1 is the MOST severe.
+Include \code{NA} if you wish to retain phenotypes that
+do not have any severity score.}
+
+\item{pheno_frequency_threshold}{Only keep phenotypes with frequency
+above the set threshold. Frequency ranges from 0-100 where 100 is
+a phenotype that occurs 100\% of the time in all associated diseases.
+Include \code{NA} if you wish to retain phenotypes that
+do not have any frequency data.}
+
 \item{keep_celltypes}{Cell type to keep.}
 
-\item{keep_onsets}{The age of onset associated with each HPO ID to keep.}
-
-\item{keep_tiers}{Tiers from \link[HPOExplorer]{hpo_tiers} to keep.}
+\item{keep_seqnames}{Chromosomes to keep.}
 
 \item{gene_size}{Min/max gene size (important for therapeutics design).}
 
-\item{keep_seqnames}{Chromosomes to keep.}
+\item{gene_frequency_threshold}{Only keep genes with frequency
+above the set threshold. Frequency ranges from 0-100 where 100 is
+a gene that occurs 100\% of the time in a given phenotype.
+Include \code{NA} if you wish to retain genes that
+do not have any frequency data.}
 
 \item{keep_biotypes}{Which gene biotypes to keep.}
 
@@ -75,29 +107,58 @@ to gene annotations.}
 
 \item{hpo}{Human Phenotype Ontology object, loaded from \pkg{ontologyIndex}.}
 
+\item{return_report}{If \code{TRUE}, will return a named list containing a
+\code{report} that shows the number of
+phenotypes/celltypes/genes remaining after each filtering step.}
+
 \item{verbose}{Print messages.}
+}
+\value{
+A data.table of the prioritised phenotype- and
+celltype-specific gene targets.
 }
 \description{
 Prioritise target genes based on a procedure:
+\strong{Association-level filters:}\cr
 \enumerate{
-\item{Association-level: }{Keep only results at q<=0.05.}
-\item{Association-level: }{Keep only results at fold_change>=1.}
-\item{Phenotype-level: }{Keep only phenotypes with high severity Tiers}
-\item{Phenotype-level: }{Keep only phenotypes with postnatal age of onsets.}
-\item{Cell type-level: }{Keep only terminally differentiated cell types.}
-\item{Gene-level: }{Remove genes on non-standard chromosomes.}
-\item{Gene-level: }{Keep only genes <4.3kb in length.}
-\item{Gene-level: }{Keep only genes in top specificity quantiles
+\item{Association-level filters: \code{q_threshold}: }{
+Keep only results at q<=0.05.}
+\item{fold_threshold: \code{fold_threshold}: }{
+Keep only results at fold_change>=1.}
+\item{Phenotype-level: \code{keep_ont_levels}: }{
+Keep only phenotypes at certain absolute ontology levels within the HPO.}
+\item{Phenotype-level: \code{keep_onsets}: }{
+Keep only phenotypes with certain age of onsets.}
+\item{Phenotype-level: \code{keep_tiers}: }{
+Keep only phenotypes with high severity Tiers.}
+\item{Phenotype-level filters: \code{severity_threshold}: }{
+Keep only phenotypes with mean Severity equal to or below the threshold.}
+\item{Phenotype-level filters: \code{pheno_frequency_threshold}: }{
+Keep only phenotypes with mean frequency equal to or above the threshold.
+(i.e. how frequently a phenotype is associated with any diseases in
+which it occurs).}
+\item{Cell type-level:  \code{keep_celltypes}:}{
+Keep only terminally differentiated cell types.}
+\item{Gene-level: \code{keep_seqnames}: }{
+Remove genes on non-standard chromosomes.}
+\item{Gene-level: \code{gene_size}:}{
+Keep only genes <4.3kb in length.}
+\item{Gene-level: \code{gene_frequency_threshold}:}{
+Keep only genes at or above a certain mean frequency threshold
+(i.e. how frequently a gene is associated with a given phenotype
+when observed within a disease).}
+\item{Gene-level: \code{keep_biotypes}:}{
+Keep only genes belonging to certain biotypes.}
+\item{Gene-level: \code{keep_specificity_quantiles}: }{
+Keep only genes in top specificity quantiles
 from the cell type dataset (\code{ctd}).}
-\item{Gene-level: }{Keep only genes in top mean expression quantiles
+\item{Gene-level: \code{keep_mean_exp_quantiles}: }{
+Keep only genes in top mean expression quantiles
 from the cell type dataset (\code{ctd}).}
-\item{Gene-level: }{Sort genes by cell type specificity and mean expression
-from the cell type dataset (\code{ctd}).}
+\item{All levels: \code{sort_cols}}{
+Sort candidate targets by a preferred order of metrics.}
 }
 }
 \examples{
-results <- load_example_results()
-ctd <- load_example_ctd()
-top_targets <- prioritise_targets(results = results,
-                                  ctd = ctd)
+res <- prioritise_targets()
 }
