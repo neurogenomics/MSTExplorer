@@ -18,10 +18,24 @@
 #' @inheritParams piggyback::pb_download
 #' @source
 #' \code{
-#' d <-  "~/Desktop/ewce/rare_disease_celltyping_apps/cell_select_interactive"
-#' piggyback::pb_upload(file = file.path(d,"data/Descartes_All_Results.rds"),
+#' d <-  "~/Desktop/ewce/rare_disease_celltyping_apps/cell_select"
+#' #### Descartes_All_Results ####
+#' f1 <- file.path(d,"data/Descartes_All_Results.rds")
+#' r1 <- readRDS(f1)
+#' data.table::setnames(r1,"list","Phenotype")
+#' r1 <- HPOExplorer:::fix_hpo_ids(dt=r1)
+#' f1new <- file.path(tempdir(),basename(f1))
+#' saveRDS(r1,file = f1new)
+#' piggyback::pb_upload(file = f1new,
 #'                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
-#' piggyback::pb_upload(file = file.path(d,"data/tabulamuris_merged.rds"),
+#' #### tabulamuris_merged ####
+#' f2 <- file.path(d,"data/tabulamuris_merged.rds")
+#' r2 <- readRDS(f2)
+#' data.table::setnames(r2,"list","Phenotype")
+#' r2 <- HPOExplorer:::fix_hpo_ids(dt=r2)
+#' f2new <- file.path(tempdir(),basename(f2))
+#' saveRDS(r2,file = f2new)
+#' piggyback::pb_upload(file = f2new,
 #'                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
 #' }
 #' @source \href{https://github.com/neurogenomics/rare_disease_celltyping/}{
@@ -51,14 +65,5 @@ load_example_results <- function(file=c("Descartes_All_Results_extras.rds",
                            overwrite = TRUE)
   }
   results <- readRDS(save_path)
-  data.table::setnames(results,"list","Phenotype")
-  if(file=="tabulamuris_merged.rds"){
-    results$HPO_ID <- HPOExplorer::harmonise_phenotypes(
-      phenotypes = results$Phenotype,
-      as_hpo_ids = TRUE)
-  } else {
-    results <- HPOExplorer::add_hpo_id(phenos = results,
-                                       verbose = FALSE)
-  }
   return(results)
 }
