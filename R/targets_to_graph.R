@@ -123,6 +123,7 @@ targets_to_graph <- function(top_targets,
   # igraph::edge_attr(g,"width") <- edge_size
   # g <- igraph::simplify(g,)
   if(isTRUE(format=="ggnetwork")){
+    requireNamespace("ggnetwork")
     g2 <- ggnetwork::fortify(g)
     rownames(g2) <- paste0("edge",seq_len(nrow(g2)))
     return(g2)

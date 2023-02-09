@@ -113,22 +113,6 @@ prioritise_targets_network <- function(top_targets,
   #   theme_void()
 
 
-  # n <- intergraph::asNetwork(g)
-  # ggplot(n,
-  #                        aes(x = x,
-  #                            y = y,
-  #                            xend = xend,
-  #                            yend = yend)) +
-  #   # geom_label(aes_string(label = "vertex.names", colour = "group")) +
-  #   geom_point(aes(color=node_type, shape=node_type)) +
-  #   geom_text(aes(label = node), color = "black") +
-  #   ggnetwork::geom_edges(aes(color=fold_change)) +
-  #   # scale_colour_gradient2(low = "white", mid = "yellow", high = "red") +
-  #   scale_size(trans = "exp") +
-  #   # guides(size = "none") +
-  #   # labs(colour = colour_label) +
-  #   theme_void()
-
 #
 #
 #   ggraph::ggraph(g,

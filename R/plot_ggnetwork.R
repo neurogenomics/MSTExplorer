@@ -1,5 +1,9 @@
 plot_ggnetwork <- function(g){
 
+  requireNamespace("ggplot2")
+  requireNamespace("ggnetwork")
+  x <- y <- xend <- yend <- node_type <- node_type <- name <- group <- NULL;
+  # n <- intergraph::asNetwork(g)
   g2 <- ggnetwork::ggnetwork(g)
 
   gp <- ggplot2::ggplot(g2,
@@ -24,4 +28,5 @@ plot_ggnetwork <- function(g){
   # plotly::plot_ly(x=g2$x,
   #                 y=g2$y,
   #                 type = "scatter")
+  return(gp)
 }

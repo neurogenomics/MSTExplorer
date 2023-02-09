@@ -53,16 +53,16 @@ Suggests:
     rworkflows,
     igraph,
     visNetwork,
-    edgebundle,
     ComplexHeatmap,
-    rvest
+    rvest,
+    patchwork,
+    ggnetwork
 Remotes: 
   github::neurogenomics/HPOExplorer
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 biocViews:
     Genetics, Preprocessing, GeneTarget, SystemsBiology, 
-    BiomedicalInformatics, DifferentialExpression, FunctionalGenomics, 
-    GeneExpression, GeneSetEnrichment, Genetics, Microarray, OneChannel, 
-    Proteomics, RNASeq, SingleCell, Software, Transcription, Visualization, 
-    mRNAMicroarray
+    BiomedicalInformatics, FunctionalGenomics, 
+    GeneExpression, GeneSetEnrichment,
+    RNASeq, SingleCell, Software, Transcription, Visualization

@@ -2,6 +2,7 @@ extract_filters <- function(pkg = "MultiEWCE",
                             fn = "prioritise_targets"){
 
   requireNamespace("rvest")
+  level <- NULL;
 
   out <- extract_help(pkg = pkg,
                       fn = fn,

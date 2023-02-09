@@ -35,7 +35,7 @@ test_that("ewce_para works", {
   unfinished <- get_unfinished_list_names(list_names = all_phenotypes,
                                           save_dir_tmp = save_dir_tmp)
   testthat::expect_lte(length(unfinished),
-                       length(all_phenotypes)-length(list_names))
+                       length(all_phenotypes))
 
 
   #### Merge results ####

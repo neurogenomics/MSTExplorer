@@ -12,7 +12,7 @@
 #' @returns ggplot object
 #'
 #' @export
-#' @importFrom data.table setnafill melt
+#' @importFrom data.table setnafill melt :=
 #' @importFrom methods show
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @examples
@@ -35,7 +35,8 @@ report_plot <- function(rep_dt,
 
   # templateR:::args2vars(report_plot)
   requireNamespace("ggplot2")
-  Tier_count <- value <- step <- HPO_ID <- level <- NULL;
+  requireNamespace("patchwork")
+  Tier <- Tier_count <- value <- step <- HPO_ID <- level <- NULL;
 
   messager("report_plot:: Preparing data.",v=verbose)
   tier_dt <- lapply(stats::setNames(rep_dt$ids,
@@ -127,7 +128,8 @@ report_plot <- function(rep_dt,
                    strip.background = ggplot2::element_rect(fill = "transparent"))
 
   #### Combine plots ####
-  gp <- patchwork::wrap_plots(gp1, gp2, ncol = 1, heights = c(.3,1))
+  gp <- patchwork::wrap_plots(gp1, gp2, ncol = 1, heights = c(.3,1)) +
+    patchwork::plot_annotation(tag_levels = LETTERS)
 
   if(isTRUE(show_plot)) methods::show(gp)
   if(!is.null(save_plot)){
