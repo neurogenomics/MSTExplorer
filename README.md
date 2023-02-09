@@ -1,6 +1,6 @@
 MultiEWCE
 ================
-[![](https://img.shields.io/badge/devel%20version-0.1.1-black.svg)](https://github.com/neurogenomics/MultiEWCE)
+[![](https://img.shields.io/badge/devel%20version-0.1.3-black.svg)](https://github.com/neurogenomics/MultiEWCE)
 [![R build
 status](https://github.com/neurogenomics/MultiEWCE/workflows/rworkflows/badge.svg)](https://github.com/neurogenomics/MultiEWCE/actions)
 [![](https://img.shields.io/github/last-commit/neurogenomics/MultiEWCE.svg)](https://github.com/neurogenomics/MultiEWCE/commits/master)
@@ -10,7 +10,7 @@ status](https://github.com/neurogenomics/MultiEWCE/workflows/rworkflows/badge.sv
 GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
 ¶ <h4> ¶ Authors: <i>Robert Gordon-Smith, Brian Schilder, Nathan
 Skene</i> ¶ </h4>
-<h4> ¶ README updated: <i>Jan-16-2023</i> ¶ </h4>
+<h4> ¶ README updated: <i>Feb-09-2023</i> ¶ </h4>
 
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->
 
@@ -28,12 +28,15 @@ If you use `MultiEWCE`, please cite:
 
 <!-- Modify this by editing the file: inst/CITATION  -->
 
+> Nathan G. Skene, Seth G. N. Grant (2016) Identification of cell types
+> underlying over 8,000 rare diseases and subtraits, *bioRxiv*;
+
 ## Installation
 
 ``` r
 if(!require("remotes")) install.packages("remotes")
 
-remotes::install_github("neurogenomics/multiewce")
+remotes::install_github("neurogenomics/MultiEWCE")
 library(MultiEWCE)
 ```
 

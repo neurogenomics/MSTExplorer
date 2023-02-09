@@ -154,7 +154,8 @@ prioritise_targets <- function(results = load_example_results(),
   #### add_hpo_id  #####
   results <- HPOExplorer::add_hpo_id(phenos = results,
                                      phenotype_to_genes = phenotype_to_genes,
-                                     hpo = hpo)
+                                     hpo = hpo,
+                                     verbose = verbose)
   if("HPO_term_valid" %in% names(results)){
     results <- results[HPO_term_valid==TRUE,]
   }

@@ -6,6 +6,16 @@
 \source{
 \code{
 d <-  "~/Desktop/ewce/rare_disease_celltyping_apps/cell_select"
+#### Descartes_All_Results_extras ####
+f0 <- file.path(d,"data/Descartes_All_Results_extras.rds")
+r0 <- readRDS(f0)
+data.table::setnames(r0,"list","Phenotype")
+r0$HPO_id=NULL
+r0 <- HPOExplorer:::fix_hpo_ids(dt=r0)
+f0new <- file.path(tempdir(),basename(f0))
+saveRDS(r0,file = f0new)
+piggyback::pb_upload(file = f0new,
+                     tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
 #### Descartes_All_Results ####
 f1 <- file.path(d,"data/Descartes_All_Results.rds")
 r1 <- readRDS(f1)
