@@ -20,7 +20,7 @@ may contain the same gene repeated. This would cause an error)."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -31,6 +31,16 @@ may contain the same gene repeated. This would cause an error)."><!-- mathjax --
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/docker.html">Docker/Singularity Containers</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -66,9 +76,8 @@ may contain the same gene repeated. This would cause an error).</p>
 <span>  <span class="va">ctd</span>,</span>
 <span>  <span class="va">list_names</span>,</span>
 <span>  <span class="va">gene_data</span>,</span>
-<span>  list_name_column <span class="op">=</span> <span class="st">"Phenotype"</span>,</span>
-<span>  gene_column <span class="op">=</span> <span class="st">"Gene"</span>,</span>
-<span>  annotLevel <span class="op">=</span> <span class="fl">1</span></span>
+<span>  annotLevel <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -85,21 +94,16 @@ may contain the same gene repeated. This would cause an error).</p>
 
 <dt>gene_data</dt>
 <dd><p>data frame of gene list names and genes
-(see <a href="get_gene_list.html">get_gene_list</a>).</p></dd>
-
-
-<dt>list_name_column</dt>
-<dd><p>The name of the gene_data column
-that has the gene list names.</p></dd>
-
-
-<dt>gene_column</dt>
-<dd><p>The name of the gene_data column that contains the genes.</p></dd>
+(see <a href="https://rdrr.io/pkg/HPOExplorer/man/get_gene_lists.html" class="external-link">get_gene_lists</a>).</p></dd>
 
 
 <dt>annotLevel</dt>
 <dd><p>An integer indicating which level of <code>sct_data</code> to
 analyse (<em>Default: 1</em>).</p></dd>
+
+
+<dt>verbose</dt>
+<dd><p>Print messages.</p></dd>
 
 </dl></div>
     <div id="value">

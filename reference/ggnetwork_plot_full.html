@@ -18,7 +18,7 @@ to creating the final interactive plot."><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -29,6 +29,16 @@ to creating the final interactive plot."><!-- mathjax --><script src="https://cd
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/docker.html">Docker/Singularity Containers</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -60,15 +70,17 @@ to creating the final interactive plot.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ggnetwork_plot_full</span><span class="op">(</span></span>
 <span>  <span class="va">cell_type</span>,</span>
+<span>  ancestor <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  results <span class="op">=</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  hpo <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/get_hpo.html" class="external-link">get_hpo</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  phenotype_to_genes <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">5e-04</span>,</span>
 <span>  fold_threshold <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Phenotype <span class="op">=</span> <span class="st">"Phenotype"</span>, ID <span class="op">=</span> <span class="st">"HPO_ID"</span>, ontLvl_genes <span class="op">=</span></span>
-<span>    <span class="st">"ontLvl_geneCount_ratio"</span>, Description <span class="op">=</span> <span class="st">"description"</span>, CellType <span class="op">=</span> <span class="st">"CellType"</span>, p <span class="op">=</span></span>
-<span>    <span class="st">"p"</span>, q <span class="op">=</span> <span class="st">"q"</span>, fold_change <span class="op">=</span> <span class="st">"fold_change"</span><span class="op">)</span>,</span>
+<span>  columns <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/list_columns.html" class="external-link">list_columns</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  colour_var <span class="op">=</span> <span class="st">"fold_change"</span>,</span>
+<span>  size_var <span class="op">=</span> <span class="st">"ontLvl_relative"</span>,</span>
+<span>  add_ont_lvl_absolute <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  add_ont_lvl_relative <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  interactive <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -77,7 +89,18 @@ to creating the final interactive plot.</p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>cell_type</dt>
-<dd><p>The cell type of interest to be plotted.</p></dd>
+<dd><p>The cell type of interest to be plotted.
+Can be a single string (e.g. <code>"Astrocytes"</code>) or a character vector
+of multiple cell types (e..g. <code>c("Astrocytes","Microglia")</code>).
+Set to <code>NULL</code> if you wish to include all cell-types that are available
+(after <code>q_threshold</code> and <code>fold_threshold</code> filtering).
+If &gt;1 cell-type remains, results will be aggregated automatically
+such that there is only 1 node per phenotype.</p></dd>
+
+
+<dt>ancestor</dt>
+<dd><p>The ancestor to get all descendants of. If <code>NULL</code>,
+returns the entirely ontology.</p></dd>
 
 
 <dt>results</dt>
@@ -111,8 +134,21 @@ to add to the hoverdata via <a href="https://rdrr.io/pkg/HPOExplorer/man/make_ho
 
 
 <dt>colour_var</dt>
-<dd><p>column name of the variable to be mapped
-to colour \&lt;string\&gt;</p></dd>
+<dd><p>Column  to be mapped to node colour.</p></dd>
+
+
+<dt>size_var</dt>
+<dd><p>Column name to be mapped  to node size.</p></dd>
+
+
+<dt>add_ont_lvl_absolute</dt>
+<dd><p>Add the absolute ontology level of each HPO term.
+See <a href="https://rdrr.io/pkg/HPOExplorer/man/get_ont_lvls.html" class="external-link">get_ont_lvls</a> for more details.</p></dd>
+
+
+<dt>add_ont_lvl_relative</dt>
+<dd><p>Add the relative ontology level of each HPO term.
+See <a href="https://rdrr.io/pkg/HPOExplorer/man/get_ont_lvls.html" class="external-link">get_ont_lvls</a> for more details.</p></dd>
 
 
 <dt>interactive</dt>
@@ -134,16 +170,33 @@ of results from RD EWCE analysis.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res_list</span> <span class="op">&lt;-</span> <span class="fu">ggnetwork_plot_full</span><span class="op">(</span>cell_type <span class="op">=</span> <span class="st">"Microglia"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ggnetwork_plot_full</span><span class="op">(</span>cell_type <span class="op">=</span> <span class="st">"Microglia"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ggnetwork_plot_full</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by phenotype.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> get_cell_ontology</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: /github/home/.cache/R/HPOExplorer/data/phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 9 associations remain after filtering.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating adjacency matrix for 9 terms.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Making hoverboxes from: 'Phenotype', 'HPO_ID', 'description', 'CellType', 'p', 'q', 'fold_change'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by q_threshold and fold_change.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by cell_type</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 8 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Aggregating results by group_var='Phenotype'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating adjacency matrix for 8 term(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 8 HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting relative ontology level for 8 HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding term definitions.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Making hoverboxes from: 'Phenotype', 'HPO_ID', 'ontLvl', 'ontLvl_relative', 'definition', 'n_celltype', 'celltype', 'mean_q', 'mean_fold_change', 'mean_sd_from_mean'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Making phenotype network object.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting ontology level for 9 HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating ggnetwork object.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='Phenotype'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='HPO_ID'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='ontLvl'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='ontLvl_relative'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='definition'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='n_celltype'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='celltype'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='mean_q'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='mean_fold_change'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='mean_sd_from_mean'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding n_edges per node.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating ggnetwork plot.</span>
 </code></pre></div>
     </div>

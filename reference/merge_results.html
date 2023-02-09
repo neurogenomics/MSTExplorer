@@ -20,7 +20,7 @@ files will be searched for and imported."><!-- mathjax --><script src="https://c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -31,6 +31,16 @@ files will be searched for and imported."><!-- mathjax --><script src="https://c
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/docker.html">Docker/Singularity Containers</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -95,16 +105,13 @@ that has the gene list names.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: /github/home/.cache/R/HPOExplorer/data/phenotype_to_genes.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
 <span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu">MultiEWCE</span><span class="fu">::</span><span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">Phenotype</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">res_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="ewce_para.html">ewce_para</a></span><span class="op">(</span>ctd <span class="op">=</span> <span class="va">ctd</span>,</span></span>
 <span class="r-in"><span>                       gene_data <span class="op">=</span> <span class="va">gene_data</span>,</span></span>
 <span class="r-in"><span>                       list_names <span class="op">=</span> <span class="va">list_names</span>,</span></span>
 <span class="r-in"><span>                       reps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
 <span class="r-in"><span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu">merge_results</span><span class="op">(</span>res_files<span class="op">=</span><span class="va">res_files</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>

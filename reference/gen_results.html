@@ -22,7 +22,7 @@ less than 4 unique genes (which cause errors in EWCE analysis)."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -33,6 +33,16 @@ less than 4 unique genes (which cause errors in EWCE analysis)."><!-- mathjax --
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/docker.html">Docker/Singularity Containers</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -73,16 +83,15 @@ less than 4 unique genes (which cause errors in EWCE analysis).</p>
 <span>  gene_column <span class="op">=</span> <span class="st">"Gene"</span>,</span>
 <span>  list_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">[[</span><span class="va">list_name_column</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  bg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">[[</span><span class="va">gene_column</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>  overwrite_past_analysis <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  reps <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  annotLevel <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  genelistSpecies <span class="op">=</span> <span class="st">"human"</span>,</span>
 <span>  sctSpecies <span class="op">=</span> <span class="st">"human"</span>,</span>
-<span>  seed <span class="op">=</span> <span class="fl">2022</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  save_dir_tmp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  save_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  verbose <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -95,7 +104,7 @@ less than 4 unique genes (which cause errors in EWCE analysis).</p>
 
 <dt>gene_data</dt>
 <dd><p>data frame of gene list names and genes
-(see <a href="get_gene_list.html">get_gene_list</a>).</p></dd>
+(see <a href="https://rdrr.io/pkg/HPOExplorer/man/get_gene_lists.html" class="external-link">get_gene_lists</a>).</p></dd>
 
 
 <dt>list_name_column</dt>
@@ -117,9 +126,9 @@ that has the gene list names.</p></dd>
  an appropriate gene background will be created automatically.</p></dd>
 
 
-<dt>overwrite_past_analysis</dt>
-<dd><p>overwrite previous results
-in the results dir <code>bool</code>.</p></dd>
+<dt>force_new</dt>
+<dd><p>Overwrite previous results
+in the <code>save_dir_tmp</code>.</p></dd>
 
 
 <dt>reps</dt>
@@ -142,10 +151,6 @@ See <a href="https://rdrr.io/pkg/EWCE/man/list_species.html" class="external-lin
 <dd><p>Species that <code>sct_data</code> came from
 (no longer limited to just "mouse" and "human").
 See <a href="https://rdrr.io/pkg/EWCE/man/list_species.html" class="external-link">list_species</a> for all available species.</p></dd>
-
-
-<dt>seed</dt>
-<dd><p>Used to set the seed for replicable results.</p></dd>
 
 
 <dt>cores</dt>
@@ -176,22 +181,27 @@ See <a href="https://rdrr.io/pkg/EWCE/man/list_species.html" class="external-lin
     <p>The gene_data should be a data frame that contains a column of gene
 list names (e.g. the column may be called "Phenotype"), and a column of
 genes (e.g. "Gene"). For example:</p><table class="table table"><tr><td>Phenotype</td><td>Gene</td></tr><tr><td>"Abnormal heart"</td><td>gene X</td></tr><tr><td>"Abnormal heart"</td><td>gene Y</td></tr><tr><td>"Poor vision"</td><td>gene Z</td></tr><tr><td>"Poor vision"</td><td>gene Y</td></tr><tr><td>etc...</td><td></td></tr></table><p>For more information on this see docs for get_gene_list
-(<a href="get_gene_list.html">get_gene_list</a>).</p>
+(<a href="https://rdrr.io/pkg/HPOExplorer/man/get_gene_lists.html" class="external-link">get_gene_lists</a>).</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: /github/home/.cache/R/HPOExplorer/data/phenotype_to_genes.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
+<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">Phenotype</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">Phenotype</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu">gen_results</span><span class="op">(</span>ctd <span class="op">=</span> <span class="va">ctd</span>,</span></span>
 <span class="r-in"><span>                           gene_data <span class="op">=</span> <span class="va">gene_data</span>,</span></span>
 <span class="r-in"><span>                           list_names <span class="op">=</span> <span class="va">list_names</span>,</span></span>
 <span class="r-in"><span>                           reps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Validating gene lists..</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4 / 5 gene lists are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving results ==&gt; /tmp/RtmpKoejJR/results_2023-02-09_13-08-07.080065.rds</span>
 </code></pre></div>
     </div>
   </div>

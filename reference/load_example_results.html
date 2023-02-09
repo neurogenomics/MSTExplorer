@@ -19,7 +19,7 @@ Results were then merged together with  merge_results."><!-- mathjax --><script 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
       </span>
     </div>
 
@@ -30,6 +30,16 @@ Results were then merged together with  merge_results."><!-- mathjax --><script 
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/docker.html">Docker/Singularity Containers</a>
+    </li>
+  </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -61,7 +71,7 @@ Results were then merged together with  <a href="merge_results.html">merge_resul
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_example_results</span><span class="op">(</span></span>
-<span>  file <span class="op">=</span> <span class="st">"Descartes_All_Results.rds"</span>,</span>
+<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Descartes_All_Results_extras.rds"</span>, <span class="st">"tabulamuris_merged.rds"</span><span class="op">)</span>,</span>
 <span>  tag <span class="op">=</span> <span class="st">"v0.0.1"</span>,</span>
 <span>  save_dir <span class="op">=</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">R_user_dir</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"MultiEWCE"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -76,6 +86,8 @@ piggyback::pb_upload(file = file.path(d,"data/Descartes_All_Results.rds"),
 piggyback::pb_upload(file = file.path(d,"data/tabulamuris_merged.rds"),
                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
 </code></p>
+<p><a href="https://github.com/neurogenomics/rare_disease_celltyping/" class="external-link">
+Results located in 'results' folder.</a></p>
     </div>
     <div id="arguments">
     <h2>Arguments</h2>
@@ -107,6 +119,7 @@ CTD.</p></li>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">load_example_results</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
 </code></pre></div>
     </div>
   </div>
