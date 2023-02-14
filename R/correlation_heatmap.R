@@ -51,20 +51,13 @@ correlation_heatmap <- function(top_targets,
                     ){
   # templateR:::args2vars(correlation_heatmap)
   requireNamespace("pals")
-  ID <- dummy <- NULL;
 
   if(!is.null(seed)) set.seed(seed)
   #### Create matrix ####
-  X_dt <- phenotype_to_genes[ID %in%
-                               unique(top_targets$HPO_ID),][,dummy:=1] |>
-    data.table::dcast.data.table(formula = "Gene ~ Phenotype",
-                                 value.var = "dummy",
-                                 fun.aggregate = mean,
-                                 fill = 0,
-                                 na.rm = TRUE)
-  data.table::setnafill(X_dt, fill = 0,
-                        cols = names(X_dt)[-1])
-  X_cor <- stats::cor(X_dt[,-1])
+  X_cor <- hpo_to_matrix(terms = unique(top_targets$HPO_ID),
+                         phenotype_to_genes = phenotype_to_genes,
+                         run_cor = TRUE,
+                         verbose = verbose)
   #### Create row/col annotations ####
   annot <- agg_results(phenos = top_targets,
                        group_var = c("Phenotype",row_side_vars),
@@ -143,5 +136,6 @@ correlation_heatmap <- function(top_targets,
   }
   #### Show plot ####
   if(isTRUE(show_plot)) methods::show(hm)
+  #### Return ####
   return(hm)
 }

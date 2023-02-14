@@ -16,6 +16,8 @@
   
 * Added `example_targets` data:
   - Speeds up run time of examples/tests.
+* New function for creating gene x phenotype matrix
+  - `hpo_to_matrix`
   
 
 ## Bug fixes
