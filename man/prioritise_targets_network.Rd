@@ -10,6 +10,9 @@ book.archnetworks.net}
 \href{https://r-graph-gallery.com/310-custom-hierarchical-edge-bundling}{
 Edge bundling with \pkg{ggraph}
 }
+
+\href{https://visjs.github.io/vis-network/examples/}{
+visNetwork examples}
 }
 \usage{
 prioritise_targets_network(
@@ -18,7 +21,7 @@ prioritise_targets_network(
   group_var = "ancestor_name",
   edge_color_var = group_var,
   edge_size_var = "fold_change",
-  mediator_var = "Gene",
+  mediator_var = list(),
   show_plot = TRUE,
   save_path = tempfile(fileext = "_prioritise_targets_network.html"),
   layout = "layout_with_kk",
@@ -28,8 +31,21 @@ prioritise_targets_network(
   scaling = list(label = list(drawThreshold = 0)),
   smooth = list(enabled = TRUE, type = "cubicBezier", roundness = 0.5),
   add_visExport = FALSE,
-  height = 1000,
-  width = 1300,
+  degree = if (is.null(mediator_var)) {
+     1
+ } else if (is.list(mediator_var)) {
+    
+    if (length(mediator_var) == 0) {
+         2
+     }
+     else {
+         1
+     }
+ },
+  height = NULL,
+  width = NULL,
+  main = "Rare Disease Celltyping",
+  submain = "Prioritised Targets Network",
   randomSeed = 2023,
   verbose = TRUE
 )
@@ -92,9 +108,26 @@ ancestor_name --> Phenotype --> CellType --> Gene}
 
 \item{add_visExport}{Add PDF download button.}
 
+\item{degree}{of depth of nodes to be colored. Default to 1.
+Set high number to have the entire sub-network.
+In case of "hierarchical" algorithm, you can also pass a
+list(from = 1, to = 1) to control degree in both direction.}
+
 \item{height}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
 
 \item{width}{: Number. Default to 1. The width of the edge. If value is set, this is not used.}
+
+\item{main}{: For add a title. Character or a named list.
+\itemize{
+ \item{"text"}{ : Character. Title.}
+ \item{"style"}{ : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'.}
+}}
+
+\item{submain}{: For add a subtitle. Character or a named list.
+\itemize{
+ \item{"text"}{ : Character. Subtitle.}
+ \item{"style"}{ : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
+}}
 
 \item{randomSeed}{: Number. The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time.}
 
@@ -114,7 +147,6 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-res <- prioritise_targets()
-top_targets <- res$top_targets
+top_targets <- example_targets$top_targets
 vn <- prioritise_targets_network(top_targets = top_targets)
 }

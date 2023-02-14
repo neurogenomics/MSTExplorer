@@ -5,11 +5,18 @@
 * `ggnetwork_plot_full`:
   - Handles multiple celltypes by aggregation.
 * New internal function: `agg_results`.
-* New functions:
+* New functions for generating/visualizing prioritised targets:
   - `prioritise_targets`
   - `prioritise_targets_heatmap`
   - `prioritise_targets_network`
   - `report_plot`
+  - `correlation_heatmap`
+  - `frequency_bar`
+  - `frequency_histogram` 
+  
+* Added `example_targets` data:
+  - Speeds up run time of examples/tests.
+  
 
 ## Bug fixes
 

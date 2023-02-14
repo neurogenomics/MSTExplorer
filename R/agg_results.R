@@ -57,7 +57,7 @@ agg_results <- function(phenos,
                    "values"), with=FALSE])
   data.table::setnames(counts_df,
                        c("count","values"),
-                       c(paste("n",tolower(count_var),sep="_"),
+                       c(paste("n",paste0(tolower(count_var),"s"),sep="_"),
                          tolower(count_var)
                        ))
 

@@ -17,8 +17,7 @@
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @examples
 #' results <- load_example_results()
-#' res <- prioritise_targets(results=results)
-#' rep_dt <- res$report
+#' rep_dt <- example_targets$report
 #' gp <- report_plot(rep_dt=rep_dt, results=results)
 report_plot <- function(rep_dt,
                         results,
@@ -27,7 +26,7 @@ report_plot <- function(rep_dt,
                         annot =
                           HPOExplorer::load_phenotype_to_genes(
                             "phenotype.hpoa"),
-                        remove_cols=c("rows","ids"),
+                        remove_cols=c("Rows","ids"),
                         show_plot=TRUE,
                         save_plot=tempfile(fileext = "_report_plot.pdf"),
                         verbose=TRUE,
@@ -46,7 +45,7 @@ report_plot <- function(rep_dt,
       HPOExplorer::add_tier(phenos = data.table::data.table(HPO_ID=x),
                             verbose = FALSE
       )$tier_merge)
-    names(tcounts) <- paste0("Tier",names(tcounts))
+    names(tcounts) <- paste("Tier",names(tcounts))
     data.table::as.data.table(as.list(tcounts))
   }) |> data.table::rbindlist(fill=TRUE, use.names = TRUE, idcol = "step")
   tier_cols <- names(tier_dt)[-1]
@@ -61,15 +60,15 @@ report_plot <- function(rep_dt,
   #### Fill missing values ####
   total_diseases <- length(unique(annot[HPO_ID %in% results$HPO_ID,]$DiseaseName))
   total_genes <- length(unique(phenotype_to_genes$Gene))
-  rep_dt[step=="start",]$diseases <- total_diseases
-  rep_dt[step=="start",]$genes <- total_genes
+  rep_dt[step=="start",]$Diseases <- total_diseases
+  rep_dt[step=="start",]$Genes <- total_genes
   data.table::setnafill(rep_dt, type = "locf",cols = seq(2,ncol(rep_dt)))
   ##### Make plot data: tiers
   dt1 <- tier_dt |>
   data.table::melt.data.table(id.vars="step",
                               variable.name = "Tier",
                               value.name = "Tier_count")
-  dt1[,Tier:=gsub("TierNA",NA,Tier)]
+  dt1[,Tier:=gsub("Tier NA",NA,Tier)]
   dt1$step <- factor(dt1$step,
                     levels = unique(dt1$step),
                     labels = paste0(seq_len(length(unique(dt1$step))),". ",

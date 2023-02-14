@@ -1,7 +1,6 @@
 test_that("prioritise_targets_network works", {
 
-  res <- prioritise_targets()
-  vn <- prioritise_targets_network(top_targets = res$top_targets)
+  vn <- prioritise_targets_network(top_targets = example_targets$top_targets)
   testthat::expect_true(methods::is(vn$plot,"visNetwork"))
   testthat::expect_true(methods::is(vn$graph,"igraph"))
 

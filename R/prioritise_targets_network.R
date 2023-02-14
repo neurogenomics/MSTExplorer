@@ -13,6 +13,8 @@
 #' \href{https://r-graph-gallery.com/310-custom-hierarchical-edge-bundling}{
 #' Edge bundling with \pkg{ggraph}
 #' }
+#' @source \href{https://visjs.github.io/vis-network/examples/}{
+#' visNetwork examples}
 #' @param top_targets output of \link[MultiEWCE]{prioritise_targets}.
 #' @param vertex_vars Columns within \code{top_targets}
 #' to include as vertices/nodes within the network.
@@ -23,6 +25,10 @@
 #'  (i.e. "Gene").
 #'  If \code{NULL}, instead will connect node hierarchically:
 #'  ancestor_name --> Phenotype --> CellType --> Gene
+#' @param degree of depth of nodes to be colored. Default to 1.
+#' Set high number to have the entire sub-network.
+#'  In case of "hierarchical" algorithm, you can also pass a
+#'  list(from = 1, to = 1) to control degree in both direction.
 #' @param show_plot Print the plot after it has been created.
 #' @param save_path Path to save HTML version of network to.
 #' @param verbose Print messages.
@@ -34,6 +40,7 @@
 #' @inheritParams visNetwork::visNodes
 #' @inheritParams visNetwork::visEdges
 #' @inheritParams visNetwork::visOptions
+#' @inheritParams visNetwork::visNetwork
 #' @returns A named list containing the \link[visNetwork]{visNetwork} plot
 #' and the the graph used to make the plot.
 #'
@@ -41,8 +48,7 @@
 #' @import ggplot2
 #' @importFrom stats setNames
 #' @examples
-#' res <- prioritise_targets()
-#' top_targets <- res$top_targets
+#' top_targets <- example_targets$top_targets
 #' vn <- prioritise_targets_network(top_targets = top_targets)
 prioritise_targets_network <- function(top_targets,
                                        vertex_vars = c("Phenotype",
@@ -51,7 +57,7 @@ prioritise_targets_network <- function(top_targets,
                                        group_var = "ancestor_name",
                                        edge_color_var=group_var,
                                        edge_size_var="fold_change",
-                                       mediator_var = "Gene",
+                                       mediator_var = list(),
                                        show_plot = TRUE,
                                        save_path = tempfile(
                                          fileext =
@@ -70,8 +76,19 @@ prioritise_targets_network <- function(top_targets,
                                                    type="cubicBezier",
                                                    roundness=.5),
                                        add_visExport = FALSE,
-                                       height = 1000,
-                                       width = 1300,
+                                       degree = if(is.null(mediator_var)){
+                                         1
+                                       } else if (is.list(mediator_var)){
+                                         if(length(mediator_var)==0){
+                                           2
+                                         } else {
+                                           1
+                                         }
+                                       },
+                                       height = NULL,
+                                       width = NULL,
+                                       main = "Rare Disease Celltyping",
+                                       submain = "Prioritised Targets Network",
                                        randomSeed = 2023,
                                        verbose = TRUE
                                        ){
@@ -86,9 +103,25 @@ prioritise_targets_network <- function(top_targets,
                         edge_color_var = edge_color_var,
                         edge_size_var = edge_size_var,
                         mediator_var = mediator_var,
+                        node_palette = pals::kovesi.linear_bmy_10_95_c78,
                         # format = "ggnetwork",
                         verbose = verbose)
-  plt <- plot_visnetwork(g = g)
+  plt <- plot_visnetwork(g = g,
+                         save_path = save_path,
+                         layout = layout,
+                         solver = solver,
+                         physics = physics,
+                         forceAtlas2Based = forceAtlas2Based,
+                         scaling = scaling,
+                         smooth = smooth,
+                         add_visExport = add_visExport,
+                         degree = degree,
+                         height = height,
+                         width = width,
+                         main = main,
+                         submain = submain,
+                         randomSeed = randomSeed,
+                         verbose = verbose)
   #### Show ####
   if(isTRUE(show_plot)) {
     # utils::browseURL(save_path)

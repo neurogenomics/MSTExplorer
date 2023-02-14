@@ -38,7 +38,6 @@ summary_plot <- function(results = load_example_results(),
                          option = "magma",
                          interactive = TRUE,
                          verbose = TRUE){
-  # templateR:::source_all()
   # templateR:::args2vars(summary_plot)
 
   requireNamespace("ggplot2")
@@ -65,7 +64,7 @@ summary_plot <- function(results = load_example_results(),
     "  ",formatC(length(unique(phenos$Phenotype)),big.mark = ","),
     " ",tolower(count_var),"s")
 
-  n_count_var <- paste("n",tolower(count_var),sep="_")
+  n_count_var <- paste("n",paste0(tolower(count_var),"s"),sep="_")
   #### Make plot ####
   plt <- ggplot(counts_df,
                 aes_string(x = group_var,

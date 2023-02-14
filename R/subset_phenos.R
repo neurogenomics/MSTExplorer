@@ -19,7 +19,6 @@ subset_phenos <- function(cell_type,
                           q_threshold = 0.0005,
                           fold_threshold = 1,
                           verbose = TRUE) {
-  # templateR:::source_all()
   # templateR:::args2vars(subset_phenos)
 
   #### Subset by q, fold_change, and celltype ####

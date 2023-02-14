@@ -18,7 +18,7 @@ extract_filters <- function(pkg = "MultiEWCE",
     `colnames<-`(c("level","step","description"))
   cols <- names(filters)
   filters[ , (cols) := lapply(.SD, trimws), .SDcols = cols]
-  filters[,level:=gsub("[ ]+|[-]|level|levels","",level)]
+  filters[,level:=gsub("[-]|level|levels","",level)]
   #### Print for plot legend ####
   # cat(paste(filters[,legend:=paste0(step,": ",description)]$legend, collapse = "\n"))
   return(filters)

@@ -42,8 +42,9 @@ Imports:
     scales,
     ggplot2,
     plotly,
-    pals
-Suggests:  
+    pals,
+    dplyr
+Suggests: 
     BiocStyle,
     rmarkdown,
     knitr,
@@ -53,7 +54,10 @@ Suggests:
     rworkflows,
     igraph,
     visNetwork,
+    heatmaply,
     ComplexHeatmap,
+    grid,
+    grDevices,
     rvest,
     patchwork,
     ggnetwork
@@ -66,3 +70,6 @@ biocViews:
     BiomedicalInformatics, FunctionalGenomics, 
     GeneExpression, GeneSetEnrichment,
     RNASeq, SingleCell, Software, Transcription, Visualization
+Depends: 
+    R (>= 2.10)
+LazyData: true

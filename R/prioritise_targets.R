@@ -97,6 +97,7 @@
 #' @importFrom data.table .SD := merge.data.table setorderv as.data.table
 #' @importFrom data.table data.table
 #' @importFrom utils head
+#' @importFrom dplyr %>%
 #' @examples
 #' res <- prioritise_targets()
 prioritise_targets <- function(results = load_example_results(),
