@@ -2,14 +2,14 @@ citHeader("To cite this package, please use:")
 
 citEntry(
   entry    = "Article",
-  title    = "Identification of cell types underlying over 8,000 rare diseases and  subtraits",
-  author   = "Kitty B. Murphy, Bobby Gordon-Smith, Jai Chapman, Momoko Otani, Brian M. Schilder, Nathan G. Skene",
-  journal  = "bioRxiv",
+  title    = "Identification of cell type-specific gene targets underlying thousands of rare diseases and subtraits",
+  author   = "Kitty B. Murphy, Robert Gordon-Smith, Jai Chapman, Momoko Otani, Brian M. Schilder, Nathan G. Skene",
+  journal  = "medRxiv",
   year     = "2023",
   volume   = NULL,
   number   = NULL,
   pages    = NULL,
-  url      = "",
-  textVersion = paste("Nathan G. Skene, Seth G. N. Grant (2016) Identification of cell types underlying over 8,000 rare diseases and  subtraits, *bioRxiv*; "
+  url      = "https://doi.org/10.1101/2023.02.13.23285820",
+  textVersion = paste("Kitty B. Murphy, Robert Gordon-Smith, Jai Chapman, Momoko Otani, Brian M. Schilder, Nathan G. Skene (2023) Identification of cell type-specific gene targets underlying thousands of rare diseases and subtraits. medRxiv, https://doi.org/10.1101/2023.02.13.23285820"
   )
 )

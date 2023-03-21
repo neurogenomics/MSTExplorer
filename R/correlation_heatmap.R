@@ -20,7 +20,7 @@
 #'
 #' @export
 #' @importFrom HPOExplorer load_phenotype_to_genes add_gene_frequency
-#' @importFrom HPOExplorer add_ancestor add_ont_lvl add_onset
+#' @importFrom HPOExplorer add_ancestor add_ont_lvl add_onset hpo_to_matrix
 #' @importFrom data.table := dcast.data.table setnafill
 #' @importFrom stats cor
 #' @examples
@@ -49,15 +49,16 @@ correlation_heatmap <- function(top_targets,
                                 interact = FALSE,
                                 verbose = TRUE
                     ){
-  # templateR:::args2vars(correlation_heatmap)
+  # devoptera::args2vars(correlation_heatmap)
   requireNamespace("pals")
 
   if(!is.null(seed)) set.seed(seed)
   #### Create matrix ####
-  X_cor <- hpo_to_matrix(terms = unique(top_targets$HPO_ID),
-                         phenotype_to_genes = phenotype_to_genes,
-                         run_cor = TRUE,
-                         verbose = verbose)
+  X_cor <- HPOExplorer::hpo_to_matrix(terms = unique(top_targets$HPO_ID),
+                                      phenotype_to_genes = phenotype_to_genes,
+                                      run_cor = TRUE,
+                                      as_sparse = FALSE,
+                                      verbose = verbose)
   #### Create row/col annotations ####
   annot <- agg_results(phenos = top_targets,
                        group_var = c("Phenotype",row_side_vars),

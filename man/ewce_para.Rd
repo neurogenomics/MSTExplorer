@@ -17,6 +17,7 @@ ewce_para(
   sctSpecies = "human",
   save_dir_tmp = tempdir(),
   force_new = FALSE,
+  parallel_boot = FALSE,
   cores = 1,
   verbose = FALSE
 )
@@ -58,6 +59,9 @@ See \link[EWCE]{list_species} for all available species.}
 
 \item{force_new}{Overwrite previous results
 in the \code{save_dir_tmp}.}
+
+\item{parallel_boot}{Parallelise at the level of bootstrap iterations,
+rather than across gene lists.}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 

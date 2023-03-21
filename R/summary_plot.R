@@ -38,7 +38,7 @@ summary_plot <- function(results = load_example_results(),
                          option = "magma",
                          interactive = TRUE,
                          verbose = TRUE){
-  # templateR:::args2vars(summary_plot)
+  # devoptera::args2vars(summary_plot)
 
   requireNamespace("ggplot2")
 

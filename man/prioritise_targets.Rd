@@ -10,22 +10,26 @@ prioritise_targets(
   annotLevel = 1,
   q_threshold = 0.05,
   fold_threshold = 1,
+  remove_descendants = c("Clinical course"),
   keep_ont_levels = NULL,
-  keep_onsets = HPOExplorer::list_onsets(exclude_onsets = c("Antenatal", "Fetal")),
+  keep_onsets = HPOExplorer::list_onsets(exclude = c("Antenatal", "Fetal", "Congenital"),
+    include_na = FALSE),
+  keep_deaths = HPOExplorer::list_deaths(exclude = c("Miscarriage", "Stillbirth",
+    "Prenatal death"), include_na = FALSE),
   keep_tiers = c(1, 2),
   severity_threshold = c(2, NA),
-  pheno_frequency_threshold = 25,
+  pheno_frequency_threshold = NULL,
   keep_celltypes = terminal_celltypes()$CellType,
   keep_seqnames = c(seq_len(22), "X", "Y"),
   gene_size = list(min = 0, max = 4300),
-  gene_frequency_threshold = c(10, NA),
+  gene_frequency_threshold = NULL,
   keep_biotypes = NULL,
-  keep_specificity_quantiles = seq(39, 40),
-  keep_mean_exp_quantiles = keep_specificity_quantiles,
-  sort_cols = c(tier = 1, tier_auto = 1, Severity_score_mean = 1, q = 1, fold_change =
-    -1, specificity_quantile = -1, mean_exp_quantile = -1, specificity = -1, mean_exp =
-    -1, pheno_freq_mean = -1, gene_freq_mean = -1, width = 1),
-  top_n = 20,
+  keep_specificity_quantiles = NULL,
+  keep_mean_exp_quantiles = seq(1, 40),
+  sort_cols = c(tier_merge = 1, Severity_score_mean = 1, q = 1, fold_change = -1,
+    specificity = -1, mean_exp = -1, pheno_freq_mean = -1, gene_freq_mean = -1, width =
+    1),
+  top_n = NULL,
   group_vars = c("HPO_ID", "CellType"),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   hpo = HPOExplorer::get_hpo(),
@@ -49,20 +53,32 @@ analyse (\emph{Default: 1}).}
 \item{fold_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
 
+\item{remove_descendants}{Remove HPO terms that are descendants of a given
+ancestral HPO term. Ancestral terms be provided as a character vector of
+phenotype names (e.g. \code{c("Clinical course")}),
+HPO IDs (e.g. \code{"HP:0031797" }) or a mixture of the two.
+See \link[HPOExplorer]{add_ancestor} for details.}
+
 \item{keep_ont_levels}{Only keep phenotypes at certain \emph{absolute}
 ontology levels to keep.
 See \link[HPOExplorer]{add_ont_lvl} for details.}
 
 \item{keep_onsets}{The age of onset associated with each HPO ID to keep.
 If >1 age of onset is associated with the term,
-only the earliest onset is considered.
+only the earliest age is considered.
 See \link[HPOExplorer]{add_onset} for details.}
+
+\item{keep_deaths}{The age of death associated with each HPO ID to keep.
+If >1 age of death is associated with the term,
+only the earliest age is considered.
+See \link[HPOExplorer]{add_death} for details.}
 
 \item{keep_tiers}{Tiers from \link[HPOExplorer]{hpo_tiers} to keep.
 Include \code{NA} if you wish to retain phenotypes that
 do not have any Tier assignment.}
 
-\item{severity_threshold}{Only keep phenotypes with severity scores below the
+\item{severity_threshold}{Only keep phenotypes with a mean
+severity score (averaged across multiple associated diseases) below the
 set threshold. The severity score ranges from 1-4 where 1 is the MOST severe.
 Include \code{NA} if you wish to retain phenotypes that
 do not have any severity score.}
@@ -71,7 +87,8 @@ do not have any severity score.}
 above the set threshold. Frequency ranges from 0-100 where 100 is
 a phenotype that occurs 100\% of the time in all associated diseases.
 Include \code{NA} if you wish to retain phenotypes that
-do not have any frequency data.}
+do not have any frequency data.
+See \link[HPOExplorer]{add_pheno_frequency} for details.}
 
 \item{keep_celltypes}{Cell type to keep.}
 
@@ -83,7 +100,8 @@ do not have any frequency data.}
 above the set threshold. Frequency ranges from 0-100 where 100 is
 a gene that occurs 100\% of the time in a given phenotype.
 Include \code{NA} if you wish to retain genes that
-do not have any frequency data.}
+do not have any frequency data.
+See \link[HPOExplorer]{add_gene_frequency} for details.}
 
 \item{keep_biotypes}{Which gene biotypes to keep.
 (e.g. "protein_coding", "processed_transcript", "snRNA",
@@ -129,7 +147,9 @@ Keep only results at fold_change>=1.}
 \item{Phenotype-level: \code{keep_ont_levels}: }{
 Keep only phenotypes at certain absolute ontology levels within the HPO.}
 \item{Phenotype-level: \code{keep_onsets}: }{
-Keep only phenotypes with certain age of onsets.}
+Keep only phenotypes with a certain age of onset.}
+\item{Phenotype-level: \code{keep_deaths}: }{
+Keep only phenotypes with a certain age of death}
 \item{Phenotype-level: \code{keep_tiers}: }{
 Keep only phenotypes with high severity Tiers.}
 \item{Phenotype-level: \code{severity_threshold}: }{

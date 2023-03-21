@@ -9,7 +9,9 @@
 #' \item{Phenotype-level: \code{keep_ont_levels}: }{
 #' Keep only phenotypes at certain absolute ontology levels within the HPO.}
 #' \item{Phenotype-level: \code{keep_onsets}: }{
-#' Keep only phenotypes with certain age of onsets.}
+#' Keep only phenotypes with a certain age of onset.}
+#' \item{Phenotype-level: \code{keep_deaths}: }{
+#' Keep only phenotypes with a certain age of death}
 #' \item{Phenotype-level: \code{keep_tiers}: }{
 #' Keep only phenotypes with high severity Tiers.}
 #' \item{Phenotype-level: \code{severity_threshold}: }{
@@ -40,32 +42,7 @@
 #' Sort candidate targets by a preferred order of metrics and
 #'  only return the top N targets per cell type-phenotype combination.}
 #' }
-#'
 #' @param keep_celltypes Cell type to keep.
-#' @param keep_tiers Tiers from \link[HPOExplorer]{hpo_tiers} to keep.
-#'  Include \code{NA} if you wish to retain phenotypes that
-#'  do not have any Tier assignment.
-#' @param severity_threshold Only keep phenotypes with severity scores below the
-#'  set threshold. The severity score ranges from 1-4 where 1 is the MOST severe.
-#'  Include \code{NA} if you wish to retain phenotypes that
-#'  do not have any severity score.
-#' @param keep_ont_levels Only keep phenotypes at certain \emph{absolute}
-#'  ontology levels to keep.
-#' See \link[HPOExplorer]{add_ont_lvl} for details.
-#' @param keep_onsets The age of onset associated with each HPO ID to keep.
-#'  If >1 age of onset is associated with the term,
-#'  only the earliest onset is considered.
-#'  See \link[HPOExplorer]{add_onset} for details.
-#' @param pheno_frequency_threshold Only keep phenotypes with frequency
-#'  above the set threshold. Frequency ranges from 0-100 where 100 is
-#'  a phenotype that occurs 100% of the time in all associated diseases.
-#'  Include \code{NA} if you wish to retain phenotypes that
-#'  do not have any frequency data.
-#' @param gene_frequency_threshold Only keep genes with frequency
-#'  above the set threshold. Frequency ranges from 0-100 where 100 is
-#'  a gene that occurs 100% of the time in a given phenotype.
-#'  Include \code{NA} if you wish to retain genes that
-#'  do not have any frequency data.
 #' @param sort_cols How to sort the rows using \link[data.table]{setorderv}.
 #'  \code{names(sort_cols)} will be supplied to the \code{cols=} argument
 #'  and values will be supplied to the \code{order=} argument.
@@ -87,17 +64,21 @@
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
 #' @inheritParams HPOExplorer::phenos_to_granges
+#' @inheritParams HPOExplorer::add_ancestor
+#' @inheritParams HPOExplorer::add_severity
+#' @inheritParams HPOExplorer::add_tier
+#' @inheritParams HPOExplorer::add_death
+#' @inheritParams HPOExplorer::add_onset
+#' @inheritParams HPOExplorer::add_gene_frequency
+#' @inheritParams HPOExplorer::add_pheno_frequency
+#' @inheritParams HPOExplorer::add_ont_lvl
 #' @returns A data.table of the prioritised phenotype- and
 #'  celltype-specific gene targets.
 #'
 #' @export
-#' @importFrom HPOExplorer load_phenotype_to_genes get_hpo add_hpo_id
-#' @importFrom HPOExplorer list_onsets phenos_to_granges add_tier add_onset
-#' @importFrom HPOExplorer add_info_content add_ancestor
-#' @importFrom data.table .SD := merge.data.table setorderv as.data.table
-#' @importFrom data.table data.table
+#' @import HPOExplorer
+#' @import data.table
 #' @importFrom utils head
-#' @importFrom dplyr %>%
 #' @examples
 #' res <- prioritise_targets()
 prioritise_targets <- function(results = load_example_results(),
@@ -105,37 +86,43 @@ prioritise_targets <- function(results = load_example_results(),
                                annotLevel = 1,
                                q_threshold = 0.05,
                                fold_threshold = 1,
+                               remove_descendants = c("Clinical course"),
                                keep_ont_levels = NULL,
                                keep_onsets =
                                  HPOExplorer::list_onsets(
-                                   exclude_onsets=c("Antenatal","Fetal")
+                                   exclude=c("Antenatal",
+                                             "Fetal",
+                                             "Congenital"),
+                                   include_na = FALSE
+                                 ),
+                               keep_deaths =
+                                 HPOExplorer::list_deaths(
+                                   exclude=c("Miscarriage",
+                                             "Stillbirth",
+                                             "Prenatal death"),
+                                   include_na = FALSE
                                  ),
                                keep_tiers = c(1,2),
                                severity_threshold = c(2,NA),
-                               pheno_frequency_threshold = 25,
+                               pheno_frequency_threshold = NULL,
                                keep_celltypes = terminal_celltypes()$CellType,
                                keep_seqnames = c(seq_len(22),"X","Y"),
                                gene_size = list("min"=0,
                                                 "max"=4300),
-                               gene_frequency_threshold = c(10,NA),
+                               gene_frequency_threshold = NULL,
                                keep_biotypes = NULL,
-                               keep_specificity_quantiles =
-                                 seq(39,40),
-                               keep_mean_exp_quantiles =
-                                 keep_specificity_quantiles,
-                               sort_cols = c("tier"=1,
-                                             "tier_auto"=1,
+                               keep_specificity_quantiles = NULL,
+                               keep_mean_exp_quantiles = seq(1,40),
+                               sort_cols = c("tier_merge"=1,
                                              "Severity_score_mean"=1,
                                              "q"=1,
                                              "fold_change"=-1,
-                                             "specificity_quantile"=-1,
-                                             "mean_exp_quantile"=-1,
                                              "specificity"=-1,
                                              "mean_exp"=-1,
                                              "pheno_freq_mean"=-1,
                                              "gene_freq_mean"=-1,
                                              "width"=1),
-                               top_n = 20,
+                               top_n = NULL,
                                group_vars = c("HPO_ID","CellType"),
                                phenotype_to_genes =
                                          HPOExplorer::load_phenotype_to_genes(),
@@ -143,12 +130,11 @@ prioritise_targets <- function(results = load_example_results(),
                                return_report = TRUE,
                                verbose = TRUE){
 
-  # templateR:::args2vars(prioritise_targets)
+  # devoptera::args2vars(prioritise_targets)
 
-  q <- fold_change <- CellType <- Gene <- tier <- HPO_ID <-
-    HPO_term_valid <- Onset_earliest <- specificity_quantile <-
-    mean_exp_quantile <- celltype_fixed <- Severity_score_min <-
-    tier_auto <- pheno_freq_mean <- gene_freq_mean <- ontLvl <- NULL;
+  q <- fold_change <- CellType <- Gene <- HPO_ID <-
+    HPO_term_valid <- specificity_quantile <-
+    mean_exp_quantile <- celltype_fixed <- NULL;
 
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
@@ -169,10 +155,6 @@ prioritise_targets <- function(results = load_example_results(),
                                              hpo = hpo,
                                              verbose = verbose)
   }
-  #### add_ancestor ####
-  results <- HPOExplorer::add_ancestor(phenos = results,
-                                       hpo = hpo,
-                                       verbose = verbose)
   #### start ####
   rep_dt <- report(dt = results,
                    step = "start",
@@ -198,69 +180,64 @@ prioritise_targets <- function(results = load_example_results(),
                    step = "fold_threshold",
                    verbose = verbose)
   #### Filter phenotypes ####
+  #### remove_descendants ####
+  results <- HPOExplorer::add_ancestor(phenos = results,
+                                       hpo = hpo,
+                                       remove_descendants = remove_descendants,
+                                       verbose = verbose)
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "remove_descendants",
+                   verbose = verbose)
   #### keep_ont_levels ####
   results <- HPOExplorer::add_ont_lvl(phenos = results,
                                       absolute = TRUE,
+                                      keep_ont_levels = keep_ont_levels,
                                       verbose = verbose)
-  if(!is.null(keep_ont_levels)){
-    results <- results[ontLvl %in% keep_ont_levels,]
-  }
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_ont_levels",
                    verbose = verbose)
   #### keep_onsets ####
   results <- HPOExplorer::add_onset(phenos = results,
+                                    keep_onsets = keep_onsets,
+                                    agg_by=c("DatabaseID","HPO_ID"),
                                     verbose = verbose)
-  if(!is.null(keep_onsets)){
-    results <- results[Onset_earliest %in% keep_onsets,]
-  }
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_onsets",
                    verbose = verbose)
+  #### keep_deaths ####
+  results <- HPOExplorer::add_death(phenos = results,
+                                    keep_deaths = keep_deaths,
+                                    agg_by = "DatabaseID",
+                                    verbose = verbose)
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "keep_deaths",
+                   verbose = verbose)
   #### keep_tiers ####
   results <- HPOExplorer::add_tier(phenos = results,
                                    hpo = hpo,
+                                   keep_tiers = keep_tiers,
                                    verbose = verbose)
-  if(!is.null(keep_tiers)){
-    results <- results[(tier %in% keep_tiers) |
-                       (tier_auto %in% keep_tiers),]
-  }
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_tiers",
                    verbose = verbose)
   #### severity_threshold ####
-  results <- HPOExplorer::add_modifier(phenos = results,
+  results <- HPOExplorer::add_severity(phenos = results,
+                                       severity_threshold = severity_threshold,
                                        verbose = verbose)
-  if(!is.null(severity_threshold)){
-    if(any(is.na(severity_threshold))){
-      results <- results[
-        Severity_score_min<=min(severity_threshold,na.rm = TRUE) |
-        is.na(Severity_score_min),]
-    } else{
-      results <- results[Severity_score_min<=
-                           min(severity_threshold,na.rm = TRUE),]
-    }
-  }
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "severity_threshold",
                    verbose = verbose)
   #### pheno_frequency_threshold ####
-  results <- HPOExplorer::add_pheno_frequency(phenos = results,
-                                              verbose = verbose)
-  if(!is.null(pheno_frequency_threshold)){
-    if(any(is.na(pheno_frequency_threshold))){
-      results <- results[
-        pheno_freq_mean>=min(pheno_frequency_threshold,na.rm = TRUE) |
-          is.na(pheno_freq_mean),]
-    } else{
-      results <- results[pheno_freq_mean>=
-                           min(pheno_frequency_threshold,na.rm = TRUE),]
-    }
-  }
+  results <- HPOExplorer::add_pheno_frequency(
+    phenos = results,
+    pheno_frequency_threshold = pheno_frequency_threshold,
+    verbose = verbose)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "pheno_frequency_threshold",
@@ -352,7 +329,6 @@ prioritise_targets <- function(results = load_example_results(),
   results <- results[CellType %in% keep_celltypes2,]
   #### Merge genes with phenotype/celltype results ####
   gr_df <- data.table::as.data.table(gr)[Gene %in% shared_genes,]
-  data.table::setnames(gr_df,"ID","HPO_ID")
   data.table::setkeyv(gr_df,"HPO_ID")
   cols <- unique(
     c("Phenotype","HPO_ID",
@@ -368,7 +344,7 @@ prioritise_targets <- function(results = load_example_results(),
     ),
     all = TRUE,
     allow.cartesian = TRUE,
-    by="HPO_ID"
+    by = "HPO_ID"
   )
   ct_dict <- stats::setNames(
     EWCE::fix_celltype_names(celltypes = unique(df_merged$CellType)),
@@ -376,18 +352,10 @@ prioritise_targets <- function(results = load_example_results(),
   df_merged[,celltype_fixed:=ct_dict[CellType]]
   by_cols <- c("Gene","celltype_fixed")
   #### gene_frequency_threshold ####
-  df_merged <- HPOExplorer::add_gene_frequency(phenotype_to_genes = df_merged,
-                                               verbose = verbose)
-  if(!is.null(gene_frequency_threshold)){
-    if(any(is.na(gene_frequency_threshold))){
-      df_merged <- df_merged[
-        gene_freq_mean>=min(gene_frequency_threshold,na.rm = TRUE) |
-          is.na(gene_freq_mean),]
-    } else{
-      df_merged <- df_merged[gene_freq_mean>=
-                               min(gene_frequency_threshold,na.rm = TRUE),]
-    }
-  }
+  df_merged <- HPOExplorer::add_gene_frequency(
+    phenotype_to_genes = df_merged,
+    gene_frequency_threshold = gene_frequency_threshold,
+    verbose = verbose)
   rep_dt <- report(dt = df_merged,
                    rep_dt = rep_dt,
                    step = "gene_frequency_threshold",

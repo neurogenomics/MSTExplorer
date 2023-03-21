@@ -47,16 +47,19 @@
 #' @export
 #' @import ggplot2
 #' @importFrom stats setNames
+#' @importFrom dplyr %>%
 #' @examples
-#' top_targets <- example_targets$top_targets
+#' top_targets <- MultiEWCE::example_targets$top_targets
 #' vn <- prioritise_targets_network(top_targets = top_targets)
 prioritise_targets_network <- function(top_targets,
-                                       vertex_vars = c("Phenotype",
+                                       vertex_vars = c("DiseaseName",
+                                                       "ancestor_name",
+                                                       "Phenotype",
                                                        "CellType",
                                                        "Gene"),
-                                       group_var = "ancestor_name",
-                                       edge_color_var=group_var,
-                                       edge_size_var="fold_change",
+                                       group_var = vertex_vars[[1]],
+                                       edge_color_var = group_var,
+                                       edge_size_var = "fold_change",
                                        mediator_var = list(),
                                        show_plot = TRUE,
                                        save_path = tempfile(
@@ -92,9 +95,10 @@ prioritise_targets_network <- function(top_targets,
                                        randomSeed = 2023,
                                        verbose = TRUE
                                        ){
-  # templateR:::args2vars(prioritise_targets_network)
+  # devoptera::args2vars(prioritise_targets_network)
 
   requireNamespace("ggplot2")
+  requireNamespace("pals")
 
   #### Network ####
   g <- targets_to_graph(top_targets = top_targets,
@@ -106,6 +110,12 @@ prioritise_targets_network <- function(top_targets,
                         node_palette = pals::kovesi.linear_bmy_10_95_c78,
                         # format = "ggnetwork",
                         verbose = verbose)
+
+  # plt <- HPOExplorer::network_3d(g = g,
+  #                                node_color_var = "node_type",
+  #                                node_symbol_var = "node_type",
+  #                                add_labels = FALSE)
+
   plt <- plot_visnetwork(g = g,
                          save_path = save_path,
                          layout = layout,
@@ -145,9 +155,6 @@ prioritise_targets_network <- function(top_targets,
   #              size = 5, alpha = 0.75, show.legend = FALSE) +
   #   theme_void()
 
-
-#
-#
 #   ggraph::ggraph(g,
 #                  layout = 'dendrogram') +
 #     ggraph::geom_edge_density() +

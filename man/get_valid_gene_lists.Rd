@@ -7,6 +7,7 @@
 get_valid_gene_lists(
   ctd,
   list_names,
+  list_name_column,
   gene_data,
   annotLevel = 1,
   verbose = TRUE
@@ -17,6 +18,9 @@ get_valid_gene_lists(
 \link[EWCE]{generate_celltype_data}.}
 
 \item{list_names}{character vector of gene list names.}
+
+\item{list_name_column}{The name of the gene_data column
+that has the gene list names.}
 
 \item{gene_data}{data frame of gene list names and genes
 (see \link[HPOExplorer]{get_gene_lists}).}

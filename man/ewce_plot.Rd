@@ -20,18 +20,19 @@ Argument is passed to \link[stats]{p.adjust} (DEFAULT: "bonferroni).}
 
 \item{ctd}{CellTypeDataset object.
 Should be provided so that the dendrogram can be taken from it
-and added to plots}
+and added to plots.}
 
 \item{...}{
   Arguments passed on to \code{\link[EWCE:ewce_plot]{EWCE::ewce_plot}}
   \describe{
-    \item{\code{align}}{(optional) Specifies whether graphs in the grid should be horizontally ("h") or
-vertically ("v") aligned. Options are "none" (default), "hv" (align in both directions), "h", and "v".}
-    \item{\code{rel_heights}}{(optional) Numerical vector of relative rows heights. Works just as
-\code{rel_widths} does, but for rows rather than columns.}
-    \item{\code{axis}}{(optional) Specifies whether graphs should be aligned by the left ("l"), right ("r"), top ("t"), or bottom ("b")
-margins. Options are "none" (default), or a string of any combination of l, r, t, and b in any order (e.g. "tblr" or "rlbt" for aligning all margins).
-Must be specified if any of the graphs are complex (e.g. faceted) and alignment is specified and desired. See \code{\link[cowplot:align_plots]{align_plots()}} for details.}
+    \item{\code{q_threshold}}{Corrected significance threshold.}
+    \item{\code{annotLevel}}{An integer indicating which level of \code{ctd} to
+analyse (\emph{Default: 1}).}
+    \item{\code{heights}}{The relative heights row in the grid. 
+Will get repeated to match the dimensions of the grid.
+Passed to \link[patchwork]{wrap_plots}.}
+    \item{\code{make_dendro}}{Add a dendrogram (requires \code{ctd}).}
+    \item{\code{verbose}}{Print messages.}
   }}
 }
 \value{

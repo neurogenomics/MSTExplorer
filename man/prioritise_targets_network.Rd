@@ -17,8 +17,8 @@ visNetwork examples}
 \usage{
 prioritise_targets_network(
   top_targets,
-  vertex_vars = c("Phenotype", "CellType", "Gene"),
-  group_var = "ancestor_name",
+  vertex_vars = c("DiseaseName", "ancestor_name", "Phenotype", "CellType", "Gene"),
+  group_var = vertex_vars[[1]],
   edge_color_var = group_var,
   edge_size_var = "fold_change",
   mediator_var = list(),
@@ -147,6 +147,6 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-top_targets <- example_targets$top_targets
+top_targets <- MultiEWCE::example_targets$top_targets
 vn <- prioritise_targets_network(top_targets = top_targets)
 }

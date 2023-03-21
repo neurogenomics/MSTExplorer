@@ -22,6 +22,8 @@
 #' For more information on this see docs for get_gene_list
 #' (\link[HPOExplorer]{get_gene_lists}).
 #' @param save_dir Folder to save merged results in.
+#' @param parallel_boot Parallelise at the level of bootstrap iterations,
+#' rather than across gene lists.
 #' @inheritParams ewce_para
 #' @inheritParams EWCE::bootstrap_enrichment_test
 #' @returns All results as a dataframe.
@@ -49,11 +51,12 @@ gen_results <- function(ctd,
                         genelistSpecies = "human",
                         sctSpecies = "human",
                         cores = 1,
+                        parallel_boot = FALSE,
                         save_dir_tmp = NULL,
                         save_dir = tempdir(),
                         verbose = 1) {
-  # templateR:::source_all()
-  # templateR:::args2vars(gen_results)
+
+  # devoptera::args2vars(gen_results)
 
   #### Run analysis ####
   res_files <- ewce_para(ctd = ctd,
@@ -67,6 +70,7 @@ gen_results <- function(ctd,
                          genelistSpecies = genelistSpecies,
                          sctSpecies = sctSpecies,
                          cores = cores,
+                         parallel_boot = parallel_boot,
                          save_dir_tmp = save_dir_tmp,
                          force_new = force_new,
                          verbose = verbose)
@@ -74,18 +78,9 @@ gen_results <- function(ctd,
   results_final <- merge_results(res_files = res_files,
                                  list_name_column = list_name_column)
   #### Save merged results ####
-  if (!is.null(save_dir)) {
-    save_path <- file.path(
-      save_dir,
-      gsub(" ","_",
-        paste0("results_",stringr::str_replace_all(Sys.time(),":","-"),".rds")
-      )
-      )
-    if (!file.exists(save_dir)) {
-      dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
-    }
-    messager("\nSaving results ==>",save_path,v=verbose)
-    saveRDS(results_final,save_path)
-  }
+  save_path <- save_results(results = results_final,
+                           save_dir = save_dir,
+                           prefix = "gen_results_",
+                           verbose = verbose)
   return(results_final)
 }

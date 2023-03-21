@@ -14,6 +14,7 @@
 #' @param force_new Overwrite previous results
 #'  in the \code{save_dir_tmp}.
 #' @param cores The number of cores to run in parallel (e.g. 8) \code{int}.
+#' @inheritParams gen_results
 #' @inheritParams EWCE::bootstrap_enrichment_test
 #' @returns Paths to saved results at "(save_dir)/(list_name).rds"
 #' (when \code{save_dir!=NULL}), or a nested list of results
@@ -44,10 +45,10 @@ ewce_para <- function(ctd,
                       sctSpecies="human",
                       save_dir_tmp = tempdir(),
                       force_new=FALSE,
+                      parallel_boot = FALSE,
                       cores=1,
                       verbose=FALSE) {
-  # templateR:::source_all()
-  # templateR:::args2vars(ewce_para)
+  # devoptera::args2vars(ewce_para)
 
   if(!is.null(save_dir_tmp)){
     dir.create(save_dir_tmp, showWarnings = FALSE, recursive = TRUE)
@@ -56,6 +57,7 @@ ewce_para <- function(ctd,
   gene_lists <- get_valid_gene_lists(ctd = ctd,
                                      annotLevel = annotLevel,
                                      list_names =  unique(list_names),
+                                     list_name_column = list_name_column,
                                      gene_data = gene_data,
                                      verbose = verbose)
 
@@ -65,6 +67,13 @@ ewce_para <- function(ctd,
                               save_dir_tmp = save_dir_tmp)
   } else {
     names(gene_lists)
+  }
+  #### Parallelise at different levels ####
+  if(isTRUE(parallel_boot)){
+    no_cores <- cores
+    cores <- 1
+  } else {
+    no_cores <- 1
   }
   #### Iterate EWCE ####
   res_files <- parallel::mclapply(stats::setNames(list_names,
@@ -84,6 +93,7 @@ ewce_para <- function(ctd,
         annotLevel = annotLevel,
         genelistSpecies = genelistSpecies,
         sctSpecies = sctSpecies,
+        no_cores = no_cores,
         verbose = verbose>1 )
       if(!is.null(save_dir_tmp)){
         save_path <- make_save_path(save_dir = save_dir_tmp,

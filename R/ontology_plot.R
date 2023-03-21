@@ -40,7 +40,7 @@ ontology_plot <- function(cell_type,
                           ...
                           ){
   # templateR:::source_all()
-  # templateR:::args2vars(ontology_plot)
+  # devoptera::args2vars(ontology_plot)
 
   HPO_term_valid <- NULL;
 

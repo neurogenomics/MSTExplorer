@@ -1,6 +1,6 @@
 Package: MultiEWCE
 Title: EWCE for Multiple Gene Lists
-Version: 0.1.3
+Version: 0.1.4
 Authors@R:
     c(person(given = "Robert",
            family = "Gordon-Smith",
@@ -43,7 +43,8 @@ Imports:
     ggplot2,
     plotly,
     pals,
-    dplyr
+    dplyr,
+    GeneOverlap
 Suggests: 
     BiocStyle,
     rmarkdown,
@@ -60,7 +61,8 @@ Suggests:
     grDevices,
     rvest,
     patchwork,
-    ggnetwork
+    ggnetwork,
+    piggyback
 Remotes: 
   github::neurogenomics/HPOExplorer
 VignetteBuilder: knitr

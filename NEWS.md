@@ -1,3 +1,22 @@
+# MultiEWCE 0.1.4
+
+## New features
+
+* `prioritise_targets`
+  - Move filtering steps and arg docs inside respective `HPOExplorer::add_*` functions.
+* `gen_results`
+  - New arg `parallel_boot` lets users choose which level to parallelise over.
+* New exported func: `gen_overlap`
+  - Compute simple overlap enrichment results. 
+  - Overcomes requirement of >=4 genes.
+  - Faster than EWCE (but less robust)
+* New internal func: `save_results`
+
+## Bug fixes
+
+* `get_valid_gene_lists`
+  - Can now handle any `list_name_column`
+  
 # MultiEWCE 0.1.3
 
 ## New features
@@ -16,8 +35,6 @@
   
 * Added `example_targets` data:
   - Speeds up run time of examples/tests.
-* New function for creating gene x phenotype matrix
-  - `hpo_to_matrix`
   
 
 ## Bug fixes

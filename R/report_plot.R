@@ -32,7 +32,7 @@ report_plot <- function(rep_dt,
                         verbose=TRUE,
                         ...){
 
-  # templateR:::args2vars(report_plot)
+  # devoptera::args2vars(report_plot)
   requireNamespace("ggplot2")
   requireNamespace("patchwork")
   Tier <- Tier_count <- value <- step <- HPO_ID <- level <- NULL;
@@ -63,7 +63,7 @@ report_plot <- function(rep_dt,
   rep_dt[step=="start",]$Diseases <- total_diseases
   rep_dt[step=="start",]$Genes <- total_genes
   data.table::setnafill(rep_dt, type = "locf",cols = seq(2,ncol(rep_dt)))
-  ##### Make plot data: tiers
+  #### Make plot data: tiers ####
   dt1 <- tier_dt |>
   data.table::melt.data.table(id.vars="step",
                               variable.name = "Tier",

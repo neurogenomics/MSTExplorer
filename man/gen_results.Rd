@@ -17,6 +17,7 @@ gen_results(
   genelistSpecies = "human",
   sctSpecies = "human",
   cores = 1,
+  parallel_boot = FALSE,
   save_dir_tmp = NULL,
   save_dir = tempdir(),
   verbose = 1
@@ -58,6 +59,9 @@ See \link[EWCE]{list_species} for all available species.}
 See \link[EWCE]{list_species} for all available species.}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
+
+\item{parallel_boot}{Parallelise at the level of bootstrap iterations,
+rather than across gene lists.}
 
 \item{save_dir_tmp}{Folder to save intermediate results files to
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}

@@ -1,36 +1,63 @@
 targets_to_graph <- function(top_targets,
                              vertex_vars,
                              group_var,
-                             metadata_vars=c("HPO_ID","definition",
-                                             "ontLvl","tier_merge"),
-                             edge_color_var=group_var,
-                             edge_size_var="fold_change",
+                             metadata_vars=c("HPO_ID",
+                                             "DiseaseNames",
+                                             "ancestor_name",
+                                             "CellType",
+                                             "q",
+                                             "fold_change",
+                                             "definition",
+                                             "ontLvl",
+                                             "tier_merge",
+                                             "disease_characteristic",
+                                             "gene_biotype",
+                                             grep(paste("_mean$",
+                                                        "_min$",
+                                                        "_latest$",
+                                                        "_names$",
+                                                        sep = "|"),
+                                                  names(top_targets),
+                                                  value = TRUE)
+                                             ) |> unique(),
+                             edge_color_var = group_var,
+                             edge_size_var = "fold_change",
                              mediator_var = "Gene",
                              node_palette = pals::isol, #pals::ocean.thermal,
                              edge_palette = node_palette,
                              format="visnetwork",
                              verbose=TRUE){
-
+  # devoptera::args2vars(targets_to_graph)
   requireNamespace("igraph")
   fold_change <- node_type <- shape <- color <-
     Phenotype <- ancestor_name <- NULL;
 
   messager("Creating network.",v=verbose)
+  #### Add associated diseases (long format) ####
+  if("DiseaseName" %in% vertex_vars &&
+     !"DiseaseName" %in% names(top_targets)){
+    annot <- HPOExplorer::load_phenotype_to_genes("phenotype.hpoa")
+    top_targets <- data.table::merge.data.table(
+      x = top_targets,
+      y = annot[,c("HPO_ID","DiseaseName","Evidence")],
+      all = FALSE)
+  }
   #### Create vertices ####
   vertex_vars <- unique(vertex_vars)
   shapes <- c("database","circle","box")
-  if("ancestor_name" %in% vertex_vars && length(vertex_vars)==4){
-    shapes <- c("database",shapes)
+  if(length(vertex_vars)>3){
+    shapes <- c(rep("database",length(vertex_vars)-3),shapes)
   }
   ##### Remove Phenotypes that are also ancestor #####
+  ## This avoids duplicate nodes
   if("ancestor_name" %in% names(top_targets)){
     top_targets <- top_targets[Phenotype!=ancestor_name,]
   }
   #### Make vertex metadata ####
   vertices <- (
     data.table::melt.data.table(
-      top_targets[,c(vertex_vars,group_var,metadata_vars),with=FALSE],
-      id.vars = c(group_var,metadata_vars),
+      top_targets[,unique(c(vertex_vars,group_var,metadata_vars)),with=FALSE],
+      id.vars = unique(c(group_var,metadata_vars)),
       measure.vars = vertex_vars,
       variable.name = "node_type",
       value.name = "node") |>
@@ -53,7 +80,7 @@ targets_to_graph <- function(top_targets,
   #### ancestor_name is only relevant metadata for Phenotype nodes ####
   vertices[node_type!="Phenotype",]$ancestor_name <- NA
   vertices <- unique(vertices)
-  vertices$name <- stringr::str_wrap(vertices$node,
+  vertices$name <- stringr::str_wrap(gsub("/"," / ",vertices$node),
                                      width = 10)
   #### Merge graphs ####
   if(is.character(mediator_var)){
@@ -66,7 +93,13 @@ targets_to_graph <- function(top_targets,
     })
   } else if(is.list(mediator_var)){
     ilist <- if(length(mediator_var)==0){
-      list(c(1,2),c(2,3),c(3,4),c(2,4))
+      if(length(vertex_vars)==4){
+        list(c(1,2),c(2,3),c(3,4),c(2,4))
+      } else if(length(vertex_vars)==5){
+        list(c(1,2),c(2,3),c(3,4),c(4,5),c(3,5))
+      } else if(length(vertex_vars)==6){
+        list(c(1,2),c(2,3),c(3,4),c(4,5),c(5,6),c(4,6))
+      }
     } else {
       mediator_var
     }
@@ -111,6 +144,7 @@ targets_to_graph <- function(top_targets,
     lapply(nms, function(nm){
       value <- igraph::vertex_attr(g,nm)[i]
       if(!is.na(value)) {
+        if(is.numeric(value)) value <- signif(value,3)
         paste0("<strong>",nm,"</strong>: ",value)
       } else {
         ""
@@ -121,8 +155,11 @@ targets_to_graph <- function(top_targets,
   }) |> unlist()
   #### Add edge color ####
   if(!is.null(edge_palette)){
-    is_pheno_edge <- igraph::as_edgelist(g)[,1] %in% vertices[node_type=="Phenotype"]$name
-    edge_color <- igraph::edge_attr(g)[grep(edge_color_var,igraph::edge_attr_names(g), value = TRUE)] |>
+    is_pheno_edge <-
+      igraph::as_edgelist(g)[,1] %in% vertices[node_type=="Phenotype"]$name
+    edge_color <- igraph::edge_attr(g)[
+      grep(edge_color_var,igraph::edge_attr_names(g), value = TRUE)
+      ] |>
       data.table::as.data.table() |>
       data.table::fcoalesce()
     edge_color_dict <- stats::setNames(
@@ -134,7 +171,9 @@ targets_to_graph <- function(top_targets,
   }
   #### Add edge size ####
   if(!is.null(edge_size_var)){
-    edge_size <- igraph::edge_attr(g)[grep(edge_size_var,igraph::edge_attr_names(g), value = TRUE)] |>
+    edge_size <- igraph::edge_attr(g)[
+      grep(edge_size_var,igraph::edge_attr_names(g), value = TRUE)
+      ] |>
       data.table::as.data.table() |>
       data.table::fcoalesce()
     igraph::edge_attr(g,"width") <- edge_size

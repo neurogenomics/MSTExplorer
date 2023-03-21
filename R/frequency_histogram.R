@@ -16,12 +16,12 @@ frequency_histogram <- function(results = load_example_results(),
                                 show_plot = TRUE,
                                 verbose = TRUE){
 
-  Metric_Type <- value <- variable <- ID <- NULL;
+  Metric_Type <- value <- variable <- HPO_ID <- NULL;
 
   results <- results |>
     HPOExplorer::add_pheno_frequency() |>
     HPOExplorer::add_ancestor()
-  gene_df <- phenotype_to_genes[ID %in% unique(results$HPO_ID),] |>
+  gene_df <- phenotype_to_genes[HPO_ID %in% unique(results$HPO_ID),] |>
     HPOExplorer::add_gene_frequency() |>
     HPOExplorer::add_ancestor()
 
@@ -31,7 +31,7 @@ frequency_histogram <- function(results = load_example_results(),
                        names(gene_df), value = TRUE)
   d1 <- data.table::melt.data.table(
     gene_df,
-    id.vars = c("ID","Phenotype"),
+    id.vars = c("HPO_ID","Phenotype"),
     measure.vars = measure.vars )
 
   g1 <- ggplot2::ggplot(d1, ggplot2::aes(x=value, fill=variable)) +

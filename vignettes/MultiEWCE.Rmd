@@ -153,6 +153,28 @@ methods::show(paste(length(unfinished),"/",length(all_phenotypes),
                     "gene lists not yet analysed"))
 ```
 
+# Run disease-level enrichment tests
+
+So far, we've iterated over gene list grouped by phenotypes.
+But we can also do this at the level of diseases (which are composed of combinations of phenotypes).
+
+Here, "LinkID" refers to the ID of each disease.
+
+```{r}
+gene_data <- HPOExplorer::load_phenotype_to_genes("genes_to_phenotype.txt")
+#### Filter only to those with >=4 genes ####
+gene_counts <- gene_data[,list(genes=length(unique(Gene))),by="LinkID"][genes>=4]
+list_names <- unique(gene_counts$LinkID)[seq_len(5)]
+```
+
+```{r}
+all_results <- gen_results(ctd = ctd,
+                           gene_data = gene_data,
+                           list_name_column = "LinkID",
+                           list_names = list_names,
+                           annotLevel = 1,
+                           reps = 10)
+```
 
 # Session info
 

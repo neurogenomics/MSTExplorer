@@ -46,7 +46,7 @@ ggnetwork_plot_full <- function(cell_type,
                                 interactive = TRUE,
                                 verbose = TRUE){
   # templateR:::source_all()
-  # templateR:::args2vars(ggnetwork_plot_full);
+  # devoptera::args2vars(ggnetwork_plot_full);
   # cell_type = "Microglia";
   # cell_type = NULL; ancestor = "Neurodevelopmental delay"
 

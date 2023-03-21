@@ -55,7 +55,6 @@
 #' @export
 #' @importFrom piggyback pb_download
 #' @importFrom tools R_user_dir
-#' @importFrom data.table setkeyv
 #' @examples
 #' res <- load_example_results()
 load_example_results <- function(file=c("Descartes_All_Results_extras.rds",
