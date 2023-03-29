@@ -8,17 +8,22 @@ prioritise_targets(
   results = load_example_results(),
   ctd = load_example_ctd(),
   annotLevel = 1,
-  q_threshold = 0.05,
-  fold_threshold = 1,
+  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
+  hpo = HPOExplorer::get_hpo(),
+  keep_deaths = HPOExplorer::list_deaths(exclude = c("Miscarriage", "Stillbirth",
+    "Prenatal death"), include_na = TRUE),
   remove_descendants = c("Clinical course"),
   keep_ont_levels = NULL,
-  keep_onsets = HPOExplorer::list_onsets(exclude = c("Antenatal", "Fetal", "Congenital"),
-    include_na = FALSE),
-  keep_deaths = HPOExplorer::list_deaths(exclude = c("Miscarriage", "Stillbirth",
-    "Prenatal death"), include_na = FALSE),
-  keep_tiers = c(1, 2),
+  pheno_ndiseases_threshold = NULL,
+  keep_tiers = c(1, 2, NA),
   severity_threshold = c(2, NA),
   pheno_frequency_threshold = NULL,
+  keep_onsets = HPOExplorer::list_onsets(exclude = c("Antenatal", "Fetal", "Congenital"),
+    include_na = TRUE),
+  symptom_p_threshold = NULL,
+  symptom_intersection_size_threshold = 1,
+  q_threshold = 0.05,
+  fold_threshold = 1,
   keep_celltypes = terminal_celltypes()$CellType,
   keep_seqnames = c(seq_len(22), "X", "Y"),
   gene_size = list(min = 0, max = 4300),
@@ -26,13 +31,12 @@ prioritise_targets(
   keep_biotypes = NULL,
   keep_specificity_quantiles = NULL,
   keep_mean_exp_quantiles = seq(1, 40),
+  symptom_gene_overlap = TRUE,
   sort_cols = c(tier_merge = 1, Severity_score_mean = 1, q = 1, fold_change = -1,
     specificity = -1, mean_exp = -1, pheno_freq_mean = -1, gene_freq_mean = -1, width =
     1),
   top_n = NULL,
   group_vars = c("HPO_ID", "CellType"),
-  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
-  hpo = HPOExplorer::get_hpo(),
   return_report = TRUE,
   verbose = TRUE
 )
@@ -48,10 +52,16 @@ and merged together with \link[MultiEWCE]{merge_results}.}
 \item{annotLevel}{An integer indicating which level of \code{sct_data} to
 analyse (\emph{Default: 1}).}
 
-\item{q_threshold}{The q value threshold to subset the \code{results} by.}
+\item{phenotype_to_genes}{Output of
+\link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
+to gene annotations.}
 
-\item{fold_threshold}{The minimum fold change in specific expression
-to subset the \code{results} by.}
+\item{hpo}{Human Phenotype Ontology object, loaded from \pkg{ontologyIndex}.}
+
+\item{keep_deaths}{The age of death associated with each HPO ID to keep.
+If >1 age of death is associated with the term,
+only the earliest age is considered.
+See \link[HPOExplorer]{add_death} for details.}
 
 \item{remove_descendants}{Remove HPO terms that are descendants of a given
 ancestral HPO term. Ancestral terms be provided as a character vector of
@@ -63,15 +73,8 @@ See \link[HPOExplorer]{add_ancestor} for details.}
 ontology levels to keep.
 See \link[HPOExplorer]{add_ont_lvl} for details.}
 
-\item{keep_onsets}{The age of onset associated with each HPO ID to keep.
-If >1 age of onset is associated with the term,
-only the earliest age is considered.
-See \link[HPOExplorer]{add_onset} for details.}
-
-\item{keep_deaths}{The age of death associated with each HPO ID to keep.
-If >1 age of death is associated with the term,
-only the earliest age is considered.
-See \link[HPOExplorer]{add_death} for details.}
+\item{pheno_ndiseases_threshold}{Filter phenotypes by the
+maximum number of diseases they are associated with.}
 
 \item{keep_tiers}{Tiers from \link[HPOExplorer]{hpo_tiers} to keep.
 Include \code{NA} if you wish to retain phenotypes that
@@ -89,6 +92,27 @@ a phenotype that occurs 100\% of the time in all associated diseases.
 Include \code{NA} if you wish to retain phenotypes that
 do not have any frequency data.
 See \link[HPOExplorer]{add_pheno_frequency} for details.}
+
+\item{keep_onsets}{The age of onset associated with each HPO ID to keep.
+If >1 age of onset is associated with the term,
+only the earliest age is considered.
+See \link[HPOExplorer]{add_onset} for details.}
+
+\item{symptom_p_threshold}{The p-value threshold of celltype-symptom
+enrichment results (using  \link[MultiEWCE]{gen_overlap}).
+Here, "symptoms" are defined as the presentation of a phenotype in the
+context of a particular disease.
+In other words:
+phenotype (HPO_ID) + disease (DatabaseID) = symptom (HPO_ID.DatabaseID)}
+
+\item{symptom_intersection_size_threshold}{The minimum number of intersecting genes between a symptom and a celltype to
+consider it a significant enrichment. Refers to the result from
+\link[MultiEWCE]{gen_overlap}.}
+
+\item{q_threshold}{The q value threshold to subset the \code{results} by.}
+
+\item{fold_threshold}{The minimum fold change in specific expression
+to subset the \code{results} by.}
 
 \item{keep_celltypes}{Cell type to keep.}
 
@@ -113,6 +137,10 @@ specificity quantiles to keep (max quantile is 40).}
 \item{keep_mean_exp_quantiles}{Which cell type
 mean expression quantiles to keep (max quantile is 40).}
 
+\item{symptom_gene_overlap}{The gene for a particular symptom
+(phenotype + disease) must appear in the celltype-symptom
+enrichment results.}
+
 \item{sort_cols}{How to sort the rows using \link[data.table]{setorderv}.
 \code{names(sort_cols)} will be supplied to the \code{cols=} argument
 and values will be supplied to the \code{order=} argument.}
@@ -120,12 +148,6 @@ and values will be supplied to the \code{order=} argument.}
 \item{top_n}{Top N genes to keep when grouping by \code{group_vars}.}
 
 \item{group_vars}{Columns to group by when selecting \code{top_n} genes.}
-
-\item{phenotype_to_genes}{Output of
-\link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
-to gene annotations.}
-
-\item{hpo}{Human Phenotype Ontology object, loaded from \pkg{ontologyIndex}.}
 
 \item{return_report}{If \code{TRUE}, will return a named list containing a
 \code{report} that shows the number of
@@ -138,27 +160,38 @@ A data.table of the prioritised phenotype- and
 celltype-specific gene targets.
 }
 \description{
-Prioritise target genes based on a procedure:
+Prioritise target genes based on a procedure:\cr
 \enumerate{
-\item{Association-level: \code{q_threshold}: }{
-Keep only results at q<=0.05.}
-\item{Association-level: \code{fold_threshold}: }{
-Keep only results at fold_change>=1.}
+\item{Disease-level: \code{keep_deaths}: }{
+Keep only diseases with a certain age of death.}
+\item{Phenotype-level: \code{remove_descendants}: }{
+Remove phenotypes belonging to a certain branch of the HPO,
+as defined by an ancestor term.}
 \item{Phenotype-level: \code{keep_ont_levels}: }{
 Keep only phenotypes at certain absolute ontology levels within the HPO.}
-\item{Phenotype-level: \code{keep_onsets}: }{
-Keep only phenotypes with a certain age of onset.}
-\item{Phenotype-level: \code{keep_deaths}: }{
-Keep only phenotypes with a certain age of death}
+\item{Phenotype-level: \code{pheno_ndiseases_threshold}: }{
+The maximum number of diseases each phenotype can be associated with.}
 \item{Phenotype-level: \code{keep_tiers}: }{
 Keep only phenotypes with high severity Tiers.}
 \item{Phenotype-level: \code{severity_threshold}: }{
 Keep only phenotypes with mean Severity equal to or below the threshold.}
-\item{Phenotype-level: \code{pheno_frequency_threshold}: }{
+\item{Symptom-level: \code{pheno_frequency_threshold}: }{
 Keep only phenotypes with mean frequency equal to or above the threshold
 (i.e. how frequently a phenotype is associated with any diseases in
 which it occurs).}
-\item{Cell type-level:  \code{keep_celltypes}: }{
+\item{Symptom-level: \code{keep_onsets}: }{
+Keep only symptoms with a certain age of onset.}
+\item{Symptom-level: \code{symptom_p_threshold}: }{
+Uncorrected p-value threshold to filter cell type-symptom associations by.}
+\item{Symptom-level: \code{symptom_intersection_size_threshold}: }{
+Minimum number of genes overlapping between a symptom gene list
+(phenotype-associated genes in the context of a particular disease)
+and the celltype (genes in top 10/40 specificity quantiles).}
+\item{Cell type-level: \code{q_threshold}: }{
+Keep only cell type-phenotype association results at q<=0.05.}
+\item{Cell type-level: \code{fold_threshold}: }{
+Keep only cell type-phenotype association results at fold_change>=1.}
+\item{Cell type-level: \code{keep_celltypes}: }{
 Keep only terminally differentiated cell types.}
 \item{Gene-level: \code{keep_seqnames}: }{
 Remove genes on non-standard chromosomes.}
@@ -176,11 +209,27 @@ from the cell type dataset (\code{ctd}).}
 \item{Gene-level: \code{keep_mean_exp_quantiles}: }{
 Keep only genes in top mean expression quantiles
 from the cell type dataset (\code{ctd}).}
+\item{Gene-level: \code{symptom_gene_overlap}: }{
+Ensure that genes nominated at the phenotype-level also
+appear in the genes overlapping at the cell type-specific symptom-level.}
 \item{All levels: \code{top_n}: }{
 Sort candidate targets by a preferred order of metrics and
 only return the top N targets per cell type-phenotype combination.}
 }
 }
+\details{
+Term key:\cr
+\itemize{
+\item{Disease: }{A disease defined in the database
+OMIM, DECIPHER and/or Orphanet.}
+\item{Phenotype: }{A clinical feature associated with one or more diseases.}
+\item{Symptom: }{A phenotype within the context of a particular disease.
+Within a given phenotype, there may be multiple symptoms with
+partially overlapping genetic mechanisms.}
+\item{Assocation: }{A cell type-specific enrichment test result conducted
+at the disease-level, phenotype-level, or symptom-level.}
+}
+}
 \examples{
-res <- prioritise_targets()
+res <- prioritise_targets(symptom_p_threshold = NULL)
 }

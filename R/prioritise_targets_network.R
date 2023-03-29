@@ -31,6 +31,8 @@
 #'  list(from = 1, to = 1) to control degree in both direction.
 #' @param show_plot Print the plot after it has been created.
 #' @param save_path Path to save HTML version of network to.
+#' @param node_palette Palette function to color nodes by.
+#' See the \pkg{pals} package for available options.
 #' @param verbose Print messages.
 #' @param add_visExport Add PDF download button.
 #'
@@ -49,16 +51,16 @@
 #' @importFrom stats setNames
 #' @importFrom dplyr %>%
 #' @examples
-#' top_targets <- MultiEWCE::example_targets$top_targets
-#' vn <- prioritise_targets_network(top_targets = top_targets)
+#' res <- MultiEWCE::example_targets
+#' vn <- prioritise_targets_network(top_targets = res$top_targets)
 prioritise_targets_network <- function(top_targets,
                                        vertex_vars = c("DiseaseName",
-                                                       "ancestor_name",
+                                                       # "ancestor_name",
                                                        "Phenotype",
                                                        "CellType",
                                                        "Gene"),
                                        group_var = vertex_vars[[1]],
-                                       edge_color_var = group_var,
+                                       edge_color_var = "fold_change",
                                        edge_size_var = "fold_change",
                                        mediator_var = list(),
                                        show_plot = TRUE,
@@ -79,23 +81,16 @@ prioritise_targets_network <- function(top_targets,
                                                    type="cubicBezier",
                                                    roundness=.5),
                                        add_visExport = FALSE,
-                                       degree = if(is.null(mediator_var)){
-                                         1
-                                       } else if (is.list(mediator_var)){
-                                         if(length(mediator_var)==0){
-                                           2
-                                         } else {
-                                           1
-                                         }
-                                       },
+                                       degree = 1,
                                        height = NULL,
                                        width = NULL,
                                        main = "Rare Disease Celltyping",
                                        submain = "Prioritised Targets Network",
+                                       node_palette = pals::kovesi.linear_bmy_10_95_c78,
                                        randomSeed = 2023,
                                        verbose = TRUE
                                        ){
-  # devoptera::args2vars(prioritise_targets_network)
+  # devoptera::args2vars(prioritise_targets_network, reassign = TRUE)
 
   requireNamespace("ggplot2")
   requireNamespace("pals")
@@ -107,8 +102,7 @@ prioritise_targets_network <- function(top_targets,
                         edge_color_var = edge_color_var,
                         edge_size_var = edge_size_var,
                         mediator_var = mediator_var,
-                        node_palette = pals::kovesi.linear_bmy_10_95_c78,
-                        # format = "ggnetwork",
+                        node_palette = node_palette,
                         verbose = verbose)
 
   # plt <- HPOExplorer::network_3d(g = g,

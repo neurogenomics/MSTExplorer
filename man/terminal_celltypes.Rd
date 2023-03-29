@@ -4,7 +4,11 @@
 \alias{terminal_celltypes}
 \title{Terminal cell types}
 \usage{
-terminal_celltypes()
+terminal_celltypes(fix_names = TRUE)
+}
+\arguments{
+\item{fix_names}{Standardise celltype names with
+\link[EWCE]{fix_celltype_names}.}
 }
 \value{
 data.table of cell types.

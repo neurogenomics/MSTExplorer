@@ -1,19 +1,22 @@
-#' Print messages 
-#' 
+#' Print messages
+#'
 #' Conditionally print messages.
-#'  Allows developers to easily control verbosity of functions, 
-#'  and meet Bioconductor requirements that dictate the message 
-#'  must first be stored to a variable before passing to \link[base]{message}. 
-#'  
-#' 
+#'  Allows developers to easily control verbosity of functions,
+#'  and meet Bioconductor requirements that dictate the message
+#'  must first be stored to a variable before passing to \link[base]{message}.
+#'
+#'
 #' @param v Whether to print messages or not.
-#' @param parallel Whether to enable message print when wrapped 
+#' @param parallel Whether to enable message print when wrapped
 #' in parallelised functions.
-#' 
-#' @return Null 
-#' @keywords internal 
+#'
+#' @return Null
+#' @keywords internal
 messager <- function(..., v = TRUE, parallel = FALSE) {
-    if(parallel){
+    if(isTRUE(parallel)){
+      message_parallel <- function(...) {
+        system(sprintf('echo "%s"', paste0(..., collapse = "")))
+      }
         if(v) try({message_parallel(...)})
     } else {
         msg <- paste(...)

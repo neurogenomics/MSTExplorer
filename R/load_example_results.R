@@ -57,11 +57,15 @@
 #' @importFrom tools R_user_dir
 #' @examples
 #' res <- load_example_results()
-load_example_results <- function(file=c("Descartes_All_Results_extras.rds",
-                                        "tabulamuris_merged.rds"),
-                                 tag = "v0.0.1",
-                                 save_dir=tools::R_user_dir(package = "MultiEWCE")
-                                 ) {
+load_example_results <- function(file=c(
+  "Descartes_All_Results_extras.symptoms.full_join.rds",
+  "Descartes_All_Results_extras.symptoms.rds",
+  "Descartes_All_Results_extras.rds",
+  "gen_overlap.symptoms.filt.rds",
+  "tabulamuris_merged.rds"),
+  tag = "v0.0.1",
+  save_dir=tools::R_user_dir(package = "MultiEWCE")
+  ) {
 
   file <- file[[1]]
   dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)

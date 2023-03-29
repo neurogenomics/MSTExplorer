@@ -17,9 +17,9 @@ visNetwork examples}
 \usage{
 prioritise_targets_network(
   top_targets,
-  vertex_vars = c("DiseaseName", "ancestor_name", "Phenotype", "CellType", "Gene"),
+  vertex_vars = c("DiseaseName", "Phenotype", "CellType", "Gene"),
   group_var = vertex_vars[[1]],
-  edge_color_var = group_var,
+  edge_color_var = "fold_change",
   edge_size_var = "fold_change",
   mediator_var = list(),
   show_plot = TRUE,
@@ -31,21 +31,12 @@ prioritise_targets_network(
   scaling = list(label = list(drawThreshold = 0)),
   smooth = list(enabled = TRUE, type = "cubicBezier", roundness = 0.5),
   add_visExport = FALSE,
-  degree = if (is.null(mediator_var)) {
-     1
- } else if (is.list(mediator_var)) {
-    
-    if (length(mediator_var) == 0) {
-         2
-     }
-     else {
-         1
-     }
- },
+  degree = 1,
   height = NULL,
   width = NULL,
   main = "Rare Disease Celltyping",
   submain = "Prioritised Targets Network",
+  node_palette = pals::kovesi.linear_bmy_10_95_c78,
   randomSeed = 2023,
   verbose = TRUE
 )
@@ -129,6 +120,9 @@ list(from = 1, to = 1) to control degree in both direction.}
  \item{"style"}{ : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
 }}
 
+\item{node_palette}{Palette function to color nodes by.
+See the \pkg{pals} package for available options.}
+
 \item{randomSeed}{: Number. The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time.}
 
 \item{verbose}{Print messages.}
@@ -147,6 +141,6 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-top_targets <- MultiEWCE::example_targets$top_targets
-vn <- prioritise_targets_network(top_targets = top_targets)
+res <- MultiEWCE::example_targets
+vn <- prioritise_targets_network(top_targets = res$top_targets)
 }

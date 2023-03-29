@@ -13,10 +13,10 @@ get_data <- function(fname,
                      overwrite = TRUE,
                      check = FALSE
                      ){
-  tmp <- file.path(storage_dir, fname)
   requireNamespace("piggyback")
-  requireNamespace("gh")
   Sys.setenv("piggyback_cache_duration" = 10)
+
+  tmp <- file.path(storage_dir, fname)
   dir.create(storage_dir, showWarnings = FALSE, recursive = TRUE)
   piggyback::pb_download(
     file = fname,

@@ -81,9 +81,10 @@ ewce_para <- function(ctd,
                      FUN=function(p){
     i <- which(list_names==p)
     genes <- gene_lists[[p]]
-    message_parallel("Analysing: ",shQuote(p),
+    messager("Analysing: ",shQuote(p),
                      " (",i,"/",length(list_names),"): ",
-                     formatC(length(genes),big.mark = ",")," genes")
+                     formatC(length(genes),big.mark = ",")," genes.",
+             parallel = TRUE)
     tryCatch({
       results <- EWCE::bootstrap_enrichment_test(
         sct_data = ctd,

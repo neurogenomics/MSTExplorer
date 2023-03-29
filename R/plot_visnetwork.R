@@ -24,6 +24,8 @@ plot_visnetwork <- function(g,
     {
       do.call(visNetwork::visNetwork,
               c(., list(main = main,
+                        height = height,
+                        width = width,
                         submain = submain,
                         background = "transparent")
                 )
@@ -55,15 +57,14 @@ plot_visnetwork <- function(g,
     ) |>
     visNetwork::visEdges(shadow = list(enabled=FALSE),
                          smooth = smooth,
-                         color = list(opacity = 0.75)) |>
+                         color = list(opacity = 0.5)) |>
     # visNetwork::visLegend() |>
     # visNetwork::visClusteringByConnection(nodes = unique(top_targets[[group_var]])) |>
     # visNetwork::visGroups(groupname = unique(igraph::vertex_attr(g,"group"))[[2]],
     #                       color="green")
     # visNetwork::visClusteringByGroup(groups = igraph::vertex_attr(g,"group"))
     visNetwork::visInteraction(hover = TRUE) |>
-    visNetwork::visOptions(height = height,
-                           width = width,
+    visNetwork::visOptions(
                            selectedBy = "node",
                            highlightNearest = list(enabled=TRUE,
                                                    degree=degree))

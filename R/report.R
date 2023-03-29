@@ -9,7 +9,7 @@ report <- function(dt,
 
   dict <- list(Rows="Rows",
                Phenotype="Phenotypes",
-               DiseaseNames="Diseases",
+               DatabaseID="Diseases",
                CellType="Cell types",
                Gene="Genes")
   get_values <- function(add_text=TRUE){

@@ -1,26 +1,37 @@
 #' Prioritise target genes
 #'
-#' Prioritise target genes based on a procedure:
+#' Prioritise target genes based on a procedure:\cr
 #' \enumerate{
-#' \item{Association-level: \code{q_threshold}: }{
-#' Keep only results at q<=0.05.}
-#' \item{Association-level: \code{fold_threshold}: }{
-#' Keep only results at fold_change>=1.}
+#' \item{Disease-level: \code{keep_deaths}: }{
+#' Keep only diseases with a certain age of death.}
+#' \item{Phenotype-level: \code{remove_descendants}: }{
+#' Remove phenotypes belonging to a certain branch of the HPO,
+#' as defined by an ancestor term.}
 #' \item{Phenotype-level: \code{keep_ont_levels}: }{
 #' Keep only phenotypes at certain absolute ontology levels within the HPO.}
-#' \item{Phenotype-level: \code{keep_onsets}: }{
-#' Keep only phenotypes with a certain age of onset.}
-#' \item{Phenotype-level: \code{keep_deaths}: }{
-#' Keep only phenotypes with a certain age of death}
+#' \item{Phenotype-level: \code{pheno_ndiseases_threshold}: }{
+#' The maximum number of diseases each phenotype can be associated with.}
 #' \item{Phenotype-level: \code{keep_tiers}: }{
 #' Keep only phenotypes with high severity Tiers.}
 #' \item{Phenotype-level: \code{severity_threshold}: }{
 #' Keep only phenotypes with mean Severity equal to or below the threshold.}
-#' \item{Phenotype-level: \code{pheno_frequency_threshold}: }{
+#' \item{Symptom-level: \code{pheno_frequency_threshold}: }{
 #' Keep only phenotypes with mean frequency equal to or above the threshold
 #'  (i.e. how frequently a phenotype is associated with any diseases in
 #'  which it occurs).}
-#' \item{Cell type-level:  \code{keep_celltypes}: }{
+#' \item{Symptom-level: \code{keep_onsets}: }{
+#' Keep only symptoms with a certain age of onset.}
+#' \item{Symptom-level: \code{symptom_p_threshold}: }{
+#' Uncorrected p-value threshold to filter cell type-symptom associations by.}
+#' \item{Symptom-level: \code{symptom_intersection_size_threshold}: }{
+#' Minimum number of genes overlapping between a symptom gene list
+#' (phenotype-associated genes in the context of a particular disease)
+#' and the celltype (genes in top 10/40 specificity quantiles).}
+#' \item{Cell type-level: \code{q_threshold}: }{
+#' Keep only cell type-phenotype association results at q<=0.05.}
+#' \item{Cell type-level: \code{fold_threshold}: }{
+#' Keep only cell type-phenotype association results at fold_change>=1.}
+#' \item{Cell type-level: \code{keep_celltypes}: }{
 #' Keep only terminally differentiated cell types.}
 #' \item{Gene-level: \code{keep_seqnames}: }{
 #' Remove genes on non-standard chromosomes.}
@@ -38,9 +49,24 @@
 #' \item{Gene-level: \code{keep_mean_exp_quantiles}: }{
 #'  Keep only genes in top mean expression quantiles
 #'  from the cell type dataset (\code{ctd}).}
+#' \item{Gene-level: \code{symptom_gene_overlap}: }{
+#'  Ensure that genes nominated at the phenotype-level also
+#'  appear in the genes overlapping at the cell type-specific symptom-level.}
 #' \item{All levels: \code{top_n}: }{
 #' Sort candidate targets by a preferred order of metrics and
 #'  only return the top N targets per cell type-phenotype combination.}
+#' }
+#'
+#' Term key:\cr
+#' \itemize{
+#' \item{Disease: }{A disease defined in the database
+#' OMIM, DECIPHER and/or Orphanet.}
+#' \item{Phenotype: }{A clinical feature associated with one or more diseases.}
+#' \item{Symptom: }{A phenotype within the context of a particular disease.
+#' Within a given phenotype, there may be multiple symptoms with
+#'  partially overlapping genetic mechanisms.}
+#' \item{Assocation: }{A cell type-specific enrichment test result conducted
+#' at the disease-level, phenotype-level, or symptom-level.}
 #' }
 #' @param keep_celltypes Cell type to keep.
 #' @param sort_cols How to sort the rows using \link[data.table]{setorderv}.
@@ -59,7 +85,19 @@
 #' @param return_report If \code{TRUE}, will return a named list containing a
 #' \code{report} that shows the number of
 #'  phenotypes/celltypes/genes remaining after each filtering step.
-#'
+#' @param symptom_p_threshold The p-value threshold of celltype-symptom
+#' enrichment results (using  \link[MultiEWCE]{gen_overlap}).
+#' Here, "symptoms" are defined as the presentation of a phenotype in the
+#' context of a particular disease.
+#'  In other words:
+#'  phenotype (HPO_ID) + disease (DatabaseID) = symptom (HPO_ID.DatabaseID)
+#' @param symptom_intersection_size_threshold
+#' The minimum number of intersecting genes between a symptom and a celltype to
+#' consider it a significant enrichment. Refers to the result from
+#' \link[MultiEWCE]{gen_overlap}.
+#' @param symptom_gene_overlap The gene for a particular symptom
+#' (phenotype + disease) must appear in the celltype-symptom
+#'  enrichment results.
 #' @inheritParams ewce_para
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
@@ -71,6 +109,7 @@
 #' @inheritParams HPOExplorer::add_onset
 #' @inheritParams HPOExplorer::add_gene_frequency
 #' @inheritParams HPOExplorer::add_pheno_frequency
+#' @inheritParams HPOExplorer::add_ndisease
 #' @inheritParams HPOExplorer::add_ont_lvl
 #' @returns A data.table of the prioritised phenotype- and
 #'  celltype-specific gene targets.
@@ -80,32 +119,44 @@
 #' @import data.table
 #' @importFrom utils head
 #' @examples
-#' res <- prioritise_targets()
-prioritise_targets <- function(results = load_example_results(),
+#' res <- prioritise_targets(symptom_p_threshold = NULL)
+prioritise_targets <- function(#### Input data ####
+                               results = load_example_results(),
                                ctd = load_example_ctd(),
                                annotLevel = 1,
-                               q_threshold = 0.05,
-                               fold_threshold = 1,
-                               remove_descendants = c("Clinical course"),
-                               keep_ont_levels = NULL,
-                               keep_onsets =
-                                 HPOExplorer::list_onsets(
-                                   exclude=c("Antenatal",
-                                             "Fetal",
-                                             "Congenital"),
-                                   include_na = FALSE
-                                 ),
+                               phenotype_to_genes =
+                                 HPOExplorer::load_phenotype_to_genes(),
+                               hpo = HPOExplorer::get_hpo(),
+                               #### Disease-level ####
                                keep_deaths =
                                  HPOExplorer::list_deaths(
                                    exclude=c("Miscarriage",
                                              "Stillbirth",
                                              "Prenatal death"),
-                                   include_na = FALSE
+                                   include_na = TRUE
                                  ),
-                               keep_tiers = c(1,2),
+                               #### Phenotype level ####
+                               remove_descendants = c("Clinical course"),
+                               keep_ont_levels = NULL,
+                               pheno_ndiseases_threshold = NULL,
+                               keep_tiers = c(1,2,NA),
                                severity_threshold = c(2,NA),
+                               #### Symptom level ####
                                pheno_frequency_threshold = NULL,
+                               keep_onsets =
+                                 HPOExplorer::list_onsets(
+                                   exclude=c("Antenatal",
+                                             "Fetal",
+                                             "Congenital"),
+                                   include_na = TRUE
+                                 ),
+                               symptom_p_threshold = NULL,
+                               symptom_intersection_size_threshold = 1,
+                               #### Celltype level ####
+                               q_threshold = 0.05,
+                               fold_threshold = 1,
                                keep_celltypes = terminal_celltypes()$CellType,
+                               #### Gene level ####
                                keep_seqnames = c(seq_len(22),"X","Y"),
                                gene_size = list("min"=0,
                                                 "max"=4300),
@@ -113,6 +164,8 @@ prioritise_targets <- function(results = load_example_results(),
                                keep_biotypes = NULL,
                                keep_specificity_quantiles = NULL,
                                keep_mean_exp_quantiles = seq(1,40),
+                               symptom_gene_overlap = TRUE,
+                               #### Sorting ####
                                sort_cols = c("tier_merge"=1,
                                              "Severity_score_mean"=1,
                                              "q"=1,
@@ -124,17 +177,14 @@ prioritise_targets <- function(results = load_example_results(),
                                              "width"=1),
                                top_n = NULL,
                                group_vars = c("HPO_ID","CellType"),
-                               phenotype_to_genes =
-                                         HPOExplorer::load_phenotype_to_genes(),
-                               hpo = HPOExplorer::get_hpo(),
                                return_report = TRUE,
                                verbose = TRUE){
 
-  # devoptera::args2vars(prioritise_targets)
+  # o <- devoptera::args2vars(prioritise_targets)
 
   q <- fold_change <- CellType <- Gene <- HPO_ID <-
-    HPO_term_valid <- specificity_quantile <-
-    mean_exp_quantile <- celltype_fixed <- NULL;
+    HPO_term_valid <- specificity_quantile <- intersection <- symptom.pval <-
+    mean_exp_quantile <- celltype_fixed <- intersection_size <- NULL;
 
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
@@ -233,6 +283,15 @@ prioritise_targets <- function(results = load_example_results(),
                    rep_dt = rep_dt,
                    step = "severity_threshold",
                    verbose = verbose)
+  #### pheno_ndiseases_threshold ####
+  results <- HPOExplorer::add_ndisease(
+    phenos = results,
+    pheno_ndiseases_threshold = pheno_ndiseases_threshold,
+    verbose = verbose)
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "pheno_ndiseases_threshold",
+                   verbose = verbose)
   #### pheno_frequency_threshold ####
   results <- HPOExplorer::add_pheno_frequency(
     phenos = results,
@@ -242,10 +301,28 @@ prioritise_targets <- function(results = load_example_results(),
                    rep_dt = rep_dt,
                    step = "pheno_frequency_threshold",
                    verbose = verbose)
+  #### symptom_p_threshold ####
+  if(!is.null(symptom_p_threshold)){
+    results <- results[symptom.pval<symptom_p_threshold]
+  }
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "symptom_p_threshold",
+                   verbose = verbose)
+  #### symptom_intersection_size_threshold ####
+  if(!is.null(symptom_intersection_size_threshold)){
+    results <- results[intersection_size>=symptom_intersection_size_threshold]
+  }
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "symptom_intersection_size_threshold",
+                   verbose = verbose)
+
+
   #### Filter celltypes ####
   if(!is.null(keep_celltypes)){
     all_celltypes <- unique(results$CellType)
-    results <- results[tolower(CellType) %in% tolower(keep_celltypes),]
+    results <- results[CellType %in% keep_celltypes,]
     valid_celltypes <- unique(results$CellType)
     messager(formatC(length(valid_celltypes),big.mark = ","),"/",
              formatC(length(all_celltypes)),
@@ -335,9 +412,7 @@ prioritise_targets <- function(results = load_example_results(),
       names(results)[!names(results) %in% names(gr_df)])
   )
   df_merged <- data.table::merge.data.table(
-    x = unique(
-      results[HPO_ID %in% unique(gr_df$HPO_ID),][,cols,with=FALSE]
-    ),
+    x = results[HPO_ID %in% unique(gr_df$HPO_ID),][,cols,with=FALSE],
     y = unique(
       gr_df[,c("HPO_ID","Gene","gene_biotype",
                "seqnames","start","end","width")]
@@ -383,6 +458,17 @@ prioritise_targets <- function(results = load_example_results(),
   rep_dt <- report(dt = df_merged,
                    rep_dt = rep_dt,
                    step = "keep_mean_exp_quantiles",
+                   verbose = verbose)
+  #### Filter by symptom intersection genes ####
+  if(isTRUE(symptom_gene_overlap) &&
+     "intersection" %in% names(df_merged)){
+    df_merged <-
+      df_merged[,symptom.in_intersection:=Gene %in% unlist(intersection),
+                by="HPO_ID.LinkID"][symptom.in_intersection==TRUE,]
+  }
+  rep_dt <- report(dt = df_merged,
+                   rep_dt = rep_dt,
+                   step = "symptom_gene_overlap",
                    verbose = verbose)
   #### Sort genes ####
   # 1=ascending, -1=descending

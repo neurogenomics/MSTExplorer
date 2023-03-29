@@ -37,40 +37,55 @@ gen_overlap <- function(gene_data =
                         save_dir = tempdir(),
                         cores = 1,
                         verbose = TRUE){
-  LinkID <- qval <- pval <-  NULL;
+  # o <- devoptera::args2vars(gen_overlap); list_name_column="HPO_ID.LinkID";
+  # gene_data[,HPO_ID.LinkID:=paste(HPO_ID,LinkID,sep=".")]
 
+  qval <- pval <-  Gene <- NULL;
+
+  t1 <- Sys.time()
   ct_genes <- apply(ctd[[annotLevel]]$specificity_quantiles,
                     2,
                     function(x){
-                      x[x %in% keep_specificity_quantiles]
+                      names(x[x %in% keep_specificity_quantiles])
                     })
   bg <- rownames(ctd[[annotLevel]]$specificity_quantiles)
-  #### Iterate overlap tests ####
-  overlap <- parallel::mclapply(stats::setNames(list_names,
-                                                list_names),
-                                function(d){
-    messager("Testing overlap: ",d, parallel = TRUE)
-    d2 <- gene_data[LinkID==d]
-    dgenes <- unique(d2$Gene)
 
-    lapply(ct_genes, function(cgenes){
-      r <- GeneOverlap::newGeneOverlap(
-        listA = names(cgenes),
-        listB = dgenes,
-        genome.size = length(bg)) |>
-        GeneOverlap::testGeneOverlap()
-      data.table::data.table(
-        intersection=if(long_format) r@intersection else list(r@intersection),
-        intersection_size=length(r@intersection),
-        union=if(long_format) r@union else list(r@union),
-        union_size=length(r@union),
-        pval=r@pval,
-        odds.ratio=r@odds.ratio,
-        jaccard=r@Jaccard)
-    }) |>
-      data.table::rbindlist(use.names = TRUE, idcol = "CellType")
-  }, mc.cores = cores) |>
-    data.table::rbindlist(use.names = TRUE, idcol = "LinkID")
+  #### Iterate overlap tests: data.table ####
+  # data.table::setDTthreads(cores)
+  # overlap <- gene_data[,gen_overlap_test(ct_genes = ct_genes,
+  #                                        list_name = {
+  #                                          if(.GRP%%50==0)
+  #                                            paste0(.BY," : ",
+  #                                                   round(.GRP/.NGRP*100,2),
+  #                                                   "%")
+  #                                        },
+  #                                        dgenes = Gene,
+  #                                        long_format = long_format,
+  #                                        bg = bg),
+  #                      by=list_name_column]
+
+  split.data.table <- utils::getFromNamespace("split.data.table","data.table")
+  #### Remove all unnecessary columns to save memory ####
+  gene_data <- gene_data[,c(list_name_column,gene_column), with=FALSE]
+  messager("Splitting data.",v=verbose)
+  gene_data_split <- split.data.table(x = gene_data,
+                                      by = list_name_column,
+                                      keep.by = FALSE)
+  remove(gene_data)
+  #### Iterate overlap tests: parallel ####
+  fut <- future::plan(future::multisession, workers = cores)
+  overlap <- furrr::future_map(.x = gene_data_split,
+                     .progress = TRUE,
+                     .f = function(.x){
+                       gen_overlap_test(ct_genes = ct_genes,
+                                        dgenes = unique(.x$Gene),
+                                        long_format = long_format,
+                                        bg = bg,
+                                        verbose = FALSE)
+                     })|>
+    data.table::rbindlist(use.names = TRUE,
+                          idcol = list_name_column)
+
   #### Multiple testing correction ####
   overlap[,qval:=stats::p.adjust(pval,method = "bonf")]
   #### Get top N ####
@@ -78,6 +93,9 @@ gen_overlap <- function(gene_data =
     overlap <- overlap[,utils::head(.SD, top_n),
                        by = c(list_name_column)]
   }
+  #### Report time ####
+  messager(difftime(Sys.time(),t1),v = TRUE)
+  #### Save results ####
   save_path <- save_results(results = overlap,
                             save_dir = save_dir,
                             prefix = "gen_overlap_",
