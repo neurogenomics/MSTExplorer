@@ -98,6 +98,8 @@
 #' @param symptom_gene_overlap The gene for a particular symptom
 #' (phenotype + disease) must appear in the celltype-symptom
 #'  enrichment results.
+#' @param severity_threshold_max The max severity score that a phenotype can
+#' have across any disease.
 #' @inheritParams ewce_para
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
@@ -111,6 +113,7 @@
 #' @inheritParams HPOExplorer::add_pheno_frequency
 #' @inheritParams HPOExplorer::add_ndisease
 #' @inheritParams HPOExplorer::add_ont_lvl
+#' @inheritParams HPOExplorer::add_evidence
 #' @returns A data.table of the prioritised phenotype- and
 #'  celltype-specific gene targets.
 #'
@@ -119,7 +122,7 @@
 #' @import data.table
 #' @importFrom utils head
 #' @examples
-#' res <- prioritise_targets(symptom_p_threshold = NULL)
+#' res <- prioritise_targets()
 prioritise_targets <- function(#### Input data ####
                                results = load_example_results(),
                                ctd = load_example_ctd(),
@@ -133,15 +136,16 @@ prioritise_targets <- function(#### Input data ####
                                    exclude=c("Miscarriage",
                                              "Stillbirth",
                                              "Prenatal death"),
-                                   include_na = TRUE
+                                   include_na = FALSE
                                  ),
                                #### Phenotype level ####
                                remove_descendants = c("Clinical course"),
                                keep_ont_levels = NULL,
                                pheno_ndiseases_threshold = NULL,
                                keep_tiers = c(1,2,NA),
-                               severity_threshold = c(2,NA),
+                               severity_threshold_max = NULL,
                                #### Symptom level ####
+                               severity_threshold = c(2,NA),
                                pheno_frequency_threshold = NULL,
                                keep_onsets =
                                  HPOExplorer::list_onsets(
@@ -150,16 +154,17 @@ prioritise_targets <- function(#### Input data ####
                                              "Congenital"),
                                    include_na = TRUE
                                  ),
-                               symptom_p_threshold = NULL,
-                               symptom_intersection_size_threshold = 1,
                                #### Celltype level ####
                                q_threshold = 0.05,
                                fold_threshold = 1,
+                               symptom_p_threshold = NULL,
+                               symptom_intersection_size_threshold = 1,
                                keep_celltypes = terminal_celltypes()$CellType,
                                #### Gene level ####
+                               keep_evidence = seq(3,6),
                                keep_seqnames = c(seq_len(22),"X","Y"),
                                gene_size = list("min"=0,
-                                                "max"=4300),
+                                                "max"=Inf),
                                gene_frequency_threshold = NULL,
                                keep_biotypes = NULL,
                                keep_specificity_quantiles = NULL,
@@ -180,11 +185,11 @@ prioritise_targets <- function(#### Input data ####
                                return_report = TRUE,
                                verbose = TRUE){
 
-  # o <- devoptera::args2vars(prioritise_targets)
+  # o <- devoptera::args2vars(prioritise_targets, reassign = TRUE)
 
-  q <- fold_change <- CellType <- Gene <- HPO_ID <-
-    HPO_term_valid <- specificity_quantile <- intersection <- symptom.pval <-
-    mean_exp_quantile <- celltype_fixed <- intersection_size <- NULL;
+  q <- fold_change <- CellType <- Gene <- width <- gene_biotype <-
+    HPO_term_valid <- symptom.pval <- Severity_score <-
+    celltype_fixed <- intersection_size <- NULL;
 
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
@@ -205,6 +210,10 @@ prioritise_targets <- function(#### Input data ####
                                              hpo = hpo,
                                              verbose = verbose)
   }
+  #### Add disease columns ####
+  results <- HPOExplorer::add_disease(phenos = results,
+                                      add_definitions = TRUE,
+                                      verbose = verbose)
   #### start ####
   rep_dt <- report(dt = results,
                    step = "start",
@@ -228,6 +237,37 @@ prioritise_targets <- function(#### Input data ####
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "fold_threshold",
+                   verbose = verbose)
+  #### Filter symptoms ####
+  ## Do these steps early bc it will drastically reduce data size
+  ## and thus speed up all subsequent steps.
+  #### symptom_p_threshold ####
+  if(!is.null(symptom_p_threshold)){
+    results <- results[symptom.pval<symptom_p_threshold]
+  }
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "symptom_p_threshold",
+                   verbose = verbose)
+  #### symptom_intersection_size_threshold ####
+  if(!is.null(symptom_intersection_size_threshold)){
+    results <- results[intersection_size>=symptom_intersection_size_threshold]
+  }
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "symptom_intersection_size_threshold",
+                   verbose = verbose)
+
+  #### Filter diseases ####
+  #### keep_deaths ####
+  results <- HPOExplorer::add_death(phenos = results,
+                                    keep_deaths = keep_deaths,
+                                    agg_by = "DatabaseID",
+                                    allow.cartesian = TRUE,
+                                    verbose = verbose)
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "keep_deaths",
                    verbose = verbose)
   #### Filter phenotypes ####
   #### remove_descendants ####
@@ -257,15 +297,6 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "keep_onsets",
                    verbose = verbose)
-  #### keep_deaths ####
-  results <- HPOExplorer::add_death(phenos = results,
-                                    keep_deaths = keep_deaths,
-                                    agg_by = "DatabaseID",
-                                    verbose = verbose)
-  rep_dt <- report(dt = results,
-                   rep_dt = rep_dt,
-                   step = "keep_deaths",
-                   verbose = verbose)
   #### keep_tiers ####
   results <- HPOExplorer::add_tier(phenos = results,
                                    hpo = hpo,
@@ -282,6 +313,17 @@ prioritise_targets <- function(#### Input data ####
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "severity_threshold",
+                   verbose = verbose)
+  #### severity_threshold_max ####
+  ## i.e. is a phenotype always severe, regardless of disease?
+  if(!is.null(severity_threshold_max)){
+    results <- results[,Severity_score_max:=gsub(
+       -Inf,NA,max(Severity_score,na.rm = TRUE)),
+       by="HPO_ID"][Severity_score_max<=severity_threshold_max]
+  }
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "severity_threshold_max",
                    verbose = verbose)
   #### pheno_ndiseases_threshold ####
   results <- HPOExplorer::add_ndisease(
@@ -301,25 +343,11 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "pheno_frequency_threshold",
                    verbose = verbose)
-  #### symptom_p_threshold ####
-  if(!is.null(symptom_p_threshold)){
-    results <- results[symptom.pval<symptom_p_threshold]
-  }
-  rep_dt <- report(dt = results,
-                   rep_dt = rep_dt,
-                   step = "symptom_p_threshold",
-                   verbose = verbose)
-  #### symptom_intersection_size_threshold ####
-  if(!is.null(symptom_intersection_size_threshold)){
-    results <- results[intersection_size>=symptom_intersection_size_threshold]
-  }
-  rep_dt <- report(dt = results,
-                   rep_dt = rep_dt,
-                   step = "symptom_intersection_size_threshold",
-                   verbose = verbose)
-
 
   #### Filter celltypes ####
+  ### Fix celltypes
+  results[,celltype_fixed:=EWCE::fix_celltype_names(CellType,
+                                                    make_unique = FALSE)]
   if(!is.null(keep_celltypes)){
     all_celltypes <- unique(results$CellType)
     results <- results[CellType %in% keep_celltypes,]
@@ -332,160 +360,133 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "keep_celltypes",
                    verbose = verbose)
-  #### Filter genes by size ####
-  messager("Filtering by gene size.",v=verbose)
-  gr <- HPOExplorer::phenos_to_granges(phenos = results,
-                                       phenotype_to_genes = phenotype_to_genes,
-                                       hpo = hpo,
-                                       keep_seqnames = keep_seqnames,
-                                       split.field = NULL,
-                                       verbose = verbose)
-  rep_dt <- report(dt = gr,
+  #### Filter genes ####
+  #### symptom_gene_overlap ####
+  results <- HPOExplorer::phenos_to_granges(
+    phenos = results,
+    phenotype_to_genes = phenotype_to_genes,
+    hpo = hpo,
+    gene_col = if(isTRUE(symptom_gene_overlap)) "intersection" else NULL,
+    keep_seqnames = NULL,
+    split.field = NULL,
+    as_datatable = TRUE,
+    verbose = verbose)
+  rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
-                   step = "keep_seqnames",
+                   step = "symptom_gene_overlap",
+                   verbose = verbose)
+  #### keep_seqnames ####
+  if(!is.null(keep_seqnames)){
+
+  }
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "symptom_gene_overlap",
+                   verbose = verbose)
+  #### keep_evidence ####
+  messager("Filtering by gene-disease association evidence.",
+           v=verbose)
+  results <- HPOExplorer::add_evidence(phenos = results,
+                                       keep_evidence = keep_evidence,
+                                       verbose = verbose)
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "keep_evidence",
                    verbose = verbose)
   #### gene_size ####
   if(!is.null(gene_size)){
-    ngenes <- length(unique(gr$Gene))
-    gr <- gr[gr@ranges@width>gene_size$min & gr@ranges@width<gene_size$max,]
-    messager(formatC(length(unique(gr$Gene)),big.mark = ","),"/",
+    messager("Filtering by gene size.",v=verbose)
+    ngenes <- length(unique(results$Gene))
+    results <- results[width>gene_size$min & width<gene_size$max,]
+    messager(formatC(length(unique(results$Gene)),big.mark = ","),"/",
              formatC(ngenes,big.mark = ","),"genes kept.",v=verbose)
   }
-  rep_dt <- report(dt = gr,
+  rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "gene_size",
                    verbose = verbose)
-  #### keep_biotypese ####
+  #### keep_biotypes ####
   if(!is.null(keep_biotypes)){
     messager("Filtering by gene biotypes.",v=verbose)
-    gr <- gr[gr$gene_biotype %in% keep_biotypes,]
+    results <- results[gene_biotype %in% keep_biotypes,]
   }
-  rep_dt <- report(dt = gr,
+  rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_biotypes",
                    verbose = verbose)
   #### Identify high-specificity genes ####
-  shared_genes <- intersect(gr$Gene,rownames(ctd[[annotLevel]]$specificity))
+  shared_genes <- intersect(results$Gene,
+                            rownames(ctd[[annotLevel]]$specificity))
   specq_df <- make_specificity_dt(ctd = ctd,
-                                 annotLevel = annotLevel,
-                                 shared_genes = shared_genes,
-                                 metric = "specificity_quantiles")
+                                  annotLevel = annotLevel,
+                                  shared_genes = shared_genes,
+                                  keep_quantiles = keep_specificity_quantiles,
+                                  metric = "specificity_quantiles")
   spec_df <- make_specificity_dt(ctd = ctd,
                                  annotLevel = annotLevel,
                                  shared_genes = shared_genes,
                                  metric = "specificity")
   exp_df <- make_specificity_dt(ctd = ctd,
-                                 annotLevel = annotLevel,
-                                 shared_genes = shared_genes,
-                                 metric = "mean_exp")
-  expq_df <- make_specificity_dt(ctd = ctd,
                                 annotLevel = annotLevel,
                                 shared_genes = shared_genes,
-                                metric = "mean_exp_quantiles")
-  ##### Filter by genes  previously identified ####
-  specq_df <- specq_df[Gene %in% gr$Gene,]
-  expq_df <- expq_df[Gene %in% gr$Gene,]
-  shared_genes <- intersect(intersect(specq_df$Gene,
-                                      expq_df$Gene),
-                            shared_genes)
-  #### Filter by specificity #####
-  if(!is.null(keep_specificity_quantiles)){
-    messager("Filtering by specificity_quantile.",v=verbose)
-    specq_df <- specq_df[specificity_quantile %in% keep_specificity_quantiles,]
-  }
-  #### Filter by specificity #####
-  if(!is.null(keep_mean_exp_quantiles)){
-    messager("Filtering by mean_exp_quantile.",v=verbose)
-    expq_df <- expq_df[mean_exp_quantile %in% keep_mean_exp_quantiles,]
-  }
-  ##### Filter by cell types  previously identified ####
-  keep_celltypes2 <- unique(results$CellType)[
-    EWCE::fix_celltype_names(unique(results$CellType)) %in%
-      specq_df$celltype_fixed
-  ]
-  results <- results[CellType %in% keep_celltypes2,]
+                                metric = "mean_exp")
+  expq_df <- make_specificity_dt(ctd = ctd,
+                                 annotLevel = annotLevel,
+                                 shared_genes = shared_genes,
+                                 keep_quantiles = keep_mean_exp_quantiles,
+                                 metric = "mean_exp_quantiles")
   #### Merge genes with phenotype/celltype results ####
-  gr_df <- data.table::as.data.table(gr)[Gene %in% shared_genes,]
-  data.table::setkeyv(gr_df,"HPO_ID")
-  cols <- unique(
-    c("Phenotype","HPO_ID",
-      names(results)[!names(results) %in% names(gr_df)])
-  )
-  df_merged <- data.table::merge.data.table(
-    x = results[HPO_ID %in% unique(gr_df$HPO_ID),][,cols,with=FALSE],
-    y = unique(
-      gr_df[,c("HPO_ID","Gene","gene_biotype",
-               "seqnames","start","end","width")]
-    ),
-    all = TRUE,
-    allow.cartesian = TRUE,
-    by = "HPO_ID"
-  )
-  ct_dict <- stats::setNames(
-    EWCE::fix_celltype_names(celltypes = unique(df_merged$CellType)),
-    unique(df_merged$CellType))
-  df_merged[,celltype_fixed:=ct_dict[CellType]]
+  results <- results[Gene %in% shared_genes,]
   by_cols <- c("Gene","celltype_fixed")
   #### gene_frequency_threshold ####
-  df_merged <- HPOExplorer::add_gene_frequency(
-    phenotype_to_genes = df_merged,
+  results <- HPOExplorer::add_gene_frequency(
+    phenotype_to_genes = results,
     gene_frequency_threshold = gene_frequency_threshold,
     verbose = verbose)
-  rep_dt <- report(dt = df_merged,
+  rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "gene_frequency_threshold",
                    verbose = verbose)
   #### Merge: specificity ####
-  df_merged <- df_merged |>
+  results <- results |>
     data.table::merge.data.table(y = spec_df,
                                  by = by_cols)
   #### Merge: specificity_quantiles ####
-  df_merged <- df_merged |>
+  results <- results |>
     data.table::merge.data.table(y = specq_df,
                                  by = by_cols)
-  rep_dt <- report(dt = df_merged,
+  rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_specificity_quantiles",
                    verbose = verbose)
   #### Merge: mean_exp ####
-  df_merged <- df_merged |>
+  results <- results |>
     data.table::merge.data.table(y = exp_df,
                                  by = by_cols)
   #### Merge: mean_exp_quantiles ####
-  df_merged <- df_merged |>
+  results <- results |>
     data.table::merge.data.table(y = expq_df,
                                  by = by_cols)
-  rep_dt <- report(dt = df_merged,
+  rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_mean_exp_quantiles",
-                   verbose = verbose)
-  #### Filter by symptom intersection genes ####
-  if(isTRUE(symptom_gene_overlap) &&
-     "intersection" %in% names(df_merged)){
-    df_merged <-
-      df_merged[,symptom.in_intersection:=Gene %in% unlist(intersection),
-                by="HPO_ID.LinkID"][symptom.in_intersection==TRUE,]
-  }
-  rep_dt <- report(dt = df_merged,
-                   rep_dt = rep_dt,
-                   step = "symptom_gene_overlap",
                    verbose = verbose)
   #### Sort genes ####
   # 1=ascending, -1=descending
   messager("Sorting rows.",v=verbose)
-  sort_cols <- sort_cols[names(sort_cols) %in% names(df_merged)]
-  data.table::setorderv(df_merged,
+  sort_cols <- sort_cols[names(sort_cols) %in% names(results)]
+  data.table::setorderv(results,
                         cols = names(sort_cols),
                         order = unname(sort_cols),
                         na.last = TRUE)
 
   if(is.null(top_n)){
-    top_targets <- df_merged
+    top_targets <- results
   } else {
     #### top_n ####
     messager("Finding top",top_n,"gene targets per:",
              paste(group_vars,collapse = ", "),v=verbose)
-    top_targets <- df_merged[,utils::head(.SD, top_n),
+    top_targets <- results[,utils::head(.SD, top_n),
                              by = c(group_vars)]
     rep_dt <- report(dt = top_targets,
                      rep_dt = rep_dt,

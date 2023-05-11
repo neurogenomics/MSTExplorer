@@ -11,6 +11,8 @@
   - Overcomes requirement of >=4 genes.
   - Faster than EWCE (but less robust)
 * New internal func: `save_results`
+* `load_example_results`
+  - New arg `force_new`
 
 ## Bug fixes
 

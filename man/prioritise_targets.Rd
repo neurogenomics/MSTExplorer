@@ -11,22 +11,24 @@ prioritise_targets(
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   hpo = HPOExplorer::get_hpo(),
   keep_deaths = HPOExplorer::list_deaths(exclude = c("Miscarriage", "Stillbirth",
-    "Prenatal death"), include_na = TRUE),
+    "Prenatal death"), include_na = FALSE),
   remove_descendants = c("Clinical course"),
   keep_ont_levels = NULL,
   pheno_ndiseases_threshold = NULL,
   keep_tiers = c(1, 2, NA),
+  severity_threshold_max = NULL,
   severity_threshold = c(2, NA),
   pheno_frequency_threshold = NULL,
   keep_onsets = HPOExplorer::list_onsets(exclude = c("Antenatal", "Fetal", "Congenital"),
     include_na = TRUE),
-  symptom_p_threshold = NULL,
-  symptom_intersection_size_threshold = 1,
   q_threshold = 0.05,
   fold_threshold = 1,
+  symptom_p_threshold = NULL,
+  symptom_intersection_size_threshold = 1,
   keep_celltypes = terminal_celltypes()$CellType,
+  keep_evidence = seq(3, 6),
   keep_seqnames = c(seq_len(22), "X", "Y"),
-  gene_size = list(min = 0, max = 4300),
+  gene_size = list(min = 0, max = Inf),
   gene_frequency_threshold = NULL,
   keep_biotypes = NULL,
   keep_specificity_quantiles = NULL,
@@ -80,6 +82,9 @@ maximum number of diseases they are associated with.}
 Include \code{NA} if you wish to retain phenotypes that
 do not have any Tier assignment.}
 
+\item{severity_threshold_max}{The max severity score that a phenotype can
+have across any disease.}
+
 \item{severity_threshold}{Only keep phenotypes with a mean
 severity score (averaged across multiple associated diseases) below the
 set threshold. The severity score ranges from 1-4 where 1 is the MOST severe.
@@ -98,6 +103,11 @@ If >1 age of onset is associated with the term,
 only the earliest age is considered.
 See \link[HPOExplorer]{add_onset} for details.}
 
+\item{q_threshold}{The q value threshold to subset the \code{results} by.}
+
+\item{fold_threshold}{The minimum fold change in specific expression
+to subset the \code{results} by.}
+
 \item{symptom_p_threshold}{The p-value threshold of celltype-symptom
 enrichment results (using  \link[MultiEWCE]{gen_overlap}).
 Here, "symptoms" are defined as the presentation of a phenotype in the
@@ -109,12 +119,10 @@ phenotype (HPO_ID) + disease (DatabaseID) = symptom (HPO_ID.DatabaseID)}
 consider it a significant enrichment. Refers to the result from
 \link[MultiEWCE]{gen_overlap}.}
 
-\item{q_threshold}{The q value threshold to subset the \code{results} by.}
-
-\item{fold_threshold}{The minimum fold change in specific expression
-to subset the \code{results} by.}
-
 \item{keep_celltypes}{Cell type to keep.}
+
+\item{keep_evidence}{The evidence scores of each gene-disease
+association to keep.}
 
 \item{keep_seqnames}{Chromosomes to keep.}
 
@@ -231,5 +239,5 @@ at the disease-level, phenotype-level, or symptom-level.}
 }
 }
 \examples{
-res <- prioritise_targets(symptom_p_threshold = NULL)
+res <- prioritise_targets()
 }

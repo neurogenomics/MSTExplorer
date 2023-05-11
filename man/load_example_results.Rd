@@ -41,21 +41,31 @@ Results located in 'results' folder.}
 }
 \usage{
 load_example_results(
-  file = c("Descartes_All_Results_extras.symptoms.full_join.rds",
-    "Descartes_All_Results_extras.symptoms.rds", "Descartes_All_Results_extras.rds",
-    "gen_overlap.symptoms.filt.rds", "tabulamuris_merged.rds"),
+  file = c("Descartes_All_Results_extras.symptoms.rds",
+    "Descartes_All_Results_extras.symptoms.full_join.rds",
+    "Descartes_All_Results_extras.rds", "gen_overlap.symptoms.filt.rds",
+    "tabulamuris_merged.rds"),
   tag = "v0.0.1",
-  save_dir = tools::R_user_dir(package = "MultiEWCE")
+  save_dir = tools::R_user_dir(package = "MultiEWCE"),
+  force_new = FALSE
 )
 }
 \arguments{
 \item{file}{File to load:
 \itemize{
-\item{"Descartes_All_Results.rds":}{
+\item{"Descartes_All_Results_extras.symptoms.full_join.rds":}{
+Contains cell type-phenotype and cell type-symptom (phenotype + disease)
+enrichment results merged into one table.
+Used the \href{https://descartes.brotmanbaty.org/}{Descartes}
+CTD ( annotation level 1).
+}
+\item{"Descartes_All_Results_extras.rds":}{
+Contains cell type-phenotype enrichment results.
 Used the \href{https://descartes.brotmanbaty.org/}{Descartes}
 CTD ( annotation level 1).
 }
 \item{"tabulamuris_merged.rds":}{
+Contains cell type-phenotype enrichment results.
 Used the \href{https://tabula-muris.ds.czbiohub.org/}{Tabula Muris}
 CTD.
 }
@@ -64,6 +74,8 @@ CTD.
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
 \item{save_dir}{Where to store the file locally.}
+
+\item{force_new}{Download the file even when a local copy already exists.}
 }
 \value{
 dataframe of enrichment results.

@@ -5,15 +5,24 @@
 #' Results were then merged together with  \link[MultiEWCE]{merge_results}.
 #' @param file File to load:
 #' \itemize{
-#' \item{"Descartes_All_Results.rds":}{
+#' \item{"Descartes_All_Results_extras.symptoms.full_join.rds":}{
+#' Contains cell type-phenotype and cell type-symptom (phenotype + disease)
+#' enrichment results merged into one table.
+#' Used the \href{https://descartes.brotmanbaty.org/}{Descartes}
+#' CTD ( annotation level 1).
+#' }
+#' \item{"Descartes_All_Results_extras.rds":}{
+#' Contains cell type-phenotype enrichment results.
 #' Used the \href{https://descartes.brotmanbaty.org/}{Descartes}
 #' CTD ( annotation level 1).
 #' }
 #' \item{"tabulamuris_merged.rds":}{
+#' Contains cell type-phenotype enrichment results.
 #' Used the \href{https://tabula-muris.ds.czbiohub.org/}{Tabula Muris}
 #' CTD.
 #' }
 #' }
+#' @param force_new Download the file even when a local copy already exists.
 #' @inheritParams load_example_ctd
 #' @inheritParams piggyback::pb_download
 #' @source
@@ -58,18 +67,22 @@
 #' @examples
 #' res <- load_example_results()
 load_example_results <- function(file=c(
-  "Descartes_All_Results_extras.symptoms.full_join.rds",
   "Descartes_All_Results_extras.symptoms.rds",
+  "Descartes_All_Results_extras.symptoms.full_join.rds",
   "Descartes_All_Results_extras.rds",
   "gen_overlap.symptoms.filt.rds",
   "tabulamuris_merged.rds"),
   tag = "v0.0.1",
-  save_dir=tools::R_user_dir(package = "MultiEWCE")
+  save_dir=tools::R_user_dir(package = "MultiEWCE"),
+  force_new=FALSE
   ) {
 
   file <- file[[1]]
   dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
   save_path <- file.path(save_dir,file)
+  if(file.exists(save_path) && isTRUE(force_new)){
+    rm_ <- file.remove(save_path)
+  }
   if (!file.exists(save_path)) {
     piggyback::pb_download(file = basename(file),
                            repo = "neurogenomics/MultiEWCE",
@@ -78,5 +91,6 @@ load_example_results <- function(file=c(
                            overwrite = TRUE)
   }
   results <- readRDS(save_path)
+  names(results) <- gsub("^symptoms\\.","symptom.",names(results))
   return(results)
 }

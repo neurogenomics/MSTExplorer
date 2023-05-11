@@ -5,9 +5,9 @@
 #' @inheritParams piggyback::pb_download
 #' @importFrom tools R_user_dir
 get_data <- function(fname,
-                     repo = "neurogenomics/MAGMA_Celltyping",
+                     repo = "neurogenomics/MultiEWCE",
                      storage_dir = tools::R_user_dir(
-                       package = "MAGMA.Celltyping",
+                       package = "MultiEWCE",
                        which = "cache"
                      ),
                      overwrite = TRUE,

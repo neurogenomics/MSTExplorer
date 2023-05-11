@@ -6,8 +6,8 @@
 \usage{
 get_data(
   fname,
-  repo = "neurogenomics/MAGMA_Celltyping",
-  storage_dir = tools::R_user_dir(package = "MAGMA.Celltyping", which = "cache"),
+  repo = "neurogenomics/MultiEWCE",
+  storage_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
   overwrite = TRUE,
   check = FALSE
 )
