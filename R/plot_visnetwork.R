@@ -67,7 +67,9 @@ plot_visnetwork <- function(g,
     visNetwork::visOptions(
                            selectedBy = "node",
                            highlightNearest = list(enabled=TRUE,
-                                                   degree=degree))
+                                                   degree=degree)) |>
+    visNetwork::visEvents(type = "on",
+                          doubleClick = "function(){ this.fit()}")
 
   if(isTRUE(add_visExport)){
     visnet <-  visnet |> visNetwork::visExport(type = "pdf")

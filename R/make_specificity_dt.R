@@ -3,6 +3,7 @@ make_specificity_dt <- function(ctd,
                                 shared_genes = NULL,
                                 metric = "specificity_quantiles",
                                 keep_quantiles = NULL,
+                                celltype_col="CellType",
                                 verbose = FALSE){
   if(metric=="mean_exp_quantiles" &&
      !"mean_exp_quantiles" %in% names(ctd[[annotLevel]])){
@@ -18,7 +19,7 @@ make_specificity_dt <- function(ctd,
   spec_dt <- data.table::data.table(as.matrix(spec[shared_genes,]),
                                     keep.rownames = "Gene") |>
     data.table::melt.data.table(id.vars = "Gene",
-                                variable.name = "celltype_fixed",
+                                variable.name = celltype_col,
                                 value.name = value.name)
   if(!is.null(keep_quantiles)){
     messager("Filtering",metric,v=verbose)

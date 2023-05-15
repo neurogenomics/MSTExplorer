@@ -27,9 +27,9 @@ get_data <- function(fname,
   #### Read/return ####
   if(grepl("\\.rds$",tmp)){
     return(readRDS(tmp))
-  } else{
+  } else if(grepl("\\.csv$|\\.tsv$",tmp)){
+    return(data.table::fread(tmp))
+  } else {
     return(tmp)
   }
 }
-
-

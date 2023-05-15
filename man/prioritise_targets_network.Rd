@@ -32,8 +32,8 @@ prioritise_targets_network(
   smooth = list(enabled = TRUE, type = "cubicBezier", roundness = 0.5),
   add_visExport = FALSE,
   degree = 1,
-  height = NULL,
-  width = NULL,
+  width = "100\%",
+  height = "90vh",
   main = "Rare Disease Celltyping",
   submain = "Prioritised Targets Network",
   node_palette = pals::kovesi.linear_bmy_10_95_c78,
@@ -104,9 +104,9 @@ Set high number to have the entire sub-network.
 In case of "hierarchical" algorithm, you can also pass a
 list(from = 1, to = 1) to control degree in both direction.}
 
-\item{height}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
-
 \item{width}{: Number. Default to 1. The width of the edge. If value is set, this is not used.}
+
+\item{height}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
 
 \item{main}{: For add a title. Character or a named list.
 \itemize{

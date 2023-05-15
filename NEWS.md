@@ -1,3 +1,24 @@
+# MultiEWCE 0.1.5
+
+## New features
+
+* `prioritise_targets`
+  - New arg `keep_evidence` to utilise GenCC evidence scores provided via `HPOExplorer`.
+  - Merge symptom-level driver genes after unlisting the "intersection" column
+    instead of using indirect approach that on nested "intersection" column.
+* `prioritise_targets_network`
+  - Add feature to resize plot after double-click.
+* New function: `add_tissues`
+  - Add tissues that each cell type is found in, using a celltype-tissue mapping file.
+  - Regenerate "DescartesHuman_celltype_mapping.csv" file as the one previously generated wrong
+  (had every celltype in every tissue)
+  
+## Bug fixes
+
+* `prioritise_targets_network`
+  - Fill screen better in saved plots with new default args: 
+    `width = "100%", height = "90vh"`
+
 # MultiEWCE 0.1.4
 
 ## New features

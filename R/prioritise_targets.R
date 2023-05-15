@@ -187,9 +187,9 @@ prioritise_targets <- function(#### Input data ####
 
   # o <- devoptera::args2vars(prioritise_targets, reassign = TRUE)
 
-  q <- fold_change <- CellType <- Gene <- width <- gene_biotype <-
+  q <- fold_change <- CellType <- width <- gene_biotype <-
     HPO_term_valid <- symptom.pval <- Severity_score <-
-    celltype_fixed <- intersection_size <- NULL;
+    intersection_size <- NULL;
 
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
@@ -346,8 +346,8 @@ prioritise_targets <- function(#### Input data ####
 
   #### Filter celltypes ####
   ### Fix celltypes
-  results[,celltype_fixed:=EWCE::fix_celltype_names(CellType,
-                                                    make_unique = FALSE)]
+  results[,CellType:=EWCE::fix_celltype_names(CellType,
+                                              make_unique = FALSE)]
   if(!is.null(keep_celltypes)){
     all_celltypes <- unique(results$CellType)
     results <- results[CellType %in% keep_celltypes,]
@@ -361,6 +361,8 @@ prioritise_targets <- function(#### Input data ####
                    step = "keep_celltypes",
                    verbose = verbose)
   #### Filter genes ####
+  #### Add genes ####
+  results <- HPOExplorer::add_genes(phenos = results,)
   #### symptom_gene_overlap ####
   results <- HPOExplorer::phenos_to_granges(
     phenos = results,
@@ -414,30 +416,19 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "keep_biotypes",
                    verbose = verbose)
-  #### Identify high-specificity genes ####
-  shared_genes <- intersect(results$Gene,
-                            rownames(ctd[[annotLevel]]$specificity))
-  specq_df <- make_specificity_dt(ctd = ctd,
-                                  annotLevel = annotLevel,
-                                  shared_genes = shared_genes,
-                                  keep_quantiles = keep_specificity_quantiles,
-                                  metric = "specificity_quantiles")
-  spec_df <- make_specificity_dt(ctd = ctd,
-                                 annotLevel = annotLevel,
-                                 shared_genes = shared_genes,
-                                 metric = "specificity")
-  exp_df <- make_specificity_dt(ctd = ctd,
-                                annotLevel = annotLevel,
-                                shared_genes = shared_genes,
-                                metric = "mean_exp")
-  expq_df <- make_specificity_dt(ctd = ctd,
-                                 annotLevel = annotLevel,
-                                 shared_genes = shared_genes,
-                                 keep_quantiles = keep_mean_exp_quantiles,
-                                 metric = "mean_exp_quantiles")
-  #### Merge genes with phenotype/celltype results ####
-  results <- results[Gene %in% shared_genes,]
-  by_cols <- c("Gene","celltype_fixed")
+  ##### keep_specificity_quantiles ####
+  ##### keep_mean_exp_quantiles ####
+  ctd_out <- add_ctd(
+    results = results,
+    ctd = ctd,
+    annotLevel = annotLevel,
+    keep_specificity_quantiles = keep_specificity_quantiles,
+    keep_mean_exp_quantiles = keep_mean_exp_quantiles,
+    all.x = FALSE,
+    rep_dt = rep_dt,
+    verbose = verbose)
+  results <- ctd_out$results;
+  rep_dt <- ctd_out$rep_dt;
   #### gene_frequency_threshold ####
   results <- HPOExplorer::add_gene_frequency(
     phenotype_to_genes = results,
@@ -447,30 +438,6 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "gene_frequency_threshold",
                    verbose = verbose)
-  #### Merge: specificity ####
-  results <- results |>
-    data.table::merge.data.table(y = spec_df,
-                                 by = by_cols)
-  #### Merge: specificity_quantiles ####
-  results <- results |>
-    data.table::merge.data.table(y = specq_df,
-                                 by = by_cols)
-  rep_dt <- report(dt = results,
-                   rep_dt = rep_dt,
-                   step = "keep_specificity_quantiles",
-                   verbose = verbose)
-  #### Merge: mean_exp ####
-  results <- results |>
-    data.table::merge.data.table(y = exp_df,
-                                 by = by_cols)
-  #### Merge: mean_exp_quantiles ####
-  results <- results |>
-    data.table::merge.data.table(y = expq_df,
-                                 by = by_cols)
-  rep_dt <- report(dt = results,
-                   rep_dt = rep_dt,
-                   step = "keep_mean_exp_quantiles",
-                   verbose = verbose)
   #### Sort genes ####
   # 1=ascending, -1=descending
   messager("Sorting rows.",v=verbose)
@@ -479,11 +446,10 @@ prioritise_targets <- function(#### Input data ####
                         cols = names(sort_cols),
                         order = unname(sort_cols),
                         na.last = TRUE)
-
+  #### top_n ####
   if(is.null(top_n)){
     top_targets <- results
   } else {
-    #### top_n ####
     messager("Finding top",top_n,"gene targets per:",
              paste(group_vars,collapse = ", "),v=verbose)
     top_targets <- results[,utils::head(.SD, top_n),
