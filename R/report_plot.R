@@ -35,14 +35,14 @@ report_plot <- function(rep_dt,
   # devoptera::args2vars(report_plot)
   requireNamespace("ggplot2")
   requireNamespace("patchwork")
-  Tier <- Tier_count <- value <- step <- HPO_ID <- level <- NULL;
+  Tier <- Tier_count <- value <- step <- hpo_id <- level <- NULL;
 
   messager("report_plot:: Preparing data.",v=verbose)
   tier_dt <- lapply(stats::setNames(rep_dt$ids,
                          rep_dt$step), function(x){
     if(length(x)==0) return(NULL)
     tcounts <- table(useNA = "always",
-      HPOExplorer::add_tier(phenos = data.table::data.table(HPO_ID=x),
+      HPOExplorer::add_tier(phenos = data.table::data.table(hpo_id=x),
                             verbose = FALSE
       )$tier_merge)
     names(tcounts) <- paste("Tier",names(tcounts))
@@ -58,8 +58,8 @@ report_plot <- function(rep_dt,
   rep_dt <- rep_dt[,-remove_cols, with=FALSE]
 
   #### Fill missing values ####
-  total_diseases <- length(unique(annot[HPO_ID %in% results$HPO_ID,]$DiseaseName))
-  total_genes <- length(unique(phenotype_to_genes$Gene))
+  total_diseases <- length(unique(annot[hpo_id %in% results$hpo_id,]$disease_name))
+  total_genes <- length(unique(phenotype_to_genes$gene_symbol))
   rep_dt[step=="start",]$Diseases <- total_diseases
   rep_dt[step=="start",]$Genes <- total_genes
   data.table::setnafill(rep_dt, type = "locf",cols = seq(2,ncol(rep_dt)))

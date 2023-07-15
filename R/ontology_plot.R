@@ -51,7 +51,6 @@ ontology_plot <- function(cell_type,
                              fold_threshold = fold_threshold,
                              phenotype_to_genes = phenotype_to_genes,
                              hpo = hpo)
-  cells <- cells[HPO_term_valid==TRUE,]
   ### Check color_var ####
   color_var <- color_var[[1]]
   val_opts <- eval(formals(ontology_plot)$color_var)
@@ -66,7 +65,7 @@ ontology_plot <- function(cell_type,
   }
   #### Create plot ####
   plt <- ontologyPlot::onto_plot(ontology = hpo,
-                                 terms = cells$HPO_ID,
+                                 terms = cells$hpo_id,
                                  fillcolor = color_func(cells[[color_var]]),
                                  shape = shape,
                                  ...)

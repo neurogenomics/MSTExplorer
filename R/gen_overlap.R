@@ -21,14 +21,14 @@
 #' @importFrom parallel mclapply
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
-#' list_names <- unique(gene_data$LinkID)[seq_len(3)]
+#' list_names <- unique(gene_data$disease_id)[seq_len(3)]
 #' overlap <- gen_overlap(gene_data = gene_data,
 #'                        list_names = list_names)
 gen_overlap <- function(gene_data =
                           HPOExplorer::load_phenotype_to_genes(),
                         ctd = load_example_ctd(),
-                        list_name_column = "LinkID",
-                        gene_column = "Gene",
+                        list_name_column = "disease_id",
+                        gene_column = "gene_symbol",
                         list_names = unique(gene_data[[list_name_column]]),
                         annotLevel = 1,
                         keep_specificity_quantiles=seq(30,40),
@@ -37,10 +37,10 @@ gen_overlap <- function(gene_data =
                         save_dir = tempdir(),
                         cores = 1,
                         verbose = TRUE){
-  # o <- devoptera::args2vars(gen_overlap); list_name_column="HPO_ID.LinkID";
-  # gene_data[,HPO_ID.LinkID:=paste(HPO_ID,LinkID,sep=".")]
+  # o <- devoptera::args2vars(gen_overlap); list_name_column="hpo_id.disease_id";
+  # gene_data[,hpo_id.disease_id:=paste(hpo_id,disease_id,sep=".")]
 
-  qval <- pval <-  Gene <- NULL;
+  qval <- pval <-  gene_symbol <- NULL;
 
   t1 <- Sys.time()
   ct_genes <- apply(ctd[[annotLevel]]$specificity_quantiles,
@@ -59,7 +59,7 @@ gen_overlap <- function(gene_data =
   #                                                   round(.GRP/.NGRP*100,2),
   #                                                   "%")
   #                                        },
-  #                                        dgenes = Gene,
+  #                                        dgenes = gene_symbol,
   #                                        long_format = long_format,
   #                                        bg = bg),
   #                      by=list_name_column]
@@ -78,7 +78,7 @@ gen_overlap <- function(gene_data =
                      .progress = TRUE,
                      .f = function(.x){
                        gen_overlap_test(ct_genes = ct_genes,
-                                        dgenes = unique(.x$Gene),
+                                        dgenes = unique(.x$gene_symbol),
                                         long_format = long_format,
                                         bg = bg,
                                         verbose = FALSE)

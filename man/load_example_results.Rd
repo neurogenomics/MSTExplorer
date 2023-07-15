@@ -9,7 +9,7 @@ d <-  "~/Desktop/ewce/rare_disease_celltyping_apps/cell_select"
 #### Descartes_All_Results_extras ####
 f0 <- file.path(d,"data/Descartes_All_Results_extras.rds")
 r0 <- readRDS(f0)
-data.table::setnames(r0,"list","Phenotype")
+data.table::setnames(r0,"list","hpo_name")
 r0$HPO_id=NULL
 r0 <- HPOExplorer:::fix_hpo_ids(dt=r0)
 f0new <- file.path(tempdir(),basename(f0))
@@ -19,7 +19,7 @@ piggyback::pb_upload(file = f0new,
 #### Descartes_All_Results ####
 f1 <- file.path(d,"data/Descartes_All_Results.rds")
 r1 <- readRDS(f1)
-data.table::setnames(r1,"list","Phenotype")
+data.table::setnames(r1,"list","hpo_name")
 r1 <- HPOExplorer:::fix_hpo_ids(dt=r1)
 f1new <- file.path(tempdir(),basename(f1))
 saveRDS(r1,file = f1new)
@@ -28,7 +28,7 @@ piggyback::pb_upload(file = f1new,
 #### tabulamuris_merged ####
 f2 <- file.path(d,"data/tabulamuris_merged.rds")
 r2 <- readRDS(f2)
-data.table::setnames(r2,"list","Phenotype")
+data.table::setnames(r2,"list","hpo_name")
 r2 <- HPOExplorer:::fix_hpo_ids(dt=r2)
 f2new <- file.path(tempdir(),basename(f2))
 saveRDS(r2,file = f2new)
@@ -45,7 +45,7 @@ load_example_results(
     "Descartes_All_Results_extras.symptoms.full_join.rds",
     "Descartes_All_Results_extras.rds", "gen_overlap.symptoms.filt.rds",
     "tabulamuris_merged.rds"),
-  tag = "v0.0.1",
+  tag = "latest",
   save_dir = tools::R_user_dir(package = "MultiEWCE"),
   force_new = FALSE
 )

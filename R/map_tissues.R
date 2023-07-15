@@ -9,7 +9,7 @@
 #'  (see \link[MultiEWCE]{load_example_ctd} for details).
 #' @param collapse If not \code{NULL},
 #' collapse rows with >1 tissue into one string:
-#' e.g. [1] "Heart" "Lung"  --> [1] "Heart;Lung"
+#' e.g. \code{c("Heart" "Lung")}  --> \code{"Heart;Lung"}
 #' @returns A list of tissues with the same length
 #'  as the input \code{celltypes}.
 #' @source

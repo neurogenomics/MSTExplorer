@@ -17,8 +17,8 @@ make_specificity_dt <- function(ctd,
 
   value.name <- gsub("s$","",metric)
   spec_dt <- data.table::data.table(as.matrix(spec[shared_genes,]),
-                                    keep.rownames = "Gene") |>
-    data.table::melt.data.table(id.vars = "Gene",
+                                    keep.rownames = "gene_symbol") |>
+    data.table::melt.data.table(id.vars = "gene_symbol",
                                 variable.name = celltype_col,
                                 value.name = value.name)
   if(!is.null(keep_quantiles)){

@@ -8,11 +8,11 @@ add_ctd(
   results = load_example_results(),
   ctd = load_example_ctd(),
   annotLevel = length(ctd),
-  keep_specificity_quantiles,
-  keep_mean_exp_quantiles,
+  keep_specificity_quantiles = NULL,
+  keep_mean_exp_quantiles = NULL,
   rep_dt = NULL,
   all.x = FALSE,
-  by = c("Gene", "celltype_fixed"),
+  by = c("gene_symbol", "CellType"),
   verbose = TRUE
 )
 }
@@ -32,6 +32,8 @@ specificity quantiles to keep (max quantile is 40).}
 
 \item{keep_mean_exp_quantiles}{Which cell type
 mean expression quantiles to keep (max quantile is 40).}
+
+\item{rep_dt}{Report table.}
 
 \item{all.x}{logical; if \code{TRUE}, then extra rows will be added to the
 output, one for each row in \code{x} that has no matching row in \code{y}.
@@ -56,6 +58,6 @@ The following columns will be added:
 }
 }
 \examples{
-res <- load_example_results("Descartes_All_Results_extras.rds")
-res2 <- add_ctd(results=res)
+results <- load_example_results()
+results2 <- add_ctd(results=results)
 }

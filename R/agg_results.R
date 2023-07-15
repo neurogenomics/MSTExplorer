@@ -16,29 +16,34 @@
 #' phenos <- subset_results(cell_type = "Microglia")
 #' agg_res <- agg_results(phenos = phenos)
 agg_results <- function(phenos,
-                        count_var = "Phenotype",
+                        count_var = "hpo_name",
                         group_var = "CellType",
                         sep="; ",
                         verbose = TRUE){
 
-  fold_change <- sd_from_mean <- . <- Gene <- NULL;
-
-  # classes <- lapply(phenos, class)
-  # phenos[,count=list(
-  #   data.table::uniqueN(eval(parse(text = count_var)))
-  # ),
-  #        ]
+  # devoptera::args2vars(agg_results)
+  fold_change <- sd_from_mean <- . <- gene_symbol <- NULL;
 
   messager("Aggregating results by",
-           paste0("group_var=",shQuote(group_var)),v=verbose)
-  if(!"Gene" %in% names(phenos)){
-    phenos$Gene <- NA
+           paste0("group_var=",paste(shQuote(group_var),collapse = "/")),
+           v=verbose)
+  # if(!"gene_symbol" %in% names(phenos)){
+  #   phenos$gene_symbol <- NA
+  # }
+  if(!"hpo_id" %in% names(phenos) &&
+     "hpo_name" %in% names(phenos)){
+    phenos <- HPOExplorer::add_hpo_id(phenos = phenos,
+                                      verbose = verbose)
   }
   #### Aggregate ####
   counts_df <- unique(phenos[,.(
     count=data.table::uniqueN(eval(parse(text = count_var))),
-    n_genes=data.table::uniqueN(Gene,na.rm = TRUE),
-    genes=paste(unique(Gene),collapse = sep),
+    n_genes=if("gene_symbol" %in% names(phenos)) {
+      data.table::uniqueN(gene_symbol,na.rm = TRUE)
+    } else NA,
+    genes=if("gene_symbol" %in% names(phenos)){
+      paste(unique(gene_symbol),collapse = sep)
+    } else NA,
     mean_fold_change=round(mean(fold_change),3),
     mean_q=round(mean(q),3),
     mean_sd_from_mean=round(mean(sd_from_mean),3),
@@ -60,11 +65,5 @@ agg_results <- function(phenos,
                        c(paste("n",paste0(tolower(count_var),"s"),sep="_"),
                          tolower(count_var)
                        ))
-
-  if(!"HPO_ID" %in% names(counts_df) &&
-     "Phenotype" %in% names(counts_df)){
-    counts_df <- HPOExplorer::add_hpo_id(phenos = counts_df,
-                                         verbose = verbose)
-  }
   return(counts_df)
 }

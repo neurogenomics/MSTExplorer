@@ -38,7 +38,7 @@ prioritise_targets(
     specificity = -1, mean_exp = -1, pheno_freq_mean = -1, gene_freq_mean = -1, width =
     1),
   top_n = NULL,
-  group_vars = c("HPO_ID", "CellType"),
+  group_vars = c("hpo_id", "CellType"),
   return_report = TRUE,
   verbose = TRUE
 )
@@ -113,7 +113,7 @@ enrichment results (using  \link[MultiEWCE]{gen_overlap}).
 Here, "symptoms" are defined as the presentation of a phenotype in the
 context of a particular disease.
 In other words:
-phenotype (HPO_ID) + disease (DatabaseID) = symptom (HPO_ID.DatabaseID)}
+phenotype (hpo_id) + disease (disease_id) = symptom (hpo_id.disease_id)}
 
 \item{symptom_intersection_size_threshold}{The minimum number of intersecting genes between a symptom and a celltype to
 consider it a significant enrichment. Refers to the result from

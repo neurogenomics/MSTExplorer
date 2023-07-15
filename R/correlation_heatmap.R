@@ -29,7 +29,7 @@
 correlation_heatmap <- function(top_targets,
                                 row_side_vars = c("ancestor_name",
                                                   "ontLvl",
-                                                  "Onset_top"),
+                                                  "onset_top"),
                                 col_side_vars = c("n_celltypes",
                                                   "n_genes"),
                                 phenotype_to_genes=
@@ -54,16 +54,19 @@ correlation_heatmap <- function(top_targets,
 
   if(!is.null(seed)) set.seed(seed)
   #### Create matrix ####
-  X_cor <- HPOExplorer::hpo_to_matrix(terms = unique(top_targets$HPO_ID),
+  X_cor <- HPOExplorer::hpo_to_matrix(terms = unique(top_targets$hpo_id),
                                       phenotype_to_genes = phenotype_to_genes,
+                                      formula = "gene_symbol ~ hpo_name",
                                       run_cor = TRUE,
                                       as_sparse = FALSE,
                                       verbose = verbose)
   #### Create row/col annotations ####
   annot <- agg_results(phenos = top_targets,
-                       group_var = c("Phenotype",row_side_vars),
+                       group_var = unique(c("hpo_name","hpo_id",row_side_vars)),
                        count_var = "CellType",
-                       verbose = verbose)
+                       verbose = verbose)[,utils::head(.SD, 1),
+                                          keyby = "hpo_name"]
+  annot <- annot[rownames(X_cor),]
   #### Heatmaply version ####
   if(isTRUE(interact)){
     requireNamespace("heatmaply")
@@ -86,7 +89,6 @@ correlation_heatmap <- function(top_targets,
 
     ra <- make_rannot(annot = annot,
                       row_side_vars = row_side_vars)
-
     ca <- make_cannot(annot = annot,
                       col_side_vars = col_side_vars)
     hm <- ComplexHeatmap::Heatmap(matrix = X_cor,

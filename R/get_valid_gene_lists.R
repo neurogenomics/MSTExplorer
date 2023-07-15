@@ -20,23 +20,23 @@ get_valid_gene_lists <- function(ctd,
                                  gene_data,
                                  annotLevel = 1,
                                  verbose = TRUE){
-  Gene <- count <- . <- NULL;
+  gene_symbol <- count <- . <- NULL;
 
   messager("Validating gene lists..",v=verbose)
   ctd_genes <- rownames(ctd[[annotLevel]]$specificity_quantiles)
-  shared_genes <- intersect(unique(gene_data$Gene),ctd_genes)
+  shared_genes <- intersect(unique(gene_data$gene_symbol),ctd_genes)
   #### Filter phenotypes #####
   gene_data <- gene_data[get(list_name_column) %in% list_names,
-                           ][Gene %in% shared_genes,
+                           ][gene_symbol %in% shared_genes,
                              ]
-  gene_counts <- gene_data[,.(count=data.table::uniqueN(Gene)),
-                           by=c("HPO_ID",list_name_column)]
+  gene_counts <- gene_data[,.(count=data.table::uniqueN(gene_symbol)),
+                           by=c("hpo_id",list_name_column)]
   validLists <- unique(gene_counts[count>=4,][[list_name_column]])
   gene_data <- gene_data[get(list_name_column) %in% validLists,]
   gene_lists <- lapply(stats::setNames(unique(gene_data[[list_name_column]]),
                                        unique(gene_data[[list_name_column]])),
          function(pheno_i){
-      unique(gene_data[get(list_name_column) == pheno_i,]$Gene)
+      unique(gene_data[get(list_name_column) == pheno_i,]$gene_symbol)
   })
   messager(formatC(length(gene_lists),big.mark = ","),"/",
            formatC(length(list_names),big.mark = ","),

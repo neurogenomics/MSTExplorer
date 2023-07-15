@@ -8,10 +8,10 @@
 #' less than 4 unique genes (which cause errors in EWCE analysis).
 #'
 #' The gene_data should be a data frame that contains a column of gene
-#' list names (e.g. the column may be called "Phenotype"), and a column of
-#' genes (e.g. "Gene"). For example:
+#' list names (e.g. the column may be called "hpo_name"), and a column of
+#' genes (e.g. "gene_symbol"). For example:
 #'
-#' | Phenotype        | Gene   |
+#' | hpo_name        | gene_symbol   |
 #' | ---------------- | ------ |
 #' | "Abnormal heart" | gene X |
 #' | "Abnormal heart" | gene Y |
@@ -33,7 +33,7 @@
 #' @importFrom stringr str_replace_all
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
-#' list_names <- unique(gene_data$Phenotype)[seq_len(5)]
+#' list_names <- unique(gene_data$hpo_name)[seq_len(5)]
 #' ctd <- load_example_ctd()
 #' all_results <- gen_results(ctd = ctd,
 #'                            gene_data = gene_data,
@@ -41,8 +41,8 @@
 #'                            reps = 10)
 gen_results <- function(ctd,
                         gene_data,
-                        list_name_column = "Phenotype",
-                        gene_column = "Gene",
+                        list_name_column = "hpo_id",
+                        gene_column = "gene_symbol",
                         list_names = unique(gene_data[[list_name_column]]),
                         bg = unique(gene_data[[gene_column]]),
                         force_new = FALSE,

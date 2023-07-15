@@ -17,7 +17,7 @@ visNetwork examples}
 \usage{
 prioritise_targets_network(
   top_targets,
-  vertex_vars = c("DiseaseName", "Phenotype", "CellType", "Gene"),
+  vertex_vars = c("disease_name", "hpo_name", "CellType", "gene_symbol"),
   group_var = vertex_vars[[1]],
   edge_color_var = "fold_change",
   edge_size_var = "fold_change",
@@ -54,9 +54,9 @@ to include as vertices/nodes within the network.}
 \item{edge_size_var}{Variable to scale edges by.}
 
 \item{mediator_var}{Variable to connect cell types and phenotypes by
-(i.e. "Gene").
+(i.e. "gene_symbol").
 If \code{NULL}, instead will connect node hierarchically:
-ancestor_name --> Phenotype --> CellType --> Gene}
+ancestor_name --> Phenotype --> CellType --> gene_symbol}
 
 \item{show_plot}{Print the plot after it has been created.}
 

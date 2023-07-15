@@ -6,7 +6,7 @@
 \usage{
 load_example_ctd(
   file = "CTD_Descartes_example.rds",
-  tag = "v0.0.1",
+  tag = "latest",
   save_dir = tools::R_user_dir(package = "MultiEWCE")
 )
 }

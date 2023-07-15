@@ -13,7 +13,7 @@
 #' @examples
 #' CTD <- load_example_ctd()
 load_example_ctd <- function(file="CTD_Descartes_example.rds",
-                             tag = "v0.0.1",
+                             tag = "latest",
                              save_dir=tools::R_user_dir(package = "MultiEWCE")
                              ) {
 

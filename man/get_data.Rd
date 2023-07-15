@@ -9,6 +9,7 @@ get_data(
   repo = "neurogenomics/MultiEWCE",
   storage_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
   overwrite = TRUE,
+  tag = "latest",
   check = FALSE
 )
 }
@@ -17,6 +18,8 @@ get_data(
 
 \item{overwrite}{Should any local files of the same name be overwritten?
 default \code{TRUE}.}
+
+\item{tag}{tag for the GitHub release to which this data should be attached.}
 }
 \description{
 Download remotely stored data via \link[piggyback]{pb_download}.

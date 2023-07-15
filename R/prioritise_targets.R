@@ -90,7 +90,7 @@
 #' Here, "symptoms" are defined as the presentation of a phenotype in the
 #' context of a particular disease.
 #'  In other words:
-#'  phenotype (HPO_ID) + disease (DatabaseID) = symptom (HPO_ID.DatabaseID)
+#'  phenotype (hpo_id) + disease (disease_id) = symptom (hpo_id.disease_id)
 #' @param symptom_intersection_size_threshold
 #' The minimum number of intersecting genes between a symptom and a celltype to
 #' consider it a significant enrichment. Refers to the result from
@@ -181,15 +181,15 @@ prioritise_targets <- function(#### Input data ####
                                              "gene_freq_mean"=-1,
                                              "width"=1),
                                top_n = NULL,
-                               group_vars = c("HPO_ID","CellType"),
+                               group_vars = c("hpo_id","CellType"),
                                return_report = TRUE,
                                verbose = TRUE){
 
   # o <- devoptera::args2vars(prioritise_targets, reassign = TRUE)
 
-  q <- fold_change <- CellType <- width <- gene_biotype <-
-    HPO_term_valid <- symptom.pval <- Severity_score <-
-    intersection_size <- NULL;
+  q <- fold_change <- CellType <- width <- seqnames <- gene_biotype <-
+    symptom.pval <- Severity_score <- intersection_size <-
+    Severity_score_max <- NULL;
 
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
@@ -198,9 +198,6 @@ prioritise_targets <- function(#### Input data ####
                                      phenotype_to_genes = phenotype_to_genes,
                                      hpo = hpo,
                                      verbose = verbose)
-  if("HPO_term_valid" %in% names(results)){
-    results <- results[HPO_term_valid==TRUE,]
-  }
   #### add_hpo_definition  #####
   results <- HPOExplorer::add_hpo_definition(phenos = results,
                                              verbose = verbose)
@@ -262,7 +259,7 @@ prioritise_targets <- function(#### Input data ####
   #### keep_deaths ####
   results <- HPOExplorer::add_death(phenos = results,
                                     keep_deaths = keep_deaths,
-                                    agg_by = "DatabaseID",
+                                    agg_by = "disease_id",
                                     allow.cartesian = TRUE,
                                     verbose = verbose)
   rep_dt <- report(dt = results,
@@ -291,7 +288,7 @@ prioritise_targets <- function(#### Input data ####
   #### keep_onsets ####
   results <- HPOExplorer::add_onset(phenos = results,
                                     keep_onsets = keep_onsets,
-                                    agg_by=c("DatabaseID","HPO_ID"),
+                                    agg_by=c("disease_id","hpo_id"),
                                     verbose = verbose)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
@@ -319,7 +316,7 @@ prioritise_targets <- function(#### Input data ####
   if(!is.null(severity_threshold_max)){
     results <- results[,Severity_score_max:=gsub(
        -Inf,NA,max(Severity_score,na.rm = TRUE)),
-       by="HPO_ID"][Severity_score_max<=severity_threshold_max]
+       by="hpo_id"][Severity_score_max<=severity_threshold_max]
   }
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
@@ -362,7 +359,6 @@ prioritise_targets <- function(#### Input data ####
                    verbose = verbose)
   #### Filter genes ####
   #### Add genes ####
-  results <- HPOExplorer::add_genes(phenos = results,)
   #### symptom_gene_overlap ####
   results <- HPOExplorer::phenos_to_granges(
     phenos = results,
@@ -379,11 +375,12 @@ prioritise_targets <- function(#### Input data ####
                    verbose = verbose)
   #### keep_seqnames ####
   if(!is.null(keep_seqnames)){
-
+    messager("Filtering by keep_seqnames.",v=verbose)
+    results <- results[seqnames %in% keep_seqnames,]
   }
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
-                   step = "symptom_gene_overlap",
+                   step = "keep_seqnames",
                    verbose = verbose)
   #### keep_evidence ####
   messager("Filtering by gene-disease association evidence.",
@@ -398,9 +395,9 @@ prioritise_targets <- function(#### Input data ####
   #### gene_size ####
   if(!is.null(gene_size)){
     messager("Filtering by gene size.",v=verbose)
-    ngenes <- length(unique(results$Gene))
+    ngenes <- length(unique(results$gene_symbol))
     results <- results[width>gene_size$min & width<gene_size$max,]
-    messager(formatC(length(unique(results$Gene)),big.mark = ","),"/",
+    messager(formatC(length(unique(results$gene_symbol)),big.mark = ","),"/",
              formatC(ngenes,big.mark = ","),"genes kept.",v=verbose)
   }
   rep_dt <- report(dt = results,

@@ -14,12 +14,12 @@ frequency_barplot <- function(results = load_example_results(),
                               show_plot = TRUE,
                               verbose = TRUE){
 
-  HPO_ID <- NULL;
+  hpo_id <- NULL;
 
   results <- results |>
     HPOExplorer::add_pheno_frequency() |>
     HPOExplorer::add_ancestor()
-  gene_df <- phenotype_to_genes[HPO_ID %in% unique(results$HPO_ID),] |>
+  gene_df <- phenotype_to_genes[hpo_id %in% unique(results$hpo_id),] |>
     HPOExplorer::add_gene_frequency() |>
     HPOExplorer::add_ancestor()
 

@@ -1,9 +1,9 @@
 targets_to_graph <- function(top_targets,
                              vertex_vars,
                              group_var,
-                             metadata_vars=c("HPO_ID",
-                                             "DiseaseName",
-                                             "DatabaseID",
+                             metadata_vars=c("hpo_id",
+                                             "disease_name",
+                                             "disease_id",
                                              "ancestor_name",
                                              "CellType",
                                              "q",
@@ -23,7 +23,7 @@ targets_to_graph <- function(top_targets,
                                              ) |> unique(),
                              edge_color_var = "fold_change",
                              edge_size_var = "fold_change",
-                             mediator_var = "Gene",
+                             mediator_var = "gene_symbol",
                              node_palette = pals::isol, #pals::ocean.thermal,
                              edge_palette = node_palette,
                              format="visnetwork",
@@ -31,8 +31,8 @@ targets_to_graph <- function(top_targets,
   # devoptera::args2vars(targets_to_graph)
   requireNamespace("igraph")
   requireNamespace("tidygraph")
-  fold_change <- node_type <- shape <- color <- node <- DiseaseName <-
-    DatabaseID <- Phenotype <- ancestor_name <- from <- to <- NULL;
+  fold_change <- node_type <- shape <- color <- node <- disease_name <-
+    disease_id <- hpo_name <- ancestor_name <- from <- to <- NULL;
 
   messager("Creating network.",v=verbose)
   #### Create vertices ####
@@ -44,10 +44,10 @@ targets_to_graph <- function(top_targets,
   ##### Remove Phenotypes that are also ancestor #####
   ## This avoids duplicate nodes
   if("ancestor_name" %in% names(top_targets)){
-    top_targets <- top_targets[Phenotype!=ancestor_name,]
+    top_targets <- top_targets[hpo_name!=ancestor_name,]
   }
-  if("DiseaseName" %in% vertex_vars){
-    top_targets[,DiseaseName:=data.table::fcoalesce(DiseaseName,DatabaseID)]
+  if("disease_name" %in% vertex_vars){
+    top_targets[,disease_name:=data.table::fcoalesce(disease_name,disease_id)]
   }
   #### Make vertex metadata ####
   metadata_vars <- metadata_vars[metadata_vars %in% names(top_targets)]
@@ -78,15 +78,15 @@ targets_to_graph <- function(top_targets,
   }
   #### Ensure each node only appears once in the node metadata ####
   vertices <- vertices[,utils::head(.SD, 1),by = c("node")]
-  #### ancestor_name is only relevant metadata for Phenotype nodes ####
+  #### ancestor_name is only relevant metadata for hpo_name nodes ####
   if("ancestor_name" %in% names(vertices)){
-    vertices[node_type!="Phenotype",]$ancestor_name <- NA
+    vertices[node_type!="hpo_name",]$ancestor_name <- NA
   }
   if("definition" %in% names(vertices)){
-    vertices[!node_type %in% c("Phenotype","ancestor_name")]$definition <- NA
+    vertices[!node_type %in% c("hpo_name","ancestor_name")]$definition <- NA
   }
   if("ontLvl" %in% names(vertices)){
-    vertices[!node_type %in% c("Phenotype","ancestor_name")]$ontLvl <- NA
+    vertices[!node_type %in% c("hpo_name","ancestor_name")]$ontLvl <- NA
   }
   vertices <- unique(vertices)
   vertices$name <- stringr::str_wrap(

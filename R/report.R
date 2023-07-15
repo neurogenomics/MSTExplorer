@@ -8,10 +8,10 @@ report <- function(dt,
   }
 
   dict <- list(Rows="Rows",
-               Phenotype="Phenotypes",
-               DatabaseID="Diseases",
+               hpo_name="Phenotypes",
+               disease_id="Diseases",
                CellType="Cell types",
-               Gene="Genes")
+               gene_symbol="Genes")
   get_values <- function(add_text=TRUE){
     lapply(stats::setNames(names(dict),names(dict)),
            function(nm){
@@ -41,7 +41,7 @@ report <- function(dt,
     rep_dt2 <- data.table::data.table(
       step=step,
       t(vals |> `names<-`( dict[names(vals)])),
-      ids=list(unique(dt$HPO_ID))
+      ids=list(unique(dt$hpo_id))
     )
     return(data.table::rbindlist(list(rep_dt,rep_dt2), fill = TRUE))
   }

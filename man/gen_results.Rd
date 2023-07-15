@@ -7,8 +7,8 @@
 gen_results(
   ctd,
   gene_data,
-  list_name_column = "Phenotype",
-  gene_column = "Gene",
+  list_name_column = "hpo_name",
+  gene_column = "gene_symbol",
   list_names = unique(gene_data[[list_name_column]]),
   bg = unique(gene_data[[gene_column]]),
   force_new = FALSE,
@@ -83,9 +83,9 @@ less than 4 unique genes (which cause errors in EWCE analysis).
 }
 \details{
 The gene_data should be a data frame that contains a column of gene
-list names (e.g. the column may be called "Phenotype"), and a column of
-genes (e.g. "Gene"). For example:\tabular{ll}{
-   Phenotype \tab Gene \cr
+list names (e.g. the column may be called "hpo_name"), and a column of
+genes (e.g. "gene_symbol"). For example:\tabular{ll}{
+   hpo_name \tab gene_symbol \cr
    "Abnormal heart" \tab gene X \cr
    "Abnormal heart" \tab gene Y \cr
    "Poor vision" \tab gene Z \cr
@@ -99,7 +99,7 @@ For more information on this see docs for get_gene_list
 }
 \examples{
 gene_data <- HPOExplorer::load_phenotype_to_genes()
-list_names <- unique(gene_data$Phenotype)[seq_len(5)]
+list_names <- unique(gene_data$hpo_name)[seq_len(5)]
 ctd <- load_example_ctd()
 all_results <- gen_results(ctd = ctd,
                            gene_data = gene_data,

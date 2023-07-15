@@ -31,7 +31,7 @@
 #' #### Descartes_All_Results_extras ####
 #' f0 <- file.path(d,"data/Descartes_All_Results_extras.rds")
 #' r0 <- readRDS(f0)
-#' data.table::setnames(r0,"list","Phenotype")
+#' data.table::setnames(r0,"list","hpo_name")
 #' r0$HPO_id=NULL
 #' r0 <- HPOExplorer:::fix_hpo_ids(dt=r0)
 #' f0new <- file.path(tempdir(),basename(f0))
@@ -41,7 +41,7 @@
 #' #### Descartes_All_Results ####
 #' f1 <- file.path(d,"data/Descartes_All_Results.rds")
 #' r1 <- readRDS(f1)
-#' data.table::setnames(r1,"list","Phenotype")
+#' data.table::setnames(r1,"list","hpo_name")
 #' r1 <- HPOExplorer:::fix_hpo_ids(dt=r1)
 #' f1new <- file.path(tempdir(),basename(f1))
 #' saveRDS(r1,file = f1new)
@@ -50,7 +50,7 @@
 #' #### tabulamuris_merged ####
 #' f2 <- file.path(d,"data/tabulamuris_merged.rds")
 #' r2 <- readRDS(f2)
-#' data.table::setnames(r2,"list","Phenotype")
+#' data.table::setnames(r2,"list","hpo_name")
 #' r2 <- HPOExplorer:::fix_hpo_ids(dt=r2)
 #' f2new <- file.path(tempdir(),basename(f2))
 #' saveRDS(r2,file = f2new)
@@ -72,10 +72,12 @@ load_example_results <- function(file=c(
   "Descartes_All_Results_extras.rds",
   "gen_overlap.symptoms.filt.rds",
   "tabulamuris_merged.rds"),
-  tag = "v0.0.1",
+  tag = "latest",
   save_dir=tools::R_user_dir(package = "MultiEWCE"),
   force_new=FALSE
   ) {
+
+  # devoptera::args2vars(load_example_results, reassign = TRUE)
 
   file <- file[[1]]
   dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
@@ -91,6 +93,12 @@ load_example_results <- function(file=c(
                            overwrite = TRUE)
   }
   results <- readRDS(save_path)
+  data.table::setnames(results,
+                       c("HPO_ID","Phenotype","HPO_ID.disease_id","disease_id",
+                         "HPO_ID.LinkID","LinkID"),
+                       c("hpo_id","hpo_name","hpo_id.disease_id","disease_id",
+                         "hpo_id.disease_id","disease_id"),
+                       skip_absent = TRUE)
   names(results) <- gsub("^symptoms\\.","symptom.",names(results))
   return(results)
 }

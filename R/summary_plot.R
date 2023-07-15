@@ -18,14 +18,14 @@
 #' @importFrom scales pretty_breaks
 #' @examples
 #' ancestor <- "Neurodevelopmental delay"
-#' plt_pheno_count <- summary_plot(count_var = "Phenotype",
+#' plt_pheno_count <- summary_plot(count_var = "hpo_name",
 #'                                 group_var = "CellType",
 #'                                 ancestor = ancestor)
 #' plt_cell_count <- summary_plot(count_var = "CellType",
-#'                                 group_var = "Phenotype",
+#'                                 group_var = "hpo_name",
 #'                                 ancestor = ancestor)
 summary_plot <- function(results = load_example_results(),
-                         count_var = "Phenotype",
+                         count_var = "hpo_name",
                          group_var = "CellType",
                          keywords = NULL,
                          q_threshold = 0.0005,
@@ -61,7 +61,7 @@ summary_plot <- function(results = load_example_results(),
   ## so need to append it to the title.
   subtitle <-  paste0(
     if(!is.null(keywords)){shQuote(paste(keywords,collapse = ", "))},
-    "  ",formatC(length(unique(phenos$Phenotype)),big.mark = ","),
+    "  ",formatC(length(unique(phenos$hpo_name)),big.mark = ","),
     " ",tolower(count_var),"s")
 
   n_count_var <- paste("n",paste0(tolower(count_var),"s"),sep="_")

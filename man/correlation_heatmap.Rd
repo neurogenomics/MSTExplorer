@@ -6,7 +6,7 @@
 \usage{
 correlation_heatmap(
   top_targets,
-  row_side_vars = c("ancestor_name", "ontLvl", "Onset_top"),
+  row_side_vars = c("ancestor_name", "ontLvl", "onset_top"),
   col_side_vars = c("n_celltypes", "n_genes"),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   col = pals::gnuplot(),

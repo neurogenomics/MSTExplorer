@@ -18,7 +18,8 @@ subset_results <- function(cell_type,
                            phenotype_to_genes =
                              HPOExplorer::load_phenotype_to_genes(),
                            verbose = TRUE){
-  CellType <- fold_change <-  HPO_ID <- HPO_ID <- HPO_term_valid <- NULL;
+  # devoptera::args2vars(subset_results)
+  CellType <- fold_change <-  hpo_id <- hpo_id <- NULL;
 
   messager("Subsetting results by q_threshold and fold_change.",v=verbose)
   #### Filter to sig results only ####
@@ -53,7 +54,7 @@ subset_results <- function(cell_type,
     phenotype_to_genes = phenotype_to_genes,
     hpo = hpo,
     verbose = verbose)
-  results_sig <- results_sig[(!is.na(HPO_ID)) & (HPO_term_valid),]
+  results_sig <- results_sig[(!is.na(hpo_id)) ,]
   messager(formatC(nrow(results_sig),big.mark = ","),
            "associations remain after filtering.",v=verbose)
   return(results_sig)

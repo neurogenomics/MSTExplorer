@@ -1,13 +1,13 @@
 prioritise_targets_heatmap <- function(top_targets,
                                        group_vars = c("CellType",
-                                                      "Phenotype"),
+                                                      "hpo_name"),
                                        value_var = "fold_change"){
 
   requireNamespace("ComplexHeatmap")
 
   X_df <- top_targets |>
     data.table::dcast.data.table(formula = paste(
-      paste(group_vars,collapse = " + "),"~ Gene"
+      paste(group_vars,collapse = " + "),"~ gene_symbol"
     ),
     fun.aggregate = mean,
     value.var = value_var,
@@ -28,8 +28,8 @@ prioritise_targets_heatmap <- function(top_targets,
                               pals::tol.rainbow(n_vals$CellType),
                               unique(df$CellType)),
                             Phenotype=stats::setNames(
-                              pals::stepped2(n_vals$Phenotype),
-                              unique(df$Phenotype))
+                              pals::stepped2(n_vals$hpo_name),
+                              unique(df$hpo_name))
                           )
   )
   ht_list <- ComplexHeatmap::Heatmap(matrix = X,

@@ -22,9 +22,9 @@
 #' @param edge_color_var Variable to color edges by.
 #' @param edge_size_var Variable to scale edges by.
 #' @param mediator_var Variable to connect cell types and phenotypes by
-#'  (i.e. "Gene").
+#'  (i.e. "gene_symbol").
 #'  If \code{NULL}, instead will connect node hierarchically:
-#'  ancestor_name --> Phenotype --> CellType --> Gene
+#'  ancestor_name --> Phenotype --> CellType --> gene_symbol
 #' @param degree of depth of nodes to be colored. Default to 1.
 #' Set high number to have the entire sub-network.
 #'  In case of "hierarchical" algorithm, you can also pass a
@@ -54,11 +54,11 @@
 #' res <- MultiEWCE::example_targets
 #' vn <- prioritise_targets_network(top_targets = res$top_targets)
 prioritise_targets_network <- function(top_targets,
-                                       vertex_vars = c("DiseaseName",
+                                       vertex_vars = c("disease_name",
                                                        # "ancestor_name",
-                                                       "Phenotype",
+                                                       "hpo_name",
                                                        "CellType",
-                                                       "Gene"),
+                                                       "gene_symbol"),
                                        group_var = vertex_vars[[1]],
                                        edge_color_var = "fold_change",
                                        edge_size_var = "fold_change",

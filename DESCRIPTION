@@ -1,6 +1,6 @@
 Package: MultiEWCE
 Title: EWCE for Multiple Gene Lists
-Version: 0.1.5
+Version: 0.1.6
 Authors@R:
     c(person(given = "Robert",
            family = "Gordon-Smith",
@@ -29,12 +29,12 @@ BugReports: https://github.com/neurogenomics/MultiEWCE/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Imports:
+    HPOExplorer (>= 0.99.10),
     data.table,
     EWCE (>= 1.0.0),
     parallel,
     stringr,
-    piggyback,
-    HPOExplorer,
+    piggyback, 
     ontologyPlot,
     stats,
     methods,

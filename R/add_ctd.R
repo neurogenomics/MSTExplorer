@@ -9,12 +9,13 @@
 #' \item{"mean_exp_quantiles"} Mean expression quantile per cell-type.
 #' }
 #' @inheritParams prioritise_targets
+#' @inheritParams report_plot
 #' @inheritParams data.table::merge.data.table
 #'
 #' @export
 #' @examples
-#' res <- load_example_results("Descartes_All_Results_extras.rds")
-#' res2 <- add_ctd(results=res)
+#' results <- load_example_results()
+#' results2 <- add_ctd(results=results)
 add_ctd <- function(results=load_example_results(),
                     ctd=load_example_ctd(),
                     annotLevel=length(ctd),
@@ -22,16 +23,18 @@ add_ctd <- function(results=load_example_results(),
                     keep_mean_exp_quantiles=NULL,
                     rep_dt=NULL,
                     all.x=FALSE,
-                    by=c("Gene","CellType"),
+                    by=c("gene_symbol","CellType"),
                     verbose=TRUE){
   # devoptera::args2vars(add_ctd)
-  Gene <- NULL;
+  gene_symbol <- NULL;
 
+  results <- HPOExplorer::add_genes(phenos = results,
+                                    verbose = verbose)
   #### Identify genes within CTD ####
-  shared_genes <- intersect(results$Gene,
+  shared_genes <- intersect(results$gene_symbol,
                             rownames(ctd[[annotLevel]]$specificity))
   #### Merge genes with phenotype/celltype results ####
-  results <- results[Gene %in% shared_genes,]
+  results <- results[gene_symbol %in% shared_genes,]
   #### Format CTD data ####
   spec_df <- make_specificity_dt(ctd = ctd,
                                  annotLevel = annotLevel,

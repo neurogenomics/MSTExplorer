@@ -12,7 +12,7 @@
 #' @export
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
-#' list_names <- unique(gene_data$Phenotype)[seq_len(3)]
+#' list_names <- unique(gene_data$hpo_name)[seq_len(3)]
 #' save_dir_tmp <- file.path(tempdir(),"results")
 #' ctd <- load_example_ctd()
 #' res_files <- ewce_para(ctd = ctd,
@@ -20,7 +20,7 @@
 #'                        list_names = list_names,
 #'                        reps = 10,
 #'                        save_dir_tmp = save_dir_tmp)
-#' unfinished <- get_unfinished_list_names(list_names = gene_data$Phenotype,
+#' unfinished <- get_unfinished_list_names(list_names = gene_data$hpo_name,
 #'                                         save_dir_tmp = save_dir_tmp)
 get_unfinished_list_names <- function (list_names,
                                        save_dir_tmp) {

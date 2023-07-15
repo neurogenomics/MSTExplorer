@@ -49,7 +49,7 @@ In this example our **gene list names** column is called `Phenotype` and our col
 ```{r setup_args}
 # Loading CTD file 
 ctd <- load_example_ctd()
-list_names <- unique(gene_data$Phenotype)[seq_len(3)] 
+list_names <- unique(gene_data$hpo_name)[seq_len(3)] 
 reps <- 10 # in practice would use more reps
 cores <- 1 # in practice would use more cores
 save_dir <- tempdir()
@@ -108,9 +108,9 @@ Just as an example, we will create a plot showing the number of significant enri
 library(ggplot2)
 library(data.table)
 #### Aggregate results ####
-n_signif <- all_results[q<=0.05 & !is.na(q), .(sig_enrichments = .N), by="Phenotype"]
+n_signif <- all_results[q<=0.05 & !is.na(q), .(sig_enrichments = .N), by="hpo_name"]
 #### Plot #### 
-plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(Phenotype,width = 10),
+plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(hpo_name,width = 10),
                                y = sig_enrichments,
                                fill = sig_enrichments)) +
     geom_col() +
@@ -131,21 +131,24 @@ all_results_2 <- MultiEWCE::merge_results(save_dir = save_dir_tmp)
 ```
 
 ## get_gene_list 
+
 This function gets a character vector of genes associated with a particular gene list name. 
 
 ```{r get_gene_list}
-eye_contact_genes <- HPOExplorer::get_gene_lists(phenotypes = "Poor eye contact", 
-                                                 phenotype_to_genes = gene_data)
+phenotypes <- c("Scoliosis")
+gene_set <- HPOExplorer::get_gene_lists(phenotypes = phenotypes,
+                                        phenotype_to_genes = gene_data)
 
-cat(paste("5 genes associated with poor eye contact:",
-          paste(eye_contact_genes$Gene[seq_len(5)],collapse = ", ")))
+cat(paste(length(unique(gene_set$gene_symbol)),
+          "genes associated with",shQuote(phenotypes),":",
+          paste(gene_set$gene_symbol[seq_len(5)],collapse = ", ")))
 ```
 
 ## get_unfinished_list_names
 This function is used to find which gene lists you have not yet analysed 
 
 ```{r get_unfinished} 
-all_phenotypes <- unique(gene_data$Phenotype)
+all_phenotypes <- unique(gene_data$hpo_name)
 unfinished <- MultiEWCE::get_unfinished_list_names(list_names = all_phenotypes,
                                                    save_dir_tmp = save_dir_tmp)
 
@@ -158,23 +161,40 @@ methods::show(paste(length(unfinished),"/",length(all_phenotypes),
 So far, we've iterated over gene list grouped by phenotypes.
 But we can also do this at the level of diseases (which are composed of combinations of phenotypes).
 
-Here, "LinkID" refers to the ID of each disease.
-
 ```{r}
 gene_data <- HPOExplorer::load_phenotype_to_genes("genes_to_phenotype.txt")
 #### Filter only to those with >=4 genes ####
-gene_counts <- gene_data[,list(genes=length(unique(Gene))),by="LinkID"][genes>=4]
-list_names <- unique(gene_counts$LinkID)[seq_len(5)]
+gene_counts <- gene_data[,list(genes=length(unique(gene_symbol))),
+                         by="disease_id"][genes>=4]
+list_names <- unique(gene_counts$disease_id)[seq_len(5)]
 ```
 
 ```{r}
 all_results <- gen_results(ctd = ctd,
                            gene_data = gene_data,
-                           list_name_column = "LinkID",
+                           list_name_column = "disease_id",
                            list_names = list_names,
                            annotLevel = 1,
                            reps = 10)
 ```
+
+# Full analysis
+
+Run the following code the replicate the main analysis in the study described [here](https://doi.org/10.1101/2023.02.13.23285820).
+
+```{r, eval=FALSE}
+gene_data <- HPOExplorer::load_phenotype_to_genes()
+gene_data[,n_gene:=length(unique(gene_symbol)),by="hpo_id"]
+gene_data <- gene_data[n_gene>=4,]
+ctd <- load_example_ctd("ctd_DescartesHuman.rds")
+
+all_results <- gen_results(ctd = ctd,
+                           list_name_column = "hpo_id", 
+                           gene_data = gene_data,  
+                           reps = 100000,
+                           cores = 10)
+```
+
 
 # Session info
 

@@ -45,11 +45,11 @@ ggnetwork_plot_full <- function(cell_type,
                                 add_ont_lvl_relative = TRUE,
                                 interactive = TRUE,
                                 verbose = TRUE){
-  # templateR:::source_all()
-  # devoptera::args2vars(ggnetwork_plot_full);
+  # devoptera::args2vars(ggnetwork_plot_full)
   # cell_type = "Microglia";
   # cell_type = NULL; ancestor = "Neurodevelopmental delay"
 
+  hpo_id <- NULL;
   messager("ggnetwork_plot_full",v=verbose)
   phenos <- subset_phenos(phenotype_to_genes = phenotype_to_genes,
                           ancestor = ancestor,
@@ -62,10 +62,15 @@ ggnetwork_plot_full <- function(cell_type,
   #### Aggregate across multiple celltypes ####
   phenos <- agg_results(phenos = phenos,
                         count_var = "CellType",
-                        group_var = "Phenotype",
+                        group_var = "hpo_name",
                         verbose = verbose)
+  phenos <- HPOExplorer::add_hpo_id(phenos = phenos,
+                                    hpo = hpo,
+                                    phenotype_to_genes = phenotype_to_genes,
+                                    verbose = verbose)
+  phenos <- phenos[!is.na(hpo_id),]
   #### Make adjacency matrix ####
-  adjacency <- HPOExplorer::adjacency_matrix(terms = phenos$HPO_ID,
+  adjacency <- HPOExplorer::adjacency_matrix(terms = phenos$hpo_id,
                                              hpo = hpo,
                                              verbose = verbose)
   #### Add metadata ####

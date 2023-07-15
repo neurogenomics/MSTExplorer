@@ -11,6 +11,7 @@ get_data <- function(fname,
                        which = "cache"
                      ),
                      overwrite = TRUE,
+                     tag = "latest",
                      check = FALSE
                      ){
   requireNamespace("piggyback")
@@ -22,7 +23,8 @@ get_data <- function(fname,
     file = fname,
     dest = storage_dir,
     repo = repo,
-    overwrite = overwrite
+    overwrite = overwrite,
+    tag = tag
   )
   #### Read/return ####
   if(grepl("\\.rds$",tmp)){

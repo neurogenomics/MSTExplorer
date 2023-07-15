@@ -7,8 +7,8 @@
 gen_overlap(
   gene_data = HPOExplorer::load_phenotype_to_genes(),
   ctd = load_example_ctd(),
-  list_name_column = "LinkID",
-  gene_column = "Gene",
+  list_name_column = "disease_id",
+  gene_column = "gene_symbol",
   list_names = unique(gene_data[[list_name_column]]),
   annotLevel = 1,
   keep_specificity_quantiles = seq(30, 40),
@@ -66,7 +66,7 @@ It also only requires >=1 gene per disease/phenotype, as opposed to >=4.
 }
 \examples{
 gene_data <- HPOExplorer::load_phenotype_to_genes()
-list_names <- unique(gene_data$LinkID)[seq_len(3)]
+list_names <- unique(gene_data$disease_id)[seq_len(3)]
 overlap <- gen_overlap(gene_data = gene_data,
                        list_names = list_names)
 }

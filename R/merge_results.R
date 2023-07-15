@@ -15,7 +15,7 @@
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
 #' ctd <- MultiEWCE::load_example_ctd()
-#' list_names <- unique(gene_data$Phenotype)[seq_len(3)]
+#' list_names <- unique(gene_data$hpo_name)[seq_len(3)]
 #' res_files <- ewce_para(ctd = ctd,
 #'                        gene_data = gene_data,
 #'                        list_names = list_names,
@@ -23,7 +23,7 @@
 #' all_results <- merge_results(res_files=res_files)
 merge_results <- function(save_dir=NULL,
                           res_files=NULL,
-                          list_name_column = "Phenotype") {
+                          list_name_column = "hpo_name") {
 
   if(is.null(res_files)){
     if(is.null(save_dir)) stop("Must provided save_dir when res_files=NULL.")

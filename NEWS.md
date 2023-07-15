@@ -1,3 +1,37 @@
+# MultiEWCE 0.1.6
+
+## New features
+
+* Require `HPOExplorer (>= 0.99.10)`
+* Switch terms:
+  - "HPO_ID" --> "hpo_id"
+  - "Phenotype" --> "hpo_name"
+  - "FREQUENCY" --> "gene_freq"
+  - "Onset" --> "onset"
+  - "Modifier" --> "modifier"
+  - "Aspect" --> "aspect"
+  - "Gene" --> "gene_symbol"
+  - "LinkID" --> "disease_id"
+* Update all "data" objects.
+* `get_data`
+  - Add `tag` arg.
+
+## Bug fixes
+
+* `load_example_results`
+  - Change `tag` to "latest".
+  - Update colnames dynamically.
+* `load_example_ctd`
+  - Change `tag` to "latest".
+* `map_tissues`
+  - Fix docs.
+* `agg_results`
+  - Add "hpo_id" column before aggregation.
+* `correlation_heatmap`
+  - Ensure row annot order is correct.
+* `add_ctd`
+  - Fix example.
+
 # MultiEWCE 0.1.5
 
 ## New features
