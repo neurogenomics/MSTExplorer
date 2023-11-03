@@ -1,6 +1,6 @@
 Package: MultiEWCE
 Title: EWCE for Multiple Gene Lists
-Version: 0.1.6
+Version: 0.1.7
 Authors@R:
     c(person(given = "Robert",
            family = "Gordon-Smith",
@@ -64,7 +64,11 @@ Suggests:
     grDevices,
     rvest,
     patchwork,
-    ggnetwork
+    ggnetwork,
+    ggpubr,
+    orthogene,
+    readxl,
+    tidyr
 Remotes: 
   github::neurogenomics/HPOExplorer,
   github::NathanSkene/EWCE

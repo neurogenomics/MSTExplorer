@@ -4,7 +4,7 @@ test_that("ewce_para works", {
 
   gene_data <- HPOExplorer::load_phenotype_to_genes()
   ctd <- MultiEWCE::load_example_ctd()
-  list_names <- unique(gene_data$hpo_name)[seq_len(3)]
+  list_names <- unique(gene_data$hpo_name)[seq(3)]
 
   #### Return results directly ####
   res_files <- ewce_para(ctd = ctd,

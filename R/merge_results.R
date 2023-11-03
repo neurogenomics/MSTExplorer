@@ -15,7 +15,7 @@
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
 #' ctd <- MultiEWCE::load_example_ctd()
-#' list_names <- unique(gene_data$hpo_name)[seq_len(3)]
+#' list_names <- unique(gene_data$hpo_name)[seq(3)]
 #' res_files <- ewce_para(ctd = ctd,
 #'                        gene_data = gene_data,
 #'                        list_names = list_names,
@@ -34,7 +34,7 @@ merge_results <- function(save_dir=NULL,
     names(res_files) <- gsub("_"," ",tolower(gsub(".rds$","",res_files)))
     messager(formatC(length(res_files),big.mark = ","),"results files found.")
   }
-  lapply(seq_len(length(res_files)),
+  lapply(seq(length(res_files)),
          function(i){
    if(is.null(res_files[[i]])){
      return(NULL)

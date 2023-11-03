@@ -46,7 +46,7 @@ load_example_results(
     "Descartes_All_Results_extras.rds", "gen_overlap.symptoms.filt.rds",
     "tabulamuris_merged.rds"),
   tag = "latest",
-  save_dir = tools::R_user_dir(package = "MultiEWCE"),
+  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
   force_new = FALSE
 )
 }

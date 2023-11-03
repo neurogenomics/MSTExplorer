@@ -4,7 +4,7 @@ test_that("gen_results works", {
 
   gene_data <- HPOExplorer::load_phenotype_to_genes()
   ctd <- load_example_ctd()
-  list_names <- unique(gene_data$hpo_name)[seq_len(3)]
+  list_names <- unique(gene_data$hpo_name)[seq(3)]
   all_results <- gen_results(ctd = ctd,
                              gene_data = gene_data,
                              list_names = list_names,

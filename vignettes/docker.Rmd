@@ -8,8 +8,12 @@ output:
   BiocStyle::html_document:
     md_extensions: -autolink_bare_uris
 params:
+  cont:
+    value: ghcr.io/neurogenomics/MultiEWCE
+  docker_registry:
+    value: ghcr.io
   docker_org:
-    value: neurogenomicslab
+    value: neurogenomics
 vignette: |
   %\VignetteIndexEntry{docker}
   %\usepackage[utf8]{inputenc}
@@ -19,22 +23,27 @@ vignette: |
 
 ```{r setup, include=FALSE}
 #### Package name ####
-pkg <- read.dcf("../DESCRIPTION", fields = "Package")[1]
-library(pkg, character.only = TRUE)
+PKG <- read.dcf("../DESCRIPTION", fields = "Package")[1]
+library(PKG, character.only = TRUE)
 ## Docker containers must be lowercase
-pkg <- tolower(pkg)
+pkg <- tolower(PKG)
 #### Username of DockerHub account ####
 docker_org <- params$docker_org
+docker_registry <- params$docker_registry 
+cont <- params$cont 
+docker_url <- if(grepl("ghcr.io",docker_registry)){
+  paste("https://ghcr.io",cont,sep="/")
+} else {
+  paste("https://hub.docker.com/repository/docker",docker_org,pkg,sep="/")
+}
+
 ```
 
-# DockerHub 
+# Installation 
 
-`r pkg` is now available via 
-[DockerHub](https://hub.docker.com/repository/docker/`r docker_org`/`r pkg`) 
+`r PKG` is now available via [`r docker_registry`](`r docker_url`) 
 as a containerised environment with Rstudio and 
 all necessary dependencies pre-installed.
-
-## Installation 
 
 ## Method 1: via Docker
 
@@ -45,7 +54,7 @@ Create an image of the [Docker](https://www.docker.com/) container
 in command line:  
 
 ```
-docker pull `r docker_org`/`r pkg`
+docker pull `r cont`
 ```
 
 Once the image has been created, you can launch it with:  
@@ -57,8 +66,8 @@ docker run \
   -e PASSWORD="<your_password>" \
   -v ~/Desktop:/Desktop \
   -v /Volumes:/Volumes \
-  -p 8787:8787 \
-  `r docker_org`/`r pkg`
+  -p 8900:8787 \
+  `r cont`
 ```  
 
 ### NOTES
@@ -78,15 +87,16 @@ If you are using a system that does not allow Docker
 you can instead [install Docker images via Singularity](https://docs.sylabs.io/guides/2.6/user-guide/singularity_and_docker.html).  
 
 ```
-singularity pull docker://`r docker_org`/`r pkg`
+singularity pull docker://`r cont`
 ```
 
+For troubleshooting, see the [Singularity documentation](https://docs.sylabs.io/guides/latest/user-guide/singularity_and_docker.html#github-container-registry).
 
-## Usage 
+# Usage 
 
 Finally, launch the containerised Rstudio by entering the 
 following URL in any web browser:
-*http://localhost:8787/*
+*http://localhost:8900/*
 
 Login using the credentials set during the Installation steps.  
 

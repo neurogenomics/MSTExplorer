@@ -2,7 +2,7 @@ MultiEWCE
 ================
 NULL [![License:
 GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
-[![](https://img.shields.io/badge/devel%20version-0.1.6-black.svg)](https://github.com/neurogenomics/MultiEWCE)
+[![](https://img.shields.io/badge/devel%20version-0.1.7-black.svg)](https://github.com/neurogenomics/MultiEWCE)
 [![](https://img.shields.io/github/languages/code-size/neurogenomics/MultiEWCE.svg)](https://github.com/neurogenomics/MultiEWCE)
 [![](https://img.shields.io/github/last-commit/neurogenomics/MultiEWCE.svg)](https://github.com/neurogenomics/MultiEWCE/commits/master)
 <br> [![R build
@@ -14,7 +14,7 @@ status](https://github.com/neurogenomics/MultiEWCE/workflows/rworkflows/badge.sv
 Authors: <i>Robert Gordon-Smith, Brian Schilder, Nathan Skene</i>  
 </h4>
 <h4>  
-README updated: <i>Jul-15-2023</i>  
+README updated: <i>Nov-03-2023</i>  
 </h4>
 
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->

@@ -7,7 +7,7 @@
 gen_results(
   ctd,
   gene_data,
-  list_name_column = "hpo_name",
+  list_name_column = "hpo_id",
   gene_column = "gene_symbol",
   list_names = unique(gene_data[[list_name_column]]),
   bg = unique(gene_data[[gene_column]]),
@@ -99,7 +99,7 @@ For more information on this see docs for get_gene_list
 }
 \examples{
 gene_data <- HPOExplorer::load_phenotype_to_genes()
-list_names <- unique(gene_data$hpo_name)[seq_len(5)]
+list_names <- unique(gene_data$hpo_name)[seq(5)]
 ctd <- load_example_ctd()
 all_results <- gen_results(ctd = ctd,
                            gene_data = gene_data,

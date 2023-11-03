@@ -66,7 +66,7 @@ It also only requires >=1 gene per disease/phenotype, as opposed to >=4.
 }
 \examples{
 gene_data <- HPOExplorer::load_phenotype_to_genes()
-list_names <- unique(gene_data$disease_id)[seq_len(3)]
+list_names <- unique(gene_data$disease_id)[seq(3)]
 overlap <- gen_overlap(gene_data = gene_data,
                        list_names = list_names)
 }

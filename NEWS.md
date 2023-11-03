@@ -1,3 +1,14 @@
+# MultiEWCE 0.1.7
+
+## New features
+
+* Update to coordinate with `HPOExplorer` updates.
+* New funcs:
+  - `plot_ont_lvl`
+  - `ttd_check`
+  - `ttd_plot`
+  - `ttd_import`
+
 # MultiEWCE 0.1.6
 
 ## New features
@@ -11,6 +22,7 @@
   - "Modifier" --> "modifier"
   - "Aspect" --> "aspect"
   - "Gene" --> "gene_symbol"
+  - "DatabaseID" --> "disease_id" 
   - "LinkID" --> "disease_id"
 * Update all "data" objects.
 * `get_data`
@@ -22,6 +34,8 @@
   - Change `tag` to "latest".
   - Update colnames dynamically.
 * `load_example_ctd`
+  - Change `tag` to "latest".
+* `load_hpo_graph`
   - Change `tag` to "latest".
 * `map_tissues`
   - Fix docs.

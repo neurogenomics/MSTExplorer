@@ -67,13 +67,15 @@
 #' @examples
 #' res <- load_example_results()
 load_example_results <- function(file=c(
+  # "results_DescartesHuman.csv.gz",
   "Descartes_All_Results_extras.symptoms.rds",
   "Descartes_All_Results_extras.symptoms.full_join.rds",
   "Descartes_All_Results_extras.rds",
   "gen_overlap.symptoms.filt.rds",
   "tabulamuris_merged.rds"),
   tag = "latest",
-  save_dir=tools::R_user_dir(package = "MultiEWCE"),
+  save_dir=tools::R_user_dir(package = "MultiEWCE",
+                             which = "cache"),
   force_new=FALSE
   ) {
 
@@ -92,7 +94,11 @@ load_example_results <- function(file=c(
                            dest = save_dir,
                            overwrite = TRUE)
   }
-  results <- readRDS(save_path)
+  if(grepl("\\.rds$",save_path, ignore.case = TRUE)){
+    results <- readRDS(save_path)
+  } else {
+    results <- data.table::fread(save_path)
+  }
   data.table::setnames(results,
                        c("HPO_ID","Phenotype","HPO_ID.disease_id","disease_id",
                          "HPO_ID.LinkID","LinkID"),

@@ -14,7 +14,8 @@
 #' CTD <- load_example_ctd()
 load_example_ctd <- function(file="CTD_Descartes_example.rds",
                              tag = "latest",
-                             save_dir=tools::R_user_dir(package = "MultiEWCE")
+                             save_dir=tools::R_user_dir(package = "MultiEWCE",
+                                                        which = "cache")
                              ) {
 
   dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)

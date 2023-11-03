@@ -71,7 +71,7 @@ report_plot <- function(rep_dt,
   dt1[,Tier:=gsub("Tier NA",NA,Tier)]
   dt1$step <- factor(dt1$step,
                     levels = unique(dt1$step),
-                    labels = paste0(seq_len(length(unique(dt1$step))),". ",
+                    labels = paste0(seq(length(unique(dt1$step))),". ",
                                     unique(dt1$step)),
                     ordered = TRUE)
   #### Make plot: tiers ####
@@ -101,7 +101,7 @@ report_plot <- function(rep_dt,
     data.table::melt(id.vars=names(filters))
   dt2$step <- factor(dt2$step,
                     levels = unique(dt2$step),
-                    labels = paste0(seq_len(length(unique(dt2$step))),". ",
+                    labels = paste0(seq(length(unique(dt2$step))),". ",
                                     unique(dt2$step)),
                     ordered = TRUE)
   messager("report_plot:: Preparing plot.",v=verbose)

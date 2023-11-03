@@ -21,8 +21,9 @@
 #' @examples
 #' g <- load_hpo_graph()
 load_hpo_graph <- function(file="hpo_igraph.rds",
-                           tag = "v0.0.1",
-                           save_dir=tools::R_user_dir(package = "MultiEWCE")
+                           tag = "latest",
+                           save_dir=tools::R_user_dir(package = "MultiEWCE",
+                                                      which = "cache")
                            ) {
 
   file <- file[[1]]

@@ -39,7 +39,7 @@ Now we will get a dataset like this from the HPO.
 
 ```{r get_HPO_data}
 gene_data <- HPOExplorer::load_phenotype_to_genes()
-print(head(gene_data))
+knitr::kable(head(gene_data))
 ```
 
 In this example our **gene list names** column is called `Phenotype` and our column of genes is called `Gene`. However, different column names can be specified to the `MultiEWCE` package. 
@@ -49,7 +49,7 @@ In this example our **gene list names** column is called `Phenotype` and our col
 ```{r setup_args}
 # Loading CTD file 
 ctd <- load_example_ctd()
-list_names <- unique(gene_data$hpo_name)[seq_len(3)] 
+list_names <- unique(gene_data$hpo_name)[seq(3)] 
 reps <- 10 # in practice would use more reps
 cores <- 1 # in practice would use more cores
 save_dir <- tempdir()
@@ -96,6 +96,7 @@ Now we have set up all our desired inputs, we can run the analysis.
 all_results <- MultiEWCE::gen_results(ctd = ctd,
                                       gene_data = gene_data,
                                       list_names = list_names, 
+                                      list_name_column = "hpo_name",
                                       reps = reps,
                                       cores = cores,
                                       save_dir = save_dir, 
@@ -141,7 +142,7 @@ gene_set <- HPOExplorer::get_gene_lists(phenotypes = phenotypes,
 
 cat(paste(length(unique(gene_set$gene_symbol)),
           "genes associated with",shQuote(phenotypes),":",
-          paste(gene_set$gene_symbol[seq_len(5)],collapse = ", ")))
+          paste(unique(gene_set$gene_symbol)[seq(5)],collapse = ", ")))
 ```
 
 ## get_unfinished_list_names
@@ -166,21 +167,22 @@ gene_data <- HPOExplorer::load_phenotype_to_genes("genes_to_phenotype.txt")
 #### Filter only to those with >=4 genes ####
 gene_counts <- gene_data[,list(genes=length(unique(gene_symbol))),
                          by="disease_id"][genes>=4]
-list_names <- unique(gene_counts$disease_id)[seq_len(5)]
+list_names <- unique(gene_counts$disease_id)[seq(5)]
 ```
 
 ```{r}
-all_results <- gen_results(ctd = ctd,
-                           gene_data = gene_data,
-                           list_name_column = "disease_id",
-                           list_names = list_names,
-                           annotLevel = 1,
-                           reps = 10)
+all_results <- MultiEWCE::gen_results(ctd = ctd,
+                                      gene_data = gene_data,
+                                      list_name_column = "disease_id",
+                                      list_names = list_names,
+                                      annotLevel = 1,
+                                      reps = 10)
 ```
 
 # Full analysis
 
-Run the following code the replicate the main analysis in the study described [here](https://doi.org/10.1101/2023.02.13.23285820).
+Run the following code the replicate the main analysis in the study 
+described [here](https://doi.org/10.1101/2023.02.13.23285820).
 
 ```{r, eval=FALSE}
 gene_data <- HPOExplorer::load_phenotype_to_genes()
@@ -188,11 +190,11 @@ gene_data[,n_gene:=length(unique(gene_symbol)),by="hpo_id"]
 gene_data <- gene_data[n_gene>=4,]
 ctd <- load_example_ctd("ctd_DescartesHuman.rds")
 
-all_results <- gen_results(ctd = ctd,
-                           list_name_column = "hpo_id", 
-                           gene_data = gene_data,  
-                           reps = 100000,
-                           cores = 10)
+all_results <- MultiEWCE::gen_results(ctd = ctd,
+                                      list_name_column = "hpo_id", 
+                                      gene_data = gene_data,  
+                                      reps = 100000,
+                                      cores = 10)
 ```
 
 

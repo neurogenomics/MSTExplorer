@@ -156,13 +156,13 @@ prioritise_targets <- function(#### Input data ####
                                  ),
                                #### Celltype level ####
                                q_threshold = 0.05,
-                               fold_threshold = 1,
+                               fold_threshold = 2,
                                symptom_p_threshold = NULL,
                                symptom_intersection_size_threshold = 1,
                                keep_celltypes = terminal_celltypes()$CellType,
                                #### Gene level ####
                                keep_evidence = seq(3,6),
-                               keep_seqnames = c(seq_len(22),"X","Y"),
+                               keep_seqnames = c(seq(22),"X","Y"),
                                gene_size = list("min"=0,
                                                 "max"=Inf),
                                gene_frequency_threshold = NULL,
@@ -181,7 +181,9 @@ prioritise_targets <- function(#### Input data ####
                                              "gene_freq_mean"=-1,
                                              "width"=1),
                                top_n = NULL,
-                               group_vars = c("hpo_id","CellType"),
+                               group_vars = c("disease_id",
+                                              "hpo_id",
+                                              "CellType"),
                                return_report = TRUE,
                                verbose = TRUE){
 

@@ -130,7 +130,7 @@ targets_to_graph <- function(top_targets,
       dt
     }) |> data.table::rbindlist(fill = TRUE)
   } else {
-    edges <- lapply(seq_len(length(vertex_vars)-1), function(i){
+    edges <- lapply(seq(length(vertex_vars)-1), function(i){
       vv <- vertex_vars[c(i,i+1)]
       dt <- unique(
         top_targets[,c(vv,c(edge_color_var,edge_size_var)),
@@ -146,7 +146,7 @@ targets_to_graph <- function(top_targets,
                             edges = edges,
                             node_key = "node")
   #### Add hoverdata ####
-  igraph::vertex_attr(g,"title") <- lapply(seq_len(length(g)), function(i){
+  igraph::vertex_attr(g,"title") <- lapply(seq(length(g)), function(i){
     nms <- igraph::vertex_attr_names(g)
     nms <- nms[!nms %in% c('shape','color','value','name')]
     lapply(nms, function(nm){
@@ -166,7 +166,7 @@ targets_to_graph <- function(top_targets,
   if(isTRUE(format=="ggnetwork")){
     requireNamespace("ggnetwork")
     g2 <- ggnetwork::fortify(g)
-    rownames(g2) <- paste0("edge",seq_len(nrow(g2)))
+    rownames(g2) <- paste0("edge",seq(nrow(g2)))
     return(g2)
   } else{
     return(g)

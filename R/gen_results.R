@@ -33,7 +33,7 @@
 #' @importFrom stringr str_replace_all
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
-#' list_names <- unique(gene_data$hpo_name)[seq_len(5)]
+#' list_names <- unique(gene_data$hpo_name)[seq(5)]
 #' ctd <- load_example_ctd()
 #' all_results <- gen_results(ctd = ctd,
 #'                            gene_data = gene_data,
@@ -58,6 +58,7 @@ gen_results <- function(ctd,
 
   # devoptera::args2vars(gen_results)
 
+  start <- Sys.time()
   #### Run analysis ####
   res_files <- ewce_para(ctd = ctd,
                          list_names = list_names,
@@ -77,10 +78,13 @@ gen_results <- function(ctd,
   #### Merge results into one dataframe ####
   results_final <- merge_results(res_files = res_files,
                                  list_name_column = list_name_column)
+  #### Report total time ####
+  messager("Done in:",round(difftime(Sys.time(),start,units = "s"), 1),
+           "seconds.",v=verbose)
   #### Save merged results ####
   save_path <- save_results(results = results_final,
-                           save_dir = save_dir,
-                           prefix = "gen_results_",
-                           verbose = verbose)
+                            save_dir = save_dir,
+                            prefix = "gen_results",
+                            verbose = verbose)
   return(results_final)
 }

@@ -16,8 +16,8 @@ piggyback::pb_upload(file = f,
 \usage{
 load_hpo_graph(
   file = "hpo_igraph.rds",
-  tag = "v0.0.1",
-  save_dir = tools::R_user_dir(package = "MultiEWCE")
+  tag = "latest",
+  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache")
 )
 }
 \arguments{
