@@ -1,6 +1,7 @@
 MultiEWCE
 ================
-NULL [![License:
+<img src='https://github.com/neurogenomics/MultiEWCE/raw/master/inst/hex/hex.png' title='Hex sticker for MultiEWCE' height='300'><br>
+[![License:
 GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
 [![](https://img.shields.io/badge/devel%20version-0.1.7-black.svg)](https://github.com/neurogenomics/MultiEWCE)
 [![](https://img.shields.io/github/languages/code-size/neurogenomics/MultiEWCE.svg)](https://github.com/neurogenomics/MultiEWCE)

@@ -61,7 +61,7 @@ stick <- hexSticker::sticker(
   subplot = here::here("inst/hex/2BIeTx6RN6O00CAaeY68q2.jpg"),
   #### Package name ####
   package = paste(strsplit(pkg,"")[[1]],collapse = " "), 
-  p_size=18, p_y = 1.3, p_color = ggplot2::alpha("white",.9),
+  p_size=18, p_y = 1.3, p_color = ggplot2::alpha("white",1),
   #### Subplot #####
   s_x=1, s_y=1,  s_height = s_size, s_width = s_size,
   #### Fill & border ####
