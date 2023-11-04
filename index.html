@@ -5,18 +5,21 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EWCE for Multiple Gene Lists • MultiEWCE</title>
+<title>Ontology-scale Cell Type Enrichment Analyses • MultiEWCE</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="EWCE for Multiple Gene Lists">
-<meta property="og:description" content="This package allows you to run EWCE on multiple gene lists in parallel. 
-  It has functions for processing the data and running the analyss. 
-  Finally you can merge the results in to one large dataframe. 
-  Each individual gene list analysis will also be saved in the results
-  directory to allow you to pause the analysis mid way and not lose anything. ">
+<script src="pkgdown.js"></script><meta property="og:title" content="Ontology-scale Cell Type Enrichment Analyses">
+<meta property="og:description" content="The `MultiEWCE` R package allows you to run 
+  [Expression Weighted Celltype Enrichment 
+  (EWCE)](https://github.com/NathanSkene/EWCE) 
+  on multiple gene lists in parallel. It was primarily designed for use with
+  the [Human Phenotype Ontology](https://hpo.jax.org/), 
+  but can be easily adapted to any other gene lists. Finally, it includes 
+  pipelines for the systematic identification of cell type-specific gene therapy
+  targets of diseases.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -37,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -87,28 +90,26 @@
 <div class="section level1">
 <div class="page-header"><h1 id="multiewce">MultiEWCE<a class="anchor" aria-label="anchor" href="#multiewce"></a>
 </h1></div>
-<a href="https://github.com/neurogenomics/MultiEWCE" class="external-link"><img src="https://img.shields.io/badge/devel%20version-0.1.3-black.svg"></a> <a href="https://github.com/neurogenomics/MultiEWCE/actions" class="external-link"><img src="https://github.com/neurogenomics/MultiEWCE/workflows/rworkflows/badge.svg" alt="R build status"></a> <a href="https://github.com/neurogenomics/MultiEWCE/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/neurogenomics/MultiEWCE.svg"></a> <a href="https://github.com/neurogenomics/MultiEWCE" class="external-link"><img src="https://img.shields.io/github/languages/code-size/neurogenomics/MultiEWCE.svg"></a> <a href="https://codecov.io/gh/neurogenomics/MultiEWCE" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MultiEWCE/branch/master/graph/badge.svg"></a> <a href="https://cran.r-project.org/web/licenses/GPL-3" class="external-link"><img src="https://img.shields.io/badge/license-GPL--3-blue.svg" alt="License: GPL-3"></a> ¶
-<h4 id="multiewce-1">
-¶ Authors: <i>Robert Gordon-Smith, Brian Schilder, Nathan Skene</i> ¶
+<img src="https://github.com/neurogenomics/MultiEWCE/raw/master/inst/hex/hex.png" title="Hex sticker for MultiEWCE" height="300"><br><a href="https://cran.r-project.org/web/licenses/GPL-3" class="external-link"><img src="https://img.shields.io/badge/license-GPL--3-blue.svg" alt="License: GPL-3"></a> <a href="https://github.com/neurogenomics/MultiEWCE" class="external-link"><img src="https://img.shields.io/badge/devel%20version-0.1.8-black.svg"></a> <a href="https://github.com/neurogenomics/MultiEWCE" class="external-link"><img src="https://img.shields.io/github/languages/code-size/neurogenomics/MultiEWCE.svg"></a> <a href="https://github.com/neurogenomics/MultiEWCE/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/neurogenomics/MultiEWCE.svg"></a> <br><a href="https://github.com/neurogenomics/MultiEWCE/actions" class="external-link"><img src="https://github.com/neurogenomics/MultiEWCE/workflows/rworkflows/badge.svg" alt="R build status"></a> <a href="https://app.codecov.io/gh/neurogenomics/MultiEWCE" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MultiEWCE/branch/master/graph/badge.svg"></a> <br><a href="https://app.codecov.io/gh/neurogenomics/MultiEWCE/tree/master" target="_blank" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MultiEWCE/branch/master/graphs/icicle.svg" title="Codecov icicle graph" width="200" height="50" style="vertical-align: top;"></a><br><h4 id="multiewce-1">
+Authors: <i>Robert Gordon-Smith, Brian Schilder, Nathan Skene</i>
 <a class="anchor" aria-label="anchor" href="#multiewce-1"></a>
 </h4>
 <h4 id="multiewce-2">
-¶ README updated: <i>Feb-09-2023</i> ¶
+README updated: <i>Nov-04-2023</i>
 <a class="anchor" aria-label="anchor" href="#multiewce-2"></a>
 </h4>
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->
 <div class="section level2">
-<h2 id="multiewce-ewce-for-multiple-gene-lists">
-<code>MultiEWCE</code>: EWCE for Multiple Gene Lists<a class="anchor" aria-label="anchor" href="#multiewce-ewce-for-multiple-gene-lists"></a>
+<h2 id="multiewce-ontology-scale-cell-type-enrichment-analyses">
+<code>MultiEWCE</code>: Ontology-scale Cell Type Enrichment Analyses<a class="anchor" aria-label="anchor" href="#multiewce-ontology-scale-cell-type-enrichment-analyses"></a>
 </h2>
 <div class="section level3">
-<h3 id="this-package-allows-you-to-run-ewce-on-multiple-gene-lists-in-parallel">This package allows you to run EWCE on multiple gene lists in parallel.<a class="anchor" aria-label="anchor" href="#this-package-allows-you-to-run-ewce-on-multiple-gene-lists-in-parallel"></a>
+<h3 id="the-multiewce-r-package-allows-you-to-run-expression-weighted-celltype-enrichment-ewce-on-multiple-gene-lists-in-parallel-it-was-primarily-designed-for-use-with-the-human-phenotype-ontology-but-can-be-easily-adapted-to-any-other-gene-lists-finally-it-includes-pipelines-for-the-systematic-identification-of-cell-type-specific-gene-therapy-targets-of-diseases">The <code>MultiEWCE</code> R package allows you to run <a href="https://github.com/NathanSkene/EWCE" class="external-link">Expression Weighted Celltype Enrichment (EWCE)</a> on multiple gene lists in parallel. It was primarily designed for use with the <a href="https://hpo.jax.org/" class="external-link">Human Phenotype Ontology</a>, but can be easily adapted to any other gene lists. Finally, it includes pipelines for the systematic identification of cell type-specific gene therapy targets of diseases.<a class="anchor" aria-label="anchor" href="#the-multiewce-r-package-allows-you-to-run-expression-weighted-celltype-enrichment-ewce-on-multiple-gene-lists-in-parallel-it-was-primarily-designed-for-use-with-the-human-phenotype-ontology-but-can-be-easily-adapted-to-any-other-gene-lists-finally-it-includes-pipelines-for-the-systematic-identification-of-cell-type-specific-gene-therapy-targets-of-diseases"></a>
 </h3>
-<p>It has functions for processing the data and running the analyss. Finally you can merge the results in to one large dataframe. Each individual gene list analysis will also be saved in the results directory to allow you to pause the analysis mid way and not lose anything.</p>
 <p>If you use <code>MultiEWCE</code>, please cite:</p>
 <!-- Modify this by editing the file: inst/CITATION  -->
 <blockquote>
-<p>Nathan G. Skene, Seth G. N. Grant (2016) Identification of cell types underlying over 8,000 rare diseases and subtraits, <em>bioRxiv</em>;</p>
+<p>Kitty B. Murphy, Robert Gordon-Smith, Jai Chapman, Momoko Otani, Brian M. Schilder, Nathan G. Skene (2023) Identification of cell type-specific gene targets underlying thousands of rare diseases and subtraits. medRxiv, <a href="https://doi.org/10.1101/2023.02.13.23285820" class="external-link uri">https://doi.org/10.1101/2023.02.13.23285820</a></p>
 </blockquote>
 </div>
 </div>
@@ -118,7 +119,7 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"neurogenomics/multiewce"</span><span class="op">)</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"neurogenomics/MultiEWCE"</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/MultiEWCE" class="external-link">MultiEWCE</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">

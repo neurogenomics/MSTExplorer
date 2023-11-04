@@ -20,7 +20,7 @@ may contain the same gene repeated. This would cause an error)."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -75,6 +75,7 @@ may contain the same gene repeated. This would cause an error).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_valid_gene_lists</span><span class="op">(</span></span>
 <span>  <span class="va">ctd</span>,</span>
 <span>  <span class="va">list_names</span>,</span>
+<span>  <span class="va">list_name_column</span>,</span>
 <span>  <span class="va">gene_data</span>,</span>
 <span>  annotLevel <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
@@ -90,6 +91,11 @@ may contain the same gene repeated. This would cause an error).</p>
 
 <dt>list_names</dt>
 <dd><p>character vector of gene list names.</p></dd>
+
+
+<dt>list_name_column</dt>
+<dd><p>The name of the gene_data column
+that has the gene list names.</p></dd>
 
 
 <dt>gene_data</dt>

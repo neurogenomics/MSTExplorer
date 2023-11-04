@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -69,8 +69,8 @@
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ewce_para</span><span class="op">(</span></span>
 <span>  <span class="va">ctd</span>,</span>
 <span>  <span class="va">gene_data</span>,</span>
-<span>  list_name_column <span class="op">=</span> <span class="st">"Phenotype"</span>,</span>
-<span>  gene_column <span class="op">=</span> <span class="st">"Gene"</span>,</span>
+<span>  list_name_column <span class="op">=</span> <span class="st">"hpo_id"</span>,</span>
+<span>  gene_column <span class="op">=</span> <span class="st">"gene_symbol"</span>,</span>
 <span>  list_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">[[</span><span class="va">list_name_column</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  bg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">[[</span><span class="va">gene_column</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
 <span>  reps <span class="op">=</span> <span class="fl">100</span>,</span>
@@ -79,6 +79,7 @@
 <span>  sctSpecies <span class="op">=</span> <span class="st">"human"</span>,</span>
 <span>  save_dir_tmp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  force_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  parallel_boot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cores <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -132,7 +133,7 @@ See <a href="https://rdrr.io/pkg/EWCE/man/list_species.html" class="external-lin
 
 
 <dt>sctSpecies</dt>
-<dd><p>Species that <code>sct_data</code> came from
+<dd><p>Species that <code>sct_data</code> is currently formatted as
 (no longer limited to just "mouse" and "human").
 See <a href="https://rdrr.io/pkg/EWCE/man/list_species.html" class="external-link">list_species</a> for all available species.</p></dd>
 
@@ -145,6 +146,11 @@ See <a href="https://rdrr.io/pkg/EWCE/man/list_species.html" class="external-lin
 <dt>force_new</dt>
 <dd><p>Overwrite previous results
 in the <code>save_dir_tmp</code>.</p></dd>
+
+
+<dt>parallel_boot</dt>
+<dd><p>Parallelise at the level of bootstrap iterations,
+rather than across gene lists.</p></dd>
 
 
 <dt>cores</dt>
@@ -167,15 +173,13 @@ in the <code>save_dir_tmp</code>.</p></dd>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
 <span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu">MultiEWCE</span><span class="fu">::</span><span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">Phenotype</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_name</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">res_files</span> <span class="op">&lt;-</span> <span class="fu">ewce_para</span><span class="op">(</span>ctd <span class="op">=</span> <span class="va">ctd</span>,</span></span>
 <span class="r-in"><span>                       gene_data <span class="op">=</span> <span class="va">gene_data</span>,</span></span>
 <span class="r-in"><span>                       list_names <span class="op">=</span> <span class="va">list_names</span>,</span></span>
 <span class="r-in"><span>                       reps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in check_bootstrap_args(sct_data = sct_data, hits = hits, annotLevel = annotLevel,     reps = reps, controlledCT = controlledCT):</span> Must provide a gene list to hits.</span>
 </code></pre></div>
     </div>
   </div>

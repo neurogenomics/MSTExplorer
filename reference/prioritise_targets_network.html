@@ -23,7 +23,7 @@ examples of each layout.'><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -70,7 +70,7 @@ examples of each layout.'><!-- mathjax --><script src="https://cdnjs.cloudflare.
     <div class="ref-description">
     <p>Plot the output of <a href="prioritise_targets.html">prioritise_targets</a>
 as an interactive network with <a href="https://rdrr.io/pkg/visNetwork/man/visNetwork.html" class="external-link">visNetwork</a>.
-See <a href="https://rdrr.io/pkg/igraph/man/layout_.html" class="external-link">layout</a> for a list of all layout functions
+See <a href="https://r.igraph.org/reference/layout_.html" class="external-link">layout</a> for a list of all layout functions
 that can be passed to the <code>prioritise_targets_network(layout=)</code> argument
 as a string (e.g. "layout.fruchterman.reingold" or "layout_as_tree").
 See <a href="https://rpubs.com/JanpuHou/337696" class="external-link">here</a> for some visualized
@@ -80,11 +80,11 @@ examples of each layout.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">prioritise_targets_network</span><span class="op">(</span></span>
 <span>  <span class="va">top_targets</span>,</span>
-<span>  vertex_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Phenotype"</span>, <span class="st">"CellType"</span>, <span class="st">"Gene"</span><span class="op">)</span>,</span>
-<span>  group_var <span class="op">=</span> <span class="st">"ancestor_name"</span>,</span>
-<span>  edge_color_var <span class="op">=</span> <span class="va">group_var</span>,</span>
+<span>  vertex_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"disease_name"</span>, <span class="st">"hpo_name"</span>, <span class="st">"CellType"</span>, <span class="st">"gene_symbol"</span><span class="op">)</span>,</span>
+<span>  group_var <span class="op">=</span> <span class="va">vertex_vars</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>  edge_color_var <span class="op">=</span> <span class="st">"fold_change"</span>,</span>
 <span>  edge_size_var <span class="op">=</span> <span class="st">"fold_change"</span>,</span>
-<span>  mediator_var <span class="op">=</span> <span class="st">"Gene"</span>,</span>
+<span>  mediator_var <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  show_plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  save_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">"_prioritise_targets_network.html"</span><span class="op">)</span>,</span>
 <span>  layout <span class="op">=</span> <span class="st">"layout_with_kk"</span>,</span>
@@ -94,8 +94,12 @@ examples of each layout.</p>
 <span>  scaling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>drawThreshold <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  smooth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>enabled <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">"cubicBezier"</span>, roundness <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>  add_visExport <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  height <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>  width <span class="op">=</span> <span class="fl">1300</span>,</span>
+<span>  degree <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  width <span class="op">=</span> <span class="st">"100%"</span>,</span>
+<span>  height <span class="op">=</span> <span class="st">"90vh"</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"Rare Disease Celltyping"</span>,</span>
+<span>  submain <span class="op">=</span> <span class="st">"Prioritised Targets Network"</span>,</span>
+<span>  node_palette <span class="op">=</span> <span class="fu">pals</span><span class="fu">::</span><span class="va"><a href="https://kwstat.github.io/pals/reference/kovesi.html" class="external-link">kovesi.linear_bmy_10_95_c78</a></span>,</span>
 <span>  randomSeed <span class="op">=</span> <span class="fl">2023</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -108,6 +112,8 @@ book.archnetworks.net</a></p>
 <p><a href="https://r-graph-gallery.com/310-custom-hierarchical-edge-bundling" class="external-link">
 Edge bundling with <span class="pkg">ggraph</span>
 </a></p>
+<p><a href="https://visjs.github.io/vis-network/examples/" class="external-link">
+visNetwork examples</a></p>
     </div>
     <div id="arguments">
     <h2>Arguments</h2>
@@ -134,9 +140,9 @@ to include as vertices/nodes within the network.</p></dd>
 
 <dt>mediator_var</dt>
 <dd><p>Variable to connect cell types and phenotypes by
-(i.e. "Gene").
+(i.e. "gene_symbol").
 If <code>NULL</code>, instead will connect node hierarchically:
-ancestor_name --&gt; Phenotype --&gt; CellType --&gt; Gene</p></dd>
+ancestor_name --&gt; Phenotype --&gt; CellType --&gt; gene_symbol</p></dd>
 
 
 <dt>show_plot</dt>
@@ -192,12 +198,36 @@ ancestor_name --&gt; Phenotype --&gt; CellType --&gt; Gene</p></dd>
 <dd><p>Add PDF download button.</p></dd>
 
 
-<dt>height</dt>
-<dd><p>: String. Default to "100%". The height of the network in pixels or as a percentage.</p></dd>
+<dt>degree</dt>
+<dd><p>of depth of nodes to be colored. Default to 1.
+Set high number to have the entire sub-network.
+In case of "hierarchical" algorithm, you can also pass a
+list(from = 1, to = 1) to control degree in both direction.</p></dd>
 
 
 <dt>width</dt>
 <dd><p>: Number. Default to 1. The width of the edge. If value is set, this is not used.</p></dd>
+
+
+<dt>height</dt>
+<dd><p>: String. Default to "100%". The height of the network in pixels or as a percentage.</p></dd>
+
+
+<dt>main</dt>
+<dd><p>: For add a title. Character or a named list.</p><ul><li><p>"text" : Character. Title.</p></li>
+<li><p>"style" : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'.</p></li>
+</ul></dd>
+
+
+<dt>submain</dt>
+<dd><p>: For add a subtitle. Character or a named list.</p><ul><li><p>"text" : Character. Subtitle.</p></li>
+<li><p>"style" : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.</p></li>
+</ul></dd>
+
+
+<dt>node_palette</dt>
+<dd><p>Palette function to color nodes by.
+See the <span class="pkg">pals</span> package for available options.</p></dd>
 
 
 <dt>randomSeed</dt>
@@ -218,118 +248,12 @@ and the the graph used to make the plot.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="prioritise_targets.html">prioritise_targets</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritising gene targets.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding term definitions.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='start' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 419,111 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 5,443 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 77</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering @ q-value &lt;= 0.05</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='q_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 7,315 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 2,477 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 77</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering @ fold-change &gt;= 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='fold_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 7,315 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 2,477 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 77</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 2,477 HPO IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_ont_levels' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 7,315 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 2,477 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 77</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with Onset.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype.hpoa</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype.hpoa</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_onsets' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 7,158 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 2,418 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 77</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with Tiers.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_tiers' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 689 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 124 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 66</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with Modifiers</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='severity_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 644 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 119 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 16 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 66</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenotype frequencies.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='pheno_frequency_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 558 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 99 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 15 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 64</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 33 / 64 of cell types kept.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_celltypes' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 352 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 86 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 15 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 33</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering by gene size.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting phenos to GRanges.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering gene metadata</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_seqnames' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 57,639 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 86 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 3,913</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 234 / 3,913 genes kept.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='gene_size' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 2,988 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 84 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 234</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_biotypes' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 2,988 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 84 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 234</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering by specificity_quantile.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering by mean_exp_quantile.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating gene frequencies.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... genes_to_phenotype.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='gene_frequency_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 12,054 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 83 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 14 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 32 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 233</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_specificity_quantiles' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 312 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 59 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 12 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 27 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 67</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_mean_exp_quantiles' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 312 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 59 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 12 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 27 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 67</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Sorting rows.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Finding top 20 gene targets per: HPO_ID, CellType</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='top_n' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 312 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 59 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 12 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 27 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 67</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='end' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - rows: 312 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - phenotypes: 59 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - diseases: 12 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - celltypes: 27 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - genes: 67</span>
-<span class="r-in"><span><span class="va">top_targets</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">$</span><span class="va">top_targets</span></span></span>
-<span class="r-in"><span><span class="va">vn</span> <span class="op">&lt;-</span> <span class="fu">prioritise_targets_network</span><span class="op">(</span>top_targets <span class="op">=</span> <span class="va">top_targets</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">MultiEWCE</span><span class="fu">::</span><span class="va"><a href="example_targets.html">example_targets</a></span></span></span>
+<span class="r-in"><span><span class="va">vn</span> <span class="op">&lt;-</span> <span class="fu">prioritise_targets_network</span><span class="op">(</span>top_targets <span class="op">=</span> <span class="va">res</span><span class="op">$</span><span class="va">top_targets</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: tidygraph</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating network.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating plot.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot ==&gt; /tmp/RtmpKoejJR/file10cc6286ba03_prioritise_targets_network.html</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot ==&gt; /tmp/RtmpqaybX4/filee1c11016b338_prioritise_targets_network.html</span>
 </code></pre></div>
     </div>
   </div>

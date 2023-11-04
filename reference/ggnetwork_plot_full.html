@@ -18,7 +18,7 @@ to creating the final interactive plot."><!-- mathjax --><script src="https://cd
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -173,25 +173,29 @@ of results from RD EWCE analysis.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">ggnetwork_plot_full</span><span class="op">(</span>cell_type <span class="op">=</span> <span class="st">"Microglia"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ggnetwork_plot_full</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by q_threshold and fold_change.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by cell_type</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 8 associations remain after filtering.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Aggregating results by group_var='Phenotype'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,719 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Aggregating results by group_var='hpo_name'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding HPO IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating adjacency matrix for 8 term(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 8 HPO IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting relative ontology level for 8 HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating all phenotypes to HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> All local files already up-to-date!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Returning a vector of phenotypes (same order as input).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>1 HPO IDs are still missing.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>1 HPO IDs are still missing.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> All local files already up-to-date!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Creating adjacency matrix for 9 term(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 9 HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting relative ontology level for 9 HPO IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding term definitions.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Making hoverboxes from: 'Phenotype', 'HPO_ID', 'ontLvl', 'ontLvl_relative', 'definition', 'n_celltype', 'celltype', 'mean_q', 'mean_fold_change', 'mean_sd_from_mean'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> All local files already up-to-date!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Making hoverboxes from: 'hpo_name', 'hpo_id', 'ontLvl', 'ontLvl_relative', 'definition', 'celltype', 'mean_q', 'mean_fold_change', 'mean_sd_from_mean'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Making phenotype network object.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating ggnetwork object.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='Phenotype'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='HPO_ID'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='hpo_name'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='hpo_id'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='ontLvl'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='ontLvl_relative'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='definition'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='n_celltype'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='celltype'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='mean_q'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding new_column='mean_fold_change'</span>

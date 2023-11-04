@@ -19,7 +19,7 @@ Results were then merged together with  merge_results."><!-- mathjax --><script 
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -71,19 +71,47 @@ Results were then merged together with  <a href="merge_results.html">merge_resul
 
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_example_results</span><span class="op">(</span></span>
-<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Descartes_All_Results_extras.rds"</span>, <span class="st">"tabulamuris_merged.rds"</span><span class="op">)</span>,</span>
-<span>  tag <span class="op">=</span> <span class="st">"v0.0.1"</span>,</span>
-<span>  save_dir <span class="op">=</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">R_user_dir</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"MultiEWCE"</span><span class="op">)</span></span>
+<span>  file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Descartes_All_Results_extras.symptoms.rds"</span>,</span>
+<span>    <span class="st">"Descartes_All_Results_extras.symptoms.full_join.rds"</span>,</span>
+<span>    <span class="st">"Descartes_All_Results_extras.rds"</span>, <span class="st">"gen_overlap.symptoms.filt.rds"</span>,</span>
+<span>    <span class="st">"tabulamuris_merged.rds"</span><span class="op">)</span>,</span>
+<span>  tag <span class="op">=</span> <span class="st">"latest"</span>,</span>
+<span>  save_dir <span class="op">=</span> <span class="fu">tools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">R_user_dir</a></span><span class="op">(</span>package <span class="op">=</span> <span class="st">"MultiEWCE"</span>, which <span class="op">=</span> <span class="st">"cache"</span><span class="op">)</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="source">
     <h2>Source</h2>
     <p><code>
-d &lt;-  "~/Desktop/ewce/rare_disease_celltyping_apps/cell_select_interactive"
-piggyback::pb_upload(file = file.path(d,"data/Descartes_All_Results.rds"),
+d &lt;-  "~/Desktop/ewce/rare_disease_celltyping_apps/cell_select"
+#### Descartes_All_Results_extras ####
+f0 &lt;- file.path(d,"data/Descartes_All_Results_extras.rds")
+r0 &lt;- readRDS(f0)
+data.table::setnames(r0,"list","hpo_name")
+r0$HPO_id=NULL
+r0 &lt;- HPOExplorer:::fix_hpo_ids(dt=r0)
+f0new &lt;- file.path(tempdir(),basename(f0))
+saveRDS(r0,file = f0new)
+piggyback::pb_upload(file = f0new,
                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
-piggyback::pb_upload(file = file.path(d,"data/tabulamuris_merged.rds"),
+#### Descartes_All_Results ####
+f1 &lt;- file.path(d,"data/Descartes_All_Results.rds")
+r1 &lt;- readRDS(f1)
+data.table::setnames(r1,"list","hpo_name")
+r1 &lt;- HPOExplorer:::fix_hpo_ids(dt=r1)
+f1new &lt;- file.path(tempdir(),basename(f1))
+saveRDS(r1,file = f1new)
+piggyback::pb_upload(file = f1new,
+                     tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+#### tabulamuris_merged ####
+f2 &lt;- file.path(d,"data/tabulamuris_merged.rds")
+r2 &lt;- readRDS(f2)
+data.table::setnames(r2,"list","hpo_name")
+r2 &lt;- HPOExplorer:::fix_hpo_ids(dt=r2)
+f2new &lt;- file.path(tempdir(),basename(f2))
+saveRDS(r2,file = f2new)
+piggyback::pb_upload(file = f2new,
                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
 </code></p>
 <p><a href="https://github.com/neurogenomics/rare_disease_celltyping/" class="external-link">
@@ -92,10 +120,17 @@ Results located in 'results' folder.</a></p>
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>file</dt>
-<dd><p>File to load:</p><ul><li><p>"Descartes_All_Results.rds":
+<dd><p>File to load:</p><ul><li><p>"Descartes_All_Results_extras.symptoms.full_join.rds":
+Contains cell type-phenotype and cell type-symptom (phenotype + disease)
+enrichment results merged into one table.
+Used the <a href="https://descartes.brotmanbaty.org/" class="external-link">Descartes</a>
+CTD ( annotation level 1).</p></li>
+<li><p>"Descartes_All_Results_extras.rds":
+Contains cell type-phenotype enrichment results.
 Used the <a href="https://descartes.brotmanbaty.org/" class="external-link">Descartes</a>
 CTD ( annotation level 1).</p></li>
 <li><p>"tabulamuris_merged.rds":
+Contains cell type-phenotype enrichment results.
 Used the <a href="https://tabula-muris.ds.czbiohub.org/" class="external-link">Tabula Muris</a>
 CTD.</p></li>
 </ul></dd>
@@ -108,6 +143,10 @@ CTD.</p></li>
 <dt>save_dir</dt>
 <dd><p>Where to store the file locally.</p></dd>
 
+
+<dt>force_new</dt>
+<dd><p>Download the file even when a local copy already exists.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -119,7 +158,6 @@ CTD.</p></li>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu">load_example_results</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
 </code></pre></div>
     </div>
   </div>

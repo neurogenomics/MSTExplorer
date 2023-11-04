@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -61,6 +61,171 @@
     </div>
 
     <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.8" id="multiewce-018">MultiEWCE 0.1.8<a class="anchor" aria-label="anchor" href="#multiewce-018"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-8">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-8"></a></h3>
+<ul><li>
+<code>MultiEWCE</code> finally gets a hex sticker!</li>
+<li>
+<code>gen_results</code> / <code>gen_overlap</code>
+<ul><li>Check for existing results and import if already there.</li>
+<li>Name all results “gen_results.rds” or “gen_overlap.rds” to avoid rerunning duplicate analyses on HPC.</li>
+</ul></li>
+<li>Update <em>rworkflows.yml</em>
+</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-8">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-8"></a></h3>
+<ul><li>Fix unit tests and examples to use “hpo_id” instead of “hpo_name”.</li>
+<li>
+<code>load_hpo_graph</code>:
+<ul><li>export</li>
+<li>Regenerate and update “hpo_graph.rds” file.</li>
+</ul></li>
+<li>Drastically reduce time to run examples.</li>
+<li>
+<code>ontology_plot</code>
+<ul><li>Fix function and add test.</li>
+</ul></li>
+<li>
+<em>DESCRIPTION</em>
+<ul><li>
+<code>Depends: R (&gt;= 2.10)</code> –&gt; <code>Depends: R (&gt;= 4.1)</code>, to ensure <code>|&gt;</code> function available.</li>
+<li>Rewrite <code>Description</code> field to reflect <code>MultiEWCE</code>’s current purpose.</li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.7" id="multiewce-017">MultiEWCE 0.1.7<a class="anchor" aria-label="anchor" href="#multiewce-017"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-7">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-7"></a></h3>
+<ul><li>Update to coordinate with <code>HPOExplorer</code> updates.</li>
+<li>New funcs:
+<ul><li><code>plot_ont_lvl</code></li>
+<li><code>ttd_check</code></li>
+<li><code>ttd_plot</code></li>
+<li><code>ttd_import</code></li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.6" id="multiewce-016">MultiEWCE 0.1.6<a class="anchor" aria-label="anchor" href="#multiewce-016"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-6">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-6"></a></h3>
+<ul><li>Require <code>HPOExplorer (&gt;= 0.99.10)</code>
+</li>
+<li>Switch terms:
+<ul><li>“HPO_ID” –&gt; “hpo_id”</li>
+<li>“Phenotype” –&gt; “hpo_name”</li>
+<li>“FREQUENCY” –&gt; “gene_freq”</li>
+<li>“Onset” –&gt; “onset”</li>
+<li>“Modifier” –&gt; “modifier”</li>
+<li>“Aspect” –&gt; “aspect”</li>
+<li>“Gene” –&gt; “gene_symbol”</li>
+<li>“DatabaseID” –&gt; “disease_id”</li>
+<li>“LinkID” –&gt; “disease_id”</li>
+</ul></li>
+<li>Update all “data” objects.</li>
+<li>
+<code>get_data</code>
+<ul><li>Add <code>tag</code> arg.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-6">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-6"></a></h3>
+<ul><li>
+<code>load_example_results</code>
+<ul><li>Change <code>tag</code> to “latest”.</li>
+<li>Update colnames dynamically.</li>
+</ul></li>
+<li>
+<code>load_example_ctd</code>
+<ul><li>Change <code>tag</code> to “latest”.</li>
+</ul></li>
+<li>
+<code>load_hpo_graph</code>
+<ul><li>Change <code>tag</code> to “latest”.</li>
+</ul></li>
+<li>
+<code>map_tissues</code>
+<ul><li>Fix docs.</li>
+</ul></li>
+<li>
+<code>agg_results</code>
+<ul><li>Add “hpo_id” column before aggregation.</li>
+</ul></li>
+<li>
+<code>correlation_heatmap</code>
+<ul><li>Ensure row annot order is correct.</li>
+</ul></li>
+<li>
+<code>add_ctd</code>
+<ul><li>Fix example.</li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.5" id="multiewce-015">MultiEWCE 0.1.5<a class="anchor" aria-label="anchor" href="#multiewce-015"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-5">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-5"></a></h3>
+<ul><li>
+<code>prioritise_targets</code>
+<ul><li>New arg <code>keep_evidence</code> to utilise GenCC evidence scores provided via <code>HPOExplorer</code>.</li>
+<li>Merge symptom-level driver genes after unlisting the “intersection” column instead of using indirect approach that on nested “intersection” column.</li>
+</ul></li>
+<li>
+<code>prioritise_targets_network</code>
+<ul><li>Add feature to resize plot after double-click.</li>
+</ul></li>
+<li>New function: <code>add_tissues</code>
+<ul><li>Add tissues that each cell type is found in, using a celltype-tissue mapping file.</li>
+<li>Regenerate “DescartesHuman_celltype_mapping.csv” file as the one previously generated wrong (had every celltype in every tissue)</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-5"></a></h3>
+<ul><li>
+<code>prioritise_targets_network</code>
+<ul><li>Fill screen better in saved plots with new default args: <code>width = "100%", height = "90vh"</code>
+</li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.4" id="multiewce-014">MultiEWCE 0.1.4<a class="anchor" aria-label="anchor" href="#multiewce-014"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-4">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-4"></a></h3>
+<ul><li>
+<code>prioritise_targets</code>
+<ul><li>Move filtering steps and arg docs inside respective <code>HPOExplorer::add_*</code> functions.</li>
+</ul></li>
+<li>
+<code>gen_results</code>
+<ul><li>New arg <code>parallel_boot</code> lets users choose which level to parallelise over.</li>
+</ul></li>
+<li>New exported func: <code>gen_overlap</code>
+<ul><li>Compute simple overlap enrichment results.</li>
+<li>Overcomes requirement of &gt;=4 genes.</li>
+<li>Faster than EWCE (but less robust)</li>
+</ul></li>
+<li>New internal func: <code>save_results</code>
+</li>
+<li>
+<code>load_example_results</code>
+<ul><li>New arg <code>force_new</code>
+</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-4">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-4"></a></h3>
+<ul><li>
+<code>get_valid_gene_lists</code>
+<ul><li>Can now handle any <code>list_name_column</code>
+</li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.3" id="multiewce-013">MultiEWCE 0.1.3<a class="anchor" aria-label="anchor" href="#multiewce-013"></a></h2>
 <div class="section level3">
 <h3 id="new-features-0-1-3">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-3"></a></h3>
@@ -69,11 +234,17 @@
 <ul><li>Handles multiple celltypes by aggregation.</li>
 </ul></li>
 <li>New internal function: <code>agg_results</code>.</li>
-<li>New functions:
+<li>New functions for generating/visualizing prioritised targets:
 <ul><li><code>prioritise_targets</code></li>
 <li><code>prioritise_targets_heatmap</code></li>
 <li><code>prioritise_targets_network</code></li>
 <li><code>report_plot</code></li>
+<li><code>correlation_heatmap</code></li>
+<li><code>frequency_bar</code></li>
+<li><code>frequency_histogram</code></li>
+</ul></li>
+<li>Added <code>example_targets</code> data:
+<ul><li>Speeds up run time of examples/tests.</li>
 </ul></li>
 </ul></div>
 <div class="section level3">

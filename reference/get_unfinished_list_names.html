@@ -21,7 +21,7 @@ re-analyse the already completed ones when you start again."><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
       </span>
     </div>
 
@@ -98,8 +98,7 @@ re-analyse the already completed ones when you start again.</p>
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing existing file: ... phenotype_to_genes.txt</span>
-<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">Phenotype</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_name</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">save_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">"results"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">res_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="ewce_para.html">ewce_para</a></span><span class="op">(</span>ctd <span class="op">=</span> <span class="va">ctd</span>,</span></span>
@@ -107,9 +106,8 @@ re-analyse the already completed ones when you start again.</p>
 <span class="r-in"><span>                       list_names <span class="op">=</span> <span class="va">list_names</span>,</span></span>
 <span class="r-in"><span>                       reps <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>                       save_dir_tmp <span class="op">=</span> <span class="va">save_dir_tmp</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting to sparse matrix.</span>
-<span class="r-in"><span><span class="va">unfinished</span> <span class="op">&lt;-</span> <span class="fu">get_unfinished_list_names</span><span class="op">(</span>list_names <span class="op">=</span> <span class="va">gene_data</span><span class="op">$</span><span class="va">Phenotype</span>,</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in check_bootstrap_args(sct_data = sct_data, hits = hits, annotLevel = annotLevel,     reps = reps, controlledCT = controlledCT):</span> Must provide a gene list to hits.</span>
+<span class="r-in"><span><span class="va">unfinished</span> <span class="op">&lt;-</span> <span class="fu">get_unfinished_list_names</span><span class="op">(</span>list_names <span class="op">=</span> <span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_name</span>,</span></span>
 <span class="r-in"><span>                                        save_dir_tmp <span class="op">=</span> <span class="va">save_dir_tmp</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
