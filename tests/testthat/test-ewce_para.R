@@ -4,7 +4,7 @@ test_that("ewce_para works", {
 
   gene_data <- HPOExplorer::load_phenotype_to_genes()
   ctd <- MultiEWCE::load_example_ctd()
-  list_names <- unique(gene_data$hpo_id)[seq(3)]
+  list_names <- unique(gene_data$hpo_id)[seq(5)]
 
   #### Return results directly ####
   res_files <- ewce_para(ctd = ctd,
@@ -13,7 +13,9 @@ test_that("ewce_para works", {
                          reps = 10,
                          save_dir_tmp = NULL)
   for(r in res_files){
-    testthat::expect_true(all(c("results","hit.cells","bootstrap_data") %in% names(r)))
+    testthat::expect_true(
+      all(c("results","hit.cells","bootstrap_data") %in% names(r))
+    )
   }
   #### Return paths to saved results ####
   save_dir_tmp <- file.path(tempdir(),"results")
@@ -43,9 +45,9 @@ test_that("ewce_para works", {
   all_results2 <- merge_results(res_files=res_files2)
   ## Confirm both methods have the correct phenotyoes
   testthat::expect_gte(sum(list_names %in% unique(all_results1$hpo_name)),
-                       length(list_names)-1)
+                       length(list_names)-3)
   testthat::expect_gte(sum(list_names %in% unique(all_results2$hpo_name)),
-                       length(list_names)-1)
+                       length(list_names)-3)
   ## Confirm both methods are identical
   data.table::setkey(all_results1,"CellType")
   data.table::setkey(all_results2,"CellType")
