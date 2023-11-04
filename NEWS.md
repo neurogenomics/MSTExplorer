@@ -18,6 +18,10 @@
 * Drastically reduce time to run examples.
 * `ontology_plot`
   - Fix function and add test.
+* *DESCRIPTION*
+  - `Depends: R (>= 2.10)` --> `Depends: R (>= 4.1)`, 
+    to ensure `|>` function available.
+  - Rewrite `Description` field to reflect `MultiEWCE`'s current purpose.
 
 # MultiEWCE 0.1.7
 

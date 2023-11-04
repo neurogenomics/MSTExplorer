@@ -1,5 +1,5 @@
 Package: MultiEWCE
-Title: EWCE for Multiple Gene Lists
+Title:  Ontology-scale Cell Type Enrichment Analyses
 Version: 0.1.8
 Authors@R:
     c(person(given = "Robert",
@@ -17,17 +17,22 @@ Authors@R:
            role = c("aut"),
            email = "nathan.skene@gmail.com",
            comment = c(ORCID = "0000-0002-6807-3180"))) 
-Description: This package allows you to run EWCE on multiple gene lists in parallel. 
-  It has functions for processing the data and running the analyss. 
-  Finally you can merge the results in to one large dataframe. 
-  Each individual gene list analysis will also be saved in the results
-  directory to allow you to pause the analysis mid way and not lose anything. 
+Description: The `MultiEWCE` R package allows you to run 
+  [Expression Weighted Celltype Enrichment 
+  (EWCE)](https://github.com/NathanSkene/EWCE) 
+  on multiple gene lists in parallel. It was primarily designed for use with
+  the [Human Phenotype Ontology](https://hpo.jax.org/), 
+  but can be easily adapted to any other gene lists. Finally, it includes 
+  pipelines for the systematic identification of cell type-specific gene therapy
+  targets of diseases.
 License: GPL-3
 Encoding: UTF-8
 URL: https://github.com/neurogenomics/MultiEWCE
 BugReports: https://github.com/neurogenomics/MultiEWCE/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Depends: 
+    R (>= 4.1)
 Imports:
     HPOExplorer (>= 0.99.10),
     data.table,
@@ -79,6 +84,4 @@ biocViews:
     BiomedicalInformatics, FunctionalGenomics, 
     GeneExpression, GeneSetEnrichment,
     RNASeq, SingleCell, Software, Transcription, Visualization
-Depends: 
-    R (>= 2.10)
 LazyData: true
