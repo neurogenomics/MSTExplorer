@@ -7,7 +7,7 @@
   - Check for existing results and import if already there.
   - Name all results "gen_results.rds" or "gen_overlap.rds" to avoid 
     rerunning duplicate analyses on HPC.
-* Update *rworkflows.yml*
+* Update *rworkflows.yml* 
     
 ## Bug fixes
 
