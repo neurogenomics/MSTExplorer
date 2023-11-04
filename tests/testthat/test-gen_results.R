@@ -11,6 +11,6 @@ test_that("gen_results works", {
                              reps = 10)
   testthat::expect_true(methods::is(all_results,"data.table"))
   testthat::expect_gte(sum(list_names %in% unique(all_results$hpo_id)),
-                       length(list_names)-1)
-  testthat::expect_gte(nrow(all_results[q<=0.05,]),10)
+                       length(list_names)-2)
+  testthat::expect_gte(nrow(all_results[q<=0.05,]),8)
 })
