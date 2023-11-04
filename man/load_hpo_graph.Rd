@@ -10,7 +10,7 @@ g <- HPOExplorer::make_igraph_object(phenos = phenos)
 f <- file.path(tempdir(),"hpo_igraph.rds")
 saveRDS(g,file = f)
 piggyback::pb_upload(file = f,
-                     tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+                     tag = "latest", repo = "neurogenomics/MultiEWCE")
 }
 }
 \usage{
@@ -36,4 +36,3 @@ Load the HPO as a precomputed graph.
 \examples{
 g <- load_hpo_graph()
 }
-\keyword{internal}

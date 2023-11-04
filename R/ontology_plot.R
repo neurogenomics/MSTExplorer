@@ -26,7 +26,8 @@
 #' @importFrom ontologyPlot onto_plot
 #' @importFrom HPOExplorer get_hpo load_phenotype_to_genes
 #' @examples
-#' plt <- ontology_plot(cell_type="Amacrine cells")
+#' results = load_example_results()[seq(100000)]
+#' plt <- ontology_plot(cell_type="ENS_glia", results=results)
 ontology_plot <- function(cell_type,
                           results = load_example_results(),
                           color_var = c("fold_change","q","p"),
@@ -37,21 +38,21 @@ ontology_plot <- function(cell_type,
                             HPOExplorer::load_phenotype_to_genes(),
                           palette = "Spectral",
                           shape = "rect",
+                          verbose=TRUE,
                           ...
                           ){
-  # templateR:::source_all()
   # devoptera::args2vars(ontology_plot)
 
-  HPO_term_valid <- NULL;
-
-  message("Generating ontology plot.")
+  color <- hpo_id <- NULL;
+  messager("Generating ontology plot.",v=verbose)
+  #### Prepare data ####
   cells <- subset_results(cell_type = cell_type,
-                             results = results,
-                             q_threshold = q_threshold,
-                             fold_threshold = fold_threshold,
-                             phenotype_to_genes = phenotype_to_genes,
-                             hpo = hpo)
-  ### Check color_var ####
+                          results = results,
+                          q_threshold = q_threshold,
+                          fold_threshold = fold_threshold,
+                          phenotype_to_genes = phenotype_to_genes,
+                          hpo = hpo)
+  #### Prepare colors  ####
   color_var <- color_var[[1]]
   val_opts <- eval(formals(ontology_plot)$color_var)
   if(!color_var %in% val_opts){
@@ -63,10 +64,15 @@ ontology_plot <- function(cell_type,
                                       cells[[color_var]],
                                       reverse = color_var == "fold change")
   }
+  cols <- c("hpo_id",color_var)
+  color_dat <- unique(
+    cells[hpo_id %in% unique(cells$hpo_id),][,cols, with=FALSE]
+  )
+  color_dat[,color:=color_func(get(color_var))]
   #### Create plot ####
   plt <- ontologyPlot::onto_plot(ontology = hpo,
-                                 terms = cells$hpo_id,
-                                 fillcolor = color_func(cells[[color_var]]),
+                                 terms = color_dat$hpo_id,
+                                 fillcolor = color_dat$color,
                                  shape = shape,
                                  ...)
   return(plt)

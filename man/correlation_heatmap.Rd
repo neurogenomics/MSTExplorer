@@ -71,6 +71,6 @@ Plot
 Plot a phenotype x phenotype correlation matrix based on genetic overlap.
 }
 \examples{
-top_targets <- example_targets$top_targets
+top_targets <- example_targets$top_targets[seq(100),]
 hm <- correlation_heatmap(top_targets = top_targets)
 }

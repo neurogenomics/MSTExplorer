@@ -24,7 +24,7 @@
 #' @importFrom data.table := dcast.data.table setnafill
 #' @importFrom stats cor
 #' @examples
-#' top_targets <- example_targets$top_targets
+#' top_targets <- example_targets$top_targets[seq(100),]
 #' hm <- correlation_heatmap(top_targets = top_targets)
 correlation_heatmap <- function(top_targets,
                                 row_side_vars = c("ancestor_name",

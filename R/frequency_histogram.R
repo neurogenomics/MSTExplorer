@@ -10,7 +10,8 @@
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @importFrom HPOExplorer add_gene_frequency add_ancestor
 #' @examples
-#' fp_res <- frequency_histogram()
+#' results <- load_example_results()[seq(5000),]
+#' fp_res <- frequency_histogram(results=results)
 frequency_histogram <- function(results = load_example_results(),
                                 phenotype_to_genes = load_phenotype_to_genes(),
                                 show_plot = TRUE,
@@ -35,7 +36,7 @@ frequency_histogram <- function(results = load_example_results(),
     measure.vars = measure.vars )
 
   g1 <- ggplot2::ggplot(d1, ggplot2::aes(x=value, fill=variable)) +
-    ggplot2::geom_histogram(stat = "count") +
+    ggplot2::geom_histogram(stat = "count", na.rm = TRUE) +
     ggplot2::scale_fill_manual(values = pals::viridis(4)) +
     ggplot2::facet_wrap(facets = "variable ~.") +
     ggplot2::theme_bw() +

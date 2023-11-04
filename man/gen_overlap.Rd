@@ -15,6 +15,7 @@ gen_overlap(
   top_n = NULL,
   long_format = FALSE,
   save_dir = tempdir(),
+  force_new = FALSE,
   cores = 1,
   verbose = TRUE
 )
@@ -46,6 +47,9 @@ genes melted into long format (default: \code{FALSE}).
 Otherwise, genes will be collapsed into a list column (\code{TRUE}).}
 
 \item{save_dir}{Directory to save results to.}
+
+\item{force_new}{Overwrite previous results
+in the \code{save_dir_tmp}.}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 

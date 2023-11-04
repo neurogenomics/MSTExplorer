@@ -33,7 +33,7 @@
 #' @importFrom stringr str_replace_all
 #' @examples
 #' gene_data <- HPOExplorer::load_phenotype_to_genes()
-#' list_names <- unique(gene_data$hpo_name)[seq(5)]
+#' list_names <- unique(gene_data$hpo_id)[seq(5)]
 #' ctd <- load_example_ctd()
 #' all_results <- gen_results(ctd = ctd,
 #'                            gene_data = gene_data,
@@ -45,7 +45,6 @@ gen_results <- function(ctd,
                         gene_column = "gene_symbol",
                         list_names = unique(gene_data[[list_name_column]]),
                         bg = unique(gene_data[[gene_column]]),
-                        force_new = FALSE,
                         reps = 100,
                         annotLevel = 1,
                         genelistSpecies = "human",
@@ -54,10 +53,22 @@ gen_results <- function(ctd,
                         parallel_boot = FALSE,
                         save_dir_tmp = NULL,
                         save_dir = tempdir(),
+                        force_new = FALSE,
                         verbose = 1) {
 
   # devoptera::args2vars(gen_results)
 
+  #### Create save path ####
+  save_path <- gen_results_save_path(save_dir = save_dir,
+                                     prefix = "gen_results")
+  #### Check if results already exist ####
+  if(file.exists(save_path) &&
+     isFALSE(force_new)) {
+    messager("Results already exist at:",save_path,
+             "Use `force_new=TRUE` to overwrite.",v=verbose)
+    results_final <- readRDS(save_path)
+    return(results_final)
+  }
   start <- Sys.time()
   #### Run analysis ####
   res_files <- ewce_para(ctd = ctd,
@@ -83,8 +94,7 @@ gen_results <- function(ctd,
            "seconds.",v=verbose)
   #### Save merged results ####
   save_path <- save_results(results = results_final,
-                            save_dir = save_dir,
-                            prefix = "gen_results",
+                            save_path = save_path,
                             verbose = verbose)
   return(results_final)
 }

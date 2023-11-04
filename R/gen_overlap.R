@@ -35,13 +35,26 @@ gen_overlap <- function(gene_data =
                         top_n = NULL,
                         long_format = FALSE,
                         save_dir = tempdir(),
+                        force_new = FALSE,
                         cores = 1,
                         verbose = TRUE){
   # o <- devoptera::args2vars(gen_overlap); list_name_column="hpo_id.disease_id";
   # gene_data[,hpo_id.disease_id:=paste(hpo_id,disease_id,sep=".")]
 
-  qval <- pval <-  gene_symbol <- NULL;
+  qval <- pval <- NULL;
 
+  #### Create save path ####
+  save_path <- gen_results_save_path(save_dir = save_dir,
+                                     prefix = "gen_overlap")
+  #### Check if results already exist ####
+  if(file.exists(save_path) &&
+     isFALSE(force_new)) {
+    messager("Results already exist at:",save_path,
+             "Use `force_new=TRUE` to overwrite.",v=verbose)
+    results_final <- readRDS(save_path)
+    return(results_final)
+  }
+  #### Run new analysis ####
   t1 <- Sys.time()
   ct_genes <- apply(ctd[[annotLevel]]$specificity_quantiles,
                     2,
@@ -64,10 +77,12 @@ gen_overlap <- function(gene_data =
   #                                        bg = bg),
   #                      by=list_name_column]
 
-  split.data.table <- utils::getFromNamespace("split.data.table","data.table")
   #### Remove all unnecessary columns to save memory ####
   gene_data <- gene_data[,c(list_name_column,gene_column), with=FALSE]
+  #### Subset data to only the list_names ####
+  gene_data <- gene_data[get(list_name_column) %in% list_names,]
   messager("Splitting data.",v=verbose)
+  split.data.table <- utils::getFromNamespace("split.data.table","data.table")
   gene_data_split <- split.data.table(x = gene_data,
                                       by = list_name_column,
                                       keep.by = FALSE)
@@ -97,8 +112,7 @@ gen_overlap <- function(gene_data =
   messager(difftime(Sys.time(),t1),v = TRUE)
   #### Save results ####
   save_path <- save_results(results = overlap,
-                            save_dir = save_dir,
-                            prefix = "gen_overlap_",
+                            save_path = save_path,
                             verbose = verbose)
   return(overlap)
 }

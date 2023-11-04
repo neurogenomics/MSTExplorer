@@ -122,7 +122,8 @@
 #' @import data.table
 #' @importFrom utils head
 #' @examples
-#' res <- prioritise_targets()
+#' results = load_example_results()[seq(5000),]
+#' res <- prioritise_targets(results=results)
 prioritise_targets <- function(#### Input data ####
                                results = load_example_results(),
                                ctd = load_example_ctd(),

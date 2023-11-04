@@ -4,7 +4,7 @@ test_that("ewce_para works", {
 
   gene_data <- HPOExplorer::load_phenotype_to_genes()
   ctd <- MultiEWCE::load_example_ctd()
-  list_names <- unique(gene_data$hpo_name)[seq(3)]
+  list_names <- unique(gene_data$hpo_id)[seq(3)]
 
   #### Return results directly ####
   res_files <- ewce_para(ctd = ctd,
@@ -18,10 +18,10 @@ test_that("ewce_para works", {
   #### Return paths to saved results ####
   save_dir_tmp <- file.path(tempdir(),"results")
   res_files2 <- ewce_para(ctd = ctd,
-                         gene_data = gene_data,
-                         list_names = list_names,
-                         reps = 10,
-                         save_dir_tmp = save_dir_tmp)
+                          gene_data = gene_data,
+                          list_names = list_names,
+                          reps = 10,
+                          save_dir_tmp = save_dir_tmp)
   files <- list.files(save_dir_tmp, full.names = TRUE)
   testthat::expect_lte(length(files), length(list_names))
   for (f in res_files2) {

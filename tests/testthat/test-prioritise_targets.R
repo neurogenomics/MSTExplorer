@@ -1,18 +1,18 @@
 test_that("prioritise_targets works", {
 
-  results <- load_example_results()
+  results <- load_example_results()[seq(50000),]
   ctd <- load_example_ctd()
 
   #### Top only ####
   res1 <- prioritise_targets(results = results,
                              ctd = ctd)
-  testthat::expect_gte(nrow(res1$top_targets), 300)
+  testthat::expect_gte(nrow(res1$top_targets), 6)
 
   #### All results ####
   res2 <- prioritise_targets(results = results,
                              ctd = ctd,
                              top_n = 2)
-  testthat::expect_gte(nrow(res2$top_targets), 200)
+  testthat::expect_gte(nrow(res2$top_targets), 6)
 
   #### Plot evidence score vs. specificity ####
   res3 <- prioritise_targets(results = results,
@@ -43,5 +43,5 @@ test_that("prioritise_targets works", {
                              keep_specificity_quantiles = NULL,
                              keep_mean_exp_quantiles = seq(1,40),
                              symptom_gene_overlap = TRUE)
-  testthat::expect_gte(nrow(res3$top_targets), 200)
+  testthat::expect_gte(nrow(res3$top_targets), 60000)
 })

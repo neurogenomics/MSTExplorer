@@ -1,3 +1,24 @@
+# MultiEWCE 0.1.8
+
+## New features
+
+* `MultiEWCE` finally gets a hex sticker!
+* `gen_results` / `gen_overlap`
+  - Check for existing results and import if already there.
+  - Name all results "gen_results.rds" or "gen_overlap.rds" to avoid 
+    rerunning duplicate analyses on HPC.
+* Update *rworkflows.yml*
+    
+## Bug fixes
+
+* Fix unit tests and examples to use "hpo_id" instead of "hpo_name".
+* `load_hpo_graph`: 
+  - export
+  - Regenerate and update "hpo_graph.rds" file.
+* Drastically reduce time to run examples.
+* `ontology_plot`
+  - Fix function and add test.
+
 # MultiEWCE 0.1.7
 
 ## New features

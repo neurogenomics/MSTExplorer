@@ -11,7 +11,6 @@ gen_results(
   gene_column = "gene_symbol",
   list_names = unique(gene_data[[list_name_column]]),
   bg = unique(gene_data[[gene_column]]),
-  force_new = FALSE,
   reps = 100,
   annotLevel = 1,
   genelistSpecies = "human",
@@ -20,6 +19,7 @@ gen_results(
   parallel_boot = FALSE,
   save_dir_tmp = NULL,
   save_dir = tempdir(),
+  force_new = FALSE,
   verbose = 1
 )
 }
@@ -40,9 +40,6 @@ that has the gene list names.}
 \item{bg}{List of gene symbols containing the background gene list
 (including hit genes). If \code{bg=NULL},
  an appropriate gene background will be created automatically.}
-
-\item{force_new}{Overwrite previous results
-in the \code{save_dir_tmp}.}
 
 \item{reps}{Number of random gene lists to generate (\emph{Default: 100},
 but should be >=10,000 for publication-quality results).}
@@ -67,6 +64,9 @@ rather than across gene lists.}
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}
 
 \item{save_dir}{Folder to save merged results in.}
+
+\item{force_new}{Overwrite previous results
+in the \code{save_dir_tmp}.}
 
 \item{verbose}{Print messages.}
 }
@@ -99,7 +99,7 @@ For more information on this see docs for get_gene_list
 }
 \examples{
 gene_data <- HPOExplorer::load_phenotype_to_genes()
-list_names <- unique(gene_data$hpo_name)[seq(5)]
+list_names <- unique(gene_data$hpo_id)[seq(5)]
 ctd <- load_example_ctd()
 all_results <- gen_results(ctd = ctd,
                            gene_data = gene_data,

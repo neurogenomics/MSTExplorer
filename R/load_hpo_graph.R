@@ -11,11 +11,11 @@
 #' f <- file.path(tempdir(),"hpo_igraph.rds")
 #' saveRDS(g,file = f)
 #' piggyback::pb_upload(file = f,
-#'                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+#'                      tag = "latest", repo = "neurogenomics/MultiEWCE")
 #' }
 #' @returns graph object
 #'
-#' @keywords internal
+#' @export
 #' @importFrom piggyback pb_download
 #' @importFrom tools R_user_dir
 #' @examples
@@ -37,5 +37,6 @@ load_hpo_graph <- function(file="hpo_igraph.rds",
                            overwrite = TRUE)
   }
   g <- readRDS(save_path)
+  g <- igraph::upgrade_graph(g)
   return(g)
 }

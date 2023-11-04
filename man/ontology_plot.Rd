@@ -14,6 +14,7 @@ ontology_plot(
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   palette = "Spectral",
   shape = "rect",
+  verbose = TRUE,
   ...
 )
 }
@@ -47,6 +48,8 @@ to gene annotations.}
 \item{palette}{The colours or colour function that values will be mapped to}
 
 \item{shape}{Character vector of shape names for nodes (or function to set them). Defaults to \code{"circle"}.}
+
+\item{verbose}{Print messages.}
 
 \item{...}{
   Arguments passed on to \code{\link[ontologyPlot:onto_plot]{ontologyPlot::onto_plot}}
@@ -84,5 +87,6 @@ so the colours are assigned manually to each phenotype in this function.
 There must be a more efficient way to do this.
 }
 \examples{
-plt <- ontology_plot(cell_type="Amacrine cells")
+results = load_example_results()[seq(100000)]
+plt <- ontology_plot(cell_type="ENS_glia", results=results)
 }

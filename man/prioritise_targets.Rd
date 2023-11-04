@@ -239,5 +239,6 @@ at the disease-level, phenotype-level, or symptom-level.}
 }
 }
 \examples{
-res <- prioritise_targets()
+results = load_example_results()[seq(5000),]
+res <- prioritise_targets(results=results)
 }

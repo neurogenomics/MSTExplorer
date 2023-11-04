@@ -31,5 +31,6 @@ ggplot object
 Plot the frequency of gene-phenotype and phenotype-disease associations.
 }
 \examples{
-fp_res <- frequency_barplot()
+results <- load_example_results()[seq(5000),]
+fp_res <- frequency_barplot(results=results)
 }

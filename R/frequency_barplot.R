@@ -8,7 +8,8 @@
 #' @export
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @examples
-#' fp_res <- frequency_barplot()
+#' results <- load_example_results()[seq(5000),]
+#' fp_res <- frequency_barplot(results=results)
 frequency_barplot <- function(results = load_example_results(),
                               phenotype_to_genes = load_phenotype_to_genes(),
                               show_plot = TRUE,
