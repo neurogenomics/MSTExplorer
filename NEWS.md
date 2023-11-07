@@ -16,6 +16,9 @@
   - Now uses `get_bg` to create background using *gprofiler*.
 * `get_valid_gene_lists`
   - Throw error when 0 valid gene lists found.
+* `get_unfinished_list_names`
+  - Fix example
+* Use *rworkflows@dev* to avoid API limit.
 
 # MultiEWCE 0.1.8
 
