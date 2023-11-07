@@ -78,7 +78,7 @@ Runs EWCE in parallel on multiple gene lists.
 \examples{
 gene_data <- HPOExplorer::load_phenotype_to_genes()
 ctd <- MultiEWCE::load_example_ctd()
-list_names <- unique(gene_data$hpo_name)[seq(3)]
+list_names <- unique(gene_data$hpo_id)[seq(3)]
 res_files <- ewce_para(ctd = ctd,
                        gene_data = gene_data,
                        list_names = list_names,
