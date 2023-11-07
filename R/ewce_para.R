@@ -14,6 +14,7 @@
 #' @param force_new Overwrite previous results
 #'  in the \code{save_dir_tmp}.
 #' @param cores The number of cores to run in parallel (e.g. 8) \code{int}.
+#' @param min_genes Minimum number of genes per list (default: 4)
 #' @inheritParams gen_results
 #' @inheritParams EWCE::bootstrap_enrichment_test
 #' @returns Paths to saved results at "(save_dir)/(list_name).rds"
@@ -46,10 +47,11 @@ ewce_para <- function(ctd,
                       bg = get_bg(species1 = genelistSpecies,
                                   species2 = sctSpecies,
                                   overwrite = force_new),
+                      min_genes = 4,
                       save_dir_tmp = tempdir(),
                       parallel_boot = FALSE,
-                      cores=1,
-                      verbose=FALSE) {
+                      cores = 1,
+                      verbose = FALSE) {
   # devoptera::args2vars(ewce_para)
 
   if(!is.null(save_dir_tmp)){
@@ -61,6 +63,7 @@ ewce_para <- function(ctd,
                                      list_names =  unique(list_names),
                                      list_name_column = list_name_column,
                                      gene_data = gene_data,
+                                     min_genes = min_genes,
                                      verbose = verbose)
 
   #### Create results directory and remove finished gene lists ####
@@ -77,6 +80,9 @@ ewce_para <- function(ctd,
   } else {
     no_cores <- 1
   }
+  #### Report on background
+  messager("Background contains",formatC(length(bg),big.mark = ","),"genes.",
+           v=verbose)
   #### Iterate EWCE ####
   res_files <- parallel::mclapply(stats::setNames(list_names,
                                                   list_names),

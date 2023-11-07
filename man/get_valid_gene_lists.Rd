@@ -10,6 +10,7 @@ get_valid_gene_lists(
   list_name_column,
   gene_data,
   annotLevel = 1,
+  min_genes = 4,
   verbose = TRUE
 )
 }
@@ -27,6 +28,8 @@ that has the gene list names.}
 
 \item{annotLevel}{An integer indicating which level of \code{sct_data} to
 analyse (\emph{Default: 1}).}
+
+\item{min_genes}{Minimum number of genes per list (default: 4)}
 
 \item{verbose}{Print messages.}
 }

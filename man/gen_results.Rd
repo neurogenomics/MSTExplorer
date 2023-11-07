@@ -16,6 +16,7 @@ gen_results(
   sctSpecies = "human",
   force_new = FALSE,
   bg = get_bg(species1 = genelistSpecies, species2 = sctSpecies, overwrite = force_new),
+  min_genes = 4,
   cores = 1,
   parallel_boot = FALSE,
   save_dir_tmp = NULL,
@@ -57,6 +58,8 @@ in the \code{save_dir_tmp}.}
 \item{bg}{List of gene symbols containing the background gene list
 (including hit genes). If \code{bg=NULL},
  an appropriate gene background will be created automatically.}
+
+\item{min_genes}{Minimum number of genes per list (default: 4)}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 

@@ -4,12 +4,18 @@
 
 * New function: `get_bg`:
   - Creates and caches background made with `gprofiler`.
+* New function: `standardise_genes`
+  - May move this to `orthogene` package as it's quite generally useful.
+* Allow users to set min number of genes:
+  - `min_genes` arg in `gen_results` / `ewce_para`.
 
 ## Bug fixes
 
-- `gen_results` / `ewce_para`
+* `gen_results` / `ewce_para`
   - `bg` was incorrectly set to use only genes in `gene_data`.
   - Now uses `get_bg` to create background using *gprofiler*.
+* `get_valid_gene_lists`
+  - Throw error when 0 valid gene lists found.
 
 # MultiEWCE 0.1.8
 

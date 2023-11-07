@@ -16,6 +16,7 @@ ewce_para(
   genelistSpecies = "human",
   sctSpecies = "human",
   bg = get_bg(species1 = genelistSpecies, species2 = sctSpecies, overwrite = force_new),
+  min_genes = 4,
   save_dir_tmp = tempdir(),
   parallel_boot = FALSE,
   cores = 1,
@@ -56,6 +57,8 @@ See \link[EWCE]{list_species} for all available species.}
 \item{bg}{List of gene symbols containing the background gene list
 (including hit genes). If \code{bg=NULL},
  an appropriate gene background will be created automatically.}
+
+\item{min_genes}{Minimum number of genes per list (default: 4)}
 
 \item{save_dir_tmp}{Folder to save intermediate results files to
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}
