@@ -10,13 +10,13 @@ ewce_para(
   list_name_column = "hpo_id",
   gene_column = "gene_symbol",
   list_names = unique(gene_data[[list_name_column]]),
-  bg = unique(gene_data[[gene_column]]),
   reps = 100,
   annotLevel = 1,
+  force_new = FALSE,
   genelistSpecies = "human",
   sctSpecies = "human",
+  bg = get_bg(species1 = genelistSpecies, species2 = sctSpecies, overwrite = force_new),
   save_dir_tmp = tempdir(),
-  force_new = FALSE,
   parallel_boot = FALSE,
   cores = 1,
   verbose = FALSE
@@ -36,15 +36,14 @@ that has the gene list names.}
 
 \item{list_names}{character vector of gene list names.}
 
-\item{bg}{List of gene symbols containing the background gene list
-(including hit genes). If \code{bg=NULL},
- an appropriate gene background will be created automatically.}
-
 \item{reps}{Number of random gene lists to generate (\emph{Default: 100},
 but should be >=10,000 for publication-quality results).}
 
 \item{annotLevel}{An integer indicating which level of \code{sct_data} to
 analyse (\emph{Default: 1}).}
+
+\item{force_new}{Overwrite previous results
+in the \code{save_dir_tmp}.}
 
 \item{genelistSpecies}{Species that \code{hits} genes came from
 (no longer limited to just "mouse" and "human").
@@ -54,11 +53,12 @@ See \link[EWCE]{list_species} for all available species.}
 (no longer limited to just "mouse" and "human").
 See \link[EWCE]{list_species} for all available species.}
 
+\item{bg}{List of gene symbols containing the background gene list
+(including hit genes). If \code{bg=NULL},
+ an appropriate gene background will be created automatically.}
+
 \item{save_dir_tmp}{Folder to save intermediate results files to
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}
-
-\item{force_new}{Overwrite previous results
-in the \code{save_dir_tmp}.}
 
 \item{parallel_boot}{Parallelise at the level of bootstrap iterations,
 rather than across gene lists.}

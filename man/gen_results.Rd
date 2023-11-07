@@ -10,16 +10,16 @@ gen_results(
   list_name_column = "hpo_id",
   gene_column = "gene_symbol",
   list_names = unique(gene_data[[list_name_column]]),
-  bg = unique(gene_data[[gene_column]]),
   reps = 100,
   annotLevel = 1,
   genelistSpecies = "human",
   sctSpecies = "human",
+  force_new = FALSE,
+  bg = get_bg(species1 = genelistSpecies, species2 = sctSpecies, overwrite = force_new),
   cores = 1,
   parallel_boot = FALSE,
   save_dir_tmp = NULL,
   save_dir = tempdir(),
-  force_new = FALSE,
   verbose = 1
 )
 }
@@ -37,10 +37,6 @@ that has the gene list names.}
 
 \item{list_names}{character vector of gene list names.}
 
-\item{bg}{List of gene symbols containing the background gene list
-(including hit genes). If \code{bg=NULL},
- an appropriate gene background will be created automatically.}
-
 \item{reps}{Number of random gene lists to generate (\emph{Default: 100},
 but should be >=10,000 for publication-quality results).}
 
@@ -55,6 +51,13 @@ See \link[EWCE]{list_species} for all available species.}
 (no longer limited to just "mouse" and "human").
 See \link[EWCE]{list_species} for all available species.}
 
+\item{force_new}{Overwrite previous results
+in the \code{save_dir_tmp}.}
+
+\item{bg}{List of gene symbols containing the background gene list
+(including hit genes). If \code{bg=NULL},
+ an appropriate gene background will be created automatically.}
+
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 
 \item{parallel_boot}{Parallelise at the level of bootstrap iterations,
@@ -64,9 +67,6 @@ rather than across gene lists.}
 (one file per gene list). Set to \code{NULL} to skip saving temporary files.}
 
 \item{save_dir}{Folder to save merged results in.}
-
-\item{force_new}{Overwrite previous results
-in the \code{save_dir_tmp}.}
 
 \item{verbose}{Print messages.}
 }

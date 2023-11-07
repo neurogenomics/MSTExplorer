@@ -7,7 +7,7 @@
 get_data(
   fname,
   repo = "neurogenomics/MultiEWCE",
-  storage_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
+  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
   overwrite = TRUE,
   tag = "latest",
   check = FALSE
@@ -15,6 +15,8 @@ get_data(
 }
 \arguments{
 \item{repo}{Repository name in format "owner/repo". Defaults to \code{guess_repo()}.}
+
+\item{save_dir}{Directory to save data to.}
 
 \item{overwrite}{Should any local files of the same name be overwritten?
 default \code{TRUE}.}

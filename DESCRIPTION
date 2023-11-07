@@ -1,6 +1,6 @@
 Package: MultiEWCE
 Title:  Ontology-scale Cell Type Enrichment Analyses
-Version: 0.1.8
+Version: 0.1.9
 Authors@R:
     c(person(given = "Robert",
            family = "Gordon-Smith",
@@ -35,6 +35,7 @@ Depends:
     R (>= 4.1)
 Imports:
     HPOExplorer (>= 0.99.10),
+    orthogene,
     data.table,
     EWCE (>= 1.0.0),
     parallel,
@@ -70,8 +71,7 @@ Suggests:
     rvest,
     patchwork,
     ggnetwork,
-    ggpubr,
-    orthogene,
+    ggpubr, 
     readxl,
     tidyr
 Remotes: 

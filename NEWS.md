@@ -1,3 +1,16 @@
+# MultiEWCE 0.1.9
+
+## New features
+
+* New function: `get_bg`:
+  - Creates and caches background made with `gprofiler`.
+
+## Bug fixes
+
+- `gen_results` / `ewce_para`
+  - `bg` was incorrectly set to use only genes in `gene_data`.
+  - Now uses `get_bg` to create background using *gprofiler*.
+
 # MultiEWCE 0.1.8
 
 ## New features

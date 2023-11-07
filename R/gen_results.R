@@ -29,6 +29,7 @@
 #' @returns All results as a dataframe.
 #'
 #' @export
+#' @importFrom orthogene create_background
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @importFrom stringr str_replace_all
 #' @examples
@@ -44,16 +45,18 @@ gen_results <- function(ctd,
                         list_name_column = "hpo_id",
                         gene_column = "gene_symbol",
                         list_names = unique(gene_data[[list_name_column]]),
-                        bg = unique(gene_data[[gene_column]]),
                         reps = 100,
                         annotLevel = 1,
                         genelistSpecies = "human",
                         sctSpecies = "human",
+                        force_new = FALSE,
+                        bg = get_bg(species1 = genelistSpecies,
+                                    species2 = sctSpecies,
+                                    overwrite = force_new),
                         cores = 1,
                         parallel_boot = FALSE,
                         save_dir_tmp = NULL,
                         save_dir = tempdir(),
-                        force_new = FALSE,
                         verbose = 1) {
 
   # devoptera::args2vars(gen_results)
@@ -64,7 +67,7 @@ gen_results <- function(ctd,
   #### Check if results already exist ####
   if(file.exists(save_path) &&
      isFALSE(force_new)) {
-    messager("Results already exist at:",save_path,
+    messager("Results already exist at:",save_path,"\n",
              "Use `force_new=TRUE` to overwrite.",v=verbose)
     results_final <- readRDS(save_path)
     return(results_final)
