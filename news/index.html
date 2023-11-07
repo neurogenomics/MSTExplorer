@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.8</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
       </span>
     </div>
 
@@ -60,6 +60,24 @@
       <small>Source: <a href="https://github.com/neurogenomics/MultiEWCE/blob/HEAD/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.9" id="multiewce-019">MultiEWCE 0.1.9<a class="anchor" aria-label="anchor" href="#multiewce-019"></a></h2>
+<div class="section level3">
+<h3 id="new-features-0-1-9">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-9"></a></h3>
+<ul><li>New function: <code>get_bg</code>:
+<ul><li>Creates and caches background made with <code>gprofiler</code>.</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-1-9">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-9"></a></h3>
+<ul><li>
+<code>gen_results</code> / <code>ewce_para</code>
+<ul><li>
+<code>bg</code> was incorrectly set to use only genes in <code>gene_data</code>.</li>
+<li>Now uses <code>get_bg</code> to create background using <em>gprofiler</em>.</li>
+</ul></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.8" id="multiewce-018">MultiEWCE 0.1.8<a class="anchor" aria-label="anchor" href="#multiewce-018"></a></h2>
 <div class="section level3">
