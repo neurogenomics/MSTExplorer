@@ -33,8 +33,7 @@ get_bg <- function(species1 = "human",
     )
   if(file.exists(save_path) &&
      isFALSE(overwrite)){
-    messager("Background already exists at:",save_path,"\n",
-             "Use `overwrite=TRUE` to overwrite.",v=verbose)
+    messager("Useing cached bg.",v=verbose)
     bg <- readRDS(save_path)
   } else {
     dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
