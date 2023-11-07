@@ -193,6 +193,8 @@ genes (e.g. "gene_symbol"). For example:</p><table class="table table"><tr><td>h
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2023-10-09</span>
 <span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_id</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu">gen_results</span><span class="op">(</span>ctd <span class="op">=</span> <span class="va">ctd</span>,</span></span>
@@ -203,9 +205,9 @@ genes (e.g. "gene_symbol"). For example:</p><table class="table table"><tr><td>h
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 2 / 5 gene lists are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing gene counts.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing gene counts.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in: 3.6 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in: 4 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving results ==&gt; /tmp/Rtmp5NzcNQ/gen_results.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving results ==&gt; /tmp/RtmpS5wtsl/gen_results.rds</span>
 </code></pre></div>
     </div>
   </div>

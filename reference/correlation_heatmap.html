@@ -174,10 +174,15 @@ to gene annotations.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">top_targets</span> <span class="op">&lt;-</span> <span class="va">example_targets</span><span class="op">$</span><span class="va">top_targets</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>,<span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">hm</span> <span class="op">&lt;-</span> <span class="fu">correlation_heatmap</span><span class="op">(</span>top_targets <span class="op">=</span> <span class="va">top_targets</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Constructing HPO gene x phenotype matrix.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2023-10-09</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating gene-disease associations with Evidence score</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with Disease</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype.hpoa</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2023-10-09</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering data from GenCC.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Importing cached file.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2023-11-07</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing all parwise correlations.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Aggregating results by group_var='hpo_name'/'hpo_id'/'ancestor_name'/'ontLvl'/'onset_top'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: ComplexHeatmap</span>
