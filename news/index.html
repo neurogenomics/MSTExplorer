@@ -67,6 +67,13 @@
 <ul><li>New function: <code>get_bg</code>:
 <ul><li>Creates and caches background made with <code>gprofiler</code>.</li>
 </ul></li>
+<li>New function: <code>standardise_genes</code>
+<ul><li>May move this to <code>orthogene</code> package as it’s quite generally useful.</li>
+</ul></li>
+<li>Allow users to set min number of genes:
+<ul><li>
+<code>min_genes</code> arg in <code>gen_results</code> / <code>ewce_para</code>.</li>
+</ul></li>
 </ul></div>
 <div class="section level3">
 <h3 id="bug-fixes-0-1-9">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-9"></a></h3>
@@ -76,6 +83,15 @@
 <code>bg</code> was incorrectly set to use only genes in <code>gene_data</code>.</li>
 <li>Now uses <code>get_bg</code> to create background using <em>gprofiler</em>.</li>
 </ul></li>
+<li>
+<code>get_valid_gene_lists</code>
+<ul><li>Throw error when 0 valid gene lists found.</li>
+</ul></li>
+<li>
+<code>get_unfinished_list_names</code>
+<ul><li>Fix example</li>
+</ul></li>
+<li>Use <em><a href="mailto:rworkflows@dev" class="email">rworkflows@dev</a></em> to avoid API limit.</li>
 </ul></div>
 </div>
     <div class="section level2">

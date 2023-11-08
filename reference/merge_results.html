@@ -72,7 +72,7 @@ files will be searched for and imported.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">merge_results</span><span class="op">(</span>save_dir <span class="op">=</span> <span class="cn">NULL</span>, res_files <span class="op">=</span> <span class="cn">NULL</span>, list_name_column <span class="op">=</span> <span class="st">"hpo_name"</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">merge_results</span><span class="op">(</span>save_dir <span class="op">=</span> <span class="cn">NULL</span>, res_files <span class="op">=</span> <span class="cn">NULL</span>, list_name_column <span class="op">=</span> <span class="st">"hpo_id"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -100,18 +100,29 @@ that has the gene list names.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2023-10-09</span>
-<span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu">MultiEWCE</span><span class="fu">::</span><span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_name</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_id</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">res_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="ewce_para.html">ewce_para</a></span><span class="op">(</span>ctd <span class="op">=</span> <span class="va">ctd</span>,</span></span>
 <span class="r-in"><span>                       gene_data <span class="op">=</span> <span class="va">gene_data</span>,</span></span>
 <span class="r-in"><span>                       list_names <span class="op">=</span> <span class="va">list_names</span>,</span></span>
+<span class="r-in"><span>                       force_new <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>                       reps <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in check_bootstrap_args(sct_data = sct_data, hits = hits, annotLevel = annotLevel,     reps = reps, controlledCT = controlledCT):</span> Must provide a gene list to hits.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Retrieving all genes using: gprofiler</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Retrieving all organisms available in gprofiler.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using stored `gprofiler_orgs`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping species name: human</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Common name mapping found for human</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 organism identified from search: hsapiens</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene table with 62,663 rows retrieved.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Returning all 62,663 genes from human.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Returning 62,663 unique genes from entire human genome.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2023-11-08</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing gene counts.</span>
 <span class="r-in"><span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu">merge_results</span><span class="op">(</span>res_files<span class="op">=</span><span class="va">res_files</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'res_files' not found</span>
 </code></pre></div>
     </div>
   </div>
