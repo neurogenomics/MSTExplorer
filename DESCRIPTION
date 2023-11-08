@@ -73,7 +73,8 @@ Suggests:
     ggnetwork,
     ggpubr, 
     readxl,
-    tidyr
+    tidyr,
+    magick
 Remotes: 
   github::neurogenomics/HPOExplorer,
   github::NathanSkene/EWCE
