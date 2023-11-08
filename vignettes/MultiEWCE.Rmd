@@ -25,7 +25,7 @@ This package is useful in cases where you have a large number of related, but se
 # Loading Phenotype Associated Gene Lists from the HPO
 The MultiEWCE package requires the gene data to be in a particular format. It must be a data.frame that includes one column of gene list names, and another column of genes. For example: 
 
-| Phenotype        | Gene   |
+| hpo_name         | Gene   |
 | ---------------- | ------ |
 | "Abnormal heart" | gene X |
 | "Abnormal heart" | gene Y |
@@ -49,7 +49,7 @@ In this example our **gene list names** column is called `Phenotype` and our col
 ```{r setup_args}
 # Loading CTD file 
 ctd <- load_example_ctd()
-list_names <- unique(gene_data$hpo_name)[seq(3)] 
+list_names <- unique(gene_data$hpo_id)[seq(10)] 
 reps <- 10 # in practice would use more reps
 cores <- 1 # in practice would use more cores
 save_dir <- tempdir()
@@ -96,10 +96,11 @@ Now we have set up all our desired inputs, we can run the analysis.
 all_results <- MultiEWCE::gen_results(ctd = ctd,
                                       gene_data = gene_data,
                                       list_names = list_names, 
-                                      list_name_column = "hpo_name",
+                                      list_name_column = "hpo_id",
                                       reps = reps,
                                       cores = cores,
                                       save_dir = save_dir, 
+                                      force_new = TRUE,
                                       save_dir_tmp = save_dir_tmp) 
 ```
 
@@ -109,11 +110,14 @@ Just as an example, we will create a plot showing the number of significant enri
 library(ggplot2)
 library(data.table)
 #### Aggregate results ####
-n_signif <- all_results[q<=0.05 & !is.na(q), .(sig_enrichments = .N), by="hpo_name"]
+n_signif <- all_results[q<=0.05 & !is.na(q),
+                        list(sig_enrichments = .N,
+                             mean_fold_change=mean(fold_change)), 
+                        by="hpo_id"]
 #### Plot #### 
-plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(hpo_name,width = 10),
+plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(hpo_id,width = 10),
                                y = sig_enrichments,
-                               fill = sig_enrichments)) +
+                               fill = mean_fold_change)) +
     geom_col() +
     labs(x="Phenotype",y="Enrichments (n)") + 
     theme_bw() 
@@ -149,7 +153,7 @@ cat(paste(length(unique(gene_set$gene_symbol)),
 This function is used to find which gene lists you have not yet analysed 
 
 ```{r get_unfinished} 
-all_phenotypes <- unique(gene_data$hpo_name)
+all_phenotypes <- unique(gene_data$hpo_id)
 unfinished <- MultiEWCE::get_unfinished_list_names(list_names = all_phenotypes,
                                                    save_dir_tmp = save_dir_tmp)
 
@@ -176,6 +180,7 @@ all_results <- MultiEWCE::gen_results(ctd = ctd,
                                       list_name_column = "disease_id",
                                       list_names = list_names,
                                       annotLevel = 1,
+                                      force_new = TRUE,
                                       reps = 10)
 ```
 
@@ -193,6 +198,7 @@ ctd <- load_example_ctd("ctd_DescartesHuman.rds")
 all_results <- MultiEWCE::gen_results(ctd = ctd,
                                       list_name_column = "hpo_id", 
                                       gene_data = gene_data,  
+                                      annotLevel = 2,
                                       reps = 100000,
                                       cores = 10)
 ```

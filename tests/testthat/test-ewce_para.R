@@ -33,7 +33,7 @@ test_that("ewce_para works", {
   }
 
   #### Tests get_unfinished_list_names ####
-  all_phenotypes <- unique(gene_data$hpo_name)
+  all_phenotypes <- unique(gene_data$hpo_id)
   unfinished <- get_unfinished_list_names(list_names = all_phenotypes,
                                           save_dir_tmp = save_dir_tmp)
   testthat::expect_lte(length(unfinished),
@@ -44,17 +44,17 @@ test_that("ewce_para works", {
   all_results1 <- merge_results(res_files=res_files)
   all_results2 <- merge_results(res_files=res_files2)
   ## Confirm both methods have the correct phenotyoes
-  testthat::expect_gte(sum(list_names %in% unique(all_results1$hpo_name)),
+  testthat::expect_gte(sum(list_names %in% unique(all_results1$hpo_id)),
                        length(list_names)-3)
-  testthat::expect_gte(sum(list_names %in% unique(all_results2$hpo_name)),
+  testthat::expect_gte(sum(list_names %in% unique(all_results2$hpo_id)),
                        length(list_names)-3)
   ## Confirm both methods are identical
   data.table::setkey(all_results1,"CellType")
   data.table::setkey(all_results2,"CellType")
   testthat::expect_equal(nrow(all_results1),
                          nrow(all_results2))
-  testthat::expect_equal(sort(unique(all_results1$hpo_name)),
-                         sort(unique(all_results2$hpo_name)))
+  testthat::expect_equal(sort(unique(all_results1$hpo_id)),
+                         sort(unique(all_results2$hpo_id)))
   testthat::expect_equal(sort(unique(all_results1$CellType)),
                          sort(unique(all_results2$CellType)))
   # testthat::expect_equal(all_results1, all_results2)

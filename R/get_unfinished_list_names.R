@@ -20,7 +20,7 @@
 #'                        list_names = list_names,
 #'                        reps = 10,
 #'                        save_dir_tmp = save_dir_tmp)
-#' unfinished <- get_unfinished_list_names(list_names = gene_data$hpo_name,
+#' unfinished <- get_unfinished_list_names(list_names = gene_data$hpo_id,
 #'                                         save_dir_tmp = save_dir_tmp)
 get_unfinished_list_names <- function (list_names,
                                        save_dir_tmp) {

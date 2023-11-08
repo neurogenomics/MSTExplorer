@@ -4,7 +4,7 @@
 \alias{merge_results}
 \title{Merge results}
 \usage{
-merge_results(save_dir = NULL, res_files = NULL, list_name_column = "hpo_name")
+merge_results(save_dir = NULL, res_files = NULL, list_name_column = "hpo_id")
 }
 \arguments{
 \item{save_dir}{Folder to save merged results in.}
@@ -25,12 +25,14 @@ Alternatively, can simply provide \code{save_dir} and \emph{.rds}
 files will be searched for and imported.
 }
 \examples{
+set.seed(2023)
 gene_data <- HPOExplorer::load_phenotype_to_genes()
-ctd <- MultiEWCE::load_example_ctd()
-list_names <- unique(gene_data$hpo_name)[seq(3)]
+ctd <- load_example_ctd()
+list_names <- unique(gene_data$hpo_id)[seq(3)]
 res_files <- ewce_para(ctd = ctd,
                        gene_data = gene_data,
                        list_names = list_names,
+                       force_new = TRUE,
                        reps = 10)
 all_results <- merge_results(res_files=res_files)
 }
