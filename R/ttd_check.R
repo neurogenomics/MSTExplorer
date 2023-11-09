@@ -99,6 +99,6 @@ ttd_check <- function(top_targets,
   return(
     list(data=dat_sub,
          data_overlap=dat_sub2,
-         plot=plot)
+         plot=plt)
   )
 }
