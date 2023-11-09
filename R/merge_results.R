@@ -30,7 +30,7 @@ merge_results <- function(save_dir=NULL,
   if(is.null(res_files)){
     if(is.null(save_dir)) stop("Must provided save_dir when res_files=NULL.")
     res_files <- list.files(path = save_dir,
-                            pattern = ".rds$",
+                            pattern = "\\.rds$",
                             ignore.case = TRUE,
                             full.names = TRUE)
     names(res_files) <- gsub("_"," ",tolower(gsub(".rds$","",res_files)))

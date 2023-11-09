@@ -52,7 +52,7 @@ ctd <- load_example_ctd()
 list_names <- unique(gene_data$hpo_id)[seq(10)] 
 reps <- 10 # in practice would use more reps
 cores <- 1 # in practice would use more cores
-save_dir <- tempdir()
+save_dir <- file.path(tempdir())
 save_dir_tmp <- file.path(save_dir,"results")
 ```
 
@@ -131,7 +131,7 @@ methods::show(plot1)
 ## merge_results 
 If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the `merge_results` function manually. The `save_dir` argument is the path to your results directory and the `list_name_column` argument is the name of the column containing gene list names. In this case we used "Phenotype" as this column name when we generated the results.
 
-```{r merge}
+```{r merge, eval=FALSE}
 all_results_2 <- MultiEWCE::merge_results(save_dir = save_dir_tmp)
 ```
 
