@@ -93,7 +93,8 @@ less than 4 unique genes (which cause errors in EWCE analysis).</p>
 <span>  parallel_boot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  save_dir_tmp <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  save_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="fl">1</span></span>
+<span>  verbose <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -180,6 +181,96 @@ rather than across gene lists.</p></dd>
 <dt>verbose</dt>
 <dd><p>Print messages.</p></dd>
 
+
+<dt>...</dt>
+<dd><p>Arguments passed on to <code><a href="https://rdrr.io/pkg/EWCE/man/bootstrap_enrichment_test.html" class="external-link">EWCE::bootstrap_enrichment_test</a></code></p><dl><dt><code>sct_data</code></dt>
+<dd><p>List generated using <a href="https://rdrr.io/pkg/EWCE/man/generate_celltype_data.html" class="external-link">generate_celltype_data</a>.</p></dd>
+
+    <dt><code>hits</code></dt>
+<dd><p>List of gene symbols containing the target gene list.
+Will automatically be converted to human gene symbols
+if <code>geneSizeControl=TRUE</code>.</p></dd>
+
+    <dt><code>sctSpecies_origin</code></dt>
+<dd><p>Species that the <code>sct_data</code> 
+originally came from, regardless of its current gene format 
+(e.g. it was previously converted from mouse to human gene orthologs).
+ This is used for computing an appropriate backgrund.</p></dd>
+
+    <dt><code>output_species</code></dt>
+<dd><p>Species to convert <code>sct_data</code> and <code>hits</code> to
+(Default: "human").
+See <a href="https://rdrr.io/pkg/EWCE/man/list_species.html" class="external-link">list_species</a> for all available species.</p></dd>
+
+    <dt><code>method</code></dt>
+<dd><p>R package to use for gene mapping:</p><ul><li><p><code>"gprofiler"</code> : Slower but more species and genes.</p></li>
+<li><p><code>"homologene"</code> : Faster but fewer species and genes.</p></li>
+<li><p><code>"babelgene"</code> : Faster but fewer species and genes.
+Also gives consensus scores for each gene mapping based on a
+ several different data sources.</p></li>
+</ul></dd>
+
+    <dt><code>no_cores</code></dt>
+<dd><p>Number of cores to parallelise
+bootstrapping <code>reps</code> over.</p></dd>
+
+    <dt><code>geneSizeControl</code></dt>
+<dd><p>Whether you want to control for
+GC content and transcript length. Recommended if the gene list originates
+from genetic studies (<em>Default: FALSE</em>).
+If set to <code>TRUE</code>, then <code>hits</code> must be from humans.</p></dd>
+
+    <dt><code>controlledCT</code></dt>
+<dd><p>[Optional] If not NULL, and instead is the name of a
+cell type, then the bootstrapping controls for expression within that
+cell type.</p></dd>
+
+    <dt><code>mtc_method</code></dt>
+<dd><p>Multiple-testing correction method
+(passed to <a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a>).</p></dd>
+
+    <dt><code>sort_results</code></dt>
+<dd><p>Sort enrichment results from
+smallest to largest p-values.</p></dd>
+
+    <dt><code>standardise_sct_data</code></dt>
+<dd><p>Should <code>sct_data</code> be standardised? 
+if <code>TRUE</code>:</p><ul><li><p>When <code>sctSpecies!=output_species</code>
+ the <code>sct_data</code> will be checked for object formatting and 
+ the genes will be converted to the orthologs of the <code>output_species</code> 
+ with <a href="https://rdrr.io/pkg/EWCE/man/standardise_ctd.html" class="external-link">standardise_ctd</a>
+  (which calls <a href="https://rdrr.io/pkg/orthogene/man/map_genes.html" class="external-link">map_genes</a> internally).</p></li>
+<li><p>When <code>sctSpecies==output_species</code>,
+ the <code>sct_data</code> will be checked for object formatting 
+ with  <a href="https://rdrr.io/pkg/EWCE/man/standardise_ctd.html" class="external-link">standardise_ctd</a>, but the gene names 
+ will remain untouched.</p></li>
+</ul></dd>
+
+    <dt><code>standardise_hits</code></dt>
+<dd><p>Should <code>hits</code> be standardised? 
+If <code>TRUE</code>:</p><ul><li><p>When <code>genelistSpecies!=output_species</code>, 
+ the genes will be converted to the orthologs of the <code>output_species</code>
+ with <a href="https://rdrr.io/pkg/orthogene/man/convert_orthologs.html" class="external-link">convert_orthologs</a>.</p></li>
+<li><p>When <code>genelistSpecies==output_species</code>, 
+ the genes will be standardised with <a href="https://rdrr.io/pkg/orthogene/man/map_genes.html" class="external-link">map_genes</a>.</p></li>
+</ul><p>If <code>FALSE</code>, <code>hits</code> will be passed on to subsequent steps as-is.</p></dd>
+
+    <dt><code>localHub</code></dt>
+<dd><p>If working offline, add argument localHub=TRUE to work 
+with a local, non-updated hub; It will only have resources available that
+have previously been downloaded. If offline, Please also see BiocManager
+vignette section on offline use to ensure proper functionality.</p></dd>
+
+    <dt><code>store_gene_data</code></dt>
+<dd><p>Store sampled gene data for every bootstrap iteration.
+When the number of bootstrap <code>reps</code> is very high (&gt;=100k) and/or
+ the number of genes in <code>hits</code> is very high, you may want
+ to set <code>store_gene_data=FALSE</code> to avoid using excessive amounts of 
+ CPU memory.</p></dd>
+
+  
+</dl></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -209,13 +300,13 @@ genes (e.g. "gene_symbol"). For example:</p><table class="table table"><tr><td>h
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Validating gene lists..</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 2 / 5 gene lists are valid.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Useing cached bg.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2023-11-09</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2023-11-14</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Background contains 62,663 genes.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing gene counts.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing gene counts.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in: 3.7 seconds.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Done in: 5.5 seconds.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving results ==&gt; /tmp/RtmpiGoWD4/gen_results.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving results ==&gt; /tmp/Rtmp0tNWxK/gen_results.rds</span>
 </code></pre></div>
     </div>
   </div>
