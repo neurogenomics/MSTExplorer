@@ -14,7 +14,7 @@
 #' fp_res <- frequency_histogram(results=results)
 frequency_histogram <- function(results = load_example_results(),
                                 phenotype_to_genes = load_phenotype_to_genes(),
-                                show_plot = TRUE,
+                                show_plot = FALSE,
                                 verbose = TRUE){
 
   Metric_Type <- value <- variable <- hpo_id <- NULL;

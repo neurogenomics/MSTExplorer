@@ -12,7 +12,7 @@
 #' fp_res <- frequency_barplot(results=results)
 frequency_barplot <- function(results = load_example_results(),
                               phenotype_to_genes = load_phenotype_to_genes(),
-                              show_plot = TRUE,
+                              show_plot = FALSE,
                               verbose = TRUE){
 
   hpo_id <- NULL;

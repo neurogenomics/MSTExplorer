@@ -7,7 +7,7 @@
 frequency_barplot(
   results = load_example_results(),
   phenotype_to_genes = load_phenotype_to_genes(),
-  show_plot = TRUE,
+  show_plot = FALSE,
   verbose = TRUE
 )
 }
