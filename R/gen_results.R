@@ -26,6 +26,7 @@
 #' rather than across gene lists.
 #' @inheritParams ewce_para
 #' @inheritParams EWCE::bootstrap_enrichment_test
+#' @inheritDotParams EWCE::bootstrap_enrichment_test
 #' @returns All results as a dataframe.
 #'
 #' @export
@@ -58,7 +59,8 @@ gen_results <- function(ctd,
                         parallel_boot = FALSE,
                         save_dir_tmp = NULL,
                         save_dir = tempdir(),
-                        verbose = 1) {
+                        verbose = 1,
+                        ...) {
 
   # devoptera::args2vars(gen_results)
 
@@ -90,7 +92,8 @@ gen_results <- function(ctd,
                          parallel_boot = parallel_boot,
                          save_dir_tmp = save_dir_tmp,
                          force_new = force_new,
-                         verbose = verbose)
+                         verbose = verbose,
+                         ...)
   #### Merge results into one dataframe ####
   results_final <- merge_results(res_files = res_files,
                                  list_name_column = list_name_column)

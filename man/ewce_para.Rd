@@ -20,7 +20,8 @@ ewce_para(
   save_dir_tmp = tempdir(),
   parallel_boot = FALSE,
   cores = 1,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 }
 \arguments{
@@ -69,6 +70,79 @@ rather than across gene lists.}
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 
 \item{verbose}{Print messages.}
+
+\item{...}{
+  Arguments passed on to \code{\link[EWCE:bootstrap_enrichment_test]{EWCE::bootstrap_enrichment_test}}
+  \describe{
+    \item{\code{sct_data}}{List generated using \link[EWCE]{generate_celltype_data}.}
+    \item{\code{hits}}{List of gene symbols containing the target gene list.
+Will automatically be converted to human gene symbols
+if \code{geneSizeControl=TRUE}.}
+    \item{\code{sctSpecies_origin}}{Species that the \code{sct_data} 
+originally came from, regardless of its current gene format 
+(e.g. it was previously converted from mouse to human gene orthologs).
+ This is used for computing an appropriate backgrund.}
+    \item{\code{output_species}}{Species to convert \code{sct_data} and \code{hits} to
+(Default: "human").
+See \link[EWCE]{list_species} for all available species.}
+    \item{\code{method}}{R package to use for gene mapping:
+\itemize{
+\item{\code{"gprofiler"} : Slower but more species and genes.}
+\item{\code{"homologene"} : Faster but fewer species and genes.}
+\item{\code{"babelgene"} : Faster but fewer species and genes.
+Also gives consensus scores for each gene mapping based on a
+ several different data sources.}
+}}
+    \item{\code{no_cores}}{Number of cores to parallelise
+bootstrapping \code{reps} over.}
+    \item{\code{geneSizeControl}}{Whether you want to control for
+GC content and transcript length. Recommended if the gene list originates
+from genetic studies (\emph{Default: FALSE}).
+If set to \code{TRUE}, then \code{hits} must be from humans.}
+    \item{\code{controlledCT}}{[Optional] If not NULL, and instead is the name of a
+cell type, then the bootstrapping controls for expression within that
+cell type.}
+    \item{\code{mtc_method}}{Multiple-testing correction method
+(passed to \link[stats]{p.adjust}).}
+    \item{\code{sort_results}}{Sort enrichment results from
+smallest to largest p-values.}
+    \item{\code{standardise_sct_data}}{Should \code{sct_data} be standardised? 
+if \code{TRUE}:
+\itemize{
+\item{When \code{sctSpecies!=output_species}
+ the \code{sct_data} will be checked for object formatting and 
+ the genes will be converted to the orthologs of the \code{output_species} 
+ with \link[EWCE]{standardise_ctd}
+  (which calls \link[orthogene]{map_genes} internally).
+}
+\item{When \code{sctSpecies==output_species},
+ the \code{sct_data} will be checked for object formatting 
+ with  \link[EWCE]{standardise_ctd}, but the gene names 
+ will remain untouched.
+ }
+}}
+    \item{\code{standardise_hits}}{Should \code{hits} be standardised? 
+If \code{TRUE}:
+\itemize{
+\item{When \code{genelistSpecies!=output_species}, 
+ the genes will be converted to the orthologs of the \code{output_species}
+ with \link[orthogene]{convert_orthologs}.
+ }
+\item{When \code{genelistSpecies==output_species}, 
+ the genes will be standardised with \link[orthogene]{map_genes}.
+ }
+} 
+If \code{FALSE}, \code{hits} will be passed on to subsequent steps as-is.}
+    \item{\code{localHub}}{If working offline, add argument localHub=TRUE to work 
+with a local, non-updated hub; It will only have resources available that
+have previously been downloaded. If offline, Please also see BiocManager
+vignette section on offline use to ensure proper functionality.}
+    \item{\code{store_gene_data}}{Store sampled gene data for every bootstrap iteration.
+When the number of bootstrap \code{reps} is very high (>=100k) and/or
+ the number of genes in \code{hits} is very high, you may want
+ to set \code{store_gene_data=FALSE} to avoid using excessive amounts of 
+ CPU memory.}
+  }}
 }
 \value{
 Paths to saved results at "(save_dir)/(list_name).rds"

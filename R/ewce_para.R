@@ -17,6 +17,7 @@
 #' @param min_genes Minimum number of genes per list (default: 4)
 #' @inheritParams gen_results
 #' @inheritParams EWCE::bootstrap_enrichment_test
+#' @inheritDotParams EWCE::bootstrap_enrichment_test
 #' @returns Paths to saved results at "(save_dir)/(list_name).rds"
 #' (when \code{save_dir!=NULL}), or a nested list of results
 #' (when \code{save_dir==NULL}).
@@ -51,7 +52,8 @@ ewce_para <- function(ctd,
                       save_dir_tmp = tempdir(),
                       parallel_boot = FALSE,
                       cores = 1,
-                      verbose = FALSE) {
+                      verbose = FALSE,
+                      ...) {
   # devoptera::args2vars(ewce_para)
 
   if(!is.null(save_dir_tmp)){
@@ -103,7 +105,8 @@ ewce_para <- function(ctd,
         genelistSpecies = genelistSpecies,
         sctSpecies = sctSpecies,
         no_cores = no_cores,
-        verbose = verbose>1 )
+        verbose = verbose>1,
+        ...)
       if(!is.null(save_dir_tmp)){
         save_path <- make_save_path(save_dir = save_dir_tmp,
                                     list_name = p)
