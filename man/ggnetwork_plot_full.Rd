@@ -16,6 +16,8 @@ ggnetwork_plot_full(
   size_var = "ontLvl_relative",
   add_ont_lvl_absolute = TRUE,
   add_ont_lvl_relative = TRUE,
+  method = c("ggnetwork", "visnetwork"),
+  interactive = TRUE,
   verbose = TRUE,
   ...
 )
@@ -59,12 +61,21 @@ See \link[KGExplorer]{get_ontology_levels} for more details.}
 \item{add_ont_lvl_relative}{Add the relative ontology level of each HPO term.
 See \link[KGExplorer]{get_ontology_levels} for more details.}
 
+\item{method}{Method to construct plot with.}
+
+\item{interactive}{Make the plot interactive.}
+
 \item{verbose}{Print messages.}
 
 \item{...}{
-  Arguments passed on to \code{\link[HPOExplorer:make_network_object]{make_network_object}}
+  Arguments passed on to \code{\link[HPOExplorer:make_]{HPOExplorer::make_network_plot}}
   \describe{
-    \item{\code{}}{}
+    \item{\code{phenos}}{A data.table containing HPO IDs and other metadata.}
+    \item{\code{label_var}}{Column containing the label for each node in a graph
+(e.g. "hpo_name").}
+    \item{\code{show_plot}}{Print the plot after it's been generated.}
+    \item{\code{hoverbox_column}}{Name of the new hoverbox column to add.}
+    \item{\code{preferred_palettes}}{Preferred palettes to use for each column.}
   }}
 }
 \value{

@@ -20,6 +20,7 @@
 #' @inheritParams HPOExplorer::make_network_plot
 #' @inheritParams HPOExplorer::filter_descendants
 #' @inheritParams HPOExplorer::make_network_object
+#' @inheritDotParams HPOExplorer::make_network_plot
 #' @returns A named list of outputs,
 #'  including a interactive network plot of the selected subset
 #' of results from RD EWCE analysis.
@@ -40,6 +41,8 @@ ggnetwork_plot_full <- function(cell_type,
                                 size_var = "ontLvl_relative",
                                 add_ont_lvl_absolute = TRUE,
                                 add_ont_lvl_relative = TRUE,
+                                method = c("ggnetwork","visnetwork"),
+                                interactive = TRUE,
                                 verbose = TRUE,
                                 ...){
   messager("ggnetwork_plot_full",v=verbose)
@@ -83,10 +86,11 @@ ggnetwork_plot_full <- function(cell_type,
   }
   #### Make plot ####
   out <- HPOExplorer::make_network_plot(phenos = phenos,
-                                                 colour_var = colour_var,
-                                                 size_var = size_var,
-                                                 interactive = interactive,
-                                                 ...)
+                                        colour_var = colour_var,
+                                        size_var = size_var,
+                                        interactive = interactive,
+                                        method = method,
+                                        ...)
   #### Return ####
   return(out)
 }
