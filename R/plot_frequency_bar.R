@@ -10,8 +10,8 @@
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @examples
 #' results <- load_example_results()[seq(2500),]
-#' fp_res <- frequency_barplot(results=results)
-frequency_barplot <- function(results = load_example_results(),
+#' fp_res <- plot_frequency_bar(results=results)
+plot_frequency_bar <- function(results = load_example_results(),
                               phenotype_to_genes = load_phenotype_to_genes(),
                               allow.cartesian = TRUE,
                               show_plot = FALSE,
@@ -28,16 +28,16 @@ frequency_barplot <- function(results = load_example_results(),
 
   #### barplot #####
   #### Gene frequencies ####
-  gene_plt_df <- frequency_plot_prepare(df = gene_df,
+  gene_plt_df <- plot_frequency_prepare(df = gene_df,
                                         col="gene_freq_name")
-  gene_plt <- frequency_plot_barplot(
+  gene_plt <- plot_frequency_bar_i(
     plt_df = gene_plt_df,
     remove_x_text = TRUE,
     title="Gene frequency within phenotypes")
   #### Phenotype frequencies ####
-  pheno_plt_df <- frequency_plot_prepare(df = results,
+  pheno_plt_df <- plot_frequency_prepare(df = results,
                                          col="pheno_freq_mean")
-  pheno_plt <- frequency_plot_barplot(
+  pheno_plt <- plot_frequency_bar_i(
     plt_df = pheno_plt_df,
     direction = 1,
     title="Phenotype frequency within diseases")

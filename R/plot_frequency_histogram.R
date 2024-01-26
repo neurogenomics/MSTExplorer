@@ -2,7 +2,7 @@
 #'
 #' Plot the frequency of gene-phenotype and phenotype-disease associations.
 #' @inheritParams prioritise_targets
-#' @inheritParams frequency_histogram
+#' @inheritParams plot_frequency_histogram
 #' @inheritParams prioritise_targets_network
 #' @return ggplot object
 #'
@@ -11,8 +11,8 @@
 #' @importFrom HPOExplorer add_gene_frequency add_ancestor
 #' @examples
 #' results <- load_example_results()[seq(500),]
-#' fp_res <- frequency_histogram(results=results)
-frequency_histogram <- function(results = load_example_results(),
+#' fp_res <- plot_frequency_histogram(results=results)
+plot_frequency_histogram <- function(results = load_example_results(),
                                 phenotype_to_genes =
                                   HPOExplorer::load_phenotype_to_genes(),
                                 show_plot = FALSE,

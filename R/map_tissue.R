@@ -14,11 +14,14 @@ map_tissue <- function(results,
                            package = "MultiEWCE",
                            name="anatomy_maps")
                        ){
+  ancestor <- ancestor_name <- tissue_ontology_term_id <- tissue <- n_tissues <-
+    n_ancestors <- cl_name <- NULL;
   results <- map_celltype(results)
   new_cols <- c("tissue_ontology_term_id","tissue")
   if(all(new_cols %in% names(results))) {
     return(results)
   }
+  messager("Mapping cell types to tissue ontology terms.")
   cl <- KGExplorer::get_ontology("cl")
   #### Assign each tissue an ancestral group ####
   uberon <- KGExplorer::get_ontology("uberon",
@@ -50,7 +53,7 @@ map_tissue <- function(results,
   #### Create tissue-celltype heatmap #####
 
   ggplot2::ggplot(map2,
-                  ggplot2::aes(x=cell_type, y=ancestor_name,
+                  ggplot2::aes(x=cl_name, y=ancestor_name,
                                fill=ancestor_name)
                   ) +
     ggplot2::geom_tile(show.legend = FALSE) +
@@ -58,7 +61,7 @@ map_tissue <- function(results,
                                                        hjust = 1, vjust=0.5))
 
 
-  return(results_cl)
+  return(map2)
 }
 
 

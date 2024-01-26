@@ -11,6 +11,7 @@
 #' @inheritParams ggpubr::stat_cor
 #' @returns A named list containing the data and the plot.
 #' @inheritParams prioritise_targets
+#' @inheritParams ggplot2::geom_boxplot
 #'
 #' @export
 #' @import HPOExplorer
@@ -33,7 +34,7 @@ plot_ont_lvl <- function(results = load_example_results(multi_dataset = TRUE),
   requireNamespace("patchwork")
   requireNamespace("ggpubr")
   gene_symbol <- celltypes <- CellType <-
-    log_fold_change <- fold_change <- NULL;
+    log_fold_change <- fold_change <- ontLvl <- NULL;
 
   results <- HPOExplorer::add_ont_lvl(results)
   results[,celltypes:=length(unique(CellType[q<0.05])), by=group_vars]

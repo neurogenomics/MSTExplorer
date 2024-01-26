@@ -1,4 +1,4 @@
-frequency_plot_barplot <- function(plt_df,
+plot_frequency_bar_i <- function(plt_df,
                                    y_lab = "Proportion of results",
                                    remove_x_text = FALSE,
                                    direction = -1,

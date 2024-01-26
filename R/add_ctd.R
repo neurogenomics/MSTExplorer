@@ -9,7 +9,7 @@
 #' \item{"mean_exp_quantiles"} Mean expression quantile per cell-type.
 #' }
 #' @inheritParams prioritise_targets
-#' @inheritParams report_plot
+#' @inheritParams plot_report
 #' @inheritParams data.table::merge.data.table
 #'
 #' @export

@@ -29,7 +29,7 @@ RoxygenNote: 7.3.1
 Depends: 
     R (>= 4.1)
 Imports:
-    HPOExplorer (>= 0.99.10),
+    HPOExplorer (>= 1.0.0),
     KGExplorer,
     orthogene,
     data.table,
@@ -61,7 +61,8 @@ Suggests:
     patchwork,
     ggpubr, 
     igraph,
-    orthogene
+    ggdendro,
+    dendextend
 Remotes: 
   github::neurogenomics/HPOExplorer,
   github::neurogenomics/KGExplorer,

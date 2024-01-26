@@ -1,4 +1,4 @@
-frequency_plot_prepare <- function(df,
+plot_frequency_prepare <- function(df,
                                    col="gene_freq_name"){
   ancestor_name <- n <- total <- pheno_freq <- NULL;
   requireNamespace("dplyr")

@@ -20,8 +20,8 @@
 #' @examples
 #' results <- load_example_results()
 #' rep_dt <- example_targets$report
-#' gp <- report_plot(rep_dt=rep_dt, results=results)
-report_plot <- function(rep_dt,
+#' gp <- plot_report(rep_dt=rep_dt, results=results)
+plot_report <- function(rep_dt,
                         results,
                         phenotype_to_genes =
                           HPOExplorer::load_phenotype_to_genes(),
@@ -30,16 +30,16 @@ report_plot <- function(rep_dt,
                             "phenotype.hpoa"),
                         remove_cols=c("Rows","ids"),
                         show_plot=TRUE,
-                        save_plot=tempfile(fileext = "_report_plot.pdf"),
+                        save_plot=tempfile(fileext = "_plot_report.pdf"),
                         verbose=TRUE,
                         ...){
 
-  # devoptera::args2vars(report_plot)
+  # devoptera::args2vars(plot_report)
   requireNamespace("ggplot2")
   requireNamespace("patchwork")
   Tier <- Tier_count <- value <- step <- hpo_id <- level <- NULL;
 
-  messager("report_plot:: Preparing data.",v=verbose)
+  messager("plot_report:: Preparing data.",v=verbose)
   tier_dt <- lapply(stats::setNames(rep_dt$ids,
                          rep_dt$step), function(x){
     if(length(x)==0) return(NULL)
@@ -106,7 +106,7 @@ report_plot <- function(rep_dt,
                     labels = paste0(seq(length(unique(dt2$step))),". ",
                                     unique(dt2$step)),
                     ordered = TRUE)
-  messager("report_plot:: Preparing plot.",v=verbose)
+  messager("plot_report:: Preparing plot.",v=verbose)
   gp2 <- ggplot2::ggplot(dt2, ggplot2::aes(x=step,
                                    y=value,
                                    fill=level,
@@ -114,7 +114,7 @@ report_plot <- function(rep_dt,
     ggplot2::geom_bar(stat = "identity",
                       alpha=1,
                       color="grey80") +
-    ggplot2::facet_grid(facets = "variable~.",
+    ggplot2::facet_grid(rows = "variable",
                         scales = "free") +
     ggplot2::geom_label(fill="black",
                         color="white",

@@ -1,44 +1,48 @@
 #' Subset EWCE results
 #'
 #' Subset RD EWCE results data by cell type, fold change and q value.
-#' @inheritParams HPOExplorer::make_phenos_dataframe
 #' @inheritParams ggnetwork_plot_full
+#' @inheritParams KGExplorer::filter_dt
+#' @inheritParams HPOExplorer::make_phenos_dataframe
 #' @returns A data frame of the selected subset of RD EWCE results
 #' with HPO ID column added.
 #'
 #' @export
 #' @examples
-#' signif_cell_data <- subset_results(cell_type="Cardiomyocytes")
-subset_results <- function(cell_type,
+#' signif_cell_data <- subset_results(filters=list(CellType = "Cardiomyocytes"))
+subset_results <- function(filters=list(cl_name=NULL),
                            results = load_example_results(),
                            q_threshold = 0.0005,
                            fold_threshold = 1,
-                           hpo = HPOExplorer::get_hpo(),
                            verbose = TRUE){
-  CellType <- fold_change <-  hpo_id <- hpo_id <- NULL;
+  fold_change <-  hpo_id <- hpo_id <- NULL;
 
   messager("Subsetting results by q_threshold and fold_change.",v=verbose)
   #### Filter to sig results only ####
   results_sig <- results[(q<=q_threshold) &
                          (fold_change>=fold_threshold),]
   #### Check that celltype is available ####
-  if(length(cell_type)==0){
-    messager("Skipping cell_type filter.",v=verbose)
-  } else if(nrow(results_sig)==0){
+  if(nrow(results_sig)==0){
     stop("No results remain after filtering")
-  } else if(any(cell_type %in% unique(results_sig$CellType))){
-    messager("Subsetting results by cell_type",v=verbose)
-    results_sig <- results_sig[CellType %in% cell_type,]
   } else {
-    cell_orig <- cell_type
-    cell_type <- unique(results_sig$CellType)[[1]]
-    messager("WARNING!: CellType",
-             substr(paste(shQuote(cell_orig),collapse = ";"),
-                    start = 1, stop = 50),
-             "...",
-             "not found in significant results.\n ",
-             "Defaulting to first CellType available:",shQuote(cell_type))
-    results_sig <- results_sig[CellType %in% cell_type,]
+    results_sig2 <- KGExplorer::filter_dt(results_sig,
+                                          filters = filters)
+    if(nrow(results_sig2)==0){
+      stop("No results remain after filtering")
+      cell_orig <- unlist(filters)
+      cell_type <- unique(results_sig[[names(filters)[1]]])[[1]]
+      messager("WARNING!: CellType",
+               substr(paste(shQuote(cell_orig),collapse = ";"),
+                      start = 1, stop = 50),
+               "...",
+               "not found in significant results.\n ",
+               "Defaulting to first CellType available:",shQuote(cell_type))
+      filters[[1]] <- cell_type
+      results_sig <- KGExplorer::filter_dt(results_sig,
+                                           filters = filters)
+    } else {
+      results_sig <- results_sig2
+    }
   }
   #### Check that the table isn't empty after filtering ####
   if(nrow(results_sig)==0){

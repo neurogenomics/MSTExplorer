@@ -3,14 +3,14 @@
 #' This subsets  the Rare disease EWCE results by cell type,
 #'  q threshold and fold change.
 #' @inheritParams ggnetwork_plot_full
+#' @inheritParams KGExplorer::filter_dt
 #' @inheritParams HPOExplorer::filter_descendants
 #' @returns A data frame of results taken from the main data frame of results.
 #' @export
-#' @importFrom HPOExplorer filter_descendants
 #' @examples
-#' phenos <- subset_phenos(cell_type = "Cardiomyocytes",
+#' phenos <- subset_phenos(filters = list(CellType = "Cardiomyocytes"),
 #'                         keep_descendants = "Neurodevelopmental delay")
-subset_phenos <- function(cell_type,
+subset_phenos <- function(filters,
                           keep_descendants = NULL,
                           results = load_example_results(),
                           hpo = HPOExplorer::get_hpo(),
@@ -18,11 +18,10 @@ subset_phenos <- function(cell_type,
                           fold_threshold = 1,
                           verbose = TRUE) {
   #### Subset by q, fold_change, and celltype ####
-  phenos <- subset_results(cell_type = cell_type,
+  phenos <- subset_results(filters = filters,
                            results = results,
                            q_threshold = q_threshold,
                            fold_threshold = fold_threshold,
-                           hpo = hpo,
                            verbose = verbose)
   #### Subset by ancestor ####
   phenos <- HPOExplorer::filter_descendants(phenos = phenos,

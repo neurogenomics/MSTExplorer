@@ -160,10 +160,10 @@
   - `prioritise_targets`
   - `prioritise_targets_heatmap`
   - `prioritise_targets_network`
-  - `report_plot`
+  - `plot_report`
   - `correlation_heatmap`
   - `frequency_bar`
-  - `frequency_histogram` 
+  - `plot_frequency_histogram` 
   
 * Added `example_targets` data:
   - Speeds up run time of examples/tests.

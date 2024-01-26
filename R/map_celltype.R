@@ -6,6 +6,7 @@
 #' @param rm_prefixes Prefixes to remove from cell type names in
 #' \code{input_col} before performing mapping.
 #' @param by Columns to merge on.
+#' @param input_col Column to use for linking with the \code{map} data.
 #' @inheritParams ggnetwork_plot_full
 #' @export
 #' @import data.table
@@ -25,6 +26,7 @@ map_celltype <- function(results,
   if(all(new_cols %in% names(results))) {
     return(results)
   }
+  messager("Mapping cell types to cell ontology terms.")
   results[,author_celltype:=gsub(paste(paste0("^",rm_prefixes,"_"),
                                        collapse = "|"),"",
                                  get(input_col),ignore.case = TRUE)]

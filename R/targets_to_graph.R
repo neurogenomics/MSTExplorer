@@ -10,7 +10,7 @@ targets_to_graph <- function(top_targets,
                                              "ancestor_name",
                                              "CellType",
                                              "q",
-                                             "fold_change",
+                                             "fold_change"
                                              # "tier_merge",
                                              # "disease_characteristic",
                                              # "gene_biotype"
@@ -68,7 +68,7 @@ targets_to_graph <- function(top_targets,
     unique(vertex_vars))
   vertices[,shape:=shape_dict[node_type]]
   #### Ensure each node only appears once in the node metadata ####
-  vertices <- vertices[,utils::head(.SD, 1),by = c("node")]
+  vertices <- vertices[,utils::head(.SD, 1), by = c("node")]
   #### ancestor_name is only relevant metadata for hpo_name nodes ####
   if("ancestor_name" %in% names(vertices)){
     vertices[node_type!="hpo_name",]$ancestor_name <- NA

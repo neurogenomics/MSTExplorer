@@ -5,11 +5,12 @@
 #' @param count_var Variable to get counts for per \code{group_var}.
 #' @param group_var Variable to group counts by.
 #' @param keywords Keywords supplied to search for phenotypes.
-#'  Will be used to generate the plot title..
+#'  Will be used to generate the plot title.
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams HPOExplorer::filter_descendants
 #' @inheritParams HPOExplorer::make_network_plot
 #' @inheritParams ggplot2::scale_fill_viridis_c
+#' @inheritParams KGExplorer::filter_dt
 #' @returns ggplot or plotly object
 #'
 #' @export
@@ -18,31 +19,31 @@
 #' @importFrom scales pretty_breaks
 #' @examples
 #' keep_descendants <- "Neurodevelopmental delay"
-#' plt_pheno_count <- summary_plot(count_var = "hpo_name",
+#' plt_pheno_count <- plot_bar_summary(count_var = "hpo_name",
 #'                                 group_var = "CellType",
 #'                                 keep_descendants = keep_descendants)
-#' plt_cell_count <- summary_plot(count_var = "CellType",
+#' plt_cell_count <- plot_bar_summary(count_var = "CellType",
 #'                                 group_var = "hpo_name",
 #'                                 keep_descendants = keep_descendants)
-summary_plot <- function(results = load_example_results(),
-                         count_var = "hpo_name",
-                         group_var = "CellType",
-                         keywords = NULL,
-                         q_threshold = 0.0005,
-                         fold_threshold = 1,
-                         cell_type = NULL,
-                         keep_descendants = NULL,
-                         hpo = HPOExplorer::get_hpo(),
-                         option = "magma",
-                         interactive = TRUE,
-                         show_plot=TRUE,
-                         verbose = TRUE){
+plot_bar_summary <- function(results = load_example_results(),
+                            count_var = "hpo_name",
+                            group_var = "CellType",
+                            keywords = NULL,
+                            q_threshold = 0.0005,
+                            fold_threshold = 1,
+                            filters = list(),
+                            keep_descendants = NULL,
+                            hpo = HPOExplorer::get_hpo(),
+                            option = "magma",
+                            interactive = TRUE,
+                            show_plot=TRUE,
+                            verbose = TRUE){
   requireNamespace("ggplot2")
   #### Subset results ####
   phenos <- subset_phenos(keep_descendants = keep_descendants,
                           results = results,
                           hpo = hpo,
-                          cell_type = cell_type,
+                          filters = filters,
                           q_threshold = q_threshold,
                           fold_threshold = fold_threshold,
                           verbose = verbose)
