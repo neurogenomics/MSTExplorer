@@ -9,13 +9,11 @@
 #'
 #' @export
 #' @importFrom piggyback pb_download
-#' @importFrom tools R_user_dir
 #' @examples
 #' CTD <- load_example_ctd()
 load_example_ctd <- function(file="CTD_Descartes_example.rds",
                              tag = "latest",
-                             save_dir=tools::R_user_dir(package = "MultiEWCE",
-                                                        which = "cache")
+                             save_dir=KGExplorer::cache_dir(package="MultiEWCE")
                              ) {
 
   dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)

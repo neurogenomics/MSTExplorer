@@ -12,6 +12,7 @@ add_ctd(
   keep_mean_exp_quantiles = NULL,
   rep_dt = NULL,
   all.x = FALSE,
+  allow.cartesian = TRUE,
   by = c("gene_symbol", "CellType"),
   verbose = TRUE
 )
@@ -41,6 +42,8 @@ These rows will have 'NA's in those columns that are usually filled with values
 from \code{y}.  The default is \code{FALSE}, so that only rows with data from both
 \code{x} and \code{y} are included in the output.}
 
+\item{allow.cartesian}{See \code{allow.cartesian} in \code{\link[data.table]{[.data.table}}.}
+
 \item{by}{A vector of shared column names in \code{x} and \code{y} to merge on.
 This defaults to the shared key columns between the two tables.
 If \code{y} has no key columns, this defaults to the key of \code{x}.}
@@ -58,6 +61,6 @@ The following columns will be added:
 }
 }
 \examples{
-results <- load_example_results()
+results <- load_example_results()[seq(100),]
 results2 <- add_ctd(results=results)
 }

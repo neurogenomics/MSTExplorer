@@ -23,9 +23,8 @@ report_plot(
 \link[MultiEWCE]{gen_results}
 and merged together with \link[MultiEWCE]{merge_results}.}
 
-\item{phenotype_to_genes}{Output of
-\link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
-to gene annotations.}
+\item{phenotype_to_genes}{Phenotype to gene mapping from
+\link[HPOExplorer]{load_phenotype_to_genes}.}
 
 \item{annot}{HPO annotations.}
 

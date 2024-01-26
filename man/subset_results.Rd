@@ -10,7 +10,6 @@ subset_results(
   q_threshold = 5e-04,
   fold_threshold = 1,
   hpo = HPOExplorer::get_hpo(),
-  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   verbose = TRUE
 )
 }
@@ -32,11 +31,8 @@ and merged together with \link[MultiEWCE]{merge_results}.}
 \item{fold_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
 
-\item{hpo}{Human Phenotype Ontology object, loaded from \pkg{ontologyIndex}.}
-
-\item{phenotype_to_genes}{Output of
-\link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
-to gene annotations.}
+\item{hpo}{Human Phenotype Ontology object,
+loaded from \link[KGExplorer]{get_ontology}.}
 
 \item{verbose}{Print messages.}
 }
@@ -48,5 +44,5 @@ with HPO ID column added.
 Subset RD EWCE results data by cell type, fold change and q value.
 }
 \examples{
-signif_cell_data <- subset_results(cell_type="Amacrine cells")
+signif_cell_data <- subset_results(cell_type="Cardiomyocytes")
 }

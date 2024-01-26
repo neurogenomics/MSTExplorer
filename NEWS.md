@@ -1,3 +1,17 @@
+# MultiEWCE 1.0.0
+
+## New features
+
+* Revamp to work with `KGExplorer`.
+
+# MultiEWCE 0.1.10
+
+## New features
+
+* `gene_results`
+  - Return merged versions of `$results` as well as `$gene_data` 
+    (when available).
+
 # MultiEWCE 0.1.9
 
 ## New features

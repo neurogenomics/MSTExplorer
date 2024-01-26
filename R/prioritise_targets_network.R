@@ -29,30 +29,16 @@
 #' Set high number to have the entire sub-network.
 #'  In case of "hierarchical" algorithm, you can also pass a
 #'  list(from = 1, to = 1) to control degree in both direction.
-#' @param show_plot Print the plot after it has been created.
-#' @param save_path Path to save HTML version of network to.
-#' @param node_palette Palette function to color nodes by.
-#' See the \pkg{pals} package for available options.
 #' @param verbose Print messages.
-#' @param add_visExport Add PDF download button.
 #'
-#' @inheritParams visNetwork::visIgraph
-#' @inheritParams visNetwork::visIgraphLayout
-#' @inheritParams visNetwork::visPhysics
-#' @inheritParams visNetwork::visNodes
-#' @inheritParams visNetwork::visEdges
-#' @inheritParams visNetwork::visOptions
-#' @inheritParams visNetwork::visNetwork
+#' @inheritParams KGExplorer::plot_graph_visnetwork
 #' @returns A named list containing the \link[visNetwork]{visNetwork} plot
 #' and the the graph used to make the plot.
 #'
 #' @export
-#' @import ggplot2
-#' @importFrom stats setNames
-#' @importFrom dplyr %>%
 #' @examples
-#' res <- MultiEWCE::example_targets
-#' vn <- prioritise_targets_network(top_targets = res$top_targets)
+#' top_targets <- MultiEWCE::example_targets$top_targets
+#' vn <- prioritise_targets_network(top_targets = top_targets)
 prioritise_targets_network <- function(top_targets,
                                        vertex_vars = c("disease_name",
                                                        # "ancestor_name",
@@ -60,23 +46,17 @@ prioritise_targets_network <- function(top_targets,
                                                        "CellType",
                                                        "gene_symbol"),
                                        group_var = vertex_vars[[1]],
+                                       colour_var = "node_type",
                                        edge_color_var = "fold_change",
                                        edge_size_var = "fold_change",
                                        mediator_var = list(),
-                                       show_plot = TRUE,
-                                       save_path = tempfile(
-                                         fileext =
-                                           "_prioritise_targets_network.html"
-                                         ),
                                        layout = "layout_with_kk",
                                        solver = "forceAtlas2Based",
                                        physics = FALSE,
                                        forceAtlas2Based = list(
                                          avoidOverlap=.5,
                                          gravitationalConstant=-50),
-                                       scaling=list(label=
-                                                      list(drawThreshold=0)
-                                                    ),
+                                       scaling=NULL,
                                        smooth=list(enabled=TRUE,
                                                    type="cubicBezier",
                                                    roundness=.5),
@@ -86,12 +66,15 @@ prioritise_targets_network <- function(top_targets,
                                        height = "90vh",
                                        main = "Rare Disease Celltyping",
                                        submain = "Prioritised Targets Network",
-                                       node_palette = pals::kovesi.linear_bmy_10_95_c78,
+                                       preferred_palettes = "kovesi.linear_bmy_10_95_c78",
                                        randomSeed = 2023,
-                                       verbose = TRUE
+                                       verbose = TRUE,
+                                       show_plot = TRUE,
+                                       save_path = tempfile(
+                                         fileext =
+                                           "_prioritise_targets_network.html"
+                                       )
                                        ){
-  # devoptera::args2vars(prioritise_targets_network, reassign = TRUE)
-
   requireNamespace("ggplot2")
   requireNamespace("pals")
 
@@ -102,52 +85,45 @@ prioritise_targets_network <- function(top_targets,
                         edge_color_var = edge_color_var,
                         edge_size_var = edge_size_var,
                         mediator_var = mediator_var,
-                        node_palette = node_palette,
                         verbose = verbose)
-
-  # plt <- HPOExplorer::network_3d(g = g,
-  #                                node_color_var = "node_type",
-  #                                node_symbol_var = "node_type",
-  #                                add_labels = FALSE)
-
-  plt <- plot_visnetwork(g = g,
-                         save_path = save_path,
-                         layout = layout,
-                         solver = solver,
-                         physics = physics,
-                         forceAtlas2Based = forceAtlas2Based,
-                         scaling = scaling,
-                         smooth = smooth,
-                         add_visExport = add_visExport,
-                         degree = degree,
-                         height = height,
-                         width = width,
-                         main = main,
-                         submain = submain,
-                         randomSeed = randomSeed,
-                         verbose = verbose)
-  #### Show ####
-  if(isTRUE(show_plot)) {
-    # utils::browseURL(save_path)
-    methods::show(plt)
-  }
-  return(list(plot=plt,
-              graph=g))
+  out <- KGExplorer::plot_graph_visnetwork(
+    g = g,
+    label_var = "name",
+    colour_var = colour_var,
+    save_path = save_path,
+    preferred_palettes = preferred_palettes,
+    layout = layout,
+    solver = solver,
+    physics = physics,
+    forceAtlas2Based = forceAtlas2Based,
+    scaling = scaling,
+    smooth = smooth,
+    add_visExport = add_visExport,
+    degree = degree,
+    height = height,
+    width = width,
+    main = main,
+    submain = submain,
+    randomSeed = randomSeed,
+    show_plot = show_plot)
+  return(out)
+}
 
 
-  # edgebundle::install_bundle_py()
-  # reticulate::use_condaenv(condaenv = "r-reticulate")
-  # hbundle <-   edgebundle::edge_bundle_hammer(object = g,
-  #                                             xy =  igraph::layout_with_kk(g),
-  #                                             bw = 5,
-  #                                             decay = 0.3)
-  # #
-  # f6_3c <-   ggplot() +
-  #   geom_path(data = hbundle, aes(x, y, group = group),
-  #             col = "gray66", size = 0.5) +
-  #   geom_point(data = xy, aes(x, y, col = Region),
-  #              size = 5, alpha = 0.75, show.legend = FALSE) +
-  #   theme_void()
+
+# edgebundle::install_bundle_py()
+# reticulate::use_condaenv(condaenv = "r-reticulate")
+# hbundle <-   edgebundle::edge_bundle_hammer(object = g,
+#                                             xy =  igraph::layout_with_kk(g),
+#                                             bw = 5,
+#                                             decay = 0.3)
+# #
+# f6_3c <-   ggplot() +
+#   geom_path(data = hbundle, aes(x, y, group = group),
+#             col = "gray66", size = 0.5) +
+#   geom_point(data = xy, aes(x, y, col = Region),
+#              size = 5, alpha = 0.75, show.legend = FALSE) +
+#   theme_void()
 
 #   ggraph::ggraph(g,
 #                  layout = 'dendrogram') +
@@ -164,5 +140,3 @@ prioritise_targets_network <- function(top_targets,
 #     ggplot2::theme_void()
 
 
-
-}

@@ -6,7 +6,7 @@
 \usage{
 ttd_check(
   top_targets,
-  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
+  save_dir = KGExplorer::cache_dir(package = "MultiEWCE"),
   drug_types = NULL,
   highest_status = NULL,
   show_plot = TRUE
@@ -33,6 +33,6 @@ Therapuetic Target Database}.
 }
 \examples{
 top_targets <- MultiEWCE::example_targets$top_targets
-top_targets <- HPOExplorer::add_genes(top_targets[q<0.05])
+top_targets <- HPOExplorer::add_genes(top_targets)
 res <- ttd_check(top_targets=top_targets)
 }

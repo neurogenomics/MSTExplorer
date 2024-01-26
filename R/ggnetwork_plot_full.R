@@ -17,25 +17,22 @@
 #' @param fold_threshold The minimum fold change in specific expression
 #'  to subset the \code{results} by.
 #' @inheritParams HPOExplorer::make_phenos_dataframe
-#' @inheritParams HPOExplorer::ggnetwork_plot
-#' @inheritParams HPOExplorer::subset_descendants
+#' @inheritParams HPOExplorer::make_network_plot
+#' @inheritParams HPOExplorer::filter_descendants
 #' @inheritParams HPOExplorer::make_network_object
 #' @returns A named list of outputs,
 #'  including a interactive network plot of the selected subset
 #' of results from RD EWCE analysis.
 #'
 #' @export
-#' @importFrom HPOExplorer get_hpo load_phenotype_to_genes adjacency_matrix
-#' @importFrom HPOExplorer make_hoverboxes make_network_object ggnetwork_plot
-#' @importFrom HPOExplorer add_hpo_definition list_columns
+#' @import HPOExplorer
+#' @import KGExplorer
 #' @examples
 #' res <- ggnetwork_plot_full(cell_type = "Microglia")
 ggnetwork_plot_full <- function(cell_type,
-                                ancestor = NULL,
+                                keep_descendants = NULL,
                                 results = load_example_results(),
                                 hpo = HPOExplorer::get_hpo(),
-                                phenotype_to_genes =
-                                  HPOExplorer::load_phenotype_to_genes(),
                                 q_threshold = 0.0005,
                                 fold_threshold = 1,
                                 columns = HPOExplorer::list_columns(),
@@ -43,82 +40,53 @@ ggnetwork_plot_full <- function(cell_type,
                                 size_var = "ontLvl_relative",
                                 add_ont_lvl_absolute = TRUE,
                                 add_ont_lvl_relative = TRUE,
-                                interactive = TRUE,
-                                verbose = TRUE){
-  # devoptera::args2vars(ggnetwork_plot_full)
-  # cell_type = "Microglia";
-  # cell_type = NULL; ancestor = "Neurodevelopmental delay"
-
-  hpo_id <- NULL;
+                                verbose = TRUE,
+                                ...){
   messager("ggnetwork_plot_full",v=verbose)
-  phenos <- subset_phenos(phenotype_to_genes = phenotype_to_genes,
-                          ancestor = ancestor,
+  phenos <- subset_phenos(keep_descendants = keep_descendants,
                           results = results,
                           hpo = hpo,
                           cell_type = cell_type,
                           q_threshold = q_threshold,
                           fold_threshold = fold_threshold,
                           verbose = verbose)
+  phenos$hpo_name <- HPOExplorer::map_phenotypes(terms = phenos$hpo_id,
+                                                 hpo = hpo,
+                                                 to="name")
   #### Aggregate across multiple celltypes ####
   phenos <- agg_results(phenos = phenos,
                         count_var = "CellType",
-                        group_var = "hpo_name",
+                        group_var = c("hpo_name","hpo_id"),
                         verbose = verbose)
-  phenos <- HPOExplorer::add_hpo_id(phenos = phenos,
-                                    hpo = hpo,
-                                    phenotype_to_genes = phenotype_to_genes,
-                                    verbose = verbose)
-  phenos <- phenos[!is.na(hpo_id),]
-  #### Make adjacency matrix ####
-  adjacency <- HPOExplorer::adjacency_matrix(terms = phenos$hpo_id,
-                                             hpo = hpo,
-                                             verbose = verbose)
   #### Add metadata ####
   if(isTRUE(add_ont_lvl_absolute)){
     phenos <- HPOExplorer::add_ont_lvl(phenos = phenos,
                                        hpo = hpo,
-                                       absolute = TRUE,
-                                       verbose = verbose)
+                                       absolute = TRUE)
   }
   if(isTRUE(add_ont_lvl_relative)){
     phenos <- HPOExplorer::add_ont_lvl(phenos = phenos,
                                        hpo = hpo,
-                                       adjacency = adjacency,
-                                       absolute = FALSE,
-                                       verbose = verbose)
+                                       absolute = FALSE)
   }
-  if(!"definition" %in% names(phenos)){
-    phenos <- HPOExplorer::add_hpo_definition(phenos = phenos,
-                                              verbose = verbose)
-  }
-  if(!"hover" %in% names(phenos)){
-    phenos <- HPOExplorer::make_hoverboxes(phenos = phenos,
-                                           columns = columns,
-                                           interactive = interactive,
-                                           verbose = verbose)
-  }
+  phenos <- HPOExplorer::add_hpo_definition(phenos = phenos,
+                                            verbose = verbose)
+  phenos <- KGExplorer::add_hoverboxes(g = phenos,
+                                       columns = names(columns),
+                                       hoverbox_column = "hover",
+                                       as_html = interactive)
   #### Fix colour var for aggregated data ####
   colour_var2 <- paste0("mean_",colour_var)
   if(!colour_var %in% names(phenos) &&
      colour_var2 %in% names(phenos)){
     colour_var <- colour_var2
   }
-  #### Make network ####
-  phenoNet <- HPOExplorer::make_network_object(phenos = phenos,
-                                               hpo = hpo,
-                                               adjacency = adjacency,
-                                               colour_var = colour_var,
-                                               verbose = verbose)
   #### Make plot ####
-  network_plot <- HPOExplorer::ggnetwork_plot(phenoNet = phenoNet,
-                                              colour_var = colour_var,
-                                              size_var = size_var,
-                                              interactive = interactive,
-                                              verbose = verbose)
+  out <- HPOExplorer::make_network_plot(phenos = phenos,
+                                                 colour_var = colour_var,
+                                                 size_var = size_var,
+                                                 interactive = interactive,
+                                                 ...)
   #### Return ####
-  return(list(plot=network_plot,
-              phenos=phenos,
-              phenoNet=phenoNet,
-              adjacency=adjacency
-              ))
+  return(out)
 }

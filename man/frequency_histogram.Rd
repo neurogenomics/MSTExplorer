@@ -6,7 +6,7 @@
 \usage{
 frequency_histogram(
   results = load_example_results(),
-  phenotype_to_genes = load_phenotype_to_genes(),
+  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   show_plot = FALSE,
   verbose = TRUE
 )
@@ -20,7 +20,7 @@ and merged together with \link[MultiEWCE]{merge_results}.}
 \link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
 to gene annotations.}
 
-\item{show_plot}{Print the plot after it has been created.}
+\item{show_plot}{Print the plot after it's been generated.}
 
 \item{verbose}{Print messages.}
 }
@@ -31,6 +31,6 @@ ggplot object
 Plot the frequency of gene-phenotype and phenotype-disease associations.
 }
 \examples{
-results <- load_example_results()[seq(5000),]
+results <- load_example_results()[seq(500),]
 fp_res <- frequency_histogram(results=results)
 }

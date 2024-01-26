@@ -3,22 +3,24 @@
 #' Plot the frequency of gene-phenotype and phenotype-disease associations.
 #' @inheritParams prioritise_targets
 #' @inheritParams prioritise_targets_network
+#' @inheritParams data.table::merge.data.table
 #' @return ggplot object
 #'
 #' @export
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @examples
-#' results <- load_example_results()[seq(5000),]
+#' results <- load_example_results()[seq(2500),]
 #' fp_res <- frequency_barplot(results=results)
 frequency_barplot <- function(results = load_example_results(),
                               phenotype_to_genes = load_phenotype_to_genes(),
+                              allow.cartesian = TRUE,
                               show_plot = FALSE,
                               verbose = TRUE){
 
   hpo_id <- NULL;
 
   results <- results |>
-    HPOExplorer::add_pheno_frequency() |>
+    HPOExplorer::add_pheno_frequency(allow.cartesian = allow.cartesian) |>
     HPOExplorer::add_ancestor()
   gene_df <- phenotype_to_genes[hpo_id %in% unique(results$hpo_id),] |>
     HPOExplorer::add_gene_frequency() |>

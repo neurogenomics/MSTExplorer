@@ -9,9 +9,9 @@
 #' @returns Aggregated \link[data.table]{data.table}
 #'
 #' @export
-#' @importFrom data.table uniqueN :=
+#' @import data.table
 #' @importFrom stringr str_wrap
-#' @importFrom HPOExplorer add_hpo_definition
+#' @import HPOExplorer
 #' @examples
 #' phenos <- subset_results(cell_type = "Microglia")
 #' agg_res <- agg_results(phenos = phenos)
@@ -20,21 +20,11 @@ agg_results <- function(phenos,
                         group_var = "CellType",
                         sep="; ",
                         verbose = TRUE){
-
-  # devoptera::args2vars(agg_results)
   fold_change <- sd_from_mean <- . <- gene_symbol <- NULL;
-
   messager("Aggregating results by",
            paste0("group_var=",paste(shQuote(group_var),collapse = "/")),
            v=verbose)
-  # if(!"gene_symbol" %in% names(phenos)){
-  #   phenos$gene_symbol <- NA
-  # }
-  if(!"hpo_id" %in% names(phenos) &&
-     "hpo_name" %in% names(phenos)){
-    phenos <- HPOExplorer::add_hpo_id(phenos = phenos,
-                                      verbose = verbose)
-  }
+  phenos <- HPOExplorer::add_hpo_name(phenos)
   #### Aggregate ####
   counts_df <- unique(phenos[,.(
     count=data.table::uniqueN(eval(parse(text = count_var))),

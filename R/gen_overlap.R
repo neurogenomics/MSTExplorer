@@ -38,11 +38,7 @@ gen_overlap <- function(gene_data =
                         force_new = FALSE,
                         cores = 1,
                         verbose = TRUE){
-  # o <- devoptera::args2vars(gen_overlap); list_name_column="hpo_id.disease_id";
-  # gene_data[,hpo_id.disease_id:=paste(hpo_id,disease_id,sep=".")]
-
   qval <- pval <- NULL;
-
   #### Create save path ####
   save_path <- gen_results_save_path(save_dir = save_dir,
                                      prefix = "gen_overlap")

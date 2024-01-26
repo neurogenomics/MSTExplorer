@@ -7,7 +7,7 @@
 load_example_ctd(
   file = "CTD_Descartes_example.rds",
   tag = "latest",
-  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache")
+  save_dir = KGExplorer::cache_dir(package = "MultiEWCE")
 )
 }
 \arguments{

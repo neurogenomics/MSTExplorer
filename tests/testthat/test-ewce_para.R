@@ -41,8 +41,8 @@ test_that("ewce_para works", {
 
 
   #### Merge results ####
-  all_results1 <- merge_results(res_files=res_files)
-  all_results2 <- merge_results(res_files=res_files2)
+  all_results1 <- merge_results(res_files=res_files)$results
+  all_results2 <- merge_results(res_files=res_files2)$results
   ## Confirm both methods have the correct phenotyoes
   testthat::expect_gte(sum(list_names %in% unique(all_results1$hpo_id)),
                        length(list_names)-3)

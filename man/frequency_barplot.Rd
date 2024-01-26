@@ -7,6 +7,7 @@
 frequency_barplot(
   results = load_example_results(),
   phenotype_to_genes = load_phenotype_to_genes(),
+  allow.cartesian = TRUE,
   show_plot = FALSE,
   verbose = TRUE
 )
@@ -20,7 +21,9 @@ and merged together with \link[MultiEWCE]{merge_results}.}
 \link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
 to gene annotations.}
 
-\item{show_plot}{Print the plot after it has been created.}
+\item{allow.cartesian}{See \code{allow.cartesian} in \code{\link[data.table]{[.data.table}}.}
+
+\item{show_plot}{Print the plot after it's been generated.}
 
 \item{verbose}{Print messages.}
 }
@@ -31,6 +34,6 @@ ggplot object
 Plot the frequency of gene-phenotype and phenotype-disease associations.
 }
 \examples{
-results <- load_example_results()[seq(5000),]
+results <- load_example_results()[seq(2500),]
 fp_res <- frequency_barplot(results=results)
 }

@@ -22,6 +22,9 @@
 #' CTD.
 #' }
 #' }
+#' @param multi_dataset Merge results generated from
+#'  multiple CellTypeDataset references
+#'  (e.g. DescartesHuman and HumanCellLandscape).
 #' @param force_new Download the file even when a local copy already exists.
 #' @inheritParams load_example_ctd
 #' @inheritParams piggyback::pb_download
@@ -63,48 +66,57 @@
 #'
 #' @export
 #' @importFrom piggyback pb_download
-#' @importFrom tools R_user_dir
 #' @examples
 #' res <- load_example_results()
 load_example_results <- function(file=c(
+  "rare_disease_min_genes4_DescartesHuman.rds",
+  "rare_disease_min_genes4_HumanCellLandscape.rds"
   # "results_DescartesHuman.csv.gz",
-  "Descartes_All_Results_extras.symptoms.rds",
-  "Descartes_All_Results_extras.symptoms.full_join.rds",
-  "Descartes_All_Results_extras.rds",
-  "gen_overlap.symptoms.filt.rds",
-  "tabulamuris_merged.rds"),
+  # "rare_disease_min_genes4_DescartesHuman.rds",
+  # "Descartes_All_Results_extras.symptoms.rds",
+  # "Descartes_All_Results_extras.symptoms.full_join.rds",
+  # "Descartes_All_Results_extras.rds",
+  # "gen_overlap.symptoms.filt.rds",
+  # "tabulamuris_merged.rds"
+  ),
+  multi_dataset=FALSE,
   tag = "latest",
-  save_dir=tools::R_user_dir(package = "MultiEWCE",
-                             which = "cache"),
+  save_dir=KGExplorer::cache_dir(package="MultiEWCE"),
   force_new=FALSE
   ) {
+  if(multi_dataset){
+    ctd_names <- c("DescartesHuman","HumanCellLandscape")
+    res <- lapply(stats::setNames(ctd_names,ctd_names), function(x){
+      load_example_results(paste0("rare_disease_min_genes4_",x,".rds"))
+    })  |> data.table::rbindlist(idcol = "ctd")
+    return(res)
+  } else{
+    file <- file[[1]]
+    dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
+    save_path <- file.path(save_dir,file)
+    if(file.exists(save_path) && isTRUE(force_new)){
+      rm_ <- file.remove(save_path)
+    }
+    if (!file.exists(save_path)) {
+      piggyback::pb_download(file = basename(file),
+                             repo = "neurogenomics/MultiEWCE",
+                             tag = tag,
+                             dest = save_dir,
+                             overwrite = TRUE)
+    }
+    if(grepl("\\.rds$",save_path, ignore.case = TRUE)){
+      results <- readRDS(save_path)
+    } else {
+      results <- data.table::fread(save_path)
+    }
+    data.table::setnames(results,
+                         c("HPO_ID","Phenotype","HPO_ID.disease_id","disease_id",
+                           "HPO_ID.LinkID","LinkID"),
+                         c("hpo_id","hpo_name","hpo_id.disease_id","disease_id",
+                           "hpo_id.disease_id","disease_id"),
+                         skip_absent = TRUE)
+    names(results) <- gsub("^symptoms\\.","symptom.",names(results))
+    return(results)
+  }
 
-  # devoptera::args2vars(load_example_results, reassign = TRUE)
-
-  file <- file[[1]]
-  dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
-  save_path <- file.path(save_dir,file)
-  if(file.exists(save_path) && isTRUE(force_new)){
-    rm_ <- file.remove(save_path)
-  }
-  if (!file.exists(save_path)) {
-    piggyback::pb_download(file = basename(file),
-                           repo = "neurogenomics/MultiEWCE",
-                           tag = tag,
-                           dest = save_dir,
-                           overwrite = TRUE)
-  }
-  if(grepl("\\.rds$",save_path, ignore.case = TRUE)){
-    results <- readRDS(save_path)
-  } else {
-    results <- data.table::fread(save_path)
-  }
-  data.table::setnames(results,
-                       c("HPO_ID","Phenotype","HPO_ID.disease_id","disease_id",
-                         "HPO_ID.LinkID","LinkID"),
-                       c("hpo_id","hpo_name","hpo_id.disease_id","disease_id",
-                         "hpo_id.disease_id","disease_id"),
-                       skip_absent = TRUE)
-  names(results) <- gsub("^symptoms\\.","symptom.",names(results))
-  return(results)
 }

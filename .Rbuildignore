@@ -8,3 +8,8 @@
 ^pkgdown$
 ^.github$
 ^README.Rmd$
+
+Icon?
+node_modules$
+package-lock\.json$
+package\.json$

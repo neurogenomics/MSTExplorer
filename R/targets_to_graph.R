@@ -2,36 +2,35 @@ targets_to_graph <- function(top_targets,
                              vertex_vars,
                              group_var,
                              metadata_vars=c("hpo_id",
+                                             "hpo_name",
+                                             "definition",
+                                             "ontLvl",
                                              "disease_name",
                                              "disease_id",
                                              "ancestor_name",
                                              "CellType",
                                              "q",
                                              "fold_change",
-                                             "definition",
-                                             "ontLvl",
-                                             "tier_merge",
-                                             "disease_characteristic",
-                                             "gene_biotype",
-                                             grep(paste("_mean$",
-                                                        "_min$",
-                                                        "_latest$",
-                                                        "_names$",
-                                                        sep = "|"),
-                                                  names(top_targets),
-                                                  value = TRUE)
+                                             # "tier_merge",
+                                             # "disease_characteristic",
+                                             # "gene_biotype"
+                                             # grep(paste("_mean$",
+                                             #            "_min$",
+                                             #            "_latest$",
+                                             #            "_names$",
+                                             #            sep = "|"),
+                                             #      names(top_targets),
+                                             #      value = TRUE)
                                              ) |> unique(),
                              edge_color_var = "fold_change",
                              edge_size_var = "fold_change",
                              mediator_var = "gene_symbol",
-                             node_palette = pals::isol, #pals::ocean.thermal,
-                             edge_palette = node_palette,
                              format="visnetwork",
                              verbose=TRUE){
   # devoptera::args2vars(targets_to_graph)
   requireNamespace("igraph")
   requireNamespace("tidygraph")
-  fold_change <- node_type <- shape <- color <- node <- disease_name <-
+  fold_change <- node_type <- shape <- node <- disease_name <-
     disease_id <- hpo_name <- ancestor_name <- from <- to <- NULL;
 
   messager("Creating network.",v=verbose)
@@ -68,14 +67,6 @@ targets_to_graph <- function(top_targets,
     shapes,
     unique(vertex_vars))
   vertices[,shape:=shape_dict[node_type]]
-  #### Add node colors ####
-  if(!is.null(node_palette)){
-    color_dict <- stats::setNames(
-      node_palette(length(unique(vertex_vars))+2)[-1],
-      unique(vertex_vars))
-    vertices[,color:=color_dict[node_type]] |>
-      data.table::setkeyv(cols = "node")
-  }
   #### Ensure each node only appears once in the node metadata ####
   vertices <- vertices[,utils::head(.SD, 1),by = c("node")]
   #### ancestor_name is only relevant metadata for hpo_name nodes ####
@@ -146,26 +137,11 @@ targets_to_graph <- function(top_targets,
                             edges = edges,
                             node_key = "node")
   #### Add hoverdata ####
-  igraph::vertex_attr(g,"title") <- lapply(seq(length(g)), function(i){
-    nms <- igraph::vertex_attr_names(g)
-    nms <- nms[!nms %in% c('shape','color','value','name')]
-    lapply(nms, function(nm){
-      value <- igraph::vertex_attr(g,nm)[i]
-      if(!is.na(value)) {
-        if(is.numeric(value)) value <- signif(value,3)
-        paste0("<strong>",nm,"</strong>: ",value)
-      } else {
-        ""
-      }
-    }) |>
-      paste(collapse = "<br>") |>
-      gsub(pattern="(<br>)+",replacement="<br>")
-  }) |> unlist()
+  g <- KGExplorer::add_hoverboxes(g = g,
+                                  hoverbox_column = "title")
   #### Format ####
-  # g <- igraph::simplify(g,)
   if(isTRUE(format=="ggnetwork")){
-    requireNamespace("ggnetwork")
-    g2 <- ggnetwork::fortify(g)
+    g2 <- KGExplorer::graph_to_ggnetwork(g)
     rownames(g2) <- paste0("edge",seq(nrow(g2)))
     return(g2)
   } else{

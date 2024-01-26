@@ -7,8 +7,8 @@
 #' @param keywords Keywords supplied to search for phenotypes.
 #'  Will be used to generate the plot title..
 #' @inheritParams ggnetwork_plot_full
-#' @inheritParams HPOExplorer::subset_descendants
-#' @inheritParams HPOExplorer::ggnetwork_plot
+#' @inheritParams HPOExplorer::filter_descendants
+#' @inheritParams HPOExplorer::make_network_plot
 #' @inheritParams ggplot2::scale_fill_viridis_c
 #' @returns ggplot or plotly object
 #'
@@ -17,13 +17,13 @@
 #' @importFrom plotly ggplotly
 #' @importFrom scales pretty_breaks
 #' @examples
-#' ancestor <- "Neurodevelopmental delay"
+#' keep_descendants <- "Neurodevelopmental delay"
 #' plt_pheno_count <- summary_plot(count_var = "hpo_name",
 #'                                 group_var = "CellType",
-#'                                 ancestor = ancestor)
+#'                                 keep_descendants = keep_descendants)
 #' plt_cell_count <- summary_plot(count_var = "CellType",
 #'                                 group_var = "hpo_name",
-#'                                 ancestor = ancestor)
+#'                                 keep_descendants = keep_descendants)
 summary_plot <- function(results = load_example_results(),
                          count_var = "hpo_name",
                          group_var = "CellType",
@@ -31,27 +31,23 @@ summary_plot <- function(results = load_example_results(),
                          q_threshold = 0.0005,
                          fold_threshold = 1,
                          cell_type = NULL,
-                         ancestor = NULL,
+                         keep_descendants = NULL,
                          hpo = HPOExplorer::get_hpo(),
-                         phenotype_to_genes =
-                           HPOExplorer::load_phenotype_to_genes(),
                          option = "magma",
                          interactive = TRUE,
+                         show_plot=TRUE,
                          verbose = TRUE){
-  # devoptera::args2vars(summary_plot)
-
   requireNamespace("ggplot2")
-
   #### Subset results ####
-  phenos <- subset_phenos(phenotype_to_genes = phenotype_to_genes,
-                          ancestor = ancestor,
+  phenos <- subset_phenos(keep_descendants = keep_descendants,
                           results = results,
                           hpo = hpo,
                           cell_type = cell_type,
                           q_threshold = q_threshold,
                           fold_threshold = fold_threshold,
                           verbose = verbose)
-
+  phenos <- HPOExplorer::add_hpo_id(phenos = phenos)
+  phenos <- HPOExplorer::add_hpo_name(phenos = phenos)
   #### Aggregate counts ####
   counts_df <- agg_results(phenos = phenos,
                            count_var = count_var,
@@ -61,41 +57,45 @@ summary_plot <- function(results = load_example_results(),
   ## so need to append it to the title.
   subtitle <-  paste0(
     if(!is.null(keywords)){shQuote(paste(keywords,collapse = ", "))},
-    "  ",formatC(length(unique(phenos$hpo_name)),big.mark = ","),
-    " ",tolower(count_var),"s")
-
+    "  ",formatC(length(unique(phenos[[count_var]])),big.mark = ","),
+    " ",tolower(count_var),"(s)")
   n_count_var <- paste("n",paste0(tolower(count_var),"s"),sep="_")
+  #### Sort celltypes by counts ####
+  data.table::setorderv(counts_df, n_count_var, -1L)
+  counts_df[[group_var]] <- factor(counts_df[[group_var]],
+                                   levels = unique(counts_df[[group_var]]),
+                                   ordered = TRUE)
   #### Make plot ####
-  plt <- ggplot(counts_df,
-                aes_string(x = group_var,
-                           y = n_count_var,
-                           fill = "mean_fold_change",
-                           mean_q = "mean_q",
-                           mean_sd_from_mean = "mean_sd_from_mean",
-                           values = tolower(count_var)
+  plt <- ggplot2::ggplot(counts_df,
+                         ggplot2::aes(x = !!ggplot2::sym(group_var),
+                           y = !!ggplot2::sym(n_count_var),
+                           fill = !!ggplot2::sym("mean_fold_change"),
+                           mean_q = !!ggplot2::sym("mean_q"),
+                           mean_sd_from_mean = !!ggplot2::sym("mean_sd_from_mean"),
+                           values = !!ggplot2::sym(tolower(count_var))
                            )
                 ) +
-    geom_col() +
-    labs(title = paste0("Enrichment results associated with:\n",
+    ggplot2::geom_col() +
+    ggplot2::labs(title = paste0("Enrichment results associated with:\n",
                         subtitle
     ),
     x = group_var,
     y = paste(count_var,"count"),
     fill = "Mean fold change") +
-    scale_y_continuous(breaks = scales::pretty_breaks(),
-                       expand = expansion(mult = c(0, .1))) +
-    scale_fill_viridis_c(option = option) +
-    theme_bw() +
-    theme(axis.text.x = element_text(angle = 45,
+    ggplot2::scale_y_continuous(breaks = scales::pretty_breaks(),
+                       expand = ggplot2::expansion(mult = c(0, .1))) +
+    ggplot2::scale_fill_viridis_c(option = option) +
+    ggplot2::theme_bw() +
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45,
                                      vjust = 0.5, hjust = 1,
                                      size = 10))
   if(isTRUE(interactive)){
-    plotly::ggplotly(plt) |>
+    plt <- plotly::ggplotly(plt) |>
       plotly::layout(hoverlabel = list(align = "left"),
                      margin = list(l = 0, r = 0,
                                    b = 0, t = 70,
                                    pad = 0) )
-  } else {
-    return(plt)
   }
+  if(show_plot) methods::show(plt)
+  return(plt)
 }

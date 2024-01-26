@@ -19,16 +19,15 @@ prioritise_targets_network(
   top_targets,
   vertex_vars = c("disease_name", "hpo_name", "CellType", "gene_symbol"),
   group_var = vertex_vars[[1]],
+  colour_var = "node_type",
   edge_color_var = "fold_change",
   edge_size_var = "fold_change",
   mediator_var = list(),
-  show_plot = TRUE,
-  save_path = tempfile(fileext = "_prioritise_targets_network.html"),
   layout = "layout_with_kk",
   solver = "forceAtlas2Based",
   physics = FALSE,
   forceAtlas2Based = list(avoidOverlap = 0.5, gravitationalConstant = -50),
-  scaling = list(label = list(drawThreshold = 0)),
+  scaling = NULL,
   smooth = list(enabled = TRUE, type = "cubicBezier", roundness = 0.5),
   add_visExport = FALSE,
   degree = 1,
@@ -36,9 +35,11 @@ prioritise_targets_network(
   height = "90vh",
   main = "Rare Disease Celltyping",
   submain = "Prioritised Targets Network",
-  node_palette = pals::kovesi.linear_bmy_10_95_c78,
+  preferred_palettes = "kovesi.linear_bmy_10_95_c78",
   randomSeed = 2023,
-  verbose = TRUE
+  verbose = TRUE,
+  show_plot = TRUE,
+  save_path = tempfile(fileext = "_prioritise_targets_network.html")
 )
 }
 \arguments{
@@ -49,6 +50,8 @@ to include as vertices/nodes within the network.}
 
 \item{group_var}{Variable to group nodes by.}
 
+\item{colour_var}{Column to color nodes by.}
+
 \item{edge_color_var}{Variable to color edges by.}
 
 \item{edge_size_var}{Variable to scale edges by.}
@@ -57,10 +60,6 @@ to include as vertices/nodes within the network.}
 (i.e. "gene_symbol").
 If \code{NULL}, instead will connect node hierarchically:
 ancestor_name --> Phenotype --> CellType --> gene_symbol}
-
-\item{show_plot}{Print the plot after it has been created.}
-
-\item{save_path}{Path to save HTML version of network to.}
 
 \item{layout}{: Character Name of igraph layout function to use. Default to "layout_nicely"}
 
@@ -120,12 +119,16 @@ list(from = 1, to = 1) to control degree in both direction.}
  \item{"style"}{ : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
 }}
 
-\item{node_palette}{Palette function to color nodes by.
-See the \pkg{pals} package for available options.}
+\item{preferred_palettes}{Preferred palettes to use for each column.}
 
 \item{randomSeed}{: Number. The nodes are randomly positioned initially. This means that the settled result is different every time. If you provide a random seed manually, the layout will be the same every time.}
 
 \item{verbose}{Print messages.}
+
+\item{show_plot}{Print the plot after it's been generated.}
+
+\item{save_path}{Path to save interactive plot to
+as a self-contained HTML file.}
 }
 \value{
 A named list containing the \link[visNetwork]{visNetwork} plot
@@ -141,6 +144,6 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-res <- MultiEWCE::example_targets
-vn <- prioritise_targets_network(top_targets = res$top_targets)
+top_targets <- MultiEWCE::example_targets$top_targets
+vn <- prioritise_targets_network(top_targets = top_targets)
 }

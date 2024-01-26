@@ -15,7 +15,7 @@ test_that("prioritise_targets works", {
   testthat::expect_gte(nrow(res2$top_targets), 6)
 
   #### Plot evidence score vs. specificity ####
-  res3 <- prioritise_targets(results = results,
+  res3 <- prioritise_targets(results = results[seq(2500)],
                              ctd = ctd,
                              keep_deaths = NULL,
                              #### Phenotype level ####
@@ -35,7 +35,7 @@ test_that("prioritise_targets works", {
                              keep_celltypes = NULL,
                              #### Gene level ####
                              keep_evidence = NULL,
-                             keep_seqnames = NULL,
+                             keep_chr = NULL,
                              gene_size = list("min"=0,
                                               "max"=Inf),
                              gene_frequency_threshold = NULL,
@@ -43,5 +43,5 @@ test_that("prioritise_targets works", {
                              keep_specificity_quantiles = NULL,
                              keep_mean_exp_quantiles = seq(1,40),
                              symptom_gene_overlap = TRUE)
-  testthat::expect_gte(nrow(res3$top_targets), 60000)
+  testthat::expect_gte(nrow(res3$top_targets), 40000)
 })

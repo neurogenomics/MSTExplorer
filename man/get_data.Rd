@@ -7,7 +7,7 @@
 get_data(
   fname,
   repo = "neurogenomics/MultiEWCE",
-  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
+  save_dir = KGExplorer::cache_dir(package = "MultiEWCE"),
   overwrite = TRUE,
   tag = "latest",
   check = FALSE

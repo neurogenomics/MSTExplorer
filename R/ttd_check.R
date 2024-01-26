@@ -16,11 +16,10 @@
 #' @importFrom utils tail
 #' @examples
 #' top_targets <- MultiEWCE::example_targets$top_targets
-#' top_targets <- HPOExplorer::add_genes(top_targets[q<0.05])
+#' top_targets <- HPOExplorer::add_genes(top_targets)
 #' res <- ttd_check(top_targets=top_targets)
 ttd_check <- function(top_targets,
-                      save_dir = tools::R_user_dir(package = "MultiEWCE",
-                                                   which = "cache"),
+                      save_dir = KGExplorer::cache_dir(package="MultiEWCE"),
                       drug_types = NULL,
                       highest_status = NULL,
                       show_plot = TRUE){
@@ -61,7 +60,7 @@ ttd_check <- function(top_targets,
   TARGETID <- DRUGNAME <- DRUGTYPE <- DRUGID <-
     GENENAME2 <- prioritised <- HIGHEST_STATUS <- NULL;
 
-  ttdi <- ttd_import(save_dir = save_dir)
+  ttdi <- KGExplorer::get_ttd(save_dir = save_dir)
   #### Filter results to only gene therapies #####
   dat_sub <- ttdi$merged[!is.na(TARGETID) &
                          !is.na(GENENAME2) &
@@ -92,7 +91,7 @@ ttd_check <- function(top_targets,
   length(unique(paste0(dat_sub2$DRUGID,dat_sub2$INDICATI,dat_sub2$GENENAME2)))
   dat_sub[,prioritised:=(DRUGID %in% dat_sub2$DRUGID)]
   #### Plot ####
-  plt <- ttd_plot(dat_sub = dat_sub)
+  plt <- KGExplorer:::plot_ttd(dat_sub = dat_sub)
   if(isTRUE(show_plot)){
     methods::show(plt)
   }

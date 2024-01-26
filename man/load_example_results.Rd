@@ -41,12 +41,11 @@ Results located in 'results' folder.}
 }
 \usage{
 load_example_results(
-  file = c("Descartes_All_Results_extras.symptoms.rds",
-    "Descartes_All_Results_extras.symptoms.full_join.rds",
-    "Descartes_All_Results_extras.rds", "gen_overlap.symptoms.filt.rds",
-    "tabulamuris_merged.rds"),
+  file = c("rare_disease_min_genes4_DescartesHuman.rds",
+    "rare_disease_min_genes4_HumanCellLandscape.rds"),
+  multi_dataset = FALSE,
   tag = "latest",
-  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
+  save_dir = KGExplorer::cache_dir(package = "MultiEWCE"),
   force_new = FALSE
 )
 }
@@ -70,6 +69,10 @@ Used the \href{https://tabula-muris.ds.czbiohub.org/}{Tabula Muris}
 CTD.
 }
 }}
+
+\item{multi_dataset}{Merge results generated from
+multiple CellTypeDataset references
+(e.g. DescartesHuman and HumanCellLandscape).}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 

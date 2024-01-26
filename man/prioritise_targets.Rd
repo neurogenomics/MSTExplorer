@@ -10,33 +10,31 @@ prioritise_targets(
   annotLevel = 1,
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   hpo = HPOExplorer::get_hpo(),
-  keep_deaths = HPOExplorer::list_deaths(exclude = c("Miscarriage", "Stillbirth",
-    "Prenatal death"), include_na = FALSE),
-  remove_descendants = c("Clinical course"),
+  keep_deaths = HPOExplorer::list_deaths(include_na = TRUE),
+  keep_descendants = c("Phenotypic abnormality"),
   keep_ont_levels = NULL,
   pheno_ndiseases_threshold = NULL,
+  gpt_filters = NULL,
   keep_tiers = c(1, 2, NA),
   severity_threshold_max = NULL,
   severity_threshold = c(2, NA),
   pheno_frequency_threshold = NULL,
-  keep_onsets = HPOExplorer::list_onsets(exclude = c("Antenatal", "Fetal", "Congenital"),
-    include_na = TRUE),
+  keep_onsets = HPOExplorer::list_onsets(include_na = TRUE),
   q_threshold = 0.05,
   fold_threshold = 2,
   symptom_p_threshold = NULL,
   symptom_intersection_size_threshold = 1,
-  keep_celltypes = terminal_celltypes()$CellType,
+  keep_celltypes = NULL,
   keep_evidence = seq(3, 6),
-  keep_seqnames = c(seq(22), "X", "Y"),
+  keep_chr = c(seq(22), "X", "Y"),
   gene_size = list(min = 0, max = Inf),
   gene_frequency_threshold = NULL,
   keep_biotypes = NULL,
   keep_specificity_quantiles = NULL,
   keep_mean_exp_quantiles = seq(1, 40),
   symptom_gene_overlap = TRUE,
-  sort_cols = c(tier_merge = 1, Severity_score_mean = 1, q = 1, fold_change = -1,
-    specificity = -1, mean_exp = -1, pheno_freq_mean = -1, gene_freq_mean = -1, width =
-    1),
+  sort_cols = c(severity_score_gpt = -1, q = 1, fold_change = -1, specificity = -1,
+    mean_exp = -1, pheno_freq_mean = -1, gene_freq_mean = -1, width = 1),
   top_n = NULL,
   group_vars = c("disease_id", "hpo_id", "CellType"),
   return_report = TRUE,
@@ -58,18 +56,17 @@ analyse (\emph{Default: 1}).}
 \link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
 to gene annotations.}
 
-\item{hpo}{Human Phenotype Ontology object, loaded from \pkg{ontologyIndex}.}
+\item{hpo}{Human Phenotype Ontology object,
+loaded from \link[KGExplorer]{get_ontology}.}
 
 \item{keep_deaths}{The age of death associated with each HPO ID to keep.
 If >1 age of death is associated with the term,
 only the earliest age is considered.
 See \link[HPOExplorer]{add_death} for details.}
 
-\item{remove_descendants}{Remove HPO terms that are descendants of a given
-ancestral HPO term. Ancestral terms be provided as a character vector of
-phenotype names (e.g. \code{c("Clinical course")}),
-HPO IDs (e.g. \code{"HP:0031797" }) or a mixture of the two.
-See \link[HPOExplorer]{add_ancestor} for details.}
+\item{keep_descendants}{Terms whose descendants should be kept 
+(including themselves).
+ Set to \code{NULL} (default) to skip this filtering step.}
 
 \item{keep_ont_levels}{Only keep phenotypes at certain \emph{absolute}
 ontology levels to keep.
@@ -77,6 +74,8 @@ See \link[HPOExplorer]{add_ont_lvl} for details.}
 
 \item{pheno_ndiseases_threshold}{Filter phenotypes by the
 maximum number of diseases they are associated with.}
+
+\item{gpt_filters}{A named list of filters to apply to the GPT annotations.}
 
 \item{keep_tiers}{Tiers from \link[HPOExplorer]{hpo_tiers} to keep.
 Include \code{NA} if you wish to retain phenotypes that
@@ -124,7 +123,7 @@ consider it a significant enrichment. Refers to the result from
 \item{keep_evidence}{The evidence scores of each gene-disease
 association to keep.}
 
-\item{keep_seqnames}{Chromosomes to keep.}
+\item{keep_chr}{Chromosomes to keep.}
 
 \item{gene_size}{Min/max gene size (important for therapeutics design).}
 
@@ -172,7 +171,7 @@ Prioritise target genes based on a procedure:\cr
 \enumerate{
 \item{Disease-level: \code{keep_deaths}: }{
 Keep only diseases with a certain age of death.}
-\item{Phenotype-level: \code{remove_descendants}: }{
+\item{Phenotype-level: \code{keep_descendants}: }{
 Remove phenotypes belonging to a certain branch of the HPO,
 as defined by an ancestor term.}
 \item{Phenotype-level: \code{keep_ont_levels}: }{
@@ -201,7 +200,7 @@ Keep only cell type-phenotype association results at q<=0.05.}
 Keep only cell type-phenotype association results at fold_change>=1.}
 \item{Cell type-level: \code{keep_celltypes}: }{
 Keep only terminally differentiated cell types.}
-\item{Gene-level: \code{keep_seqnames}: }{
+\item{Gene-level: \code{keep_chr}: }{
 Remove genes on non-standard chromosomes.}
 \item{Gene-level: \code{gene_size}: }{
 Keep only genes <4.3kb in length.}

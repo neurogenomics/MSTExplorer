@@ -13,7 +13,7 @@ agg_results(
 )
 }
 \arguments{
-\item{phenos}{dataframe of phenotypes and values / parameters.}
+\item{phenos}{A data.table containing HPO IDs and other metadata.}
 
 \item{count_var}{Variable to get counts for per \code{group_var}.}
 

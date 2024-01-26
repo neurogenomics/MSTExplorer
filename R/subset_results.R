@@ -7,24 +7,20 @@
 #' with HPO ID column added.
 #'
 #' @export
-#' @importFrom HPOExplorer get_hpo load_phenotype_to_genes add_hpo_id
 #' @examples
-#' signif_cell_data <- subset_results(cell_type="Amacrine cells")
+#' signif_cell_data <- subset_results(cell_type="Cardiomyocytes")
 subset_results <- function(cell_type,
                            results = load_example_results(),
                            q_threshold = 0.0005,
                            fold_threshold = 1,
                            hpo = HPOExplorer::get_hpo(),
-                           phenotype_to_genes =
-                             HPOExplorer::load_phenotype_to_genes(),
                            verbose = TRUE){
-  # devoptera::args2vars(subset_results)
   CellType <- fold_change <-  hpo_id <- hpo_id <- NULL;
 
   messager("Subsetting results by q_threshold and fold_change.",v=verbose)
   #### Filter to sig results only ####
   results_sig <- results[(q<=q_threshold) &
-                           (fold_change>=fold_threshold),]
+                         (fold_change>=fold_threshold),]
   #### Check that celltype is available ####
   if(length(cell_type)==0){
     messager("Skipping cell_type filter.",v=verbose)
@@ -40,7 +36,7 @@ subset_results <- function(cell_type,
              substr(paste(shQuote(cell_orig),collapse = ";"),
                     start = 1, stop = 50),
              "...",
-             "not found in results.\n ",
+             "not found in significant results.\n ",
              "Defaulting to first CellType available:",shQuote(cell_type))
     results_sig <- results_sig[CellType %in% cell_type,]
   }
@@ -49,11 +45,6 @@ subset_results <- function(cell_type,
     stop("ERROR!: phenos table is empty.")
   }
   #### Add HPO IDs ####
-  results_sig <- HPOExplorer::add_hpo_id(
-    phenos = results_sig,
-    phenotype_to_genes = phenotype_to_genes,
-    hpo = hpo,
-    verbose = verbose)
   results_sig <- results_sig[(!is.na(hpo_id)) ,]
   messager(formatC(nrow(results_sig),big.mark = ","),
            "associations remain after filtering.",v=verbose)

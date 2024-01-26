@@ -5,9 +5,13 @@
 \title{Plot ontology levels}
 \usage{
 plot_ont_lvl(
-  results = load_example_results(),
+  results = load_example_results(multi_dataset = TRUE),
   p2g = HPOExplorer::load_phenotype_to_genes(),
-  x_vars = c("genes", "celltypes", "log(abs(fold_change))")
+  x_vars = c("genes", "celltypes", "log_fold_change"),
+  group_vars = c("hpo_id", "ontLvl", "ctd"),
+  label.x.npc = 0.05,
+  label.y.npc = 0.5,
+  notch = FALSE
 )
 }
 \arguments{
@@ -18,6 +22,22 @@ and merged together with \link[MultiEWCE]{merge_results}.}
 \item{p2g}{Phenotype to gene data.}
 
 \item{x_vars}{Variables to plot on the x-axis of each subplot.}
+
+\item{group_vars}{Compute the mean value for each \code{x_vars}
+grouped by the \code{group_vars}.
+This can be less accurate for some metrics but helps to drastically
+reduce computational load.}
+
+\item{label.x.npc, label.y.npc}{can be \code{numeric} or \code{character}
+ vector of the same length as the number of groups and/or panels. If too
+ short they will be recycled. \itemize{ \item If \code{numeric}, value should
+ be between 0 and 1. Coordinates to be used for positioning the label,
+ expressed in "normalized parent coordinates". \item If \code{character},
+ allowed values include: i) one of c('right', 'left', 'center', 'centre',
+ 'middle') for x-axis; ii) and one of c( 'bottom', 'top', 'center', 'centre',
+ 'middle') for y-axis.}
+
+ If too short they will be recycled.}
 }
 \value{
 A named list containing the data and the plot.
@@ -27,5 +47,5 @@ Generate plots comparing the ontology level of each HPO phenotype and
 several other metrics.
 }
 \examples{
-plts <- plot_ont_lvl()
+plts <- plot_ont_lvl(label.x.npc = .05)
 }

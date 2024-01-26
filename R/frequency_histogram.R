@@ -10,17 +10,18 @@
 #' @importFrom HPOExplorer load_phenotype_to_genes
 #' @importFrom HPOExplorer add_gene_frequency add_ancestor
 #' @examples
-#' results <- load_example_results()[seq(5000),]
+#' results <- load_example_results()[seq(500),]
 #' fp_res <- frequency_histogram(results=results)
 frequency_histogram <- function(results = load_example_results(),
-                                phenotype_to_genes = load_phenotype_to_genes(),
+                                phenotype_to_genes =
+                                  HPOExplorer::load_phenotype_to_genes(),
                                 show_plot = FALSE,
                                 verbose = TRUE){
 
   Metric_Type <- value <- variable <- hpo_id <- NULL;
 
   results <- results |>
-    HPOExplorer::add_pheno_frequency() |>
+    HPOExplorer::add_pheno_frequency(allow.cartesian = TRUE) |>
     HPOExplorer::add_ancestor()
   gene_df <- phenotype_to_genes[hpo_id %in% unique(results$hpo_id),] |>
     HPOExplorer::add_gene_frequency() |>
@@ -36,7 +37,7 @@ frequency_histogram <- function(results = load_example_results(),
     measure.vars = measure.vars )
 
   g1 <- ggplot2::ggplot(d1, ggplot2::aes(x=value, fill=variable)) +
-    ggplot2::geom_histogram(stat = "count", na.rm = TRUE) +
+    ggplot2::geom_histogram(na.rm = TRUE) +
     ggplot2::scale_fill_manual(values = pals::viridis(4)) +
     ggplot2::facet_wrap(facets = "variable ~.") +
     ggplot2::theme_bw() +
@@ -47,9 +48,11 @@ frequency_histogram <- function(results = load_example_results(),
   measure.vars <- grep(paste("^p$","^q$","^fold_change",
                              "_min$","_max$","_mean$", sep = "|"),
                        names(results), value = TRUE)
+  id.vars = c("hpo_id","hpo_name")
+  id.vars <- id.vars[id.vars %in% names(results)]
   d2 <- data.table::melt.data.table(results,
-                                         id.vars = c("hpo_id","hpo_name"),
-                                         measure.vars = measure.vars)
+                                    id.vars = id.vars,
+                                    measure.vars = measure.vars)
   d2$Metric_Type <- ifelse(grepl("pheno_freq",d2$variable),
                                 "Frequency","Enrichment")
   g2 <- ggplot2::ggplot(d2,

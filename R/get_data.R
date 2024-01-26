@@ -4,13 +4,9 @@
 #' @param save_dir Directory to save data to.
 #' @keywords internal
 #' @inheritParams piggyback::pb_download
-#' @importFrom tools R_user_dir
 get_data <- function(fname,
                      repo = "neurogenomics/MultiEWCE",
-                     save_dir = tools::R_user_dir(
-                       package = "MultiEWCE",
-                       which = "cache"
-                     ),
+                     save_dir = KGExplorer::cache_dir(package="MultiEWCE"),
                      overwrite = TRUE,
                      tag = "latest",
                      check = FALSE

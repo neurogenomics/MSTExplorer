@@ -14,7 +14,7 @@
 #'
 #' @export
 #' @examples
-#' results <- load_example_results()
+#' results <- load_example_results()[seq(100),]
 #' results2 <- add_ctd(results=results)
 add_ctd <- function(results=load_example_results(),
                     ctd=load_example_ctd(),
@@ -23,13 +23,15 @@ add_ctd <- function(results=load_example_results(),
                     keep_mean_exp_quantiles=NULL,
                     rep_dt=NULL,
                     all.x=FALSE,
+                    allow.cartesian = TRUE,
                     by=c("gene_symbol","CellType"),
                     verbose=TRUE){
   # devoptera::args2vars(add_ctd)
   gene_symbol <- NULL;
 
   results <- HPOExplorer::add_genes(phenos = results,
-                                    verbose = verbose)
+                                    all.x = all.x,
+                                    allow.cartesian = allow.cartesian)
   #### Identify genes within CTD ####
   shared_genes <- intersect(results$gene_symbol,
                             rownames(ctd[[annotLevel]]$specificity))
@@ -58,12 +60,14 @@ add_ctd <- function(results=load_example_results(),
   results <- results |>
     data.table::merge.data.table(y = spec_df,
                                  by = by,
-                                 all.x = all.x)
+                                 all.x = all.x,
+                                 allow.cartesian = allow.cartesian)
   #### Merge: specificity_quantiles ####
   results <- results |>
     data.table::merge.data.table(y = specq_df,
                                  by = by,
-                                 all.x = all.x)
+                                 all.x = all.x,
+                                 allow.cartesian = allow.cartesian)
   if(!is.null(rep_dt)){
     rep_dt <- report(dt = results,
                      rep_dt = rep_dt,

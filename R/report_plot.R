@@ -7,6 +7,8 @@
 #' @param show_plot Show the plot.
 #' @param save_plot Path to save the plot to.
 #' @param remove_cols Columns to remove from \code{rep_dt}.
+#' @param phenotype_to_genes Phenotype to gene mapping from
+#' \link[HPOExplorer]{load_phenotype_to_genes}.
 #' @inheritParams ggnetwork_plot_full
 #' @inheritDotParams ggplot2::ggsave
 #' @returns ggplot object

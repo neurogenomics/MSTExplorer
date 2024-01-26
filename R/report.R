@@ -8,7 +8,7 @@ report <- function(dt,
   }
 
   dict <- list(Rows="Rows",
-               hpo_name="Phenotypes",
+               hpo_id="Phenotypes",
                disease_id="Diseases",
                CellType="Cell types",
                gene_symbol="Genes")

@@ -95,14 +95,14 @@ gen_results <- function(ctd,
                          verbose = verbose,
                          ...)
   #### Merge results into one dataframe ####
-  results_final <- merge_results(res_files = res_files,
-                                 list_name_column = list_name_column)
+  results_merged <- merge_results(res_files = res_files,
+                                  list_name_column = list_name_column)
   #### Report total time ####
   messager("Done in:",round(difftime(Sys.time(),start,units = "s"), 1),
            "seconds.",v=verbose)
   #### Save merged results ####
-  save_path <- save_results(results = results_final,
+  save_path <- save_results(results = results_merged$results,
                             save_path = save_path,
                             verbose = verbose)
-  return(results_final)
+  return(results_merged)
 }

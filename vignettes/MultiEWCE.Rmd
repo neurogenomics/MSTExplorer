@@ -3,7 +3,7 @@ title: "Getting Started"
 author: "<h4>Authors: <i>`r auths <- eval(parse(text = gsub('person','c',read.dcf('../DESCRIPTION', fields = 'Authors@R'))));paste(auths[names(auths)=='given'],auths[names(auths)=='family'], collapse = ', ')`</i></h4>" 
 date: "<h4>Vignette updated: <i>`r format( Sys.Date(), '%b-%d-%Y')`</i></h4>"
 output:
-  BiocStyle::html_document
+  rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{MultiEWCE}
   %\VignetteEngine{knitr::rmarkdown}
@@ -93,15 +93,16 @@ Here we set the input parameters related to this.
 Now we have set up all our desired inputs, we can run the analysis. 
 
 ```{r run} 
-all_results <- MultiEWCE::gen_results(ctd = ctd,
-                                      gene_data = gene_data,
-                                      list_names = list_names, 
-                                      list_name_column = "hpo_id",
-                                      reps = reps,
-                                      cores = cores,
-                                      save_dir = save_dir, 
-                                      force_new = TRUE,
-                                      save_dir_tmp = save_dir_tmp) 
+out <- MultiEWCE::gen_results(ctd = ctd,
+                              gene_data = gene_data,
+                              list_names = list_names, 
+                              list_name_column = "hpo_id",
+                              reps = reps,
+                              cores = cores,
+                              save_dir = save_dir, 
+                              force_new = TRUE,
+                              save_dir_tmp = save_dir_tmp)
+results <- out$results
 ```
 
 # Visualise the results 
@@ -110,7 +111,7 @@ Just as an example, we will create a plot showing the number of significant enri
 library(ggplot2)
 library(data.table)
 #### Aggregate results ####
-n_signif <- all_results[q<=0.05 & !is.na(q),
+n_signif <- results[q<=0.05 & !is.na(q),
                         list(sig_enrichments = .N,
                              mean_fold_change=mean(fold_change)), 
                         by="hpo_id"]
@@ -175,13 +176,14 @@ list_names <- unique(gene_counts$disease_id)[seq(5)]
 ```
 
 ```{r}
-all_results <- MultiEWCE::gen_results(ctd = ctd,
-                                      gene_data = gene_data,
-                                      list_name_column = "disease_id",
-                                      list_names = list_names,
-                                      annotLevel = 1,
-                                      force_new = TRUE,
-                                      reps = 10)
+out <- MultiEWCE::gen_results(ctd = ctd,
+                              gene_data = gene_data,
+                              list_name_column = "disease_id",
+                              list_names = list_names,
+                              annotLevel = 1,
+                              force_new = TRUE,
+                              reps = 10)
+results <- out$results
 ```
 
 # Full analysis
@@ -189,7 +191,7 @@ all_results <- MultiEWCE::gen_results(ctd = ctd,
 Run the following code the replicate the main analysis in the study 
 described [here](https://doi.org/10.1101/2023.02.13.23285820).
 
-```{r, eval=FALSE}
+```r
 gene_data <- HPOExplorer::load_phenotype_to_genes()
 gene_data[,n_gene:=length(unique(gene_symbol)),by="hpo_id"]
 gene_data <- gene_data[n_gene>=4,]
@@ -202,7 +204,6 @@ all_results <- MultiEWCE::gen_results(ctd = ctd,
                                       reps = 100000,
                                       cores = 10)
 ```
-
 
 # Session info
 

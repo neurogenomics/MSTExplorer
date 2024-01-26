@@ -8,7 +8,7 @@ get_bg(
   species1 = "human",
   species2 = "human",
   method = "gprofiler",
-  save_dir = tools::R_user_dir(package = "MultiEWCE", which = "cache"),
+  save_dir = KGExplorer::cache_dir(package = "MultiEWCE"),
   overwrite = FALSE,
   verbose = TRUE,
   ...

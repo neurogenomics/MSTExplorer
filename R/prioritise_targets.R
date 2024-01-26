@@ -4,7 +4,7 @@
 #' \enumerate{
 #' \item{Disease-level: \code{keep_deaths}: }{
 #' Keep only diseases with a certain age of death.}
-#' \item{Phenotype-level: \code{remove_descendants}: }{
+#' \item{Phenotype-level: \code{keep_descendants}: }{
 #' Remove phenotypes belonging to a certain branch of the HPO,
 #' as defined by an ancestor term.}
 #' \item{Phenotype-level: \code{keep_ont_levels}: }{
@@ -33,7 +33,7 @@
 #' Keep only cell type-phenotype association results at fold_change>=1.}
 #' \item{Cell type-level: \code{keep_celltypes}: }{
 #' Keep only terminally differentiated cell types.}
-#' \item{Gene-level: \code{keep_seqnames}: }{
+#' \item{Gene-level: \code{keep_chr}: }{
 #' Remove genes on non-standard chromosomes.}
 #' \item{Gene-level: \code{gene_size}: }{
 #' Keep only genes <4.3kb in length.}
@@ -104,16 +104,7 @@
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
 #' @inheritParams HPOExplorer::phenos_to_granges
-#' @inheritParams HPOExplorer::add_ancestor
-#' @inheritParams HPOExplorer::add_severity
-#' @inheritParams HPOExplorer::add_tier
-#' @inheritParams HPOExplorer::add_death
-#' @inheritParams HPOExplorer::add_onset
-#' @inheritParams HPOExplorer::add_gene_frequency
-#' @inheritParams HPOExplorer::add_pheno_frequency
-#' @inheritParams HPOExplorer::add_ndisease
-#' @inheritParams HPOExplorer::add_ont_lvl
-#' @inheritParams HPOExplorer::add_evidence
+#' @inheritParams HPOExplorer::add_
 #' @returns A data.table of the prioritised phenotype- and
 #'  celltype-specific gene targets.
 #'
@@ -134,15 +125,16 @@ prioritise_targets <- function(#### Input data ####
                                #### Disease-level ####
                                keep_deaths =
                                  HPOExplorer::list_deaths(
-                                   exclude=c("Miscarriage",
-                                             "Stillbirth",
-                                             "Prenatal death"),
-                                   include_na = FALSE
+                                   # exclude=c("Miscarriage",
+                                   #           "Stillbirth",
+                                   #           "Prenatal death"),
+                                   include_na = TRUE
                                  ),
                                #### Phenotype level ####
-                               remove_descendants = c("Clinical course"),
+                               keep_descendants = c("Phenotypic abnormality"),
                                keep_ont_levels = NULL,
                                pheno_ndiseases_threshold = NULL,
+                               gpt_filters = NULL,
                                keep_tiers = c(1,2,NA),
                                severity_threshold_max = NULL,
                                #### Symptom level ####
@@ -150,9 +142,9 @@ prioritise_targets <- function(#### Input data ####
                                pheno_frequency_threshold = NULL,
                                keep_onsets =
                                  HPOExplorer::list_onsets(
-                                   exclude=c("Antenatal",
-                                             "Fetal",
-                                             "Congenital"),
+                                   # exclude=c("Antenatal",
+                                   #           "Fetal",
+                                   #           "Congenital"),
                                    include_na = TRUE
                                  ),
                                #### Celltype level ####
@@ -160,10 +152,10 @@ prioritise_targets <- function(#### Input data ####
                                fold_threshold = 2,
                                symptom_p_threshold = NULL,
                                symptom_intersection_size_threshold = 1,
-                               keep_celltypes = terminal_celltypes()$CellType,
+                               keep_celltypes = NULL,#terminal_celltypes()$CellType,
                                #### Gene level ####
                                keep_evidence = seq(3,6),
-                               keep_seqnames = c(seq(22),"X","Y"),
+                               keep_chr = c(seq(22),"X","Y"),
                                gene_size = list("min"=0,
                                                 "max"=Inf),
                                gene_frequency_threshold = NULL,
@@ -172,8 +164,7 @@ prioritise_targets <- function(#### Input data ####
                                keep_mean_exp_quantiles = seq(1,40),
                                symptom_gene_overlap = TRUE,
                                #### Sorting ####
-                               sort_cols = c("tier_merge"=1,
-                                             "Severity_score_mean"=1,
+                               sort_cols = c("severity_score_gpt"=-1,
                                              "q"=1,
                                              "fold_change"=-1,
                                              "specificity"=-1,
@@ -187,9 +178,6 @@ prioritise_targets <- function(#### Input data ####
                                               "CellType"),
                                return_report = TRUE,
                                verbose = TRUE){
-
-  # o <- devoptera::args2vars(prioritise_targets, reassign = TRUE)
-
   q <- fold_change <- CellType <- width <- seqnames <- gene_biotype <-
     symptom.pval <- Severity_score <- intersection_size <-
     Severity_score_max <- NULL;
@@ -198,22 +186,19 @@ prioritise_targets <- function(#### Input data ####
   messager("Prioritising gene targets.",v=verbose)
   #### add_hpo_id  #####
   results <- HPOExplorer::add_hpo_id(phenos = results,
-                                     phenotype_to_genes = phenotype_to_genes,
-                                     hpo = hpo,
-                                     verbose = verbose)
+                                     hpo = hpo)
+  results <- HPOExplorer::add_hpo_name(phenos = results,
+                                       hpo = hpo)
   #### add_hpo_definition  #####
   results <- HPOExplorer::add_hpo_definition(phenos = results,
                                              verbose = verbose)
   #### add_info_content #####
-  if("info_content" %in% names(sort_cols)){
-    results <- HPOExplorer::add_info_content(phenos = results,
-                                             hpo = hpo,
-                                             verbose = verbose)
-  }
+  results <- HPOExplorer::add_info_content(phenos = results,
+                                           hpo = hpo)
   #### Add disease columns ####
   results <- HPOExplorer::add_disease(phenos = results,
-                                      add_definitions = TRUE,
-                                      verbose = verbose)
+                                      add_definitions = FALSE,
+                                      allow.cartesian = TRUE)
   #### start ####
   rep_dt <- report(dt = results,
                    step = "start",
@@ -250,49 +235,55 @@ prioritise_targets <- function(#### Input data ####
                    step = "symptom_p_threshold",
                    verbose = verbose)
   #### symptom_intersection_size_threshold ####
-  if(!is.null(symptom_intersection_size_threshold)){
-    results <- results[intersection_size>=symptom_intersection_size_threshold]
+  if("intersection_size" %in% names(results)){
+    if(!is.null(symptom_intersection_size_threshold)){
+      results <- results[intersection_size>=symptom_intersection_size_threshold]
+    }
+    rep_dt <- report(dt = results,
+                     rep_dt = rep_dt,
+                     step = "symptom_intersection_size_threshold",
+                     verbose = verbose)
   }
-  rep_dt <- report(dt = results,
-                   rep_dt = rep_dt,
-                   step = "symptom_intersection_size_threshold",
-                   verbose = verbose)
 
   #### Filter diseases ####
   #### keep_deaths ####
   results <- HPOExplorer::add_death(phenos = results,
                                     keep_deaths = keep_deaths,
                                     agg_by = "disease_id",
-                                    allow.cartesian = TRUE,
-                                    verbose = verbose)
+                                    allow.cartesian = TRUE)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_deaths",
                    verbose = verbose)
   #### Filter phenotypes ####
-  #### remove_descendants ####
+  #### keep_descendants ####
   results <- HPOExplorer::add_ancestor(phenos = results,
                                        hpo = hpo,
-                                       remove_descendants = remove_descendants,
-                                       verbose = verbose)
+                                       keep_descendants = keep_descendants)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
-                   step = "remove_descendants",
+                   step = "keep_descendants",
                    verbose = verbose)
   #### keep_ont_levels ####
   results <- HPOExplorer::add_ont_lvl(phenos = results,
                                       absolute = TRUE,
-                                      keep_ont_levels = keep_ont_levels,
-                                      verbose = verbose)
+                                      hpo = hpo,
+                                      keep_ont_levels = keep_ont_levels)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_ont_levels",
                    verbose = verbose)
+  #### Add GPT annotations ####
+  results <- HPOExplorer::add_gpt_annotations(phenos = results,
+                                              gpt_filters = gpt_filters)
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "keep_onsets",
+                   verbose = verbose)
   #### keep_onsets ####
   results <- HPOExplorer::add_onset(phenos = results,
                                     keep_onsets = keep_onsets,
-                                    agg_by=c("disease_id","hpo_id"),
-                                    verbose = verbose)
+                                    agg_by=c("disease_id","hpo_id"))
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_onsets",
@@ -308,8 +299,7 @@ prioritise_targets <- function(#### Input data ####
                    verbose = verbose)
   #### severity_threshold ####
   results <- HPOExplorer::add_severity(phenos = results,
-                                       severity_threshold = severity_threshold,
-                                       verbose = verbose)
+                                       severity_threshold = severity_threshold)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "severity_threshold",
@@ -337,8 +327,7 @@ prioritise_targets <- function(#### Input data ####
   #### pheno_frequency_threshold ####
   results <- HPOExplorer::add_pheno_frequency(
     phenos = results,
-    pheno_frequency_threshold = pheno_frequency_threshold,
-    verbose = verbose)
+    pheno_frequency_threshold = pheno_frequency_threshold)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "pheno_frequency_threshold",
@@ -368,7 +357,7 @@ prioritise_targets <- function(#### Input data ####
     phenotype_to_genes = phenotype_to_genes,
     hpo = hpo,
     gene_col = if(isTRUE(symptom_gene_overlap)) "intersection" else NULL,
-    keep_seqnames = NULL,
+    keep_chr = NULL,
     split.field = NULL,
     as_datatable = TRUE,
     verbose = verbose)
@@ -376,21 +365,20 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "symptom_gene_overlap",
                    verbose = verbose)
-  #### keep_seqnames ####
-  if(!is.null(keep_seqnames)){
-    messager("Filtering by keep_seqnames.",v=verbose)
-    results <- results[seqnames %in% keep_seqnames,]
+  #### keep_chr ####
+  if(!is.null(keep_chr)){
+    messager("Filtering by keep_chr.",v=verbose)
+    results <- results[seqnames %in% keep_chr,]
   }
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
-                   step = "keep_seqnames",
+                   step = "keep_chr",
                    verbose = verbose)
   #### keep_evidence ####
   messager("Filtering by gene-disease association evidence.",
            v=verbose)
   results <- HPOExplorer::add_evidence(phenos = results,
-                                       keep_evidence = keep_evidence,
-                                       verbose = verbose)
+                                       keep_evidence = keep_evidence)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
                    step = "keep_evidence",
@@ -433,6 +421,7 @@ prioritise_targets <- function(#### Input data ####
   results <- HPOExplorer::add_gene_frequency(
     phenotype_to_genes = results,
     gene_frequency_threshold = gene_frequency_threshold,
+    allow.cartesian = TRUE,
     verbose = verbose)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
