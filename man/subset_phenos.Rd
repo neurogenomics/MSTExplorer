@@ -45,6 +45,6 @@ This subsets  the Rare disease EWCE results by cell type,
 q threshold and fold change.
 }
 \examples{
-phenos <- subset_phenos(cell_type = "Cardiomyocytes",
+phenos <- subset_phenos(filters = list(CellType = "Cardiomyocytes"),
                         keep_descendants = "Neurodevelopmental delay")
 }

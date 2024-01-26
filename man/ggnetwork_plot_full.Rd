@@ -10,7 +10,7 @@ ggnetwork_plot_full(
   results = load_example_results(),
   hpo = HPOExplorer::get_hpo(),
   q_threshold = 5e-04,
-  fold_threshold = 2,
+  fold_threshold = 1,
   columns = HPOExplorer::list_columns(),
   colour_var = "fold_change",
   size_var = "ontLvl_relative",
@@ -84,5 +84,5 @@ This puts all the functions together from getting the subset of results
 to creating the final interactive plot.
 }
 \examples{
-res <- ggnetwork_plot_full(filters = list(cell_type = "Microglia"))
+res <- ggnetwork_plot_full(filters = list(CellType = "Microglia"))
 }

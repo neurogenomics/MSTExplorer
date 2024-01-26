@@ -36,5 +36,5 @@ with HPO ID column added.
 Subset RD EWCE results data by cell type, fold change and q value.
 }
 \examples{
-signif_cell_data <- subset_results(filters=list(cl_name="astrocytes"))
+signif_cell_data <- subset_results(filters=list(CellType = "Cardiomyocytes"))
 }
