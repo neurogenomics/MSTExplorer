@@ -57,9 +57,12 @@ plot_bar_summary <- function(results = load_example_results(),
   ## plotly doesn't inherit subtitle arg from ggplot,
   ## so need to append it to the title.
   subtitle <-  paste0(
-    if(!is.null(keywords)){shQuote(paste(keywords,collapse = ", "))},
+    if(!is.null(keywords)){
+      paste0("keywords: ",shQuote(paste(keywords,collapse = ", ")),";")
+      },
     "  ",formatC(length(unique(phenos[[count_var]])),big.mark = ","),
-    " ",tolower(count_var),"(s)")
+    " ",tolower(count_var),"(s)"
+    )
   n_count_var <- paste("n",paste0(tolower(count_var),"s"),sep="_")
   #### Sort celltypes by counts ####
   data.table::setorderv(counts_df, n_count_var, -1L)
