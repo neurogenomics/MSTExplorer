@@ -10,7 +10,7 @@
 #' @export
 #' @examples
 #' signif_cell_data <- subset_results(filters=list(CellType = "Cardiomyocytes"))
-subset_results <- function(filters=list(cl_name=NULL),
+subset_results <- function(filters = list(cl_name=NULL),
                            results = load_example_results(),
                            q_threshold = 0.0005,
                            fold_threshold = 1,
@@ -25,6 +25,10 @@ subset_results <- function(filters=list(cl_name=NULL),
   if(nrow(results_sig)==0){
     stop("No results remain after filtering")
   } else {
+    if(length(unlist(filters))==0){
+      messager("Skipping filtering.")
+      return(results_sig)
+    }
     messager("Selected",names(filters)[1],":",
              paste("\n -",filters[[1]],collapse=""))
     results_sig2 <- KGExplorer::filter_dt(results_sig,

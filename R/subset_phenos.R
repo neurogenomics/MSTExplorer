@@ -10,7 +10,7 @@
 #' @examples
 #' phenos <- subset_phenos(filters = list(CellType = "Cardiomyocytes"),
 #'                         keep_descendants = "Neurodevelopmental delay")
-subset_phenos <- function(filters,
+subset_phenos <- function(filters = NULL,
                           keep_descendants = NULL,
                           results = load_example_results(),
                           hpo = HPOExplorer::get_hpo(),

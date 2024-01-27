@@ -11,7 +11,7 @@ plot_bar_summary(
   keywords = NULL,
   q_threshold = 5e-04,
   fold_threshold = 1,
-  filters = list(),
+  filters = NULL,
   keep_descendants = NULL,
   hpo = HPOExplorer::get_hpo(),
   option = "magma",

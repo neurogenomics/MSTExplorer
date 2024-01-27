@@ -5,7 +5,7 @@
 \title{Subset RD EWCE results}
 \usage{
 subset_phenos(
-  filters,
+  filters = NULL,
   keep_descendants = NULL,
   results = load_example_results(),
   hpo = HPOExplorer::get_hpo(),
