@@ -25,10 +25,11 @@ subset_results <- function(filters=list(cl_name=NULL),
   if(nrow(results_sig)==0){
     stop("No results remain after filtering")
   } else {
+    messager("Selected",names(filters)[1],":",
+             paste("\n -",filters[[1]],collapse=""))
     results_sig2 <- KGExplorer::filter_dt(results_sig,
                                           filters = filters)
     if(nrow(results_sig2)==0){
-      stop("No results remain after filtering")
       cell_orig <- unlist(filters)
       cell_type <- unique(results_sig[[names(filters)[1]]])[[1]]
       messager("WARNING!: CellType",
