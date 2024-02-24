@@ -11,19 +11,35 @@
 #' @importFrom piggyback pb_download
 #' @examples
 #' CTD <- load_example_ctd()
-load_example_ctd <- function(file="CTD_Descartes_example.rds",
+load_example_ctd <- function(file= c("ctd_DescartesHuman_example.rds",
+                                     "ctd_DescartesHuman.rds",
+                                     "ctd_HumanCellLandscape.rds"
+                                     ),
+                             multi_dataset = FALSE,
                              tag = "latest",
-                             save_dir=KGExplorer::cache_dir(package="MultiEWCE")
+                             save_dir=KGExplorer::cache_dir(package="MSTExplorer")
                              ) {
 
-  dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
-  save_path <- file.path(save_dir,file)
-  if (!file.exists(save_path)) {
-    piggyback::pb_download(file = basename(file),
-                           repo = "neurogenomics/MultiEWCE",
-                           tag = tag,
-                           dest = save_dir,
-                           overwrite = TRUE)
+  if(isFALSE(multi_dataset)){
+    file <- file[1]
   }
-  return(readRDS(save_path))
+  dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
+  ctd_list <- lapply(stats::setNames(file,
+                                     gsub("\\.rds$|ctd_","",file)),
+                     function(f){
+    messager("Loading",f)
+    save_path <- file.path(save_dir,f)
+    if (!file.exists(save_path)) {
+      piggyback::pb_download(file = basename(f),
+                             repo = "neurogenomics/MSTExplorer",
+                             tag = tag,
+                             dest = save_dir,
+                             overwrite = TRUE)
+    }
+    return(readRDS(save_path))
+  })
+  if(isFALSE(multi_dataset)){
+    ctd_list <- ctd_list[[1]]
+  }
+  return(ctd_list)
 }

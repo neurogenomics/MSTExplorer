@@ -11,57 +11,48 @@
 #' results2 <- map_tissue(results = results)
 map_tissue <- function(results,
                          map = KGExplorer::get_data_package(
-                           package = "MultiEWCE",
-                           name="anatomy_maps")
+                           package = "MSTExplorer",
+                           name="tissue_maps"),
+                       add_ancestors=10
                        ){
-  ancestor <- ancestor_name <- tissue_ontology_term_id <- tissue <- n_tissues <-
+  ancestor <- ancestor_name <- n_tissues <-
     n_ancestors <- cl_name <- NULL;
   results <- map_celltype(results)
-  new_cols <- c("tissue_ontology_term_id","tissue")
+  new_cols <- c("top_uberon_id","uberon_ancestor_name")
   if(all(new_cols %in% names(results))) {
+    messager("Tissue columns already present.","Skipping mapping.")
     return(results)
   }
-  messager("Mapping cell types to tissue ontology terms.")
-  cl <- KGExplorer::get_ontology("cl")
-  #### Assign each tissue an ancestral group ####
+  messager("Mapping cell types to UBERON tissue ontology terms.")
+  #### Assign each tissue to a top tissue ####
+  # results[!cl_id %in% tissue_maps$cl_id]
+  by <- c("ctd","cl_id","cl_name")
+  by <- intersect(by,names(results))
+  map_agg <- map[,list(cl_count=sum(cl_count),
+                       n_uberon=data.table::uniqueN(uberon_id),
+                       top_uberon_id=names(table(uberon_id))[which.max(table(uberon_id))],
+                       top_uberon_name=names(table(uberon_name))[which.max(table(uberon_name))]
+                       ),
+                 by=by]
+  #### Get the ancestor for each tissue #####
   uberon <- KGExplorer::get_ontology("uberon",
-                                     term = map$tissue_ontology_term_id,
-                                     add_ancestors = 1)
-  map2 <- data.table::merge.data.table(map,
-                               uberon@elementMetadata,
-                               all.x = TRUE,
-                               by.x="tissue_ontology_term_id",
-                               by.y="id")
-  map2[,ancestor:=data.table::fcoalesce(ancestor,tissue_ontology_term_id)]
-  map2[,ancestor_name:=data.table::fcoalesce(ancestor_name,as.character(tissue))]
-  #### Compute metrics for each celltype ####
-  map2[,n_tissues:=data.table::uniqueN(tissue),
-      by=c("cell_type_ontology_term_id","cell_type")]
-  map2[,n_ancestors:=data.table::uniqueN(ancestor),
-       by=c("cell_type_ontology_term_id","cell_type")]
-
-
-
-
-  #### Set cell type order ####
-  dend <- KGExplorer::ontology_to(ont = cl,
-                                  # terms = results$cell_type_ontology_term_id,
-                                  to="dendrogram")
-  map2$cell_type_ontology_term_id <- factor(map2$cell_type_ontology_term_id,
-                                            levels=labels(dend),
-                                            ordered = TRUE)
-  #### Create tissue-celltype heatmap #####
-
-  ggplot2::ggplot(map2,
-                  ggplot2::aes(x=cl_name, y=ancestor_name,
-                               fill=ancestor_name)
-                  ) +
-    ggplot2::geom_tile(show.legend = FALSE) +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90,
-                                                       hjust = 1, vjust=0.5))
-
-
-  return(map2)
+                                     add_ancestors=add_ancestors)
+  map_agg2 <- merge(map_agg,
+        data.table::data.table(
+          uberon@elementMetadata
+          )[,list(uberon_id=id,
+                  uberon_ancestor=ancestor,
+                  uberon_ancestor_name=ancestor_name)],
+        all.x=TRUE,
+        by.x="top_uberon_id",
+        by.y="uberon_id")
+  map_agg2[,uberon_ancestor_name:=data.table::fcoalesce(uberon_ancestor_name,top_uberon_name)]
+  map_agg2[,uberon_ancestor:=data.table::fcoalesce(uberon_ancestor,top_uberon_id)]
+  results2 <- data.table::merge.data.table(results,
+                                           map_agg2,
+                                           all.x = TRUE,
+                                           by=by)
+  return(results2)
 }
 
 

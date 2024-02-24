@@ -1,6 +1,6 @@
 #' Prioritise targets network
 #'
-#' Plot the output of \link[MultiEWCE]{prioritise_targets}
+#' Plot the output of \link[MSTExplorer]{prioritise_targets}
 #' as an interactive network with \link[visNetwork]{visNetwork}.
 #' See \link[igraph]{layout} for a list of all layout functions
 #' that can be passed to the \code{prioritise_targets_network(layout=)} argument
@@ -15,7 +15,7 @@
 #' }
 #' @source \href{https://visjs.github.io/vis-network/examples/}{
 #' visNetwork examples}
-#' @param top_targets output of \link[MultiEWCE]{prioritise_targets}.
+#' @param top_targets output of \link[MSTExplorer]{prioritise_targets}.
 #' @param vertex_vars Columns within \code{top_targets}
 #' to include as vertices/nodes within the network.
 #' @param group_var Variable to group nodes by.
@@ -37,7 +37,7 @@
 #'
 #' @export
 #' @examples
-#' top_targets <- MultiEWCE::example_targets$top_targets
+#' top_targets <- MSTExplorer::example_targets$top_targets
 #' vn <- prioritise_targets_network(top_targets = top_targets)
 prioritise_targets_network <- function(top_targets,
                                        vertex_vars = c("disease_name",

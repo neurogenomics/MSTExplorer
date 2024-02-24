@@ -6,7 +6,7 @@
 #'  "celltype" and "tissue".
 #' If \code{NULL}, will use a built-in mapping file that only applies to the
 #' CellTypeDataset DescartesHuman
-#'  (see \link[MultiEWCE]{load_example_ctd} for details).
+#'  (see \link[MSTExplorer]{load_example_ctd} for details).
 #' @param collapse If not \code{NULL},
 #' collapse rows with >1 tissue into one string:
 #' e.g. \code{c("Heart" "Lung")}  --> \code{"Heart;Lung"}
@@ -26,7 +26,7 @@
 #' f <- file.path("~/Desktop/ewce/rare_disease_celltyping/data/",
 #'                "DescartesHuman_celltype_mapping.csv")
 #'                data.table::fwrite(map,f)
-#' piggyback::pb_upload(file = f, repo = "neurogenomics/MultiEWCE")
+#' piggyback::pb_upload(file = f, repo = "neurogenomics/MSTExplorer")
 #' }
 #'
 #' @export

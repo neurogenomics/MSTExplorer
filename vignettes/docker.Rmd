@@ -9,7 +9,7 @@ output:
     md_extensions: -autolink_bare_uris
 params:
   cont:
-    value: ghcr.io/neurogenomics/MultiEWCE
+    value: ghcr.io/neurogenomics/MSTExplorer
   docker_registry:
     value: ghcr.io
   docker_org:

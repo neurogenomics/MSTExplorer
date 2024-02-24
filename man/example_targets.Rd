@@ -17,7 +17,7 @@ usethis::use_data(example_targets, overwrite = TRUE)
 data("example_targets")
 }
 \description{
-Example output from the function \link[MultiEWCE]{prioritise_targets}.
+Example output from the function \link[MSTExplorer]{prioritise_targets}.
 Used in examples to reduce run time.
 }
 \keyword{datasets}

@@ -15,7 +15,7 @@ r0 <- HPOExplorer:::fix_hpo_ids(dt=r0)
 f0new <- file.path(tempdir(),basename(f0))
 saveRDS(r0,file = f0new)
 piggyback::pb_upload(file = f0new,
-                     tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+                     tag = "v0.0.1", repo = "neurogenomics/MSTExplorer")
 #### Descartes_All_Results ####
 f1 <- file.path(d,"data/Descartes_All_Results.rds")
 r1 <- readRDS(f1)
@@ -24,7 +24,7 @@ r1 <- HPOExplorer:::fix_hpo_ids(dt=r1)
 f1new <- file.path(tempdir(),basename(f1))
 saveRDS(r1,file = f1new)
 piggyback::pb_upload(file = f1new,
-                     tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+                     tag = "v0.0.1", repo = "neurogenomics/MSTExplorer")
 #### tabulamuris_merged ####
 f2 <- file.path(d,"data/tabulamuris_merged.rds")
 r2 <- readRDS(f2)
@@ -33,7 +33,7 @@ r2 <- HPOExplorer:::fix_hpo_ids(dt=r2)
 f2new <- file.path(tempdir(),basename(f2))
 saveRDS(r2,file = f2new)
 piggyback::pb_upload(file = f2new,
-                     tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+                     tag = "v0.0.1", repo = "neurogenomics/MSTExplorer")
 }
 
 \href{https://github.com/neurogenomics/rare_disease_celltyping/}{
@@ -41,11 +41,10 @@ Results located in 'results' folder.}
 }
 \usage{
 load_example_results(
-  file = c("rare_disease_min_genes4_DescartesHuman.rds",
-    "rare_disease_min_genes4_HumanCellLandscape.rds"),
+  file = c("phenomix_results.tsv.gz", ),
   multi_dataset = FALSE,
   tag = "latest",
-  save_dir = KGExplorer::cache_dir(package = "MultiEWCE"),
+  save_dir = KGExplorer::cache_dir(package = "MSTExplorer"),
   force_new = FALSE
 )
 }
@@ -84,9 +83,9 @@ multiple CellTypeDataset references
 dataframe of enrichment results.
 }
 \description{
-This loads a example of enrichment results from \link[MultiEWCE]{gen_results}
+This loads a example of enrichment results from \link[MSTExplorer]{gen_results}
 using the Human Phenotype Ontology and a given CellTypeDataset (CTD).
-Results were then merged together with  \link[MultiEWCE]{merge_results}.
+Results were then merged together with  \link[MSTExplorer]{merge_results}.
 }
 \examples{
 res <- load_example_results()

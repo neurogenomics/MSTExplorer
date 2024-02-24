@@ -12,7 +12,7 @@
 #' results <- load_example_results()[seq(2500),]
 #' fp_res <- plot_frequency_bar(results=results)
 plot_frequency_bar <- function(results = load_example_results(),
-                              phenotype_to_genes = load_phenotype_to_genes(),
+                              phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
                               allow.cartesian = TRUE,
                               show_plot = FALSE,
                               verbose = TRUE){

@@ -57,11 +57,12 @@ dir.create(dirname(filename), showWarnings = FALSE, recursive = TRUE)
 
 ```{r}    
 s_size = 1
+da <- sprintf('\u2191') 
 stick <- hexSticker::sticker( 
   subplot = here::here("inst/hex/2BIeTx6RN6O00CAaeY68q2.jpg"),
   #### Package name ####
-  package = paste(strsplit(pkg,"")[[1]],collapse = " "), 
-  p_size=18, p_y = 1.3, p_color = ggplot2::alpha("white",1),
+  package = paste(strsplit(paste("Multi",da,"\nScale",da,"\nTarget",da,"\nExplorer"),"")[[1]],collapse=" "), 
+  p_size=22, p_y = 1.1, p_color = ggplot2::alpha("white",1),
   #### Subplot #####
   s_x=1, s_y=1,  s_height = s_size, s_width = s_size,
   #### Fill & border ####
@@ -69,7 +70,9 @@ stick <- hexSticker::sticker(
   #### Spotlight ####
   spotlight = TRUE, l_alpha = .3, l_width = 10, l_x = .5, l_y = .75,
   #### File output ####
-  dpi = 300, filename = filename,white_around_sticker = T)
+  dpi = 300, filename = filename,white_around_sticker = TRUE,
+  url=paste0("github.com/neurogenomics/",pkg), u_size=4, u_color="white",
+  lineheight = .25)
 print(stick)
 ```
 

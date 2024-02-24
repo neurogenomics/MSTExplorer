@@ -1,30 +1,30 @@
-MultiEWCE
+MSTExplorer
 ================
-<img src='https://github.com/neurogenomics/MultiEWCE/raw/master/inst/hex/hex.png' title='Hex sticker for MultiEWCE' height='300'><br>
+<img src='https://github.com/neurogenomics/MSTExplorer/raw/master/inst/hex/hex.png' title='Hex sticker for MSTExplorer' height='300'><br>
 [![License:
 GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
-[![](https://img.shields.io/badge/devel%20version-0.1.8-black.svg)](https://github.com/neurogenomics/MultiEWCE)
-[![](https://img.shields.io/github/languages/code-size/neurogenomics/MultiEWCE.svg)](https://github.com/neurogenomics/MultiEWCE)
-[![](https://img.shields.io/github/last-commit/neurogenomics/MultiEWCE.svg)](https://github.com/neurogenomics/MultiEWCE/commits/master)
+[![](https://img.shields.io/badge/devel%20version-1.0.0-black.svg)](https://github.com/neurogenomics/MSTExplorer)
+[![](https://img.shields.io/github/languages/code-size/neurogenomics/MSTExplorer.svg)](https://github.com/neurogenomics/MSTExplorer)
+[![](https://img.shields.io/github/last-commit/neurogenomics/MSTExplorer.svg)](https://github.com/neurogenomics/MSTExplorer/commits/master)
 <br> [![R build
-status](https://github.com/neurogenomics/MultiEWCE/workflows/rworkflows/badge.svg)](https://github.com/neurogenomics/MultiEWCE/actions)
-[![](https://codecov.io/gh/neurogenomics/MultiEWCE/branch/master/graph/badge.svg)](https://app.codecov.io/gh/neurogenomics/MultiEWCE)
+status](https://github.com/neurogenomics/MSTExplorer/workflows/rworkflows/badge.svg)](https://github.com/neurogenomics/MSTExplorer/actions)
+[![](https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graph/badge.svg)](https://app.codecov.io/gh/neurogenomics/MSTExplorer)
 <br>
-<a href='https://app.codecov.io/gh/neurogenomics/MultiEWCE/tree/master' target='_blank'><img src='https://codecov.io/gh/neurogenomics/MultiEWCE/branch/master/graphs/icicle.svg' title='Codecov icicle graph' width='200' height='50' style='vertical-align: top;'></a>  
+<a href='https://app.codecov.io/gh/neurogenomics/MSTExplorer/tree/master' target='_blank'><img src='https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graphs/icicle.svg' title='Codecov icicle graph' width='200' height='50' style='vertical-align: top;'></a>  
 <h4>  
-Authors: <i>Robert Gordon-Smith, Brian Schilder, Nathan Skene</i>  
+Authors: <i>Brian Schilder, Robert Gordon-Smith, Nathan Skene</i>  
 </h4>
 <h4>  
-README updated: <i>Nov-04-2023</i>  
+README updated: <i>Feb-24-2024</i>  
 </h4>
 
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->
 
-## `MultiEWCE`: Ontology-scale Cell Type Enrichment Analyses
+## `MSTExplorer`: Multi-Scale Target Explorer
 
-### The `MultiEWCE` R package allows you to run [Expression Weighted Celltype Enrichment (EWCE)](https://github.com/NathanSkene/EWCE) on multiple gene lists in parallel. It was primarily designed for use with the [Human Phenotype Ontology](https://hpo.jax.org/), but can be easily adapted to any other gene lists. Finally, it includes pipelines for the systematic identification of cell type-specific gene therapy targets of diseases.
+### Multi-Scale Target Explorer (`MSTExplorer`) systematically identifies, prioritises, and visualises cell-type-specific gene therapy targets across the phenome.
 
-If you use `MultiEWCE`, please cite:
+If you use `MSTExplorer`, please cite:
 
 <!-- Modify this by editing the file: inst/CITATION  -->
 
@@ -38,14 +38,14 @@ If you use `MultiEWCE`, please cite:
 ``` r
 if(!require("remotes")) install.packages("remotes")
 
-remotes::install_github("neurogenomics/MultiEWCE")
-library(MultiEWCE)
+remotes::install_github("neurogenomics/MSTExplorer")
+library(MSTExplorer)
 ```
 
 ## Documentation
 
-### [Website](https://neurogenomics.github.io/MultiEWCE)
+### [Website](https://neurogenomics.github.io/MSTExplorer)
 
-### [Get started](https://neurogenomics.github.io/MultiEWCE/articles/MultiEWCE)
+### [Get started](https://neurogenomics.github.io/MSTExplorer/articles/MSTExplorer)
 
 <br>

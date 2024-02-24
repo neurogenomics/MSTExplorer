@@ -4,7 +4,7 @@
 #' dataframe. Can also handle results lists directly.
 #' Alternatively, can simply provide \code{save_dir} and \emph{.rds}
 #' files will be searched for and imported.
-#' @param res_files The output of \link[MultiEWCE]{ewce_para}
+#' @param res_files The output of \link[MSTExplorer]{ewce_para}
 #' (can be either a list of file names, or a nested list of results).
 #' @inheritParams ewce_para
 #' @inheritParams gen_results

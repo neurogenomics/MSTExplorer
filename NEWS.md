@@ -1,7 +1,8 @@
-# MultiEWCE 1.0.0
+# MSTExplorer 1.0.0
 
 ## New features
 
+* Rename `MSTExplorer`.
 * Revamp to work with `KGExplorer`.
 
 # MultiEWCE 0.1.10
@@ -65,7 +66,7 @@
 
 * Update to coordinate with `HPOExplorer` updates.
 * New funcs:
-  - `plot_ont_lvl`
+  - `plot_ontology_levels`
   - `ttd_check`
   - `ttd_plot`
   - `ttd_import`

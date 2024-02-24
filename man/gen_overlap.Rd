@@ -65,7 +65,7 @@ gene setvs. celltype gene set
 }
 \details{
 \emph{NOTE}:\cr
-This is a faster but less robust version of \link[MultiEWCE]{gen_results}.
+This is a faster but less robust version of \link[MSTExplorer]{gen_results}.
 It also only requires >=1 gene per disease/phenotype, as opposed to >=4.
 }
 \examples{

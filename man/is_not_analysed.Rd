@@ -18,7 +18,7 @@ Vector of TRUE or FALSE.
 \description{
 Takes a gene list name and checks the output results directory to see if that
 gene list has been analysed yet.
-The \link[MultiEWCE]{ewce_para} function outputs the results
+The \link[MSTExplorer]{ewce_para} function outputs the results
 for each gene list in to the results directory (\code{save_dir_tmp})
 with name format \emph{list_name.rds}.
 }

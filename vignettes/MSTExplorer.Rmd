@@ -5,17 +5,17 @@ date: "<h4>Vignette updated: <i>`r format( Sys.Date(), '%b-%d-%Y')`</i></h4>"
 output:
   rmarkdown::html_document
 vignette: >
-  %\VignetteIndexEntry{MultiEWCE}
+  %\VignetteIndexEntry{MSTExplorer}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 --- 
 
 ```{r setup}
-library(MultiEWCE)
+library(MSTExplorer)
 ```
 
 # Introduction
-The `MultiEWCE` package is an extension of the [EWCE](https://nathanskene.github.io/EWCE/articles/EWCE.html) package. 
+The `MSTExplorer` package is an extension of the [EWCE](https://nathanskene.github.io/EWCE/articles/EWCE.html) package. 
 It is designed to run expression weighted celltype enrichment (`EWCE`) on multiple gene lists in parallel. 
 The results are then stored both as separate *.rds* files, one for each individual `EWCE` analysis, 
 as well as a in a single dataframe containing all the results.  
@@ -23,7 +23,7 @@ as well as a in a single dataframe containing all the results.
 This package is useful in cases where you have a large number of related, but separate, gene lists. In this vignette we will use an example from the Human Phenotype Ontology (HPO). The HPO contains over 9000 clinically relevant phenotypes annotated with lists of genes that have been found to be associated with the particular phenotype.
 
 # Loading Phenotype Associated Gene Lists from the HPO
-The MultiEWCE package requires the gene data to be in a particular format. It must be a data.frame that includes one column of gene list names, and another column of genes. For example: 
+The MSTExplorer package requires the gene data to be in a particular format. It must be a data.frame that includes one column of gene list names, and another column of genes. For example: 
 
 | hpo_name         | Gene   |
 | ---------------- | ------ |
@@ -42,7 +42,7 @@ gene_data <- HPOExplorer::load_phenotype_to_genes()
 knitr::kable(head(gene_data))
 ```
 
-In this example our **gene list names** column is called `Phenotype` and our column of genes is called `Gene`. However, different column names can be specified to the `MultiEWCE` package. 
+In this example our **gene list names** column is called `Phenotype` and our column of genes is called `Gene`. However, different column names can be specified to the `MSTExplorer` package. 
 
 # Setting up input arguments for the gen_results function
 
@@ -93,7 +93,7 @@ Here we set the input parameters related to this.
 Now we have set up all our desired inputs, we can run the analysis. 
 
 ```{r run} 
-out <- MultiEWCE::gen_results(ctd = ctd,
+out <- MSTExplorer::gen_results(ctd = ctd,
                               gene_data = gene_data,
                               list_names = list_names, 
                               list_name_column = "hpo_id",
@@ -128,12 +128,12 @@ plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(hpo_id,width = 10),
 methods::show(plot1)
 ```
 
-# Other functions in MultiEWCE
+# Other functions in MSTExplorer
 ## merge_results 
 If you have a results directory of individual EWCE results but do not have the merged dataframe of all results, you can call the `merge_results` function manually. The `save_dir` argument is the path to your results directory and the `list_name_column` argument is the name of the column containing gene list names. In this case we used "Phenotype" as this column name when we generated the results.
 
 ```{r merge, eval=FALSE}
-all_results_2 <- MultiEWCE::merge_results(save_dir = save_dir_tmp)
+all_results_2 <- MSTExplorer::merge_results(save_dir = save_dir_tmp)
 ```
 
 ## get_gene_list 
@@ -155,7 +155,7 @@ This function is used to find which gene lists you have not yet analysed
 
 ```{r get_unfinished} 
 all_phenotypes <- unique(gene_data$hpo_id)
-unfinished <- MultiEWCE::get_unfinished_list_names(list_names = all_phenotypes,
+unfinished <- MSTExplorer::get_unfinished_list_names(list_names = all_phenotypes,
                                                    save_dir_tmp = save_dir_tmp)
 
 methods::show(paste(length(unfinished),"/",length(all_phenotypes),
@@ -176,7 +176,7 @@ list_names <- unique(gene_counts$disease_id)[seq(5)]
 ```
 
 ```{r}
-out <- MultiEWCE::gen_results(ctd = ctd,
+out <- MSTExplorer::gen_results(ctd = ctd,
                               gene_data = gene_data,
                               list_name_column = "disease_id",
                               list_names = list_names,
@@ -197,7 +197,7 @@ gene_data[,n_gene:=length(unique(gene_symbol)),by="hpo_id"]
 gene_data <- gene_data[n_gene>=4,]
 ctd <- load_example_ctd("ctd_DescartesHuman.rds")
 
-all_results <- MultiEWCE::gen_results(ctd = ctd,
+all_results <- MSTExplorer::gen_results(ctd = ctd,
                                       list_name_column = "hpo_id", 
                                       gene_data = gene_data,  
                                       annotLevel = 2,

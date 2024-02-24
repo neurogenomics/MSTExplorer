@@ -1,4 +1,4 @@
-extract_filters <- function(pkg = "MultiEWCE",
+extract_filters <- function(pkg = "MSTExplorer",
                             fn = "prioritise_targets"){
 
   requireNamespace("rvest")

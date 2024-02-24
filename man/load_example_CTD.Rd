@@ -5,9 +5,11 @@
 \title{Load example CTD (Descartes)}
 \usage{
 load_example_ctd(
-  file = "CTD_Descartes_example.rds",
+  file = c("ctd_DescartesHuman_example.rds", "ctd_DescartesHuman.rds",
+    "ctd_HumanCellLandscape.rds"),
+  multi_dataset = FALSE,
   tag = "latest",
-  save_dir = KGExplorer::cache_dir(package = "MultiEWCE")
+  save_dir = KGExplorer::cache_dir(package = "MSTExplorer")
 )
 }
 \arguments{

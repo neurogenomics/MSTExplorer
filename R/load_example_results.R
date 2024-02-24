@@ -1,8 +1,8 @@
 #' Load example results
 #'
-#' This loads a example of enrichment results from \link[MultiEWCE]{gen_results}
+#' This loads a example of enrichment results from \link[MSTExplorer]{gen_results}
 #' using the Human Phenotype Ontology and a given CellTypeDataset (CTD).
-#' Results were then merged together with  \link[MultiEWCE]{merge_results}.
+#' Results were then merged together with  \link[MSTExplorer]{merge_results}.
 #' @param file File to load:
 #' \itemize{
 #' \item{"Descartes_All_Results_extras.symptoms.full_join.rds":}{
@@ -40,7 +40,7 @@
 #' f0new <- file.path(tempdir(),basename(f0))
 #' saveRDS(r0,file = f0new)
 #' piggyback::pb_upload(file = f0new,
-#'                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+#'                      tag = "v0.0.1", repo = "neurogenomics/MSTExplorer")
 #' #### Descartes_All_Results ####
 #' f1 <- file.path(d,"data/Descartes_All_Results.rds")
 #' r1 <- readRDS(f1)
@@ -49,7 +49,7 @@
 #' f1new <- file.path(tempdir(),basename(f1))
 #' saveRDS(r1,file = f1new)
 #' piggyback::pb_upload(file = f1new,
-#'                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+#'                      tag = "v0.0.1", repo = "neurogenomics/MSTExplorer")
 #' #### tabulamuris_merged ####
 #' f2 <- file.path(d,"data/tabulamuris_merged.rds")
 #' r2 <- readRDS(f2)
@@ -58,7 +58,7 @@
 #' f2new <- file.path(tempdir(),basename(f2))
 #' saveRDS(r2,file = f2new)
 #' piggyback::pb_upload(file = f2new,
-#'                      tag = "v0.0.1", repo = "neurogenomics/MultiEWCE")
+#'                      tag = "v0.0.1", repo = "neurogenomics/MSTExplorer")
 #' }
 #' @source \href{https://github.com/neurogenomics/rare_disease_celltyping/}{
 #' Results located in 'results' folder.}
@@ -69,8 +69,9 @@
 #' @examples
 #' res <- load_example_results()
 load_example_results <- function(file=c(
-  "rare_disease_min_genes4_DescartesHuman.rds",
-  "rare_disease_min_genes4_HumanCellLandscape.rds"
+  "phenomix_results.tsv.gz",
+  # "rare_disease_min_genes4_DescartesHuman.rds",
+  # "rare_disease_min_genes4_HumanCellLandscape.rds"
   # "results_DescartesHuman.csv.gz",
   # "rare_disease_min_genes4_DescartesHuman.rds",
   # "Descartes_All_Results_extras.symptoms.rds",
@@ -81,7 +82,7 @@ load_example_results <- function(file=c(
   ),
   multi_dataset=FALSE,
   tag = "latest",
-  save_dir=KGExplorer::cache_dir(package="MultiEWCE"),
+  save_dir=KGExplorer::cache_dir(package="MSTExplorer"),
   force_new=FALSE
   ) {
   if(multi_dataset){
@@ -99,7 +100,7 @@ load_example_results <- function(file=c(
     }
     if (!file.exists(save_path)) {
       piggyback::pb_download(file = basename(file),
-                             repo = "neurogenomics/MultiEWCE",
+                             repo = "neurogenomics/MSTExplorer",
                              tag = tag,
                              dest = save_dir,
                              overwrite = TRUE)

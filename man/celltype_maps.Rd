@@ -26,6 +26,11 @@ celltype_maps <- lapply(obj_list, function(obj){
 }) |> data.table::rbindlist(idcol = "ctd")
 #### Ensure one entry per cell type
 celltype_maps <- celltype_maps[,.SD[1],by=c("ctd","author_celltype")]
+## Rename cols to make more concise and conform to hpo_id/hpo_name format
+data.table::setnames(celltype_maps,
+                     c("cell_type_ontology_term_id","cell_type"),
+                     c("cl_id","cl_name"))
+celltype_maps <- fix_cl_ids(celltype_maps)
 usethis::use_data(celltype_maps, overwrite = TRUE)
 }
 }

@@ -1,7 +1,7 @@
 #' Example prioritised targets
 #'
 #' @description
-#' Example output from the function \link[MultiEWCE]{prioritise_targets}.
+#' Example output from the function \link[MSTExplorer]{prioritise_targets}.
 #' Used in examples to reduce run time.
 #' @source
 #' \code{
@@ -39,6 +39,11 @@
 #' }) |> data.table::rbindlist(idcol = "ctd")
 #' #### Ensure one entry per cell type
 #' celltype_maps <- celltype_maps[,.SD[1],by=c("ctd","author_celltype")]
+#' ## Rename cols to make more concise and conform to hpo_id/hpo_name format
+#' data.table::setnames(celltype_maps,
+#'                      c("cell_type_ontology_term_id","cell_type"),
+#'                      c("cl_id","cl_name"))
+#' celltype_maps <- fix_cl_ids(celltype_maps)
 #' usethis::use_data(celltype_maps, overwrite = TRUE)
 #' }
 #' @format data.table
@@ -62,13 +67,20 @@
 #'           # "tissue_original",
 #'           "cell_type_ontology_term_id",
 #'           "cell_type")
-#' anatomy_maps <- lapply(obj_list, function(obj){
+#' tissue_maps <- lapply(obj_list, function(obj){
 #'   select_cols <- cols[cols %in% colnames(obj@meta.data)]
-#'   unique(data.table::as.data.table(obj@meta.data[,select_cols]))
+#'   d <- data.table::as.data.table(obj@meta.data[,select_cols])
+#'   d[,cl_count:=.N, by=c("cell_type_ontology_term_id","cell_type")]
+#'   unique(d)
 #' }) |> data.table::rbindlist(idcol = "ctd", fill=TRUE)
-#' usethis::use_data(anatomy_maps, overwrite = TRUE)
+#' data.table::setnames(tissue_maps,
+#'                      c("tissue_ontology_term_id","tissue",
+#'                        "cell_type_ontology_term_id","cell_type"),
+#'                      c("uberon_id","uberon_name",
+#'                        "cl_id","cl_name"))
+#' usethis::use_data(tissue_maps, overwrite = TRUE)
 #' }
 #' @format data.table
-#' @usage data("anatomy_maps")
-"anatomy_maps"
+#' @usage data("tissue_maps")
+"tissue_maps"
 

@@ -1,12 +1,12 @@
 #' Plot bar dendrogram
 #'
-#' Create a plot summarising MultiEWCE results as a bar chart with multiple
+#' Create a plot summarising MSTExplorer results as a bar chart with multiple
 #'  facets and a cell ontology-based dendrogram.
-#' @param ancestor_names Keep terms with specific ancestors.
 #' @param celltype_col Name of the cell type column in the \code{results}.
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams HPOExplorer::add_ancestor
 #' @inheritParams ggplot2::facet_wrap
+#' @inheritParams ggplot2::theme
 #' @inheritDotParams EWCE::ewce_plot
 #' @returns A bar chart with dendrogram of EWCE results in each cell type.
 #'
@@ -16,137 +16,141 @@
 #' out <- plot_bar_dendro(results = results)
 plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE),
                             celltype_col = "cl_name",
-                            ancestor_names=c(
-                              "Abnormality of the nervous system",
-                              "Abnormality of the cardiovascular system",
-                              "Abnormality of the immune system",
-                              "Abnormality of the respiratory system",
-                              "Abnormality of the eye",
-                              "Abnormality of the endocrine system",
-                              "Neoplasm"),
+                            target_branches = get_target_branches(),
+                            keep_ancestors=names(target_branches),
                             facets = "ancestor_name",
+                            add_test_target_celltypes=TRUE,
+                            preferred_palettes = "tol",
+                            legend.position="none",
+                            heights = c(.3,1,.3,.3),
+                            expand_dendro_x =rep(0.01,2),
+                            q_threshold=0.05,
+                            show_plot=TRUE,
+                            save_path=NULL,
+                            height = 16,
+                            width = 13,
                             ...) {
   requireNamespace("ggplot2")
   requireNamespace("patchwork")
-  requireNamespace("dendextend")
   requireNamespace("ggdendro")
-  hpo_id <- p <- fold_change <- cl_name <- ancestor_name <-
+  requireNamespace("scales")
+  # results=data.table::fread("/Users/bms20/Desktop/Rare Disease Celltyping/rare_disease_celltyping/results/phenomix_results.tsv.gz")
+  hpo_id <- p <- fold_change <- ancestor_name <- ancestor_color <- cl_id <-
     enriched_phenotypes_norm <- enriched_phenotypes <- top_ancestor_name <-
-    color <- NULL;
+    dummy <- NULL;
 
-  results <- map_celltype(results)
-  #### Get celltype dendrogram ####
-  ## From CTD
-  # ctd1 <- get_data("ctd_HumanCellLandscape.rds")
-  # ctd2 <- get_data("ctd_DescartesHuman.rds")
-  # dend_list <- EWCE:::prep_dendro(ctdIN = ctd[[1]])
-  ## From ontology
-  cl <- KGExplorer::get_ontology("cl", add_ancestors = 1)
-  #### Method 1 ####
-  # X <- KGExplorer::ontology_to(ont = cl,
-  #                              to="similarity")
-  # X <- X[unique(results$cl_id),
-  #        unique(results$cl_id)]
-  # hc <- stats::hclust(stats::dist(X) )
-  # ddata <- ggdendro::dendro_data(hc)
-  #### Method 2 ####
-  # g <- KGExplorer::ontology_to(ont = cl,
-  #                               to="tbl_graph")
-  # KGExplorer::filter_graph(g,
-  # node_filters = list(name=results$cl_id))
+  {
+    results <- results[,total_phenotypes:=data.table::uniqueN(hpo_id)]
+    results <- HPOExplorer::add_hpo_name(results)
+    results <- HPOExplorer::add_ancestor(results)
+    results <- map_celltype(results)
+    results[, enriched_phenotypes:=data.table::uniqueN(hpo_id[q<q_threshold],
+                                                       na.rm = TRUE),
+            by=c(celltype_col,"cl_id","ancestor","ancestor_name")]
+    results[, phenotypes_per_ancestor:=data.table::uniqueN(hpo_id),
+            by=c("ancestor","ancestor_name")]
+    results_full <- data.table::copy(results)
+    results <- KGExplorer::filter_dt(results,
+                                     filters = list(ancestor_name=keep_ancestors))
+    target_celltypes <- get_target_celltypes(target_branches=target_branches)
+  }
+  ## Convert ontology to dendrogram ontology
+  {
+    cl <- KGExplorer::get_ontology(name = "cl",
+                                   add_ancestors = 1)
+    ddata <- ontology_to_ggdendro(ont=cl,
+                                  terms=as.character(unique(results$cl_id))
+    )
+    #### Make celltypes an ordered factor based on the clustering #####
+    results[[celltype_col]] <- factor(results[[celltype_col]],
+                                      levels=unique(ddata$labels$label),
+                                      ordered = TRUE)
+  }
+  #### Filter the results ####
+  by <- unique(c(celltype_col,"cl_id","ancestor","ancestor_name"))
+  dat <- results[q<q_threshold & cl_id %in% unique(ddata$labels$id),
+                 lapply(.SD,mean),
+                 by=by,
+                 .SDcols = c("enriched_phenotypes",
+                             "phenotypes_per_ancestor",
+                             "p","q","fold_change")
+                 ]
+  #### Get the top HPO category for each cell type ####
+  add_top_value(dat=dat,
+                sort_var="enriched_phenotypes",
+                label_var=facets,
+                group_var=celltype_col,
+                new_var="top_ancestor_name",
+                normalise_group=TRUE)
+  #### Color each cell type x-axis label by the most commonly enriched HPO category ####
+  cmap <- get_color_map(dat=dat,
+                        columns = "top_ancestor_name",
+                        ddata=ddata,
+                        celltype_col=celltype_col,
+                        preferred_palettes=preferred_palettes)
+  color_map <- cmap$color_map
+  color_vector <- cmap$color_vector
 
-  #### Method 3 ####
-  hc <- KGExplorer::ontology_to(ont = cl,
-                                to="igraph_dist_hclust")
-  dend <- stats::as.dendrogram(hc)
-  messager("Pruning dendrogram.")
-  dend2 <- dendextend::prune(
-    dend,
-    leaves=labels(dend)[!labels(dend) %in% results$cl_id])
-  ddata <- ggdendro::dendro_data(dend2)
-
-
-  ddata$labels$label <- KGExplorer::map_ontology_terms(ont = cl,
-                                                       terms=ddata$labels$label)
+  #### Create summary bar plot ####
+  #### Create tissue-celltype heatmap #####
+  results[,dummy:=paste0("All"," (n=",total_phenotypes," phenotypes)")]
+  tissue_plots <- plot_tissues(results = results,
+                               facet_var = "dummy",
+                               types = "bar")
+  ggsummary <- tissue_plots$bar_plot +
+                  ggplot2::labs(x=NULL, y=NULL) +
+                  ggplot2::scale_fill_gradient(low="black",high="grey") +
+    ggplot2::theme_bw() +
+    ggplot2::theme(legend.position = "none",
+                   axis.ticks.x = ggplot2::element_blank(),
+                   axis.text.x = ggplot2::element_blank(),
+                   strip.background = ggplot2::element_rect(fill = "transparent")
+                   )
+  #### Create faceted bar plot ####
+  ggbars_out <- plot_bar_branches(results=dat,
+                                  results_full=results_full,
+                                  target_branches=target_branches,
+                                  target_celltypes=target_celltypes,
+                                  celltype_col=celltype_col,
+                                  add_test_target_celltypes=add_test_target_celltypes,
+                                  color_map=color_map,
+                                  color_vector=color_vector,
+                                  legend.position=legend.position,
+                                  q_threshold=q_threshold,
+                                  facets=facets)
+  ggbars <- ggbars_out$plot
+  #### Create dendrogram plot ####
   ggdend <-
     ggdendro::ggdendrogram(ddata) +
-    ggplot2::scale_x_discrete(expand =c(.01, .01)) +
+    ggplot2::scale_x_discrete(expand = expand_dendro_x) +
     ggdendro::theme_dendro() +
-    ggplot2::theme(plot.margin = ggplot2::unit(c(0,0,0,0), "cm"))
-  # ggplot(ggdendro::segment(ddata)) +
-  #   ggplot2::geom_segment(ggplot2::aes_string(
-  #     x = "x", y = "y",
-  #     xend = "xend", yend = "yend"
-  #   )) +
-  #   ggdendro::theme_dendro()
-  # b1 <- ggplot(ggdendro::segment(ddata)) +
-  #   ggplot2::geom_segment(ggplot2::aes(
-  #     x = x, y = y,
-  #     xend = xend, yend = yend
-  #   )) +
-  #   ggdendro::theme_dendro()
-  # EWCE::ewce_plot(total_res = results,
-  #                 mtc_method = mtc_method,
-  #                 ctd = ctd,
-  #                 ...)
-  results <- HPOExplorer::add_ancestor(phenos = results)
-  dat <- results[q<0.05, list(enriched_phenotypes=data.table::uniqueN(hpo_id),
-                              p=mean(p),
-                              q=mean(q),
-                              fold_change=mean(fold_change)),
-                 by=c(celltype_col,"ancestor","ancestor_name")]
+    ggplot2::scale_y_reverse()
 
-  dat <- dat[get(celltype_col) %in% unique(ddata$labels$label),]
-  dat <- KGExplorer::filter_dt(dat,
-                               filters = list(ancestor_name=ancestor_names))
+  #### Plot -log(p) vs. N enrichments in a given target cell type
+  ggprop_res <- plot_proportional_enrichment(results = results_full,
+                                             color_map = color_map,
+                                             target_branches=target_branches,
+                                             show_plot = FALSE)
 
-  dat[[celltype_col]] <- factor(dat[[celltype_col]],
-                                levels=unique(ddata$labels$label),
-                                ordered = TRUE)
-  #### Get the top HPO category for each cell type ####
-  ### NOrmalise count within each ancestor
-  dat[,enriched_phenotypes_norm:=(enriched_phenotypes/max(enriched_phenotypes)),
-      by=c("ancestor")]
-  dat[,top_ancestor_name:=head(ancestor_name[which.max(enriched_phenotypes_norm)],1),
-      by=c(celltype_col)]
-  # cellmeta <- data.table::data.table(
-  #   cl@elementMetadata[,c("name","ancestor","ancestor_name")],
-  #   key = "name"
-  # )[unique(ddata$labels$label),]
-
-  color_dict <- KGExplorer::map_colors(dat,
-                                         columns = "top_ancestor_name",
-                                         preferred_palettes = "brewer.set2",
-                                         as="dict")[[1]]
-  dat2 <- unique(dat[,c(celltype_col,"top_ancestor_name"), with=FALSE]
-                 )[,color:=color_dict[top_ancestor_name]] |>
-    data.table::setkeyv(celltype_col)
-  color_vector <- dat2[unique(ddata$labels$label),]$color
-  color_vector[is.na(color_vector)] <- "grey20"
-  # color_vector <- KGExplorer::map_colors(unique(dat[,c(celltype_col,"top_ancestor_name")]),
-  #                                        columns = "top_ancestor_name",
-  #                                        preferred_palettes = "brewer.set2",
-  #                                      as="vector")[[1]]
-
-  ggbars <- ggplot2::ggplot(dat, ggplot2::aes(x=!!ggplot2::sym(celltype_col),
-                                              y=enriched_phenotypes,
-                                              fill=ancestor_name)) +
-    ggplot2::geom_bar(stat="identity", show.legend = FALSE) +
-    ggplot2::scale_fill_manual(values=color_dict) +
-    ggplot2::facet_wrap(facets = facets,
-                        scales="free_y", ncol = 1) +
-    ggplot2::labs(x=NULL,y="Enriched phenotypes") +
-    ggplot2::theme_bw() +
-    ggplot2::theme(axis.text.x = ggplot2::element_text(
-      angle = 90, hjust = 1, vjust=0.5,
-      color = unname(color_vector)
-      ),
-      strip.background = ggplot2::element_rect(fill = "transparent")
-      )
-
-  ggp <- patchwork::wrap_plots(ggbars ,
-                        ggdend + ggplot2::scale_y_reverse(),
-                        ncol = 1, heights = c(1,.3))
+  #### Combine plots ####
+  plot.margin <- ggplot2::unit(c(0,0,0,0),"cm")
+  ggp <- patchwork::wrap_plots(ggsummary,
+                               ggbars,
+                               ggdend,
+                               ggprop_res$plot,
+                               ncol = 1,
+                               heights = heights) +
+    patchwork::plot_annotation(tag_levels = letters) &
+    theme(plot.margin = plot.margin)
+  #### Show plot ####
+  if(show_plot) methods::show(ggp)
+  #### Save plot ####
+  if(!is.null(save_path)){
+    KGExplorer::plot_save(plt = ggp,
+                          path = save_path,
+                          height = height,
+                          width = width)
+  }
   #### Return ####
   return(
     list(data=dat,

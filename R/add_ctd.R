@@ -8,6 +8,7 @@
 #' \item{"mean_exp"} Mean expression per cell-type.
 #' \item{"mean_exp_quantiles"} Mean expression quantile per cell-type.
 #' }
+#' @param keep_celltypes A character vector of cell types to keep.
 #' @inheritParams prioritise_targets
 #' @inheritParams plot_report
 #' @inheritParams data.table::merge.data.table
@@ -21,12 +22,12 @@ add_ctd <- function(results=load_example_results(),
                     annotLevel=length(ctd),
                     keep_specificity_quantiles=NULL,
                     keep_mean_exp_quantiles=NULL,
+                    keep_celltypes=NULL,
                     rep_dt=NULL,
                     all.x=FALSE,
                     allow.cartesian = TRUE,
                     by=c("gene_symbol","CellType"),
                     verbose=TRUE){
-  # devoptera::args2vars(add_ctd)
   gene_symbol <- NULL;
 
   results <- HPOExplorer::add_genes(phenos = results,
@@ -41,20 +42,24 @@ add_ctd <- function(results=load_example_results(),
   spec_df <- make_specificity_dt(ctd = ctd,
                                  annotLevel = annotLevel,
                                  shared_genes = shared_genes,
+                                 keep_celltypes = keep_celltypes,
                                  metric = "specificity")
   specq_df <- make_specificity_dt(ctd = ctd,
                                   annotLevel = annotLevel,
                                   shared_genes = shared_genes,
                                   keep_quantiles = keep_specificity_quantiles,
+                                  keep_celltypes = keep_celltypes,
                                   metric = "specificity_quantiles")
   exp_df <- make_specificity_dt(ctd = ctd,
                                 annotLevel = annotLevel,
                                 shared_genes = shared_genes,
+                                keep_celltypes = keep_celltypes,
                                 metric = "mean_exp")
   expq_df <- make_specificity_dt(ctd = ctd,
                                  annotLevel = annotLevel,
                                  shared_genes = shared_genes,
                                  keep_quantiles = keep_mean_exp_quantiles,
+                                 keep_celltypes = keep_celltypes,
                                  metric = "mean_exp_quantiles")
   #### Merge: specificity ####
   results <- results |>

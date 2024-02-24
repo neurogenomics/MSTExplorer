@@ -14,7 +14,7 @@ opt <- optparse::parse_args(opt_parser)
 root <- "/rds/general/project/neurogenomics-lab/ephemeral/rare_disease"
 
 
-library(MultiEWCE)
+library(MSTExplorer)
 ctd <- load_example_ctd("ctd_DescartesHuman.rds")
 gene_data <- HPOExplorer::load_phenotype_to_genes()
 gene_data[,n_gene:=length(unique(gene_symbol)),by="hpo_id"]

@@ -5,7 +5,7 @@
 #'  (determined by the top specificity quantiles for each celltype).
 #'
 #' \emph{NOTE}:\cr
-#' This is a faster but less robust version of \link[MultiEWCE]{gen_results}.
+#' This is a faster but less robust version of \link[MSTExplorer]{gen_results}.
 #' It also only requires >=1 gene per disease/phenotype, as opposed to >=4.
 #' @param long_format Return results with "union" and "intersection"
 #'  genes melted into long format (default: \code{FALSE}).

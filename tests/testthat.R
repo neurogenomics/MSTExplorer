@@ -1,4 +1,4 @@
 library(testthat)
-library(MultiEWCE)
+library(MSTExplorer)
 
-test_check("MultiEWCE")
+test_check("MSTExplorer")

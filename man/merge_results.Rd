@@ -9,7 +9,7 @@ merge_results(save_dir = NULL, res_files = NULL, list_name_column = "hpo_id")
 \arguments{
 \item{save_dir}{Folder to save merged results in.}
 
-\item{res_files}{The output of \link[MultiEWCE]{ewce_para}
+\item{res_files}{The output of \link[MSTExplorer]{ewce_para}
 (can be either a list of file names, or a nested list of results).}
 
 \item{list_name_column}{The name of the gene_data column

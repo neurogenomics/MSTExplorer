@@ -86,7 +86,7 @@
 #' \code{report} that shows the number of
 #'  phenotypes/celltypes/genes remaining after each filtering step.
 #' @param symptom_p_threshold The p-value threshold of celltype-symptom
-#' enrichment results (using  \link[MultiEWCE]{gen_overlap}).
+#' enrichment results (using  \link[MSTExplorer]{gen_overlap}).
 #' Here, "symptoms" are defined as the presentation of a phenotype in the
 #' context of a particular disease.
 #'  In other words:
@@ -94,7 +94,7 @@
 #' @param symptom_intersection_size_threshold
 #' The minimum number of intersecting genes between a symptom and a celltype to
 #' consider it a significant enrichment. Refers to the result from
-#' \link[MultiEWCE]{gen_overlap}.
+#' \link[MSTExplorer]{gen_overlap}.
 #' @param symptom_gene_overlap The gene for a particular symptom
 #' (phenotype + disease) must appear in the celltype-symptom
 #'  enrichment results.

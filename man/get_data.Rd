@@ -6,8 +6,8 @@
 \usage{
 get_data(
   fname,
-  repo = "neurogenomics/MultiEWCE",
-  save_dir = KGExplorer::cache_dir(package = "MultiEWCE"),
+  repo = "neurogenomics/MSTExplorer",
+  save_dir = KGExplorer::cache_dir(package = "MSTExplorer"),
   overwrite = TRUE,
   tag = "latest",
   check = FALSE

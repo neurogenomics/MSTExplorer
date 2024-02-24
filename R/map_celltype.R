@@ -7,6 +7,7 @@
 #' \code{input_col} before performing mapping.
 #' @param by Columns to merge on.
 #' @param input_col Column to use for linking with the \code{map} data.
+#' @param add_stage Add developmental stage information.
 #' @inheritParams ggnetwork_plot_full
 #' @export
 #' @import data.table
@@ -16,39 +17,44 @@
 map_celltype <- function(results,
                          input_col="CellType",
                          map = KGExplorer::get_data_package(
-                           package = "MultiEWCE",
+                           package = "MSTExplorer",
                            name="celltype_maps"),
                          rm_prefixes=c("Adult","Fetus","HESC"),
-                         by=c("ctd","author_celltype")
+                         by=c("ctd","author_celltype"),
+                         add_stage=TRUE
                          ){
   author_celltype <- NULL;
-  new_cols <- c("cell_type_ontology_term_id","cell_type")
+  #### Check for existing columns ####
+  new_cols <- c("cl_id","cl_name")
   if(all(new_cols %in% names(results))) {
+    messager("Cell type columns already present.","Skipping mapping.")
     return(results)
   }
+  #### Add new columns ####
   messager("Mapping cell types to cell ontology terms.")
   results[,author_celltype:=gsub(paste(paste0("^",rm_prefixes,"_"),
                                        collapse = "|"),"",
                                  get(input_col),ignore.case = TRUE)]
-  if(!all(by %in% names(results))) {
+  by <- by[by %in% names(results)]
+  if(length(by)==0) {
     stopper("All 'by' columns must be in 'results'.")
   }
   results_cl <- data.table::merge.data.table(results,
                                map,
                                by=by,
                                all.x = TRUE)
-  if(sum(is.na(results_cl$cell_type_ontology_term_id))>0){
-    stopper("Missing 'cell_type_ontology_term_id' for",
-            sum(is.na(results_cl$cell_type_ontology_term_id)),"rows.")
+  if(sum(is.na(results_cl$cl_id))>0){
+    stopper("Missing 'cl_id' for",
+            sum(is.na(results_cl$cl_id)),"rows.")
   }
-  ## Rename cols to make more concise and conform to hpo_id/hpo_name format
-  data.table::setnames(results_cl,
-                       c("cell_type_ontology_term_id","cell_type"),
-                       c("cl_id","cl_name"))
   #### Add stage ####
-  # results[ctd=="DescartesHuman",stage:="Fetus"]
-  # results[ctd=="HumanCellLandscape",
-  #         stage:=data.table::tstrsplit(CellType,"_",keep=1)]
+  if(isTRUE(add_stage)){
+    messager("Adding stage information.")
+    results_cl[ctd=="DescartesHuman",
+               stage:="Fetus"]
+    results_cl[ctd=="HumanCellLandscape",
+               stage:=data.table::tstrsplit(CellType,"_",keep=1)]
+  }
   return(results_cl)
 }
 

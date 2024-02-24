@@ -3,7 +3,7 @@ test_that("ewce_para works", {
   set.seed(2023)
 
   gene_data <- HPOExplorer::load_phenotype_to_genes()
-  ctd <- MultiEWCE::load_example_ctd()
+  ctd <- MSTExplorer::load_example_ctd()
   list_names <- unique(gene_data$hpo_id)[seq(5)]
 
   #### Return results directly ####

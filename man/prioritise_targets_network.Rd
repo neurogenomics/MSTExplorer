@@ -43,7 +43,7 @@ prioritise_targets_network(
 )
 }
 \arguments{
-\item{top_targets}{output of \link[MultiEWCE]{prioritise_targets}.}
+\item{top_targets}{output of \link[MSTExplorer]{prioritise_targets}.}
 
 \item{vertex_vars}{Columns within \code{top_targets}
 to include as vertices/nodes within the network.}
@@ -135,7 +135,7 @@ A named list containing the \link[visNetwork]{visNetwork} plot
 and the the graph used to make the plot.
 }
 \description{
-Plot the output of \link[MultiEWCE]{prioritise_targets}
+Plot the output of \link[MSTExplorer]{prioritise_targets}
 as an interactive network with \link[visNetwork]{visNetwork}.
 See \link[igraph]{layout} for a list of all layout functions
 that can be passed to the \code{prioritise_targets_network(layout=)} argument
@@ -144,6 +144,6 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-top_targets <- MultiEWCE::example_targets$top_targets
+top_targets <- MSTExplorer::example_targets$top_targets
 vn <- prioritise_targets_network(top_targets = top_targets)
 }
