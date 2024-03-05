@@ -5,7 +5,7 @@
 \title{Plot ontology levels}
 \usage{
 plot_ontology_levels(
-  results = load_example_results(multi_dataset = TRUE),
+  results = load_example_results(),
   p2g = HPOExplorer::load_phenotype_to_genes(),
   x_vars = c("genes", "cell types", "log(fold change)", "mean_specificity"),
   group_vars = c("hpo_id", "ontLvl", "ctd"),

@@ -12,12 +12,13 @@
 #'
 #' @export
 #' @examples
-#' results <- load_example_results(multi_dataset=TRUE)
+#' results <- load_example_results()
 #' out <- plot_bar_dendro(results = results)
-plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE),
+plot_bar_dendro <- function(results = load_example_results(),
                             celltype_col = "cl_name",
                             target_branches = get_target_branches(),
                             keep_ancestors=names(target_branches),
+                            hpo = HPOExplorer::get_hpo(),
                             facets = "ancestor_name",
                             add_test_target_celltypes=TRUE,
                             preferred_palettes = "tol",
@@ -34,17 +35,18 @@ plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE)
   requireNamespace("patchwork")
   requireNamespace("ggdendro")
   requireNamespace("scales")
-  # results=data.table::fread("/Users/bms20/Desktop/Rare Disease Celltyping/rare_disease_celltyping/results/phenomix_results.tsv.gz")
   hpo_id <- p <- fold_change <- ancestor_name <- ancestor_color <- cl_id <-
-    enriched_phenotypes_norm <- enriched_phenotypes <- top_ancestor_name <-
+    sig_phenotypes_norm <- sig_phenotypes <- top_ancestor_name <-
     dummy <- NULL;
 
   {
     results <- results[,total_phenotypes:=data.table::uniqueN(hpo_id)]
-    results <- HPOExplorer::add_hpo_name(results)
-    results <- HPOExplorer::add_ancestor(results)
+    results <- HPOExplorer::add_hpo_name(results,
+                                         hpo = hpo)
+    results <- HPOExplorer::add_ancestor(results,
+                                         hpo = hpo)
     results <- map_celltype(results)
-    results[, enriched_phenotypes:=data.table::uniqueN(hpo_id[q<q_threshold],
+    results[, sig_phenotypes:=data.table::uniqueN(hpo_id[q<q_threshold],
                                                        na.rm = TRUE),
             by=c(celltype_col,"cl_id","ancestor","ancestor_name")]
     results[, phenotypes_per_ancestor:=data.table::uniqueN(hpo_id),
@@ -59,8 +61,7 @@ plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE)
     cl <- KGExplorer::get_ontology(name = "cl",
                                    add_ancestors = 1)
     ddata <- ontology_to_ggdendro(ont=cl,
-                                  terms=as.character(unique(results$cl_id))
-    )
+                                  terms=as.character(unique(results$cl_id)))
     #### Make celltypes an ordered factor based on the clustering #####
     results[[celltype_col]] <- factor(results[[celltype_col]],
                                       levels=unique(ddata$labels$label),
@@ -71,13 +72,13 @@ plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE)
   dat <- results[q<q_threshold & cl_id %in% unique(ddata$labels$id),
                  lapply(.SD,mean),
                  by=by,
-                 .SDcols = c("enriched_phenotypes",
+                 .SDcols = c("sig_phenotypes",
                              "phenotypes_per_ancestor",
                              "p","q","fold_change")
                  ]
   #### Get the top HPO category for each cell type ####
   add_top_value(dat=dat,
-                sort_var="enriched_phenotypes",
+                sort_var="sig_phenotypes",
                 label_var=facets,
                 group_var=celltype_col,
                 new_var="top_ancestor_name",
@@ -90,9 +91,7 @@ plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE)
                         preferred_palettes=preferred_palettes)
   color_map <- cmap$color_map
   color_vector <- cmap$color_vector
-
   #### Create summary bar plot ####
-  #### Create tissue-celltype heatmap #####
   results[,dummy:=paste0("All"," (n=",total_phenotypes," phenotypes)")]
   tissue_plots <- plot_tissues(results = results,
                                facet_var = "dummy",
@@ -127,7 +126,7 @@ plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE)
     ggplot2::scale_y_reverse()
 
   #### Plot -log(p) vs. N enrichments in a given target cell type
-  ggprop_res <- plot_proportional_enrichment(results = results_full,
+  ggprop_out <- plot_proportional_enrichment(results = results_full,
                                              color_map = color_map,
                                              target_branches=target_branches,
                                              show_plot = FALSE)
@@ -137,13 +136,13 @@ plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE)
   ggp <- patchwork::wrap_plots(ggsummary,
                                ggbars,
                                ggdend,
-                               ggprop_res$plot,
+                               ggprop_out$plot,
                                ncol = 1,
                                heights = heights) +
     patchwork::plot_annotation(tag_levels = letters) &
-    theme(plot.margin = plot.margin)
+    ggplot2::theme(plot.margin = plot.margin)
   #### Show plot ####
-  if(show_plot) methods::show(ggp)
+  if(isTRUE(show_plot)) methods::show(ggp)
   #### Save plot ####
   if(!is.null(save_path)){
     KGExplorer::plot_save(plt = ggp,
@@ -154,6 +153,8 @@ plot_bar_dendro <- function(results = load_example_results(multi_dataset = TRUE)
   #### Return ####
   return(
     list(data=dat,
-         plot=ggp)
+         plot=ggp,
+         ggbars_out=ggbars_out,
+         ggprop_out=ggprop_out)
   )
 }

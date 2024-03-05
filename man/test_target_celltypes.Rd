@@ -5,7 +5,7 @@
 \title{Test target cell types}
 \usage{
 test_target_celltypes(
-  results = MSTExplorer::load_example_results(multi_dataset = TRUE),
+  results = load_example_results(),
   target_celltypes = get_target_celltypes(),
   celltype_col = "cl_id",
   tests = c("within_branches", "across_branches", "across_branches_per_celltype"),

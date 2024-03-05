@@ -34,6 +34,6 @@ in \code{results}.}
 Map cell types to cell ontology terms.
 }
 \examples{
-results <- load_example_results(multi_dataset = TRUE)
+results <- load_example_results()
 results2 <- map_celltype(results = results)
 }

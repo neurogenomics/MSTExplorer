@@ -23,12 +23,6 @@ add_ctd(
 \link[MSTExplorer]{gen_results}
 and merged together with \link[MSTExplorer]{merge_results}}
 
-\item{ctd}{Cell Type Data List generated using
-\link[EWCE]{generate_celltype_data}.}
-
-\item{annotLevel}{An integer indicating which level of \code{sct_data} to
-analyse (\emph{Default: 1}).}
-
 \item{keep_specificity_quantiles}{Which cell type
 specificity quantiles to keep (max quantile is 40).}
 

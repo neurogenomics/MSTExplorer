@@ -33,26 +33,52 @@ plot_differential_outcomes_ggstatsplot <- function(plot_dat,
    #### Set min observation per group ####
    # d <- d[,x_var_n:=.N,by=x_var][x_var_n>1]
    #### Make celltypes an ordered factor ####
-   d[,median_y:=median(get(y_var)),by=c(facet_var,x_var)]
-   data.table::setorderv(d, "median_y")
-   d[,(x_var):=factor(get(x_var),levels=unique(get(x_var)), ordered = TRUE)]
+   if(is.numeric(d[[y_var]])){
+     d[,median_y:=median(get(y_var)),by=c(facet_var,x_var)]
+     d[,(x_var):=factor(get(x_var),levels=unique(get(x_var)), ordered = TRUE)]
+     data.table::setorderv(d, "median_y")
+     method <- "ggbetweenstats"
+   } else {
+     d[,(y_var):=factor(get(y_var),levels=rev(unique(get(y_var))), ordered = TRUE)]
+     counts <- d[,.N, by=c(x_var,y_var)][,pct:=.N/sum(N), by=c(x_var)][get(y_var)==levels(d[[y_var]])[1],]|>
+       data.table::setorderv("pct",-1)
+     d[,(x_var):=factor(get(x_var),levels=unique(counts[[x_var]]), ordered = TRUE)]
+     method <- "ggbarstats"
+   }
+
    tryCatch({
-     ggstatsplot::ggbetweenstats( data = d,
-                                  x = !!ggplot2::sym(x_var),
-                                  y = !!ggplot2::sym(y_var),
-                                  title=f,
-                                  type = type,
-                                  centrality.plotting = centrality.plotting,
-                                  centrality.type = centrality.type,
-                                  pairwise.comparisons = pairwise.comparisons,
-                                  xlab = x_var,
-                                  ylab = y_var,
-                                  ggtheme=
-                                    ggstatsplot::theme_ggstatsplot() +
-                                    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)),
-                                  package = valid_pal$package[1],
-                                  palette = valid_pal$palette[1],
-                                  ...)
+     if(method=="ggbetweenstats"){
+       ggstatsplot::ggbetweenstats( data = d,
+                                    x = !!ggplot2::sym(x_var),
+                                    y = !!ggplot2::sym(y_var),
+                                    title=f,
+                                    type = type,
+                                    centrality.plotting = centrality.plotting,
+                                    centrality.type = centrality.type,
+                                    pairwise.comparisons = pairwise.comparisons,
+                                    xlab = x_var,
+                                    ylab = y_var,
+                                    ggtheme=
+                                      ggstatsplot::theme_ggstatsplot() +
+                                      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)),
+                                    package = valid_pal$package[1],
+                                    palette = valid_pal$palette[1],
+                                    ...)
+     } else {
+       ggstatsplot::ggbarstats(data = d,
+                               x = !!ggplot2::sym(y_var),
+                               y = !!ggplot2::sym(x_var),
+                               title=f,
+                               type = type,
+                               sample.size.label.args = list(size=3),
+                               pairwise.comparisons = pairwise.comparisons,
+                               xlab = y_var,
+                               ylab = x_var,
+                               ggtheme=
+                                 ggstatsplot::theme_ggstatsplot() +
+                                 ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)),
+                               ...)
+     }
    }, error=function(e){message(e);NULL})
  })
  #### Filter out NULL ####

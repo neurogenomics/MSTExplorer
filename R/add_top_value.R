@@ -1,5 +1,5 @@
 add_top_value <- function(dat,
-                          sort_var="enriched_phenotypes",
+                          sort_var="sig_phenotypes",
                           label_var="ancestor_name",
                           group_var="cl_name",
                           new_var="top_ancestor_name",

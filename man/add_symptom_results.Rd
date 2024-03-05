@@ -5,17 +5,17 @@
 \title{Add symptom results}
 \usage{
 add_symptom_results(
-  results = load_example_results(multi_dataset = TRUE),
+  results = load_example_results(),
   q_threshold = 0.05,
-  fold_threshold = 2,
+  fold_threshold = NULL,
   celltype_col = "CellType",
   ctd_list = load_example_ctd(file = paste0("ctd_", unique(results$ctd), ".rds"),
     multi_dataset = TRUE),
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
-  annotLevels = list(DescartesHuman = 2, HumanCellLandscape = 3),
+  annotLevels = map_ctd_levels(results),
   keep_quantiles = seq(30, 40),
   top_n = NULL,
-  proportion_driver_genes_symptom_threshold = 0.75
+  proportion_driver_genes_symptom_threshold = 0.25
 )
 }
 \arguments{
@@ -38,5 +38,6 @@ to gene annotations.}
 Add symptom results to the results data.table.
 }
 \examples{
+results = load_example_results()[seq(5000)]
 results <- add_symptom_results()
 }

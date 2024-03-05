@@ -2,29 +2,29 @@
 #'
 #' @export
 #' @examples
-#' results <- load_example_results(multi_dataset = TRUE)
+#' results <- load_example_results()
 #' results <- HPOExplorer::add_ancestor(results,
-#'                                      lvl = 6,
+#'                                      lvl = 7,
 #'                                      force_new = TRUE)
 #' target_branches <- list("Recurrent bacterial infections"="leukocyte")
 #' out <- plot_bar_branches(results=results,
 #'                          target_branches=target_branches,
 #'                          facets = "hpo_name",
 #'                          legend.position="right",
-#'                          lvl=7,
+#'                          lvl=8,
 #'                          ncol=2,
 #'                          vbars="hepatoblast",
 #'                          facets_n=NULL,
 #'                          q_threshold=0.05,
 #'                          background_full=FALSE)
-plot_bar_branches <- function(results = load_example_results(multi_dataset = TRUE),
+plot_bar_branches <- function(results = load_example_results(),
                               results_full = NULL,
                               target_branches = get_target_branches(),
                               keep_ancestors = names(target_branches),
                               target_celltypes = get_target_celltypes(
                                 target_branches=target_branches
                               ),
-                              target_branches_keep = TRUE,
+                              target_branches_keep = NULL,
                               celltype_col = "cl_name",
                               keep_ont_levels=NULL,
                               add_test_target_celltypes=TRUE,
@@ -52,8 +52,8 @@ plot_bar_branches <- function(results = load_example_results(multi_dataset = TRU
   hpo_id <- p.adj.signif <- ancestor_name_original <- ancestor_name <- NULL;
 
   results <- map_celltype(results)
-  if(!"enriched_phenotypes" %in% names(results)){
-    results[, enriched_phenotypes:=data.table::uniqueN(hpo_id[q<q_threshold],
+  if(!"sig_phenotypes" %in% names(results)){
+    results[, sig_phenotypes:=data.table::uniqueN(hpo_id[q<q_threshold],
                                                        na.rm = TRUE),
             by=c(celltype_col,"cl_id","ancestor","ancestor_name")]
   }
@@ -118,7 +118,6 @@ plot_bar_branches <- function(results = load_example_results(multi_dataset = TRU
     target_tests <- test_target_celltypes(results=results,
                                           tests="across_branches_per_celltype",
                                           target_celltypes = target_celltypes,
-                                          celltype_col = celltype_col,
                                           q_threshold = q_threshold)
     if(nrow(target_tests[[1]])==0) {
       messager("0 tests returned. Skipping annotation.")
@@ -138,10 +137,11 @@ plot_bar_branches <- function(results = load_example_results(multi_dataset = TRU
   #### Make facets ordered ####
   dat[[facets]] <- factor(dat[[facets]],
                           # set facet var in the order of the fill var to avoid reordering
-                          levels=unique(dat[order(match(get(facets),get(fill_var))),][[facets]]),
+                          levels = rev(unique(names(target_celltypes))),
+                          # levels=unique(dat[order(match(get(facets),get(fill_var))),][[facets]]),
                           ordered = TRUE)
   if(!is.null(normalise_by) && normalise_by %in% names(dat)){
-    dat[,enriched_phenotypes:=scales::rescale_max(enriched_phenotypes),
+    dat[,sig_phenotypes:=scales::rescale_max(sig_phenotypes),
         by=normalise_by]
   }
   #### Create color map ####
@@ -154,9 +154,8 @@ plot_bar_branches <- function(results = load_example_results(multi_dataset = TRU
   #### Bar plot ####
   ggbars <- ggplot2::ggplot(dat,
                             ggplot2::aes(x=!!ggplot2::sym(celltype_col),
-                                         y=enriched_phenotypes,
-                                         fill=!!ggplot2::sym(fill_var),
-                                         group=!!ggplot2::sym(facets)
+                                         y=sig_phenotypes,
+                                         fill=!!ggplot2::sym(fill_var)
                                          )
                             ) +
     ggplot2::geom_bar(stat="identity") +
@@ -214,7 +213,7 @@ plot_bar_branches <- function(results = load_example_results(multi_dataset = TRU
   if(isTRUE(add_test_target_celltypes)){
     ggbars <- ggbars +
       ggplot2::geom_text(ggplot2::aes(label=p.adj.signif,
-                                      y=1.05*enriched_phenotypes),
+                                      y=1.05*sig_phenotypes),
                                       # nudge_y=3,
                                       size=2,
                                       color="black",
@@ -229,7 +228,6 @@ plot_bar_branches <- function(results = load_example_results(multi_dataset = TRU
                           height = height,
                           width = width)
   }
-  # ggplot2::ggsave(file="~/Downloads/ggbars.pdf", plot = out$plot, height =12, width=12)
   return(list(plot=ggbars,
               dat=dat))
 }

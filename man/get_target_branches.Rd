@@ -4,7 +4,7 @@
 \alias{get_target_branches}
 \title{Get target branches}
 \usage{
-get_target_branches()
+get_target_branches(sort = TRUE)
 }
 \description{
 A named list of mappings between HPO ancestral terms (list names),

@@ -5,10 +5,11 @@
 \title{Plot bar dendrogram}
 \usage{
 plot_bar_dendro(
-  results = load_example_results(multi_dataset = TRUE),
+  results = load_example_results(),
   celltype_col = "cl_name",
   target_branches = get_target_branches(),
   keep_ancestors = names(target_branches),
+  hpo = HPOExplorer::get_hpo(),
   facets = "ancestor_name",
   add_test_target_celltypes = TRUE,
   preferred_palettes = "tol",
@@ -29,6 +30,9 @@ plot_bar_dendro(
 and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{celltype_col}{Name of the cell type column in the \code{results}.}
+
+\item{hpo}{Human Phenotype Ontology object,
+loaded from \link[KGExplorer]{get_ontology}.}
 
 \item{facets}{A set of variables or expressions quoted by \code{\link[ggplot2:vars]{vars()}}
 and defining faceting groups on the rows or columns dimension.
@@ -75,6 +79,6 @@ Create a plot summarising MSTExplorer results as a bar chart with multiple
 facets and a cell ontology-based dendrogram.
 }
 \examples{
-results <- load_example_results(multi_dataset=TRUE)
+results <- load_example_results()
 out <- plot_bar_dendro(results = results)
 }

@@ -15,7 +15,7 @@
 #' @export
 #' @examples
 #' res <- test_target_celltypes(tests="within_branches")
-test_target_celltypes <- function(results=MSTExplorer::load_example_results(multi_dataset = TRUE),
+test_target_celltypes <- function(results=load_example_results(),
                                   target_celltypes = get_target_celltypes(),
                                   celltype_col="cl_id",
                                   tests=c("within_branches",

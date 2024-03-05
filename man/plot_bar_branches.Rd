@@ -5,12 +5,12 @@
 \title{Plot bar plot of enriched phenotypes per celltype per HPO branch}
 \usage{
 plot_bar_branches(
-  results = load_example_results(multi_dataset = TRUE),
+  results = load_example_results(),
   results_full = NULL,
   target_branches = get_target_branches(),
   keep_ancestors = names(target_branches),
   target_celltypes = get_target_celltypes(target_branches = target_branches),
-  target_branches_keep = TRUE,
+  target_branches_keep = NULL,
   celltype_col = "cl_name",
   keep_ont_levels = NULL,
   add_test_target_celltypes = TRUE,
@@ -40,16 +40,16 @@ plot_bar_branches(
 Plot bar plot of enriched phenotypes per celltype per HPO branch
 }
 \examples{
-results <- load_example_results(multi_dataset = TRUE)
+results <- load_example_results()
 results <- HPOExplorer::add_ancestor(results,
-                                     lvl = 6,
+                                     lvl = 7,
                                      force_new = TRUE)
 target_branches <- list("Recurrent bacterial infections"="leukocyte")
 out <- plot_bar_branches(results=results,
                          target_branches=target_branches,
                          facets = "hpo_name",
                          legend.position="right",
-                         lvl=7,
+                         lvl=8,
                          ncol=2,
                          vbars="hepatoblast",
                          facets_n=NULL,

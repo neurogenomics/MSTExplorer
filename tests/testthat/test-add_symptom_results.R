@@ -1,6 +1,6 @@
 test_that("add_symptom_results works", {
 
-  results <- load_example_results(multi_dataset = TRUE)
+  results <- load_example_results()
   results <- map_celltype(results)
   testthat::expect_false("celltype_symptom" %in% names(results))
 

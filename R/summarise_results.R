@@ -1,3 +1,7 @@
+#' Summarise results
+#'
+#' Summarise results from \pkg{MSTExplorer}.
+#' @export
 summarise_results <- function(results,
                               group_var="ctd",
                               digits=3,

@@ -41,7 +41,7 @@ Results located in 'results' folder.}
 }
 \usage{
 load_example_results(
-  file = c("phenomix_results.tsv.gz", ),
+  file = c("phenomix_results.tsv.gz"),
   multi_dataset = FALSE,
   tag = "latest",
   save_dir = KGExplorer::cache_dir(package = "MSTExplorer"),

@@ -117,8 +117,10 @@
 #' res <- prioritise_targets(results=results)
 prioritise_targets <- function(#### Input data ####
                                results = load_example_results(),
-                               ctd = load_example_ctd(),
-                               annotLevel = 1,
+                               ctd_list = load_example_ctd(
+                                 c("ctd_DescartesHuman.rds",
+                                   "ctd_HumanCellLandscape.rds"),
+                                 multi_dataset=TRUE),
                                phenotype_to_genes =
                                  HPOExplorer::load_phenotype_to_genes(),
                                hpo = HPOExplorer::get_hpo(),
@@ -137,6 +139,7 @@ prioritise_targets <- function(#### Input data ####
                                gpt_filters = NULL,
                                keep_tiers = c(1,2,NA),
                                severity_threshold_max = NULL,
+                               run_prune_ancestors=TRUE,
                                #### Symptom level ####
                                severity_threshold = c(2,NA),
                                pheno_frequency_threshold = NULL,
@@ -160,7 +163,7 @@ prioritise_targets <- function(#### Input data ####
                                                 "max"=Inf),
                                gene_frequency_threshold = NULL,
                                keep_biotypes = NULL,
-                               keep_specificity_quantiles = NULL,
+                               keep_specificity_quantiles = seq(1,40),
                                keep_mean_exp_quantiles = seq(1,40),
                                symptom_gene_overlap = TRUE,
                                #### Sorting ####
@@ -179,8 +182,7 @@ prioritise_targets <- function(#### Input data ####
                                return_report = TRUE,
                                verbose = TRUE){
   q <- fold_change <- CellType <- width <- seqnames <- gene_biotype <-
-    symptom.pval <- Severity_score <- intersection_size <-
-    Severity_score_max <- NULL;
+    Severity_score <- cl_name <- cl_id <- Severity_score_max <- NULL;
 
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
@@ -223,27 +225,31 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "fold_threshold",
                    verbose = verbose)
-  #### Filter symptoms ####
-  ## Do these steps early bc it will drastically reduce data size
-  ## and thus speed up all subsequent steps.
-  #### symptom_p_threshold ####
-  if(!is.null(symptom_p_threshold)){
-    results <- results[symptom.pval<symptom_p_threshold]
-  }
-  rep_dt <- report(dt = results,
-                   rep_dt = rep_dt,
-                   step = "symptom_p_threshold",
-                   verbose = verbose)
-  #### symptom_intersection_size_threshold ####
-  if("intersection_size" %in% names(results)){
-    if(!is.null(symptom_intersection_size_threshold)){
-      results <- results[intersection_size>=symptom_intersection_size_threshold]
-    }
-    rep_dt <- report(dt = results,
-                     rep_dt = rep_dt,
-                     step = "symptom_intersection_size_threshold",
-                     verbose = verbose)
-  }
+  # #### Filter symptoms ####
+  # ## Do these steps early bc it will drastically reduce data size
+  # ## and thus speed up all subsequent steps.
+  # #### Filter smyptom overlap ####
+  # results2 <- add_driver_genes(results = results,
+  #                              ctd_list = ctd_list,
+  #                              keep_quantiles = keep_specificity_quantiles)
+  # #### symptom_p_threshold ####
+  # if(!is.null(symptom_p_threshold)){
+  #   results <- results[symptom.pval<symptom_p_threshold]
+  # }
+  # rep_dt <- report(dt = results,
+  #                  rep_dt = rep_dt,
+  #                  step = "symptom_p_threshold",
+  #                  verbose = verbose)
+  # #### symptom_intersection_size_threshold ####
+  # if("intersection_size" %in% names(results)){
+  #   if(!is.null(symptom_intersection_size_threshold)){
+  #     results <- results[intersection_size>=symptom_intersection_size_threshold]
+  #   }
+  #   rep_dt <- report(dt = results,
+  #                    rep_dt = rep_dt,
+  #                    step = "symptom_intersection_size_threshold",
+  #                    verbose = verbose)
+  # }
 
   #### Filter diseases ####
   #### keep_deaths ####
@@ -256,6 +262,16 @@ prioritise_targets <- function(#### Input data ####
                    step = "keep_deaths",
                    verbose = verbose)
   #### Filter phenotypes ####
+  #### prune_ancestors #####
+  if(isTRUE(run_prune_ancestors)){
+    results <- KGExplorer::prune_ancestors(dat = results,
+                                           id_col = "hpo_id",
+                                           ont = hpo)
+  }
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "prune_ancestors",
+                   verbose = verbose)
   #### keep_descendants ####
   results <- HPOExplorer::add_ancestor(phenos = results,
                                        hpo = hpo,
@@ -339,7 +355,9 @@ prioritise_targets <- function(#### Input data ####
                                               make_unique = FALSE)]
   if(!is.null(keep_celltypes)){
     all_celltypes <- unique(results$CellType)
-    results <- results[CellType %in% keep_celltypes,]
+    results <- results[CellType %in% keep_celltypes|
+                       cl_name %in% keep_celltypes|
+                       cl_id %in% keep_celltypes,]
     valid_celltypes <- unique(results$CellType)
     messager(formatC(length(valid_celltypes),big.mark = ","),"/",
              formatC(length(all_celltypes)),
@@ -351,12 +369,15 @@ prioritise_targets <- function(#### Input data ####
                    verbose = verbose)
   #### Filter genes ####
   #### Add genes ####
+  results <- HPOExplorer::add_genes(phenos=results,
+                                    phenotype_to_genes=phenotype_to_genes,
+                                    hpo = hpo)
   #### symptom_gene_overlap ####
   results <- HPOExplorer::phenos_to_granges(
     phenos = results,
     phenotype_to_genes = phenotype_to_genes,
     hpo = hpo,
-    gene_col = if(isTRUE(symptom_gene_overlap)) "intersection" else NULL,
+    # gene_col = if(isTRUE(symptom_gene_overlap)) "intersection" else NULL,
     keep_chr = NULL,
     split.field = NULL,
     as_datatable = TRUE,
@@ -406,17 +427,27 @@ prioritise_targets <- function(#### Input data ####
                    verbose = verbose)
   ##### keep_specificity_quantiles ####
   ##### keep_mean_exp_quantiles ####
-  ctd_out <- add_ctd(
-    results = results,
-    ctd = ctd,
-    annotLevel = annotLevel,
-    keep_specificity_quantiles = keep_specificity_quantiles,
-    keep_mean_exp_quantiles = keep_mean_exp_quantiles,
-    all.x = FALSE,
-    rep_dt = rep_dt,
-    verbose = verbose)
-  results <- ctd_out$results;
-  rep_dt <- ctd_out$rep_dt;
+  results <- add_driver_genes(results = results,
+                              ctd_list = ctd_list,
+                              keep_quantiles = keep_specificity_quantiles,
+                              metric = "specificity_quantiles",
+                              group_var = c("hpo_id","disease_id")
+                              )
+  rep_dt <- report(dt = results,
+                   rep_dt = rep_dt,
+                   step = "add_driver_genes",
+                   verbose = verbose)
+  # ctd_out <- add_ctd(
+  #   results = results,
+  #   ctd = ctd,
+  #   annotLevel = annotLevel,
+  #   keep_specificity_quantiles = keep_specificity_quantiles,
+  #   keep_mean_exp_quantiles = keep_mean_exp_quantiles,
+  #   all.x = FALSE,
+  #   rep_dt = rep_dt,
+  #   verbose = verbose)
+  # results <- ctd_out$results;
+  # rep_dt <- ctd_out$rep_dt;
   #### gene_frequency_threshold ####
   results <- HPOExplorer::add_gene_frequency(
     phenotype_to_genes = results,

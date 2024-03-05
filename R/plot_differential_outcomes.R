@@ -48,22 +48,25 @@ plot_differential_outcomes <- function(results,
                                                    facet_var=facet_var,
                                                    max_facets=max_facets,
                                                    ...)
-    stat_dat <- filter_ggstatsplot(plts=plts,
-                                   q_threshold=q_threshold)
+    stat_dat <- filter_ggstatsplot(plts=plts)
     stat_dat[["plot_data"]] <- plot_dat
-    if(nrow(stat_dat$summary_data)==0){
-      warning("No significant results found. Returning unfiltered plot.")
-      return(list(plot=plts,
-                  data=stat_dat))
+    if(!is.null(q_threshold$summary)){
+      n_sig <- nrow(stat_dat$summary_data[q.value<=q_threshold$summary])
+      if(n_sig==0){
+        warning("No significant results found. Returning unfiltered plot.")
+        return(list(plot=plts,
+                    data=stat_dat))
+      }
     }
     #### Recreate the plot with only significant results ####
     if(!any(mapply(is.null,q_threshold))){
-      plts2 <- plot_differential_outcomes_ggstatsplot(plot_dat=plot_dat[get(facet_var) %in% stat_dat$summary_data$facet,],
-                                                      remove_facets=remove_facets,
-                                                      x_var=x_var,
-                                                      y_var=y_var,
-                                                      facet_var=facet_var,
-                                                      max_facets=max_facets)
+      plts2 <- plot_differential_outcomes_ggstatsplot(
+        plot_dat=plot_dat[get(facet_var) %in% stat_dat$summary_data$facet,],
+        remove_facets=remove_facets,
+        x_var=x_var,
+        y_var=y_var,
+        facet_var=facet_var,
+        max_facets=max_facets)
       stat_dat2 <- filter_ggstatsplot(plts=plts2,
                                       q_threshold=q_threshold)
       stat_dat2[["plot_data"]] <- plot_dat
@@ -79,19 +82,19 @@ plot_differential_outcomes <- function(results,
       plot_dat <- plot_dat[get(facet_var) %in% ids,]
     }
     #### Plot ####
-    plt <- ggplot(plot_dat,
-           aes(x=tidytext::reorder_within(x=!!ggplot2::sym(x_var),
-                                          by=!!ggplot2::sym(y_var),
-                                          within=!!ggplot2::sym(facet_var)
+    plt <- ggplot2::ggplot(plot_dat,
+                           ggplot2::aes(x=tidytext::reorder_within(x=!!ggplot2::sym(x_var),
+                                        by=!!ggplot2::sym(y_var),
+                                        within=!!ggplot2::sym(facet_var)
            ),
            y=!!ggplot2::sym(y_var))) +
-      geom_boxplot() +
+      ggplot2::geom_boxplot() +
       tidytext::scale_x_reordered() +
-      labs(x=x_var) +
-      facet_wrap(facets = facet_var,
+      ggplot2::labs(x=x_var) +
+      ggplot2::facet_wrap(facets = facet_var,
                  nrow = 3,
                  scales = "free_x") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
     return(list(plot=plt,
                 data=plot_dat))
   }

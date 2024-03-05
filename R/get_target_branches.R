@@ -3,8 +3,8 @@
 #' A named list of mappings between HPO ancestral terms (list names),
 #' and Cell Ontology ancestral terms (list values).
 #' @keywords internal
-get_target_branches <- function(){
-  list(
+get_target_branches <- function(sort=TRUE){
+  target_branches <- list(
     "Abnormality of the nervous system"=
       c("neural cell"),
     "Abnormality of the cardiovascular system"=
@@ -29,4 +29,8 @@ get_target_branches <- function(){
       "retinal cell"
     )
   )
+  if(isTRUE(sort)){
+    target_branches <- target_branches[sort(names(target_branches))]
+  }
+  return(target_branches)
 }

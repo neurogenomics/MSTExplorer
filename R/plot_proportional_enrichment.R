@@ -1,4 +1,4 @@
-plot_proportional_enrichment <- function (results=load_example_results(multi_dataset = TRUE),
+plot_proportional_enrichment <- function (results=load_example_results(),
                                            target_branches = get_target_branches(),
                                            target_celltypes = get_target_celltypes(target_branches=target_branches),
                                            celltype_col="cl_id",
@@ -11,7 +11,13 @@ plot_proportional_enrichment <- function (results=load_example_results(multi_dat
                                              )[[1]],
                                            legend.position = "none",
                                            y_limits=NULL,
-                                           y_lab="On-target tests (%)",
+                                           scales="free_y",
+                                           y_var="pct",
+                                           y_lab=if(y_var=="enrichment") {
+                                             "On-target enrichment"
+                                           } else {
+                                             "On-target associations (%)"
+                                           },
                                            nrow=1,
                                            show_plot=TRUE) {
  #  res <- rols::OlsSearch(q = "nervous system",
@@ -32,7 +38,8 @@ plot_proportional_enrichment <- function (results=load_example_results(multi_dat
   #       by.x="cl_id",
   #       by.y="subject")
   requireNamespace("ggplot2")
-  ancestor_name <- pct <- pct_min <- pct_max <- NULL;
+  ancestor_name <- pct <- pct_min <- pct_max <- enrichment <- pct_celltype <-
+    enrichment_mean <- NULL;
 
   results <- HPOExplorer::add_hpo_name(results)
   results <- HPOExplorer::add_ancestor(results,
@@ -65,54 +72,61 @@ plot_proportional_enrichment <- function (results=load_example_results(multi_dat
   #### Add newline to long branch names #####
   proportional_results[,branch:=gsub("Abnormality of the","Abnormality of the\n",branch)]
   names(color_map) <- gsub("Abnormality of the","Abnormality of the\n",names(color_map))
-
+  #### Compute enrichment (observed/expected) ####
+  proportional_results[,enrichment:=(pct/pct_celltype)]
   #### Compute summary stats #####
   ss <- proportional_results[,list(pct_max=max(pct),
-                             pct_min=min(pct)),
+                                   pct_min=min(pct),
+                                   enrichment_mean=mean(enrichment)),
                        by="branch"][,list(pct_min=max(pct_min),
                                           pct_max=max(pct_max),
                                           pct_max_mean=mean(pct_max),
-                                          pct_max_sd=stats::sd(pct_max)
+                                          pct_max_sd=stats::sd(pct_max),
+                                          enrichment_mean=mean(enrichment_mean)
                                           )]
   messager("Proportional enrichment summary stats:")
   messager(" - pct_min:",round(ss$pct_min,2))
   messager(" - pct_max:",round(ss$pct_max,2))
   messager(" - pct_max_mean:",round(ss$pct_max_mean,2))
   messager(" - pct_max_sd:",round(ss$pct_max_sd,2))
+  messager(" - enrichment_mean:",round(ss$enrichment_mean,2))
   #### Plot ####
   baseline_dat <- proportional_results[,.SD[1],by=c("branch")]
+  baseline_dat[,baseline:=ifelse(y_var=="enrichment",1,pct_celltype)]
   prop_plot <- ggplot2::ggplot(proportional_results,
                                ggplot2::aes(x = minus_log_p,
-                          y = pct,
+                                            y = !!ggplot2::sym(y_var),
                           color = branch),
                       na.rm = TRUE) +
     ggplot2::geom_point(size = 3) +
     ggplot2::geom_line(linewidth = 0.6) +
     ggplot2::facet_wrap(nrow = nrow,
+                        scales = scales,
                         facets=c("branch","celltype_label")) +
     ggplot2::labs(x=bquote(-log[10](p)),
                   y=y_lab) +
     ggplot2::scale_y_continuous(limits = y_limits) +
     ggplot2::scale_color_manual(values = color_map) +
     ggplot2::geom_hline(data=baseline_dat,
-               mapping = ggplot2::aes(yintercept = pct_celltype),
-               linetype="dashed",
-               alpha=.5) +
+                        mapping = ggplot2::aes(yintercept = baseline),
+                        linetype="dashed",
+                        alpha=.5) +
     ggplot2::geom_text(data = baseline_dat,
-              mapping = ggplot2::aes(y = pct_celltype,
-                            x=6,
-                            label=paste0("baseline ",
-                                        "(",n_celltype,"/",n_all_celltypes,")"),
+              mapping = ggplot2::aes(y = baseline,
+                                     x=6,
+                                     label=paste0(
+                                       "baseline ",
+                                                  "(",n_celltype,"/",n_all_celltypes,")"),
                             ),
               hjust=1,
+              vjust = -0.75,
               size=3,
-              nudge_y = 2,
               color="black",
               alpha=.5) +
     ggplot2::theme_bw() +
     ggplot2::theme(strip.background = ggplot2::element_rect(fill="transparent"),
           legend.position = legend.position)
-  if(show_plot) methods::show(prop_plot)
+  if(isTRUE(show_plot)) methods::show(prop_plot)
   #### Return ####
   return(list(plot=prop_plot,
               data=proportional_results))

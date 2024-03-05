@@ -69,7 +69,7 @@
 #' @examples
 #' res <- load_example_results()
 load_example_results <- function(file=c(
-  "phenomix_results.tsv.gz",
+  "phenomix_results.tsv.gz"
   # "rare_disease_min_genes4_DescartesHuman.rds",
   # "rare_disease_min_genes4_HumanCellLandscape.rds"
   # "results_DescartesHuman.csv.gz",

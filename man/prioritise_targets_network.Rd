@@ -17,13 +17,13 @@ visNetwork examples}
 \usage{
 prioritise_targets_network(
   top_targets,
-  vertex_vars = c("disease_name", "hpo_name", "CellType", "gene_symbol"),
+  vertex_vars = c("disease_name", "hpo_name", "cl_name", "gene_symbol"),
   group_var = vertex_vars[[1]],
   colour_var = "node_type",
   edge_color_var = "fold_change",
   edge_size_var = "fold_change",
-  mediator_var = list(),
-  layout = "layout_with_kk",
+  mediator_var = list(c(1, 2), c(2, 3), c(3, 4), c(1, 3)),
+  layout = "layout_with_sugiyama",
   solver = "forceAtlas2Based",
   physics = FALSE,
   forceAtlas2Based = list(avoidOverlap = 0.5, gravitationalConstant = -50),
@@ -39,7 +39,8 @@ prioritise_targets_network(
   randomSeed = 2023,
   verbose = TRUE,
   show_plot = TRUE,
-  save_path = tempfile(fileext = "_prioritise_targets_network.html")
+  save_path = tempfile(fileext = "_prioritise_targets_network.html"),
+  run_prune_ancestors = FALSE
 )
 }
 \arguments{

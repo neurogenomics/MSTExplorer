@@ -5,24 +5,26 @@
 #'
 #' @export
 #' @examples
+#' results = load_example_results()[seq(5000)]
 #' results <- add_symptom_results()
-add_symptom_results <- function(results = load_example_results(multi_dataset = TRUE),
+add_symptom_results <- function(results = load_example_results(),
                                 q_threshold = 0.05,
-                                fold_threshold = 2,
+                                fold_threshold = NULL,
                                 celltype_col="CellType",
                                 ctd_list = load_example_ctd(
                                   file = paste0("ctd_",unique(results$ctd),".rds"),
-                                  multi_dataset = TRUE),
+                                  multi_dataset = TRUE
+                                  ),
                                 phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
-                                annotLevels = list(DescartesHuman=2,
-                                                   HumanCellLandscape=3),
+                                annotLevels =  map_ctd_levels(results),
                                 keep_quantiles = seq(30,40),
                                 top_n = NULL,
-                                proportion_driver_genes_symptom_threshold=.75
+                                proportion_driver_genes_symptom_threshold=.25
                                 ){
   n_genes_hpo_id <- n_genes_disease_id <- n_genes_symptom <- gene_symbol <-
     celltype_symptom <- NULL;
 
+  messager("Adding symptom-level results.")
   phenotype_to_genes[,n_genes_hpo_id:=data.table::uniqueN(gene_symbol),
                      by="hpo_id"]
   phenotype_to_genes[,n_genes_disease_id:=data.table::uniqueN(gene_symbol),
@@ -32,7 +34,7 @@ add_symptom_results <- function(results = load_example_results(multi_dataset = T
   results <- subset_results(results = results,
                             fold_threshold = fold_threshold,
                             q_threshold = q_threshold)
-  if(celltype_col %in% c("cl_id","cl_id")){
+  if(celltype_col %in% c("cl_id","cl_name")){
     results <- map_celltype(results)
   }
   results <- HPOExplorer::add_genes(results,
@@ -51,7 +53,7 @@ add_symptom_results <- function(results = load_example_results(multi_dataset = T
                              annotLevels = annotLevels,
                              keep_quantiles = keep_quantiles,
                              top_n = top_n,
-                             enrichment_level = "hpo_id")
+                             group_var = "hpo_id")
   phenos[,n_driver_genes_symptom:=data.table::uniqueN(gene_symbol),
              by=c("hpo_id","disease_id","ctd","CellType")]
   phenos[,proportion_driver_genes_symptom:=(n_driver_genes_symptom/n_genes_symptom)]

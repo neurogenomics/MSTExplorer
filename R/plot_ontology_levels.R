@@ -17,7 +17,7 @@
 #' @import HPOExplorer
 #' @examples
 #' out <- plot_ontology_levels()
-plot_ontology_levels <- function(results = load_example_results(multi_dataset = TRUE),
+plot_ontology_levels <- function(results = load_example_results(),
                          p2g = HPOExplorer::load_phenotype_to_genes(),
                          x_vars = c("genes",
                                     "cell types",
