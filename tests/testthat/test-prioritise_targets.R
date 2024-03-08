@@ -34,7 +34,7 @@ test_that("prioritise_targets works", {
                              symptom_intersection_size_threshold = 1,
                              keep_celltypes = NULL,
                              #### Gene level ####
-                             keep_evidence = NULL,
+                             evidence_score_threshold = NULL,
                              keep_chr = NULL,
                              gene_size = list("min"=0,
                                               "max"=Inf),

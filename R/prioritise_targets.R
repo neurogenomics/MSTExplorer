@@ -157,7 +157,7 @@ prioritise_targets <- function(#### Input data ####
                                symptom_intersection_size_threshold = 1,
                                keep_celltypes = NULL,#terminal_celltypes()$CellType,
                                #### Gene level ####
-                               keep_evidence = seq(3,6),
+                               evidence_score_threshold = 3,
                                keep_chr = c(seq(22),"X","Y"),
                                gene_size = list("min"=0,
                                                 "max"=Inf),
@@ -395,14 +395,14 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "keep_chr",
                    verbose = verbose)
-  #### keep_evidence ####
+  #### evidence_score_threshold ####
   messager("Filtering by gene-disease association evidence.",
            v=verbose)
   results <- HPOExplorer::add_evidence(phenos = results,
-                                       keep_evidence = keep_evidence)
+                                       evidence_score_threshold = evidence_score_threshold)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
-                   step = "keep_evidence",
+                   step = "evidence_score_threshold",
                    verbose = verbose)
   #### gene_size ####
   if(!is.null(gene_size)){

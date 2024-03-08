@@ -5,9 +5,11 @@
 \title{Map cell type}
 \usage{
 map_tissue(
-  results,
+  results = NULL,
   map = KGExplorer::get_data_package(package = "MSTExplorer", name = "tissue_maps"),
-  add_ancestors = 10
+  add_ancestors = 10,
+  uberon = KGExplorer::get_ontology(name = "uberon", add_ancestors = add_ancestors),
+  return_agg = FALSE
 )
 }
 \arguments{
@@ -17,6 +19,11 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{map}{Many:many mapping between tissue ontology terms and cell type
 ontology terms.}
+
+\item{uberon}{UBERON ontology object of class \link[simona]{ontology_DAG}.}
+
+\item{return_agg}{Return the aggregated results instead of merging with a
+table of association \code{results}.}
 }
 \description{
 Map cell types to cell ontology terms.

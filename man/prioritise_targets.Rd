@@ -26,7 +26,7 @@ prioritise_targets(
   symptom_p_threshold = NULL,
   symptom_intersection_size_threshold = 1,
   keep_celltypes = NULL,
-  keep_evidence = seq(3, 6),
+  evidence_score_threshold = 3,
   keep_chr = c(seq(22), "X", "Y"),
   gene_size = list(min = 0, max = Inf),
   gene_frequency_threshold = NULL,
@@ -115,8 +115,8 @@ consider it a significant enrichment. Refers to the result from
 
 \item{keep_celltypes}{Cell type to keep.}
 
-\item{keep_evidence}{The evidence scores of each gene-disease
-association to keep.}
+\item{evidence_score_threshold}{The minimum threshold of mean
+evidence scores of each gene-phenotype association to keep.}
 
 \item{keep_chr}{Chromosomes to keep.}
 

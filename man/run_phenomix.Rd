@@ -10,8 +10,11 @@ run_phenomix(
   ymat,
   test_method = "glm",
   metric = "specificity",
+  ctd = MSTExplorer::load_example_ctd(file = paste0("ctd_", ctd_name, ".rds")),
+  xmat = ctd[[annotLevel]][[metric]],
   save_path = here::here("results", paste0("phenomix_", test_method, "_", metric),
     paste0("phenomix_", ctd_name, "_results.tsv.gz")),
+  multivariate = FALSE,
   workers = NULL,
   force_new = FALSE,
   ...
@@ -21,7 +24,8 @@ run_phenomix(
 Run phenomix
 }
 \examples{
-ymat <- HPOExplorer::hpo_to_matrix(formula = "gene_symbol ~ hpo_id")
+ymat <- HPOExplorer::hpo_to_matrix()
+ymat <- ymat[,1:10]
 lm_res <- run_phenomix(ctd_name = "HumanCellLandscape",
                        annotLevel = 3,
                        ymat = ymat,

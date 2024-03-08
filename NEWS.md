@@ -113,7 +113,7 @@
 ## New features
 
 * `prioritise_targets`
-  - New arg `keep_evidence` to utilise GenCC evidence scores provided via `HPOExplorer`.
+  - New arg `evidence_score_threshold` to utilise GenCC evidence scores provided via `HPOExplorer`.
   - Merge symptom-level driver genes after unlisting the "intersection" column
     instead of using indirect approach that on nested "intersection" column.
 * `prioritise_targets_network`

@@ -81,7 +81,8 @@ summarise_results <- function(results,
   tmerged_transposed <- t(tmerged)
   #### Save ####
   if(!is.null(save_path)){
-    utils::write.csv(tmerged_transposed,"~/Downloads/tmerged.csv")
+    dir.create(dirname(save_path), recursive = TRUE, showWarnings = FALSE)
+    utils::write.csv(tmerged_transposed,save_path)
   }
   #### Return ####
   return(list(
