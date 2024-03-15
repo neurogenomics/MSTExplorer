@@ -1,6 +1,6 @@
 get_ggstatsplot_stats <- function(plts,
                                   method = "fdr"){
-  plot_id <- NULL;
+  plot_id <- facet <- NULL;
   #### patchwork object ####
   if(methods::is(plts,"patchwork") ||
      methods::is(plts,"list")){

@@ -13,6 +13,10 @@ add_driver_genes <- function(results = load_example_results(),
                              ...){
   gene_symbol <- NULL;
 
+  if(metric %in% names(results)){
+    messager("specificity_quantiles for driver genes already present in input.")
+    return(results)
+  }
   results <- HPOExplorer::add_genes(results,
                                     ...)
   #### Find the most cell-type specific genes per cell type per CTD ####

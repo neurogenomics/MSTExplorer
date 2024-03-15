@@ -13,18 +13,18 @@
 subset_results <- function(filters = list(cl_name=NULL),
                            results = load_example_results(),
                            q_threshold = 0.0005,
-                           fold_threshold = 1,
+                           effect_threshold = 1,
                            verbose = TRUE){
-  fold_change <-  hpo_id <- hpo_id <- NULL;
+  effect <-  hpo_id <- hpo_id <- NULL;
 
-  messager("Subsetting results by q_threshold and fold_change.",v=verbose)
+  messager("Subsetting results by q_threshold and effect.",v=verbose)
   #### Filter to sig results only ####
   results_sig <- data.table::copy(results)
   if(is.numeric(q_threshold)){
     results_sig <- results_sig[q<q_threshold]
   }
-  if(is.numeric(fold_threshold)){
-    results_sig <- results_sig[fold_change>fold_threshold]
+  if(is.numeric(effect_threshold)){
+    results_sig <- results_sig[effect>effect_threshold]
   }
   #### Check that celltype is available ####
   if(nrow(results_sig)==0){

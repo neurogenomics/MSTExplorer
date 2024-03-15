@@ -31,6 +31,12 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{celltype_col}{Name of the cell type column in the \code{results}.}
 
+\item{target_branches}{A named list of HPO
+branches each matched with CL cell type branches that
+correspond to on-target cell types across the two ontologies.}
+
+\item{keep_ancestors}{Only HPO terms that have these ancestors will be kept.}
+
 \item{hpo}{Human Phenotype Ontology object,
 loaded from \link[KGExplorer]{get_ontology}.}
 
@@ -42,10 +48,32 @@ For compatibility with the classic interface, can also be a
 formula or character vector. Use either a one sided formula, \code{~a + b},
 or a character vector, \code{c("a", "b")}.}
 
-\item{legend.position}{the position of legends ("none", "left", "right",
-"bottom", "top", or two-element numeric vector)}
+\item{add_test_target_celltypes}{Using the significant phenotype-cell type
+association \code{results}, run proportional enrichment tests to
+determine whether each cell type is overrepresented in a given HPO branch
+relative to all other HPO branches. Overrepresented cell types will be
+denoted by "*" above its bar.}
+
+\item{preferred_palettes}{Preferred palettes to use for each column.}
+
+\item{legend.position}{the default position of legends ("none", "left",
+"right", "bottom", "top", "inside")}
+
+\item{heights}{Passed to \link[patchwork]{wrap_plots}.}
+
+\item{expand_dendro_x}{Passed to \link[ggplot2]{scale_x_discrete}
+in the cell type dendrogram.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
+
+\item{show_plot}{Print the plot to the console.}
+
+\item{save_path}{Save the plot to a file.
+Set to \code{NULL} to not save the plot.}
+
+\item{height}{Height of the saved plot.}
+
+\item{width}{Width of the saved plot.}
 
 \item{...}{
   Arguments passed on to \code{\link[EWCE:ewce_plot]{EWCE::ewce_plot}}
@@ -64,9 +92,6 @@ Should be provided so that the dendrogram can be taken from it
 and added to plots.}
     \item{\code{annotLevel}}{An integer indicating which level of \code{ctd} to
 analyse (\emph{Default: 1}).}
-    \item{\code{heights}}{The relative heights row in the grid. 
-Will get repeated to match the dimensions of the grid.
-Passed to \link[patchwork]{wrap_plots}.}
     \item{\code{make_dendro}}{Add a dendrogram (requires \code{ctd}).}
     \item{\code{verbose}}{Print messages.}
   }}
@@ -75,8 +100,10 @@ Passed to \link[patchwork]{wrap_plots}.}
 A bar chart with dendrogram of EWCE results in each cell type.
 }
 \description{
-Create a plot summarising MSTExplorer results as a bar chart with multiple
-facets and a cell ontology-based dendrogram.
+Create a plot summarising \pkg{MSTExplorer} results as a bar chart
+with multiple facets showing selected branches from the
+Human Phenotype Ontology (HPO). Also shows a dendrogram of celltype-celltype
+relationships using the Cell Ontology (CL).
 }
 \examples{
 results <- load_example_results()

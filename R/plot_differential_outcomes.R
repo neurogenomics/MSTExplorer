@@ -2,6 +2,15 @@
 #'
 #' Plot differential outcomes (annotations) of different diseases as they occur
 #' in different cell types via particular phenotypes.
+#' @param remove_facets A character vector of facets to remove.
+#' @param run_stats If \code{TRUE}, run statistical tests and display the
+#' summary statistics directly on the plot.
+#' @param max_facets Maximum number of facets to display.
+#' @param q_threshold A list of thresholds for significance testing.
+#'
+#' @inherit plot_
+#' @inheritParams plot_bar_dendro
+#' @inheritParams KGExplorer::filter_dt
 #' @inheritDotParams ggstatsplot::ggbetweenstats
 #' @export
 #' @examples
@@ -26,6 +35,7 @@ plot_differential_outcomes <- function(results,
                                        ...
                                        ){
   requireNamespace("ggplot2")
+  n_celltype <- n_ids <- q.value <- NULL;
 
   {
     results <- HPOExplorer::add_hpo_name(results)
@@ -77,6 +87,8 @@ plot_differential_outcomes <- function(results,
                   data=stat_dat))
     }
   } else {
+    requireNamespace("tidytext")
+
     if(!is.null(max_facets)){
       ids <- utils::head(unique(plot_dat[[facet_var]]),max_facets)
       plot_dat <- plot_dat[get(facet_var) %in% ids,]

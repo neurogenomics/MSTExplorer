@@ -1,6 +1,7 @@
 #' Test target cell types
 #'
 #' Test the following hypotheses across \link{gen_results} enrichment results.
+#' @param tests The types of tests to conduct.
 #' \itemize{
 #' \item{"within_branches"}{
 #' Are on-target cell types enriched for significant results?}
@@ -10,6 +11,11 @@
 #' Are on-target cell types enriched for significant results across
 #' branches per cell type?}
 #' }
+#' @param ancestor_var The name of the \code{results} column
+#'  containing the ancestor name.
+#' @inheritParams ggnetwork_plot_full
+#' @inheritParams plot_bar_dendro
+#' @inheritParams plot_bar_dendro_facets
 #' @inheritParams ewce_para
 #' @inheritParams rstatix::anova_test
 #' @export
@@ -28,7 +34,7 @@ test_target_celltypes <- function(results=load_example_results(),
                                   ){
   requireNamespace("dplyr")
   requireNamespace("rstatix")
-  ancestor_name <- NULL;
+  ancestor_name <- is_sig <- is_target <- valid <- cl_id <- NULL;
 
   # results <- HPOExplorer::add_ancestor(results)
   results <- map_celltype(results)
@@ -69,7 +75,7 @@ test_target_celltypes <- function(results=load_example_results(),
           rstatix::anova_test(formula = is_sig ~ is_target,
                               within=dplyr::all_of(within)
                               )
-      }, mc.cores = cores) |> data.table:::rbindlist(idcol = "ancestor_name")|>
+      }, mc.cores = cores) |> data.table::rbindlist(idcol = "ancestor_name")|>
       rstatix::adjust_pvalue(method = "bonf") |>
       rstatix::add_significance()
   }
@@ -104,7 +110,7 @@ test_target_celltypes <- function(results=load_example_results(),
           rstatix::anova_test(formula = is_sig ~ is_target,
                               within=dplyr::all_of(within)
                               )
-      }, mc.cores = cores) |> data.table:::rbindlist(idcol = "ancestor_name")|>
+      }, mc.cores = cores) |> data.table::rbindlist(idcol = "ancestor_name")|>
       rstatix::adjust_pvalue(method = "bonf") |>
       rstatix::add_significance()
   }

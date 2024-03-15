@@ -1,6 +1,17 @@
 #' Plot differential outcomes: heatmap
-#' @export
+#'
+#' @param phenotypes HPO phenotypes to include.
+#' Can be provided either as names (e.g. "Hypotonia") or
+#' HPO IDs (e.g. "HP:0001252").
+#' @param outcome_var Outcome variable to plot.
+#' @param fill_limits Min/max limits for the fill scale.
+#' @param print_phenotypes Print the phenotypes in the subtitle.
+#' @inheritParams plot_
+#' @inheritParams plot_bar_dendro
+#' @inheritParams plot_differential_outcomes
 #' @inheritDotParams add_symptom_results
+#'
+#' @export
 #' @examples
 #' results <- load_example_results()
 #' keep_descendants <- "Hypotonia" # HP:0001252
@@ -27,7 +38,7 @@ plot_differential_outcomes_heatmap <- function(phenotypes = NULL,
                                                height=NULL,
                                                width=NULL,
                                                ...){
-  hpo_id <- NULL;
+  hpo_id <- disease_name <- NULL;
   results <- data.table::copy(results)
   if(!outcome_var %in% names(results)){
     stopper("outcome_var ",shQuote(outcome_var)," not in results.")
@@ -133,13 +144,14 @@ plot_differential_outcomes_heatmap <- function(phenotypes = NULL,
   if(isTRUE(show_plot)) methods::show(pw)
   #### Save ####
   KGExplorer::plot_save(plt  = pw,
-                        path = save_path,
+                        save_path = save_path,
                         height = height,
                         width = width)
   #### Return ####
   return(
     list(plot=pw,
-         data=dat)
+         data=dat,
+         data_agg=dat_mean)
   )
   # X <- data.table::dcast.data.table(long_data,
   #                                   formula=disease_name~cl_name,

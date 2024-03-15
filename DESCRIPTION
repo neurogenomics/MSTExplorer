@@ -48,7 +48,8 @@ Imports:
     GeneOverlap,
     future,
     furrr,
-    tidygraph
+    tidygraph,
+    rstatix
 Suggests: 
     rmarkdown,
     knitr,
@@ -62,10 +63,16 @@ Suggests:
     ggpubr, 
     igraph,
     ggdendro,
-    dendextend
+    gginnards,
+    ggstatsplot,
+    paletteer,
+    tibble,
+    tidytext,
+    phenomix
 Remotes: 
   github::neurogenomics/HPOExplorer,
   github::neurogenomics/KGExplorer,
+  github::neurogenomics/phenomix,
   github::NathanSkene/EWCE
 VignetteBuilder: knitr
 Config/testthat/edition: 3

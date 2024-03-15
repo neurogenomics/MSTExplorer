@@ -39,7 +39,8 @@ plot_proportional_enrichment <- function (results=load_example_results(),
   #       by.y="subject")
   requireNamespace("ggplot2")
   ancestor_name <- pct <- pct_min <- pct_max <- enrichment <- pct_celltype <-
-    enrichment_mean <- NULL;
+    enrichment_mean <- minus_log_p <- p <- celltype_label <- baseline <-
+    n_celltype <- branch <- NULL;
 
   results <- HPOExplorer::add_hpo_name(results)
   results <- HPOExplorer::add_ancestor(results,

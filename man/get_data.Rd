@@ -10,7 +10,8 @@ get_data(
   save_dir = KGExplorer::cache_dir(package = "MSTExplorer"),
   overwrite = TRUE,
   tag = "latest",
-  check = FALSE
+  check = FALSE,
+  ...
 )
 }
 \arguments{
@@ -22,6 +23,22 @@ get_data(
 default \code{TRUE}.}
 
 \item{tag}{tag for the GitHub release to which this data should be attached.}
+
+\item{...}{
+  Arguments passed on to \code{\link[piggyback:pb_download]{piggyback::pb_download}}
+  \describe{
+    \item{\code{file}}{name or vector of names of files to be downloaded. If \code{NULL},
+all assets attached to the release will be downloaded.}
+    \item{\code{dest}}{name of vector of names of where file should be downloaded.
+Can be a directory or a list of filenames the same length as \code{file}
+vector. Any directories in the path provided must already exist.}
+    \item{\code{ignore}}{a list of files to ignore (if downloading "all" because
+\code{file=NULL}).}
+    \item{\code{use_timestamps}}{DEPRECATED.}
+    \item{\code{show_progress}}{logical, show a progress bar be shown for uploading?
+Defaults to \verb{[interactive()]} - can also set globally with options("piggyback.verbose")}
+    \item{\code{.token}}{GitHub authentication token, see \verb{[gh::gh_token()]}}
+  }}
 }
 \description{
 Download remotely stored data via \link[piggyback]{pb_download}.

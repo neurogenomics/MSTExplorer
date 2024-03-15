@@ -20,7 +20,7 @@ agg_results <- function(phenos,
                         group_var = "CellType",
                         sep="; ",
                         verbose = TRUE){
-  fold_change <- sd_from_mean <- . <- gene_symbol <- NULL;
+  effect <- sd_from_mean <- . <- gene_symbol <- NULL;
   messager("Aggregating results by",
            paste0("group_var=",paste(shQuote(group_var),collapse = "/")),
            v=verbose)
@@ -34,7 +34,7 @@ agg_results <- function(phenos,
     genes=if("gene_symbol" %in% names(phenos)){
       paste(unique(gene_symbol),collapse = sep)
     } else NA,
-    mean_fold_change=round(mean(fold_change),3),
+    mean_effect=round(mean(effect),3),
     mean_q=round(mean(q),3),
     mean_sd_from_mean=round(mean(sd_from_mean),3),
     values=paste(
@@ -46,7 +46,7 @@ agg_results <- function(phenos,
                    "count",
                    "n_genes",
                    "genes",
-                   "mean_fold_change",
+                   "mean_effect",
                    "mean_q",
                    "mean_sd_from_mean",
                    "values"), with=FALSE])

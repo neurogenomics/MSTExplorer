@@ -9,8 +9,12 @@
 #'  \link[MSTExplorer]{prioritise_targets}.
 #' @param drug_types Filter results by drug type.
 #' @param keep_status Filter results by drug approval status.
-#' @param show_plot Show the plot.
+#' @param failed_status Drug approval status categories that indicate
+#' the drug failed.
+#' @param remove_status Remove results by drug approval status.
+#' @inheritParams plot_
 #' @inheritParams load_example_ctd
+#' @inheritParams data.table::merge.data.table
 #'
 #' @export
 #' @importFrom utils tail
@@ -86,9 +90,10 @@ ttd_check <- function(top_targets,
   if(!is.null(remove_status)){
     dat_sub <- dat_sub[!HIGHEST_STATUS %in% remove_status,]
   }
+  dat_sub[,failed:=HIGHEST_STATUS %in% failed_status]
   #### Filter to only those in top_targets ####
   dat_sub2 <- (merge(
-        dat_sub[!HIGHEST_STATUS %in% failed_status],
+        dat_sub[failed==FALSE],
         top_targets,
         allow.cartesian = allow.cartesian,
         by.x = "GENENAME3",
@@ -111,7 +116,7 @@ ttd_check <- function(top_targets,
   if(isTRUE(show_plot)) methods::show(plt)
   #### Save ####
   KGExplorer::plot_save(plt = plt,
-                        path=save_path,
+                        save_path=save_path,
                         height=height,
                         width=width)
   #### Return ####

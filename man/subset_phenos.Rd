@@ -10,7 +10,7 @@ subset_phenos(
   results = load_example_results(),
   hpo = HPOExplorer::get_hpo(),
   q_threshold = 5e-04,
-  fold_threshold = 1,
+  effect_threshold = 1,
   verbose = TRUE
 )
 }
@@ -32,7 +32,7 @@ loaded from \link[KGExplorer]{get_ontology}.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
-\item{fold_threshold}{The minimum fold change in specific expression
+\item{effect_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
 
 \item{verbose}{Print messages.}

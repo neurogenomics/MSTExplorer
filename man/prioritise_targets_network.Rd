@@ -20,8 +20,8 @@ prioritise_targets_network(
   vertex_vars = c("disease_name", "hpo_name", "cl_name", "gene_symbol"),
   group_var = vertex_vars[[1]],
   colour_var = "node_type",
-  edge_color_var = "fold_change",
-  edge_size_var = "fold_change",
+  edge_color_var = "logFC",
+  edge_size_var = "logFC",
   mediator_var = list(c(1, 2), c(2, 3), c(3, 4), c(1, 3)),
   layout = "layout_with_sugiyama",
   solver = "forceAtlas2Based",
@@ -130,6 +130,9 @@ list(from = 1, to = 1) to control degree in both direction.}
 
 \item{save_path}{Path to save interactive plot to
 as a self-contained HTML file.}
+
+\item{run_prune_ancestors}{Prune redundant ancestral terms if any of their
+descendants are present. Passes to \link[KGExplorer]{prune_ancestors}.}
 }
 \value{
 A named list containing the \link[visNetwork]{visNetwork} plot

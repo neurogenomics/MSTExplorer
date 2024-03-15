@@ -4,12 +4,14 @@
 #' @param save_dir Directory to save data to.
 #' @keywords internal
 #' @inheritParams piggyback::pb_download
+#' @inheritDotParams piggyback::pb_download
 get_data <- function(fname,
                      repo = "neurogenomics/MSTExplorer",
                      save_dir = KGExplorer::cache_dir(package="MSTExplorer"),
                      overwrite = TRUE,
                      tag = "latest",
-                     check = FALSE
+                     check = FALSE,
+                     ...
                      ){
   requireNamespace("piggyback")
   Sys.setenv("piggyback_cache_duration" = 10)
@@ -21,7 +23,8 @@ get_data <- function(fname,
     dest = save_dir,
     repo = repo,
     overwrite = overwrite,
-    tag = tag
+    tag = tag,
+    ...
   )
   #### Read/return ####
   if(grepl("\\.rds$",tmp)){

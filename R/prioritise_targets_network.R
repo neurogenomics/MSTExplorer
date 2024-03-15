@@ -30,7 +30,7 @@
 #'  In case of "hierarchical" algorithm, you can also pass a
 #'  list(from = 1, to = 1) to control degree in both direction.
 #' @param verbose Print messages.
-#'
+#' @inheritParams prioritise_targets
 #' @inheritParams KGExplorer::plot_graph_visnetwork
 #' @returns A named list containing the \link[visNetwork]{visNetwork} plot
 #' and the the graph used to make the plot.
@@ -47,8 +47,8 @@ prioritise_targets_network <- function(top_targets,
                                                        "gene_symbol"),
                                        group_var = vertex_vars[[1]],
                                        colour_var = "node_type",
-                                       edge_color_var = "fold_change",
-                                       edge_size_var = "fold_change",
+                                       edge_color_var = "logFC",
+                                       edge_size_var = "logFC",
                                        # mediator_var = list(),
                                        mediator_var = list(c(1,2),c(2,3),c(3,4),c(1,3)),
                                        layout = "layout_with_sugiyama",
@@ -80,8 +80,15 @@ prioritise_targets_network <- function(top_targets,
   requireNamespace("ggplot2")
   requireNamespace("pals")
 
+  add_logfc(top_targets)
+  if(any(c("cl_name","cl_id") %in% vertex_vars)){
+    map_celltype(top_targets)
+  }
   if(isTRUE(run_prune_ancestors)){
-    top_targets <- prune_ancestors(dat = top_targets)
+    hpo <- HPOExplorer::get_hpo()
+    top_targets <- KGExplorer::prune_ancestors(dat = top_targets,
+                                               id_col = "hpo_id",
+                                               ont = hpo)
   }
   #### Network ####
   g <- targets_to_graph(top_targets = top_targets,

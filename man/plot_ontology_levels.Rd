@@ -7,7 +7,10 @@
 plot_ontology_levels(
   results = load_example_results(),
   p2g = HPOExplorer::load_phenotype_to_genes(),
-  x_vars = c("genes", "cell types", "log(fold change)", "mean_specificity"),
+  x_vars = c("genes", "cell types", "estimate", "mean_specificity"),
+  log_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "effect"),
+  sig_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "effect", "cell types",
+    "mean_specificity"),
   group_vars = c("hpo_id", "ontLvl", "ctd"),
   q_threshold = 0.05,
   min_value = NULL,
@@ -15,7 +18,7 @@ plot_ontology_levels(
   label.y.npc = 0.5,
   n.breaks = 4,
   notch = FALSE,
-  nrow = 1,
+  nrow = 2,
   show_plot = TRUE,
   save_path = NULL,
   height = 7,
@@ -32,12 +35,19 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{x_vars}{Variables to plot on the x-axis of each subplot.}
 
+\item{log_vars}{Logical vector indicating which variables to log-transform.}
+
+\item{sig_vars}{Logical vector indicating which variables to only plot
+for significant results.}
+
 \item{group_vars}{Compute the mean value for each \code{x_vars}
 grouped by the \code{group_vars}.
 This can be less accurate for some metrics but helps to drastically
 reduce computational load.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
+
+\item{min_value}{Minimum value for the \code{specificity} metric.}
 
 \item{label.x.npc, label.y.npc}{can be \code{numeric} or \code{character}
  vector of the same length as the number of groups and/or panels. If too
@@ -50,10 +60,26 @@ reduce computational load.}
 
  If too short they will be recycled.}
 
+\item{n.breaks}{Passed to \link[ggplot2]{scale_fill_viridis_c}.}
+
 \item{notch}{If \code{FALSE} (default) make a standard box plot. If
 \code{TRUE}, make a notched box plot. Notches are used to compare groups;
 if the notches of two boxes do not overlap, this suggests that the medians
 are significantly different.}
+
+\item{nrow}{Number of facet rows for the plot.}
+
+\item{show_plot}{Print the plot to the console.}
+
+\item{save_path}{Save the plot to a file.
+Set to \code{NULL} to not save the plot.}
+
+\item{height}{Height of the saved plot.}
+
+\item{width}{Width of the saved plot.}
+
+\item{smooth.line.args}{A list of additional aesthetic arguments to be passed
+to \code{geom_smooth} geom used to display the regression line.}
 }
 \value{
 A named list containing the data and the plot.

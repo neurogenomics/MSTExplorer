@@ -15,6 +15,9 @@ load_example_ctd(
 \arguments{
 \item{file}{Name of a remotely stored file.}
 
+\item{multi_dataset}{Return a named list of multiple CTDs
+instead of just one CTD.}
+
 \item{tag}{tag for the GitHub release to which this data should be attached.}
 
 \item{save_dir}{Where to store the file locally.}

@@ -9,6 +9,7 @@
 #' \item{"mean_exp_quantiles"} Mean expression quantile per cell-type.
 #' }
 #' @param keep_celltypes A character vector of cell types to keep.
+#' @inheritParams ewce_para
 #' @inheritParams prioritise_targets
 #' @inheritParams plot_report
 #' @inheritParams data.table::merge.data.table

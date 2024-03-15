@@ -10,9 +10,9 @@ ggnetwork_plot_full(
   results = load_example_results(),
   hpo = HPOExplorer::get_hpo(),
   q_threshold = 5e-04,
-  fold_threshold = 1,
+  effect_threshold = 1,
   columns = HPOExplorer::list_columns(),
-  colour_var = "fold_change",
+  colour_var = "effect",
   size_var = "ontLvl_relative",
   add_ont_lvl_absolute = TRUE,
   add_ont_lvl_relative = TRUE,
@@ -40,7 +40,7 @@ loaded from \link[KGExplorer]{get_ontology}.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
-\item{fold_threshold}{The minimum fold change in specific expression
+\item{effect_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
 
 \item{columns}{A named vector of columns in \code{phenos}

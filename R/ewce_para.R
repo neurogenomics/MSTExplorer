@@ -1,7 +1,7 @@
 #' EWCE parallel
 #'
 #' Runs EWCE in parallel on multiple gene lists.
-#' @param ctd Cell Type Data List generated using
+#' @param ctd CellTypeDataset generated using
 #'  \link[EWCE]{generate_celltype_data}.
 #' @param list_names character vector of gene list names.
 #' @param gene_data data frame of gene list names and genes

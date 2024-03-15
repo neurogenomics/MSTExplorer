@@ -15,13 +15,13 @@ subset_phenos <- function(filters = NULL,
                           results = load_example_results(),
                           hpo = HPOExplorer::get_hpo(),
                           q_threshold = 0.0005,
-                          fold_threshold = 1,
+                          effect_threshold = 1,
                           verbose = TRUE) {
-  #### Subset by q, fold_change, and celltype ####
+  #### Subset by q, effect, and celltype ####
   phenos <- subset_results(filters = filters,
                            results = results,
                            q_threshold = q_threshold,
-                           fold_threshold = fold_threshold,
+                           effect_threshold = effect_threshold,
                            verbose = verbose)
   #### Subset by ancestor ####
   phenos <- HPOExplorer::filter_descendants(phenos = phenos,

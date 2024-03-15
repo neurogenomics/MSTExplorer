@@ -1,4 +1,6 @@
 run_similarity <- function(X_list=NULL){
+  requireNamespace("tibble")
+
   if(is.null(X_list)){
     messager("Creating default correlation matrices.")
     X_list <- list()
@@ -12,7 +14,7 @@ run_similarity <- function(X_list=NULL){
       )
     #### Celltype-based similarity ####
     results <- load_example_results()
-    # results[,combined_score:=(1-p)*fold_change]
+    # results[,combined_score:=(1-p)*effect]
     X_list[["celltypes"]] <- data.table::dcast.data.table(
       results,
       formula =  paste0(ctd,".",CellType) ~ hpo_id,
@@ -28,7 +30,7 @@ run_similarity <- function(X_list=NULL){
   }
   #### Run Correlations on each matrix ####
   Xcor_list <- lapply(X_list, function(X) {
-    WGCNA::cor(X)
+    # WGCNA::cor(X)
   })
   #### Run decomposition before computing correlations ####
   reduc_list <- lapply(X_list, function(X) {
@@ -56,22 +58,22 @@ run_similarity <- function(X_list=NULL){
   #### Find intersecting rownames ####
   ids <- Reduce(intersect, lapply(Xcor_list, rownames))
   #### Test how similar each pair of correlation matrices are to each other ####
-  cor_tests <- combn(x=names(Xcor_list), m=2, simplify=FALSE,
-                        function(x){
-    messager("Testing:", x[1], "vs.", x[2])
-      stats::cor.test(Xcor_list[[x[1]]][ids, ids],
-                      Xcor_list[[x[2]]][ids, ids],
-             method="pearson")
-  })|> `names<-`( combn(x=names(Xcor_list), m=2, simplify=FALSE,
-                        function(x) paste(x, collapse = ".")) )
-  cor_dt <- lapply(cor_tests, broom::tidy)|>
-    data.table::rbindlist(idcol = "test")
+  # cor_tests <- combn(x=names(Xcor_list), m=2, simplify=FALSE,
+  #                       function(x){
+  #   messager("Testing:", x[1], "vs.", x[2])
+  #     stats::cor.test(Xcor_list[[x[1]]][ids, ids],
+  #                     Xcor_list[[x[2]]][ids, ids],
+  #            method="pearson")
+  # })|> `names<-`( combn(x=names(Xcor_list), m=2, simplify=FALSE,
+  #                       function(x) paste(x, collapse = ".")) )
+  # cor_dt <- lapply(cor_tests, broom::tidy)|>
+  #   data.table::rbindlist(idcol = "test")
 
 
   #### Return ####
-  return(
-    list(X_list = X_list,
-         Xcor_list = Xcor_list,
-         cor_dt = cor_dt)
-  )
+  # return(
+  #   list(X_list = X_list,
+  #        Xcor_list = Xcor_list,
+  #        cor_dt = cor_dt)
+  # )
 }

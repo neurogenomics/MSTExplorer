@@ -5,6 +5,8 @@
 #' During Development single-cell RNA-seq atlas at annotation level 1.
 #' @param file Name of a remotely stored file.
 #' @param save_dir Where to store the file locally.
+#' @param multi_dataset Return a named list of multiple CTDs
+#' instead of just one CTD.
 #' @inheritParams piggyback::pb_download
 #'
 #' @export

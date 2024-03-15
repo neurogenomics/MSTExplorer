@@ -1,10 +1,26 @@
 #' Plot bar dendrogram
 #'
-#' Create a plot summarising MSTExplorer results as a bar chart with multiple
-#'  facets and a cell ontology-based dendrogram.
+#' Create a plot summarising \pkg{MSTExplorer} results as a bar chart
+#' with multiple facets showing selected branches from the
+#' Human Phenotype Ontology (HPO). Also shows a dendrogram of celltype-celltype
+#' relationships using the Cell Ontology (CL).
 #' @param celltype_col Name of the cell type column in the \code{results}.
+#' @param target_branches A named list of HPO
+#' branches each matched with CL cell type branches that
+#' correspond to on-target cell types across the two ontologies.
+#' @param keep_ancestors Only HPO terms that have these ancestors will be kept.
+#' @param add_test_target_celltypes Using the significant phenotype-cell type
+#' association \code{results}, run proportional enrichment tests to
+#' determine whether each cell type is overrepresented in a given HPO branch
+#' relative to all other HPO branches. Overrepresented cell types will be
+#' denoted by "*" above its bar.
+#' @param expand_dendro_x Passed to \link[ggplot2]{scale_x_discrete}
+#' in the cell type dendrogram.
+#' @inheritParams plot_
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams HPOExplorer::add_ancestor
+#' @inheritParams KGExplorer::map_colors
+#' @inheritParams KGExplorer::plot_save
 #' @inheritParams ggplot2::facet_wrap
 #' @inheritParams ggplot2::theme
 #' @inheritDotParams EWCE::ewce_plot
@@ -35,9 +51,8 @@ plot_bar_dendro <- function(results = load_example_results(),
   requireNamespace("patchwork")
   requireNamespace("ggdendro")
   requireNamespace("scales")
-  hpo_id <- p <- fold_change <- ancestor_name <- ancestor_color <- cl_id <-
-    sig_phenotypes_norm <- sig_phenotypes <- top_ancestor_name <-
-    dummy <- NULL;
+  hpo_id <- cl_id <- sig_phenotypes <-
+    dummy <- total_phenotypes <- phenotypes_per_ancestor <- NULL;
 
   {
     results <- results[,total_phenotypes:=data.table::uniqueN(hpo_id)]
@@ -59,7 +74,8 @@ plot_bar_dendro <- function(results = load_example_results(),
   ## Convert ontology to dendrogram ontology
   {
     cl <- KGExplorer::get_ontology(name = "cl",
-                                   add_ancestors = 1)
+                                   add_ancestors = 1,
+                                   remove_rings=TRUE)
     ddata <- ontology_to_ggdendro(ont=cl,
                                   terms=as.character(unique(results$cl_id)))
     #### Make celltypes an ordered factor based on the clustering #####
@@ -69,12 +85,13 @@ plot_bar_dendro <- function(results = load_example_results(),
   }
   #### Filter the results ####
   by <- unique(c(celltype_col,"cl_id","ancestor","ancestor_name"))
+  add_logfc(results)
   dat <- results[q<q_threshold & cl_id %in% unique(ddata$labels$id),
                  lapply(.SD,mean),
                  by=by,
                  .SDcols = c("sig_phenotypes",
                              "phenotypes_per_ancestor",
-                             "p","q","fold_change")
+                             "p","q","logFC")
                  ]
   #### Get the top HPO category for each cell type ####
   add_top_value(dat=dat,
@@ -106,7 +123,7 @@ plot_bar_dendro <- function(results = load_example_results(),
                    strip.background = ggplot2::element_rect(fill = "transparent")
                    )
   #### Create faceted bar plot ####
-  ggbars_out <- plot_bar_branches(results=dat,
+  ggbars_out <- plot_bar_dendro_facets(results=dat,
                                   results_full=results_full,
                                   target_branches=target_branches,
                                   target_celltypes=target_celltypes,
@@ -146,7 +163,7 @@ plot_bar_dendro <- function(results = load_example_results(),
   #### Save plot ####
   if(!is.null(save_path)){
     KGExplorer::plot_save(plt = ggp,
-                          path = save_path,
+                          save_path = save_path,
                           height = height,
                           width = width)
   }

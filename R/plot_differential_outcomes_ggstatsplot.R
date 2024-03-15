@@ -10,6 +10,9 @@ plot_differential_outcomes_ggstatsplot <- function(plot_dat,
                                                    centrality.plotting = FALSE,
                                                    pairwise.comparisons = TRUE,
                                                    ...){
+  requireNamespace("paletteer")
+  requireNamespace("ggstatsplot")
+  median_y <- pct <- N <- NULL;
   # valid_facets <- plot_dat[, list(N=.N,
   #                                 sd=sd(get(y_var))
   #                                 ),
@@ -24,7 +27,9 @@ plot_differential_outcomes_ggstatsplot <- function(plot_dat,
                             facet_var = facet_var,
                             facet_subset = valid_facets,
                             max_facets = max_facets)
-  valid_pal <- subset(paletteer::palettes_d_names,length>=length(unique(plot_dat[[x_var]])))|>data.frame()
+  valid_pal <- subset(paletteer::palettes_d_names,
+                      length>=length(unique(plot_dat[[x_var]])))|>
+    data.frame()
   valid_dat <- valid_dat[!get(facet_var) %in% remove_facets]
   plts_list <- lapply(stats::setNames(unique(valid_dat[[facet_var]]),
                                       unique(valid_dat[[facet_var]])),
@@ -34,7 +39,7 @@ plot_differential_outcomes_ggstatsplot <- function(plot_dat,
    # d <- d[,x_var_n:=.N,by=x_var][x_var_n>1]
    #### Make celltypes an ordered factor ####
    if(is.numeric(d[[y_var]])){
-     d[,median_y:=median(get(y_var)),by=c(facet_var,x_var)]
+     d[,median_y:=stats::median(get(y_var)),by=c(facet_var,x_var)]
      d[,(x_var):=factor(get(x_var),levels=unique(get(x_var)), ordered = TRUE)]
      data.table::setorderv(d, "median_y")
      method <- "ggbetweenstats"

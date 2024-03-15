@@ -11,7 +11,7 @@ plot_report(
   annot = HPOExplorer::load_phenotype_to_genes("phenotype.hpoa"),
   remove_cols = c("Rows", "ids"),
   show_plot = TRUE,
-  save_plot = tempfile(fileext = "_plot_report.pdf"),
+  save_path = tempfile(fileext = "_plot_report.pdf"),
   verbose = TRUE,
   ...
 )
@@ -30,9 +30,10 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{remove_cols}{Columns to remove from \code{rep_dt}.}
 
-\item{show_plot}{Show the plot.}
+\item{show_plot}{Print the plot to the console.}
 
-\item{save_plot}{Path to save the plot to.}
+\item{save_path}{Save the plot to a file.
+Set to \code{NULL} to not save the plot.}
 
 \item{verbose}{Print messages.}
 
@@ -43,13 +44,16 @@ and merged together with \link[MSTExplorer]{merge_results}}
     \item{\code{plot}}{Plot to save, defaults to last plot displayed.}
     \item{\code{device}}{Device to use. Can either be a device function
 (e.g. \link{png}), or one of "eps", "ps", "tex" (pictex),
-"pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only).}
+"pdf", "jpeg", "tiff", "png", "bmp", "svg" or "wmf" (windows only). If
+\code{NULL} (default), the device is guessed based on the \code{filename} extension.}
     \item{\code{path}}{Path of the directory to save plot to: \code{path} and \code{filename}
 are combined to create the fully qualified file name. Defaults to the
 working directory.}
     \item{\code{scale}}{Multiplicative scaling factor.}
-    \item{\code{width,height,units}}{Plot size in \code{units} ("in", "cm", "mm", or "px").
-If not supplied, uses the size of current graphics device.}
+    \item{\code{width,height}}{Plot size in units expressed by the \code{units} argument.
+If not supplied, uses the size of the current graphics device.}
+    \item{\code{units}}{One of the following units in which the \code{width} and \code{height}
+arguments are expressed: \code{"in"}, \code{"cm"}, \code{"mm"} or \code{"px"}.}
     \item{\code{dpi}}{Plot resolution. Also accepts a string input: "retina" (320),
 "print" (300), or "screen" (72). Applies only to raster output types.}
     \item{\code{limitsize}}{When \code{TRUE} (the default), \code{ggsave()} will not
@@ -57,6 +61,10 @@ save images larger than 50x50 inches, to prevent the common error of
 specifying dimensions in pixels.}
     \item{\code{bg}}{Background colour. If \code{NULL}, uses the \code{plot.background} fill value
 from the plot theme.}
+    \item{\code{create.dir}}{Whether to create new directories if a non-existing
+directory is specified in the \code{filename} or \code{path} (\code{TRUE}) or return an
+error (\code{FALSE}, default). If \code{FALSE} and run in an interactive session,
+a prompt will appear asking to create a new directory when necessary.}
   }}
 }
 \value{

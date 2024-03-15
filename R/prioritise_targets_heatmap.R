@@ -1,7 +1,7 @@
 prioritise_targets_heatmap <- function(top_targets,
                                        group_vars = c("CellType",
                                                       "hpo_name"),
-                                       value_var = "fold_change"){
+                                       value_var = "effect"){
 
   requireNamespace("ComplexHeatmap")
 

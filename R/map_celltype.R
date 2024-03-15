@@ -23,7 +23,7 @@ map_celltype <- function(results,
                          by=c("ctd","author_celltype"),
                          add_stage=TRUE
                          ){
-  author_celltype <- NULL;
+  author_celltype <- ctd <- CellType <- NULL;
   #### Check for existing columns ####
   new_cols <- c("cl_id","cl_name")
   if(all(new_cols %in% names(results))) {

@@ -113,12 +113,12 @@ library(data.table)
 #### Aggregate results ####
 n_signif <- results[q<=0.05 & !is.na(q),
                         list(sig_enrichments = .N,
-                             mean_fold_change=mean(fold_change)), 
+                             mean_effect=mean(effect)), 
                         by="hpo_id"]
 #### Plot #### 
 plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(hpo_id,width = 10),
                                y = sig_enrichments,
-                               fill = mean_fold_change)) +
+                               fill = mean_effect)) +
     geom_col() +
     labs(x="Phenotype",y="Enrichments (n)") + 
     theme_bw() 

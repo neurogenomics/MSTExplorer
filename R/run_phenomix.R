@@ -1,24 +1,35 @@
 #' Run phenomix
 #'
-#'
+#' Run many phenotype-cell type association tests in parallel using
+#' \link[phenomix]{iterate_lm}.
+#' @param ctd_name Name of the CTD to load.
+#' @param metric Which matrix within the CTD to use
+#' (e.g. "mean_exp","specificity","specificity_quantiles").
+#' @param save_path Path to save the table of aggregated results to.
+#' @inheritParams ewce_para
+#' @inheritParams phenomix::iterate_lm
 #' @export
 #' @examples
-#' ymat <- HPOExplorer::hpo_to_matrix()
-#' ymat <- ymat[,1:10]
-#' lm_res <- run_phenomix(ctd_name = "HumanCellLandscape",
-#'                        annotLevel = 3,
-#'                        ymat = ymat,
-#'                        save_path=tempfile())
+#' \dontrun{
+#'   ymat <- HPOExplorer::hpo_to_matrix()
+#'   ymat <- ymat[,1:10]
+#'   lm_res <- run_phenomix(ctd_name = "HumanCellLandscape",
+#'                          annotLevel = 3,
+#'                          ymat = ymat,
+#'                          save_path=tempfile())
+#' }
 run_phenomix <- function(ctd_name,
                          annotLevel,
                          ymat,
                          test_method="glm",
                          metric="specificity",
-                         ctd = MSTExplorer::load_example_ctd(
+                         ctd = load_example_ctd(
                            file = paste0("ctd_",ctd_name,".rds")
                            ),
                          xmat = ctd[[annotLevel]][[metric]],
-                         save_path = here::here(
+                         save_path = file.path(
+                           tempfile(),
+                           # here::here(),
                            "results",paste0("phenomix_",test_method,"_",metric),
                            paste0("phenomix_",ctd_name,"_results.tsv.gz")
                          ),
@@ -27,6 +38,9 @@ run_phenomix <- function(ctd_name,
                          force_new = FALSE,
                          ...
 ){
+  requireNamespace("phenomix")
+  effect <- NULL;
+
   if(file.exists(save_path) && isFALSE(force_new)){
     message("Loading existing results from ",save_path)
     return(data.table::fread(save_path))
@@ -51,11 +65,11 @@ run_phenomix <- function(ctd_name,
                          c("xvar","yvar"),
                          c("CellType","hpo_id"))
     # x-u/sd
-    # lm_res[,tmp:=log(scales::rescale(estimate,c(1,2)))][,fold_change:=(tmp-mean(tmp))/sd(tmp)]
-    # lm_res[,fold_change:=log(abs(estimate)/mean(abs(estimate)))][,fold_change:=fold_change+abs(min(fold_change))]
-    # lm_res[,fold_change:=scales::rescale(log(abs(estimate)),c(0,5))]
-    lm_res[,fold_change:=log(scales::rescale(get(effect_var),c(1,5)))]
-    # hist(lm_res$fold_change)
+    # lm_res[,tmp:=log(scales::rescale(estimate,c(1,2)))][,effect:=(tmp-mean(tmp))/stats::sd(tmp)]
+    # lm_res[,effect:=log(abs(estimate)/mean(abs(estimate)))][,effect:=effect+abs(min(effect))]
+    # lm_res[,effect:=scales::rescale(log(abs(estimate)),c(0,5))]
+    lm_res[,effect:=log(scales::rescale(get(effect_var),c(1,5)))]
+    # hist(lm_res$effect)
   }
   run_phenomix_postprocess(lm_res,
                            annotLevel=annotLevel)

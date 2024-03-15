@@ -23,9 +23,23 @@ ttd_check(
 
 \item{drug_types}{Filter results by drug type.}
 
+\item{failed_status}{Drug approval status categories that indicate
+the drug failed.}
+
 \item{keep_status}{Filter results by drug approval status.}
 
-\item{show_plot}{Show the plot.}
+\item{remove_status}{Remove results by drug approval status.}
+
+\item{allow.cartesian}{See \code{allow.cartesian} in \code{\link[data.table]{[.data.table}}.}
+
+\item{show_plot}{Print the plot to the console.}
+
+\item{save_path}{Save the plot to a file.
+Set to \code{NULL} to not save the plot.}
+
+\item{height}{Height of the saved plot.}
+
+\item{width}{Width of the saved plot.}
 }
 \description{
 Identify the overlap between your prioritised list of gene therapy targets

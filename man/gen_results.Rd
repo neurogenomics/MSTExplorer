@@ -26,7 +26,7 @@ gen_results(
 )
 }
 \arguments{
-\item{ctd}{Cell Type Data List generated using
+\item{ctd}{CellTypeDataset generated using
 \link[EWCE]{generate_celltype_data}.}
 
 \item{gene_data}{data frame of gene list names and genes

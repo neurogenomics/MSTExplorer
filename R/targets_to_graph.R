@@ -10,7 +10,7 @@ targets_to_graph <- function(top_targets,
                                              "ancestor_name",
                                              "CellType",
                                              "q",
-                                             "fold_change"
+                                             "effect"
                                              # "tier_merge",
                                              # "disease_characteristic",
                                              # "gene_biotype"
@@ -22,15 +22,15 @@ targets_to_graph <- function(top_targets,
                                              #      names(top_targets),
                                              #      value = TRUE)
                                              ) |> unique(),
-                             edge_color_var = "fold_change",
-                             edge_size_var = "fold_change",
+                             edge_color_var = "effect",
+                             edge_size_var = "effect",
                              mediator_var = "gene_symbol",
                              format="visnetwork",
                              verbose=TRUE){
   # devoptera::args2vars(targets_to_graph)
   requireNamespace("igraph")
   requireNamespace("tidygraph")
-  fold_change <- node_type <- shape <- node <- disease_name <-
+  effect <- node_type <- shape <- node <- disease_name <-
     disease_id <- hpo_name <- ancestor_name <- from <- to <- NULL;
 
   messager("Creating network.",v=verbose)
@@ -125,7 +125,7 @@ targets_to_graph <- function(top_targets,
       vv <- vertex_vars[c(i,i+1)]
       dt <- unique(
         top_targets[,c(vv,c(edge_color_var,edge_size_var)),
-                    with=FALSE][,fold_change:=mean(fold_change), by=vv]
+                    with=FALSE][,effect:=mean(effect), by=vv]
       )
       names(dt) <- c("from","to","color","width")
       dt

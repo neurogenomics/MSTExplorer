@@ -15,7 +15,7 @@ get_valid_gene_lists(
 )
 }
 \arguments{
-\item{ctd}{Cell Type Data List generated using
+\item{ctd}{CellTypeDataset generated using
 \link[EWCE]{generate_celltype_data}.}
 
 \item{list_names}{character vector of gene list names.}

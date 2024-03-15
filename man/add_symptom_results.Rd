@@ -7,7 +7,7 @@
 add_symptom_results(
   results = load_example_results(),
   q_threshold = 0.05,
-  fold_threshold = NULL,
+  effect_threshold = NULL,
   celltype_col = "CellType",
   ctd_list = load_example_ctd(file = paste0("ctd_", unique(results$ctd), ".rds"),
     multi_dataset = TRUE),
@@ -25,14 +25,30 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
-\item{fold_threshold}{The minimum fold change in specific expression
+\item{effect_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
+
+\item{celltype_col}{Cell type column name in \code{results}.}
+
+\item{ctd_list}{A named list of CellTypeDataset objects each
+created with \link[EWCE]{generate_celltype_data}.}
 
 \item{phenotype_to_genes}{Output of
 \link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
 to gene annotations.}
 
+\item{annotLevels}{The annotation level to use within each CTD in
+\code{ctd_list}.}
+
+\item{keep_quantiles}{Quantiles to keep in each CellTypeDataset of the
+\code{ctd_list}.}
+
 \item{top_n}{Top N genes to keep when grouping by \code{group_vars}.}
+
+\item{proportion_driver_genes_symptom_threshold}{The minimum proportion of
+overlap between symptom genes (genes annotated to a phenotype
+via a specific disease) and the driver genes
+(genes driving a signficant phenotype-cell type association).}
 }
 \description{
 Add symptom results to the results data.table.

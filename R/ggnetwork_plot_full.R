@@ -7,7 +7,7 @@
 #'  \link[MSTExplorer]{gen_results}
 #'  and merged together with \link[MSTExplorer]{merge_results}
 #' @param q_threshold The q value threshold to subset the \code{results} by.
-#' @param fold_threshold The minimum fold change in specific expression
+#' @param effect_threshold The minimum fold change in specific expression
 #'  to subset the \code{results} by.
 #' @inheritParams HPOExplorer::make_phenos_dataframe
 #' @inheritParams HPOExplorer::make_network_plot
@@ -29,9 +29,9 @@ ggnetwork_plot_full <- function(filters,
                                 results = load_example_results(),
                                 hpo = HPOExplorer::get_hpo(),
                                 q_threshold = 0.0005,
-                                fold_threshold = 1,
+                                effect_threshold = 1,
                                 columns = HPOExplorer::list_columns(),
-                                colour_var = "fold_change",
+                                colour_var = "effect",
                                 size_var = "ontLvl_relative",
                                 add_ont_lvl_absolute = TRUE,
                                 add_ont_lvl_relative = TRUE,
@@ -45,7 +45,7 @@ ggnetwork_plot_full <- function(filters,
                           results = results,
                           hpo = hpo,
                           q_threshold = q_threshold,
-                          fold_threshold = fold_threshold,
+                          effect_threshold = effect_threshold,
                           verbose = verbose)
   phenos <- HPOExplorer::add_hpo_name(phenos = phenos,
                                       hpo = hpo)

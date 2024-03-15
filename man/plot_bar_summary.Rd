@@ -10,7 +10,7 @@ plot_bar_summary(
   group_var = "CellType",
   keywords = NULL,
   q_threshold = 5e-04,
-  fold_threshold = 1,
+  effect_threshold = 1,
   filters = NULL,
   keep_descendants = NULL,
   hpo = HPOExplorer::get_hpo(),
@@ -34,7 +34,7 @@ Will be used to generate the plot title.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
-\item{fold_threshold}{The minimum fold change in specific expression
+\item{effect_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
 
 \item{filters}{A named list, where each element in the list is the name of 
@@ -51,14 +51,14 @@ loaded from \link[KGExplorer]{get_ontology}.}
 \item{option}{A character string indicating the color map option to use.
 Eight options are available:
 \itemize{
- \item "magma" (or "A")
- \item "inferno" (or "B")
- \item "plasma" (or "C")
- \item "viridis" (or "D")
- \item "cividis" (or "E")
- \item "rocket" (or "F")
- \item "mako" (or "G")
- \item "turbo" (or "H")
+\item \code{"magma"} (or \code{"A"})
+\item \code{"inferno"} (or \code{"B"})
+\item \code{"plasma"} (or \code{"C"})
+\item \code{"viridis"} (or \code{"D"})
+\item \code{"cividis"} (or \code{"E"})
+\item \code{"rocket"} (or \code{"F"})
+\item \code{"mako"} (or \code{"G"})
+\item \code{"turbo"} (or \code{"H"})
 }}
 
 \item{interactive}{Make the plot interactive.}

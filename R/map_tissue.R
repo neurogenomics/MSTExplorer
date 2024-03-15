@@ -7,6 +7,7 @@
 #' table of association \code{results}.
 #' @param uberon UBERON ontology object of class \link[simona]{ontology_DAG}.
 #' @inheritParams ggnetwork_plot_full
+#' @inheritParams KGExplorer::get_ontology
 #' @export
 #' @import data.table
 #' @examples
@@ -22,7 +23,7 @@ map_tissue <- function(results = NULL,
                          add_ancestors=add_ancestors),
                        return_agg=FALSE
                        ){
-  ancestor <- ancestor_name <- cl_count <- uberon_id <- id <-
+  ancestor <- ancestor_name <- cl_count <- uberon_id <- uberon_name <- id <-
     uberon_ancestor_name <- top_uberon_name <- uberon_ancestor <-
     top_uberon_id <- NULL;
   if(!is.null(results)){

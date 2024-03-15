@@ -24,7 +24,7 @@ gen_overlap(
 \item{gene_data}{data frame of gene list names and genes
 (see \link[HPOExplorer]{get_gene_lists}).}
 
-\item{ctd}{Cell Type Data List generated using
+\item{ctd}{CellTypeDataset generated using
 \link[EWCE]{generate_celltype_data}.}
 
 \item{list_name_column}{The name of the gene_data column

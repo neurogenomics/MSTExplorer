@@ -1,6 +1,6 @@
 map_ctd_levels <- function(results,
                            annot_var="annotLevel"){
-  annotLevel <- NULL;
+  annotLevel <- ctd <- NULL;
   if(!annot_var %in% names(results)) {
     results[,annotLevel:=ifelse(ctd=="DescartesHuman",2,
                                 ifelse(ctd=="HumanCellLandscape",3,NA))]

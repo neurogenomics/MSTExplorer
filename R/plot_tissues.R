@@ -6,6 +6,7 @@ plot_tissues <- function(results,
                          y_adjust=1,
                          hjust = -0.2,
                          types=c("tile","bar")){
+  cl_name <- uberon_ancestor_name <- n_enrichments <- NULL;
   res <- list()
   {
     if(("tile" %in% types) ||

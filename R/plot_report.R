@@ -4,11 +4,10 @@
 #' \link[MSTExplorer]{prioritise_targets}.
 #' @param rep_dt Report table.
 #' @param annot HPO annotations.
-#' @param show_plot Show the plot.
-#' @param save_plot Path to save the plot to.
 #' @param remove_cols Columns to remove from \code{rep_dt}.
 #' @param phenotype_to_genes Phenotype to gene mapping from
 #' \link[HPOExplorer]{load_phenotype_to_genes}.
+#' @inheritParams plot_
 #' @inheritParams ggnetwork_plot_full
 #' @inheritDotParams ggplot2::ggsave
 #' @returns ggplot object
@@ -30,7 +29,7 @@ plot_report <- function(rep_dt,
                             "phenotype.hpoa"),
                         remove_cols=c("Rows","ids"),
                         show_plot=TRUE,
-                        save_plot=tempfile(fileext = "_plot_report.pdf"),
+                        save_path=tempfile(fileext = "_plot_report.pdf"),
                         verbose=TRUE,
                         ...){
 
@@ -130,13 +129,13 @@ plot_report <- function(rep_dt,
 
   #### Combine plots ####
   gp <- patchwork::wrap_plots(gp1, gp2, ncol = 1, heights = c(.3,1)) +
-    patchwork::plot_annotation(tag_levels = LETTERS)
+    patchwork::plot_annotation(tag_levels = letters)
 
   if(isTRUE(show_plot)) methods::show(gp)
-  if(!is.null(save_plot)){
-    messager("Saving plot ==>",save_plot,v=verbose)
-    dir.create(dirname(save_plot), showWarnings = FALSE, recursive = TRUE)
-    ggplot2::ggsave(filename = save_plot,
+  if(!is.null(save_path)){
+    messager("Saving plot ==>",save_path,v=verbose)
+    dir.create(dirname(save_path), showWarnings = FALSE, recursive = TRUE)
+    ggplot2::ggsave(filename = save_path,
                     plot = gp,
                     ...)
   }

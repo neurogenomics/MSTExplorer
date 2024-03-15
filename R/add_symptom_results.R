@@ -1,6 +1,16 @@
 #' Add symptom results
 #'
 #' Add symptom results to the results data.table.
+#' @param celltype_col Cell type column name in \code{results}.
+#' @param annotLevels The annotation level to use within each CTD in
+#' \code{ctd_list}.
+#' @param keep_quantiles Quantiles to keep in each CellTypeDataset of the
+#' \code{ctd_list}.
+#' @param proportion_driver_genes_symptom_threshold The minimum proportion of
+#' overlap between symptom genes (genes annotated to a phenotype
+#' via a specific disease) and the driver genes
+#' (genes driving a signficant phenotype-cell type association).
+#'
 #' @inheritParams prioritise_targets
 #'
 #' @export
@@ -9,7 +19,7 @@
 #' results <- add_symptom_results()
 add_symptom_results <- function(results = load_example_results(),
                                 q_threshold = 0.05,
-                                fold_threshold = NULL,
+                                effect_threshold = NULL,
                                 celltype_col="CellType",
                                 ctd_list = load_example_ctd(
                                   file = paste0("ctd_",unique(results$ctd),".rds"),
@@ -22,8 +32,13 @@ add_symptom_results <- function(results = load_example_results(),
                                 proportion_driver_genes_symptom_threshold=.25
                                 ){
   n_genes_hpo_id <- n_genes_disease_id <- n_genes_symptom <- gene_symbol <-
-    celltype_symptom <- NULL;
+    celltype_symptom <- n_driver_genes_symptom <-
+    proportion_driver_genes_symptom <- NULL;
 
+  if("proportion_driver_genes_symptom" %in% names(results)){
+    messager("Symptom results already present in input.")
+    return(results)
+  }
   messager("Adding symptom-level results.")
   phenotype_to_genes[,n_genes_hpo_id:=data.table::uniqueN(gene_symbol),
                      by="hpo_id"]
@@ -32,7 +47,7 @@ add_symptom_results <- function(results = load_example_results(),
   phenotype_to_genes[,n_genes_symptom:=data.table::uniqueN(gene_symbol),
                      by=c("hpo_id","disease_id")]
   results <- subset_results(results = results,
-                            fold_threshold = fold_threshold,
+                            effect_threshold = effect_threshold,
                             q_threshold = q_threshold)
   if(celltype_col %in% c("cl_id","cl_name")){
     results <- map_celltype(results)

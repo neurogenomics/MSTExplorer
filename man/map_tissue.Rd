@@ -20,6 +20,8 @@ and merged together with \link[MSTExplorer]{merge_results}}
 \item{map}{Many:many mapping between tissue ontology terms and cell type
 ontology terms.}
 
+\item{add_ancestors}{Add ancestors for each term.}
+
 \item{uberon}{UBERON ontology object of class \link[simona]{ontology_DAG}.}
 
 \item{return_agg}{Return the aggregated results instead of merging with a

@@ -28,7 +28,7 @@ plot_frequency_histogram <- function(results = load_example_results(),
     HPOExplorer::add_ancestor()
 
   #### Gene freqs ####
-  measure.vars <- grep(paste("^p$","^q$","^fold_change",
+  measure.vars <- grep(paste("^p$","^q$","^effect",
                              "_min$","_max$","_mean$", sep = "|"),
                        names(gene_df), value = TRUE)
   d1 <- data.table::melt.data.table(
@@ -45,7 +45,7 @@ plot_frequency_histogram <- function(results = load_example_results(),
                      ggplot2::element_rect(fill = "transparent"))
 
   #### Phenotype freqs ####
-  measure.vars <- grep(paste("^p$","^q$","^fold_change",
+  measure.vars <- grep(paste("^p$","^q$","^effect",
                              "_min$","_max$","_mean$", sep = "|"),
                        names(results), value = TRUE)
   id.vars = c("hpo_id","hpo_name")

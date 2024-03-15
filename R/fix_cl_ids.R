@@ -20,7 +20,7 @@ fix_cl_ids <- function(dat,
   # vague_terms <- unique(
   #   dat[cl_id %in% c( "CL:0000003","CL:0000000","~~all~~")]$author_celltype
   # )
-  cl_name <- CellType <- cl_id <- NULL;
+  cl_name <- cl_id <- author_celltype <- NULL;
   if(!"cl_id" %in% names(dat)) stopper("No 'cl_id' column in the input data.")
   #### Replace generic celltype annotations with more specific ones ####
   if(length(replace_map)>0){
