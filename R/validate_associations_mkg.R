@@ -18,6 +18,7 @@ validate_associations_mkg <- function(results=load_example_results(),
   from <- hpo_id <- NULL;
   # kg <- data.table::fread(here::here("data/monarch_kg_cells.csv"))
   add_logfc(results)
+  kg_og <- data.table::copy(kg)
   kg <- kg[grepl("HP:",from)][from %in% unique(results$hpo_id)]
   message(paste(
     "Remaining:",length(unique(kg$from)),
@@ -50,6 +51,8 @@ validate_associations_mkg <- function(results=load_example_results(),
 
   return(
     list(
+      kg=kg_og,
+      kg_filt=kg,
       kg_res=kg_res,
       proportion_phenotypes_captured=proportion_phenotypes_captured,
       missing_phenos=missing_phenos,

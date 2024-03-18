@@ -37,7 +37,9 @@
 #'
 #' @export
 #' @examples
-#' top_targets <- MSTExplorer::example_targets$top_targets
+#' top_targets <- MSTExplorer::example_targets$top_targets[1:10]
+#' top_targets[,estimate:=fold_change]
+#' top_targets <- map_celltype(top_targets)
 #' vn <- prioritise_targets_network(top_targets = top_targets)
 prioritise_targets_network <- function(top_targets,
                                        vertex_vars = c("disease_name",
@@ -58,6 +60,7 @@ prioritise_targets_network <- function(top_targets,
                                          avoidOverlap=.5,
                                          gravitationalConstant=-50),
                                        scaling=NULL,
+                                       arrows = "from",
                                        smooth=list(enabled=TRUE,
                                                    type="cubicBezier",
                                                    roundness=.5),
@@ -109,6 +112,7 @@ prioritise_targets_network <- function(top_targets,
     physics = physics,
     forceAtlas2Based = forceAtlas2Based,
     scaling = scaling,
+    arrows = arrows,
     smooth = smooth,
     add_visExport = add_visExport,
     degree = degree,

@@ -4,6 +4,7 @@
 #' @param group_var Variable to segregate results by.
 #' @param add_merged Add a merged summary across all groups.
 #' @param save_path Path to save the summary to as a CSV.
+#' @inheritParams prioritise_targets
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams base::format
 #' @export
@@ -14,12 +15,14 @@
 summarise_results <- function(results,
                               group_var="ctd",
                               add_merged=TRUE,
+                              phenotype_to_genes=HPOExplorer::load_phenotype_to_genes(),
                               digits=3,
                               save_path=tempfile("summarise_results.csv")){
 
   CellType <- hpo_id <- celltypes_per_phenotype <- phenotypes_per_celltype <-
     phenotype <- ctd <- NULL;
-  p2g <- HPOExplorer::load_phenotype_to_genes()
+
+  p2g <- data.table::copy(phenotype_to_genes)
   p2g[,phenotype:=hpo_id]
   total_phenotypes <- data.table::uniqueN(p2g$hpo_id)
   total_diseases <- data.table::uniqueN(p2g$disease_id)
@@ -99,6 +102,7 @@ summarise_results <- function(results,
   #### Add merged version too ####
   if(isTRUE(add_merged)){
     tmerged_all <- summarise_results(results,
+                                     phenotype_to_genes = p2g,
                                      group_var=NULL,
                                      add_merged=FALSE,
                                      save_path = NULL)$tmerged
@@ -118,3 +122,14 @@ summarise_results <- function(results,
     tmerged_transposed=tmerged_transposed
   ))
 }
+
+### Check across ontLvl
+## Remarkably stable across ontLvl, all right around 86%.
+# res_summ_ontLvl <- lapply(stats::setNames(seq(0,max(results$ontLvl)),
+#                                           seq(0,max(results$ontLvl))), function(x){
+#                                             MSTExplorer::summarise_results(results[ontLvl>=x],
+#                                                                            phenotype_to_genes = p2g,
+#                                                                            save_path = NULL)$tmerged[ctd=="all"]
+#                                           })|> data.table::rbindlist(idcol = "ontLvl")
+#
+# format(res_summ_ontLvl, big.mark=NULL)

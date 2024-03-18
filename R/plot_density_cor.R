@@ -1,7 +1,7 @@
 plot_density_cor <- function(res,
                              x="p_HumanCellLandscape",
                              y="p_DescartesHuman",
-                             point.args = list(alpha=.1),
+                             point.args = list(alpha=.01),
                              density_alpha=.7,
                              min_colors=15,
                              log_vars=FALSE){
@@ -16,7 +16,8 @@ plot_density_cor <- function(res,
     ggplot2::scale_fill_manual(
       values = c(ggplot2::alpha("white",0),
                  ggplot2::alpha(pals::gnuplot(min_colors)[-1],density_alpha)
-    ))
+    )) +
+    ggplot2::labs(fill="Density")
   if(isTRUE(log_vars)){
     p <- p+
       ggplot2::scale_x_log10() +

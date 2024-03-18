@@ -8,6 +8,7 @@ summarise_results(
   results,
   group_var = "ctd",
   add_merged = TRUE,
+  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
   digits = 3,
   save_path = tempfile("summarise_results.csv")
 )
@@ -20,6 +21,10 @@ and merged together with \link[MSTExplorer]{merge_results}}
 \item{group_var}{Variable to segregate results by.}
 
 \item{add_merged}{Add a merged summary across all groups.}
+
+\item{phenotype_to_genes}{Output of
+\link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
+to gene annotations.}
 
 \item{digits}{a positive integer indicating how many significant digits
     are to be used for

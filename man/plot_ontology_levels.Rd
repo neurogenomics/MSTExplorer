@@ -7,6 +7,8 @@
 plot_ontology_levels(
   results = load_example_results(),
   p2g = HPOExplorer::load_phenotype_to_genes(),
+  ctd_list = load_example_ctd(file = paste0("ctd_", unique(results$ctd), ".rds"),
+    multi_dataset = TRUE),
   x_vars = c("genes", "cell types", "estimate", "mean_specificity"),
   log_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "effect"),
   sig_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "effect", "cell types",
@@ -32,6 +34,9 @@ plot_ontology_levels(
 and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{p2g}{Phenotype to gene data.}
+
+\item{ctd_list}{A named list of CellTypeDataset objects each
+created with \link[EWCE]{generate_celltype_data}.}
 
 \item{x_vars}{Variables to plot on the x-axis of each subplot.}
 

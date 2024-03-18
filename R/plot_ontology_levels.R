@@ -26,6 +26,10 @@
 #' out <- plot_ontology_levels()
 plot_ontology_levels <- function(results = load_example_results(),
                          p2g = HPOExplorer::load_phenotype_to_genes(),
+                         ctd_list = load_example_ctd(
+                           file = paste0("ctd_",unique(results$ctd),".rds"),
+                           multi_dataset = TRUE
+                         ),
                          x_vars = c("genes",
                                     "cell types",
                                     "estimate",
@@ -80,6 +84,7 @@ plot_ontology_levels <- function(results = load_example_results(),
   #### Add specificity of DRIVER GENES ####
   if(sum(grepl("specificity$",x_vars))>0){
     driver_genes <- add_driver_genes(results[q<q_threshold],
+                                     ctd_list = ctd_list,
                                      metric="specificity",
                                      min_value=min_value,
                                      allow.cartesian=TRUE)

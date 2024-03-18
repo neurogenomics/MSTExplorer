@@ -9,7 +9,8 @@ validate_associations_correlate_ctd(
   filters = NULL,
   group_var = "ctd",
   celltype_var = "cl_name",
-  q_threshold = 0.05
+  q_threshold = 0.05,
+  ...
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ that contains the group variable to compare across.}
 that contains the cell type variable to compare across.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
+
+\item{...}{Additional arguments passed to \code{plot_density_cor}.}
 }
 \description{
 Validate phenotype-cell type associations can making comparisons within and

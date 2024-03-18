@@ -28,6 +28,7 @@ prioritise_targets_network(
   physics = FALSE,
   forceAtlas2Based = list(avoidOverlap = 0.5, gravitationalConstant = -50),
   scaling = NULL,
+  arrows = "from",
   smooth = list(enabled = TRUE, type = "cubicBezier", roundness = 0.5),
   add_visExport = FALSE,
   degree = 1,
@@ -148,6 +149,8 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-top_targets <- MSTExplorer::example_targets$top_targets
+top_targets <- MSTExplorer::example_targets$top_targets[1:10]
+top_targets[,estimate:=fold_change]
+top_targets <- map_celltype(top_targets)
 vn <- prioritise_targets_network(top_targets = top_targets)
 }
