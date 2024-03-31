@@ -209,6 +209,10 @@ prioritise_targets <- function(#### Input data ####
     Severity_score <- cl_name <- cl_id <- Severity_score_max <-
     info_content <- NULL;
 
+  force(results)
+  force(ctd_list)
+  force(hpo)
+  force(phenotype_to_genes)
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
   #### Add logFC ####

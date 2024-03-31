@@ -13,6 +13,7 @@
 #' @param log_vars Logical vector indicating which variables to log-transform.
 #' @param sig_vars Logical vector indicating which variables to only plot
 #' for significant results.
+#' @param return_data Return the full long data used in the plots.
 #' @inheritParams plot_
 #' @inheritParams ggpubr::stat_cor
 #' @inheritParams prioritise_targets
@@ -57,7 +58,8 @@ plot_ontology_levels <- function(results = load_example_results(),
                          height=7,
                          width=length(x_vars)*5.75,
                          smooth.line.args=list(method = "loess",
-                                               se = FALSE)
+                                               se = FALSE),
+                         return_data=TRUE
                          ){
 
   requireNamespace("ggplot2")
@@ -252,6 +254,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                           height = height,
                           width = width)
   }
+  if(isFALSE(return_data)) r2 <- NULL
   return(list(data=r2,
               data_stats=data_stats,
               plot=plts2))

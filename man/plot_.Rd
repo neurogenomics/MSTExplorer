@@ -36,6 +36,9 @@ Set to \code{NULL} to not save the plot.}
 \item{heights}{Passed to \link[patchwork]{wrap_plots}.}
 
 \item{subtitle_size}{Size of the plot subtitle.}
+
+\item{phenotype_to_genes}{Phenotype to gene mapping from
+\link[HPOExplorer]{load_phenotype_to_genes}.}
 }
 \value{
 R object.

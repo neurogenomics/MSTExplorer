@@ -51,9 +51,8 @@ genes in the include, default, and exclude lists.}
 \link[MSTExplorer]{gen_results}
 and merged together with \link[MSTExplorer]{merge_results}}
 
-\item{phenotype_to_genes}{Output of
-\link[HPOExplorer]{load_phenotype_to_genes} mapping phenotypes
-to gene annotations.}
+\item{phenotype_to_genes}{Phenotype to gene mapping from
+\link[HPOExplorer]{load_phenotype_to_genes}.}
 
 \item{agg_var}{The variable(s) to aggregate \code{results} by.}
 

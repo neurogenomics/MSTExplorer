@@ -5,8 +5,6 @@
 #' @param rep_dt Report table.
 #' @param annot HPO annotations.
 #' @param remove_cols Columns to remove from \code{rep_dt}.
-#' @param phenotype_to_genes Phenotype to gene mapping from
-#' \link[HPOExplorer]{load_phenotype_to_genes}.
 #' @inheritParams plot_
 #' @inheritParams ggnetwork_plot_full
 #' @inheritDotParams ggplot2::ggsave

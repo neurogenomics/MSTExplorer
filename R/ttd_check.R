@@ -34,18 +34,9 @@ ttd_check <- function(top_targets,
                       show_plot = TRUE,
                       save_path = NULL,
                       height=NULL,
-                      width=NULL){
-  # top_targets <- prioritise_targets(
-  #   keep_deaths = NULL,
-  #   keep_tiers = NULL,
-  #   severity_threshold_max = NULL,
-  #   severity_threshold = NULL,
-  #   pheno_frequency_threshold = NULL,
-  #   keep_onsets = NULL,
-  #   keep_ont_levels = seq(4),
-  #   keep_celltypes = NULL,
-  #   top_n = 2,
-  #   group_vars = c("hpo_id","disease_id"))$top_targets
+                      width=NULL,
+                      phenotype_to_genes=HPOExplorer::load_phenotype_to_genes()){
+  # top_targets <- prioritise_targets()$top_targets
   # drug_types <- c("Gene therapy"
     # "Antisense drug",
     # "Antisense oligonucleotide",
@@ -109,6 +100,14 @@ ttd_check <- function(top_targets,
   # length(unique(paste0(dat_sub2$DRUGID,dat_sub2$INDICATI,
   #                      dat_sub2$GENENAME2)))
   dat_sub[,prioritised:=(DRUGID %in% dat_sub2$DRUGID)]
+  #### Hypergeometric test ####
+  dat_sub[,failed:=HIGHEST_STATUS %in% failed_status]
+  fail <- dat_sub[failed==TRUE,drop=FALSE]
+  notfail <- dat_sub[failed==FALSE,drop=FALSE]
+  ttd_hypergeo_out <- ttd_hypergeo(fail=fail,
+                                   notfail=notfail,
+                                   top_targets=top_targets,
+                                   p2g=phenotype_to_genes)
   #### Plot ####
   plt <- plot_ttd(dat_sub = dat_sub,
                   failed_status = failed_status)
@@ -124,6 +123,7 @@ ttd_check <- function(top_targets,
     list(data=dat_sub,
          data_overlap=dat_sub2,
          pct_captured,
-         plot=plt)
+         plot=plt,
+         ttd_hypergeo_out=ttd_hypergeo_out)
   )
 }

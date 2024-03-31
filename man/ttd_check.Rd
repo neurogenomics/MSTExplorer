@@ -14,7 +14,8 @@ ttd_check(
   show_plot = TRUE,
   save_path = NULL,
   height = NULL,
-  width = NULL
+  width = NULL,
+  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes()
 )
 }
 \arguments{
@@ -40,6 +41,9 @@ Set to \code{NULL} to not save the plot.}
 \item{height}{Height of the saved plot.}
 
 \item{width}{Width of the saved plot.}
+
+\item{phenotype_to_genes}{Phenotype to gene mapping from
+\link[HPOExplorer]{load_phenotype_to_genes}.}
 }
 \description{
 Identify the overlap between your prioritised list of gene therapy targets
