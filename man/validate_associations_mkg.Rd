@@ -7,7 +7,11 @@
 validate_associations_mkg(
   results = load_example_results(),
   kg = get_data("monarch_kg_cells.csv"),
-  q_threshold = 0.05
+  q_threshold = 0.05,
+  cl = KGExplorer::get_ontology(name = "cl", remove_cyclic_paths = TRUE, remove_rings =
+    TRUE),
+  alt_ids = c(`CL:0000111` = "CL:2000032"),
+  metric = c("dist_nca.min_adj", "dist_lca.min_adj", "dist_nca.min", "dist_lca.min")[1]
 )
 }
 \arguments{
@@ -20,6 +24,12 @@ and merged together with \link[MSTExplorer]{merge_results}}
 the Monarch Knowledge Graph.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
+
+\item{cl}{Cell Ontology object.}
+
+\item{alt_ids}{Alternative IDs to map CL IDs into.}
+
+\item{metric}{Ontological distance metric to use for plotting.}
 }
 \description{
 This function validates the associations between phenotypes and cell types

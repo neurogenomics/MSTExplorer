@@ -8,13 +8,26 @@
 #' @param kg A data.table with phenotype-cell type relationships
 #' ("from" and "to" columns, respectively) gathered from
 #'  the Monarch Knowledge Graph.
+#' @param cl Cell Ontology object.
+#' @param alt_ids Alternative IDs to map CL IDs into.
+#' @param metric Ontological distance metric to use for plotting.
 #' @export
 #' @examples
 #' results <- load_example_results()
 #' kg <- validate_associations_mkg(result=results)
 validate_associations_mkg <- function(results=load_example_results(),
                                       kg=get_data("monarch_kg_cells.csv"),
-                                      q_threshold=0.05){
+                                      q_threshold=0.05,
+                                      cl=KGExplorer::get_ontology(
+                                        name = "cl",
+                                        remove_cyclic_paths = TRUE,
+                                        remove_rings = TRUE),
+                                      alt_ids=c("CL:0000111"="CL:2000032"),
+                                      metric = c("dist_nca.min_adj",
+                                                 "dist_lca.min_adj",
+                                                 "dist_nca.min",
+                                                 "dist_lca.min")[1]
+                                      ){
   from <- hpo_id <- NULL;
   # kg <- data.table::fread(here::here("data/monarch_kg_cells.csv"))
   add_logfc(results)
@@ -48,7 +61,14 @@ validate_associations_mkg <- function(results=load_example_results(),
   # n_after <- res[q<0.05]$hpo_id|>unique()|>length()
   n_before <- nrow(kg)
   n_after <- nrow(results[q<q_threshold])
-
+  #### Compute % recall at each cell type ontological distance #####
+  cl_distance_results <- validate_associations_mkg_dist(
+    results=results,
+    kg=kg,
+    cl=cl,
+    q_threshold=q_threshold,
+    alt_ids=alt_ids,
+    metric = metric)
   return(
     list(
       kg=kg_og,
@@ -60,7 +80,8 @@ validate_associations_mkg <- function(results=load_example_results(),
       res_missing=res_missing,
       n_before=n_before,
       n_after=n_after,
-      increased_knowledge=n_after/n_before
+      increased_knowledge=n_after/n_before,
+      cl_distance_results=cl_distance_results
     )
   )
 }

@@ -69,7 +69,7 @@ See \link[KGExplorer]{get_ontology_levels} for more details.}
     \item{\code{phenos}}{A data.table containing HPO IDs and other metadata.}
     \item{\code{label_var}}{Column containing the label for each node in a graph
 (e.g. "hpo_name").}
-    \item{\code{show_plot}}{Print the plot after it's been generated.}
+    \item{\code{show_plot}}{Show the plot.}
     \item{\code{hoverbox_column}}{Name of the new hoverbox column to add.}
     \item{\code{preferred_palettes}}{Preferred palettes to use for each column.}
   }}

@@ -7,10 +7,12 @@
 plot_report(
   rep_dt,
   results,
-  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(),
-  annot = HPOExplorer::load_phenotype_to_genes("phenotype.hpoa"),
-  remove_cols = c("Rows", "ids"),
+  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(1),
+  annot = HPOExplorer::load_phenotype_to_genes(3),
+  remove_cols = c("Rows", "Rows_diff", "ids"),
+  label.size = 0.25,
   show_plot = TRUE,
+  add_tiers = TRUE,
   save_path = tempfile(fileext = "_plot_report.pdf"),
   verbose = TRUE,
   ...
@@ -30,7 +32,11 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{remove_cols}{Columns to remove from \code{rep_dt}.}
 
+\item{label.size}{Size of label border, in mm.}
+
 \item{show_plot}{Print the plot to the console.}
+
+\item{add_tiers}{Add severity tiers subplot.}
 
 \item{save_path}{Save the plot to a file.
 Set to \code{NULL} to not save the plot.}

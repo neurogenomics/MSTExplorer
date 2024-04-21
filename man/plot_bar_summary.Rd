@@ -63,7 +63,7 @@ Eight options are available:
 
 \item{interactive}{Make the plot interactive.}
 
-\item{show_plot}{Print the plot after it's been generated.}
+\item{show_plot}{Show the plot.}
 
 \item{verbose}{Print messages.}
 }

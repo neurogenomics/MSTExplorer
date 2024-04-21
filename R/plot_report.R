@@ -5,8 +5,10 @@
 #' @param rep_dt Report table.
 #' @param annot HPO annotations.
 #' @param remove_cols Columns to remove from \code{rep_dt}.
+#' @param add_tiers Add severity tiers subplot.
 #' @inheritParams plot_
 #' @inheritParams ggnetwork_plot_full
+#' @inheritParams ggplot2::geom_label
 #' @inheritDotParams ggplot2::ggsave
 #' @returns ggplot object
 #'
@@ -21,12 +23,13 @@
 plot_report <- function(rep_dt,
                         results,
                         phenotype_to_genes =
-                          HPOExplorer::load_phenotype_to_genes(),
+                          HPOExplorer::load_phenotype_to_genes(1),
                         annot =
-                          HPOExplorer::load_phenotype_to_genes(
-                            "phenotype.hpoa"),
-                        remove_cols=c("Rows","ids"),
+                          HPOExplorer::load_phenotype_to_genes(3),
+                        remove_cols=c("Rows","Rows_diff","ids"),
+                        label.size = 0.25,
                         show_plot=TRUE,
+                        add_tiers=TRUE,
                         save_path=tempfile(fileext = "_plot_report.pdf"),
                         verbose=TRUE,
                         ...){
@@ -35,60 +38,62 @@ plot_report <- function(rep_dt,
   requireNamespace("ggplot2")
   requireNamespace("patchwork")
   Tier <- Tier_count <- value <- step <- hpo_id <- level <- NULL;
-
   messager("plot_report:: Preparing data.",v=verbose)
-  tier_dt <- lapply(stats::setNames(rep_dt$ids,
-                         rep_dt$step), function(x){
-    if(length(x)==0) return(NULL)
-    tcounts <- table(useNA = "always",
-      HPOExplorer::add_tier(phenos = data.table::data.table(hpo_id=x),
-                            verbose = FALSE
-      )$tier_merge)
-    names(tcounts) <- paste("Tier",names(tcounts))
-    data.table::as.data.table(as.list(tcounts))
-  }) |> data.table::rbindlist(fill=TRUE, use.names = TRUE, idcol = "step")
-  tier_cols <- names(tier_dt)[-1]
-  data.table::setnafill(tier_dt,fill=0, type = "const", cols = tier_cols)
-  tier_dt <- data.table::merge.data.table(rep_dt[,c("step")],
-                                          tier_dt,
-                                          all.x = TRUE, sort = FALSE)
-  data.table::setnafill(tier_dt, type = "locf",cols = seq(2,ncol(tier_dt)))
+  gp_list <- list()
+  if(add_tiers){
+    tier_dt <- lapply(stats::setNames(rep_dt$ids,
+                                      rep_dt$step), function(x){
+      if(length(x)==0) return(NULL)
+      tcounts <- table(useNA = "always",
+                       HPOExplorer::add_tier(phenos = data.table::data.table(hpo_id=x),
+                                             verbose = FALSE
+                       )$tier_merge)
+      names(tcounts) <- paste("Tier",names(tcounts))
+      data.table::as.data.table(as.list(tcounts))
+    }) |> data.table::rbindlist(fill=TRUE,
+                                use.names = TRUE,
+                                idcol = "step")
+    tier_cols <- names(tier_dt)[-1]
+    data.table::setnafill(tier_dt,fill=0, type = "const", cols = tier_cols)
+    tier_dt <- data.table::merge.data.table(rep_dt[,c("step")],
+                                            tier_dt,
+                                            all.x = TRUE, sort = FALSE)
+    data.table::setnafill(tier_dt, type = "locf",cols = seq(2,ncol(tier_dt)))
+    #### Make plot data: tiers ####
+    dt1 <- tier_dt |>
+      data.table::melt.data.table(id.vars="step",
+                                  variable.name = "Tier",
+                                  value.name = "Tier_count")
+    dt1[,Tier:=gsub("Tier NA",NA,Tier)]
+    dt1$step <- factor(dt1$step,
+                       levels = unique(dt1$step),
+                       labels = paste0(seq(length(unique(dt1$step))),". ",
+                                       unique(dt1$step)),
+                       ordered = TRUE)
+    #### Make plot: tiers ####
+    gp_list[["tiers"]] <- ggplot2::ggplot(dt1,
+                           ggplot2::aes(x=step,y=Tier_count,
+                                        fill=Tier)) +
+      ggplot2::geom_bar(stat = "identity",
+                        alpha=1,
+                        position = "fill") +
+      ggplot2::theme_minimal() +
+      ggplot2::scale_fill_viridis_d(na.value = "grey90",
+                                    option = "mako") +
+      ggplot2::scale_y_continuous(labels = scales::percent) +
+      ggplot2::labs(y="% phenotypes", x=NULL) +
+      ggplot2::theme(axis.text.x = ggplot2::element_blank())
+  } else {
+    dt1 <- NULL
+  }
   #### Remove cols ####
   rep_dt <- rep_dt[,-remove_cols, with=FALSE]
-
   #### Fill missing values ####
   total_diseases <- length(unique(annot[hpo_id %in% results$hpo_id,]$disease_name))
   total_genes <- length(unique(phenotype_to_genes$gene_symbol))
   rep_dt[step=="start",]$Diseases <- total_diseases
   rep_dt[step=="start",]$Genes <- total_genes
   data.table::setnafill(rep_dt, type = "locf",cols = seq(2,ncol(rep_dt)))
-  #### Make plot data: tiers ####
-  dt1 <- tier_dt |>
-  data.table::melt.data.table(id.vars="step",
-                              variable.name = "Tier",
-                              value.name = "Tier_count")
-  dt1[,Tier:=gsub("Tier NA",NA,Tier)]
-  dt1$step <- factor(dt1$step,
-                    levels = unique(dt1$step),
-                    labels = paste0(seq(length(unique(dt1$step))),". ",
-                                    unique(dt1$step)),
-                    ordered = TRUE)
-  #### Make plot: tiers ####
-  gp1 <- ggplot2::ggplot(dt1,
-                         ggplot2::aes(x=step,y=Tier_count,
-                                      fill=Tier)) +
-    ggplot2::geom_bar(stat = "identity",
-                      alpha=1,
-                      position = "fill") +
-    ggplot2::theme_minimal() +
-    ggplot2::scale_fill_viridis_d(na.value = "grey90",
-                                  option = "mako") +
-    ggplot2::scale_y_continuous(labels = scales::percent) +
-    ggplot2::labs(y="% phenotypes", x=NULL) +
-    ggplot2::theme(axis.text.x = ggplot2::element_blank())
-
-
-  #### Plot ####
   #### Add step levels/descriptions ####
   filters <- extract_filters()
   #### Make plot data ####
@@ -104,7 +109,7 @@ plot_report <- function(rep_dt,
                                     unique(dt2$step)),
                     ordered = TRUE)
   messager("plot_report:: Preparing plot.",v=verbose)
-  gp2 <- ggplot2::ggplot(dt2, ggplot2::aes(x=step,
+  gp_list[["filters"]] <- ggplot2::ggplot(dt2, ggplot2::aes(x=step,
                                    y=value,
                                    fill=level,
                                    label=value)) +
@@ -116,6 +121,7 @@ plot_report <- function(rep_dt,
     ggplot2::geom_label(fill="black",
                         color="white",
                         alpha=.8,
+                        label.size = label.size,
                         vjust = 0) +
     ggplot2::scale_fill_viridis_d(na.value = "grey90",
                                   option = "viridis") +
@@ -126,9 +132,16 @@ plot_report <- function(rep_dt,
                    strip.background = ggplot2::element_rect(fill = "transparent"))
 
   #### Combine plots ####
-  gp <- patchwork::wrap_plots(gp1, gp2, ncol = 1, heights = c(.3,1)) +
-    patchwork::plot_annotation(tag_levels = letters)
-
+  gp <- patchwork::wrap_plots(gp_list,
+                              ncol = 1,
+                              heights = if(length(gp_list)==2){
+                                c(.3,1)
+                              } else {
+                                NULL
+                              })
+  if(length(gp_list)>1){
+    gp <- gp + patchwork::plot_annotation(tag_levels = letters)
+  }
   if(isTRUE(show_plot)) methods::show(gp)
   if(!is.null(save_path)){
     messager("Saving plot ==>",save_path,v=verbose)
@@ -137,5 +150,75 @@ plot_report <- function(rep_dt,
                     plot = gp,
                     ...)
   }
-  return(gp)
+  return(list(
+    data=list("tiers"=dt1,
+              "filters"=dt2),
+    plot=gp
+  ))
 }
+
+
+# https://rich-iannone.github.io/DiagrammeR/
+# https://www.andreashandel.com/posts/2022-06-11-flowdiagramr-exploration/
+# https://github.com/CTU-Bern/flowchart
+# https://nrennie.rbind.io/blog/creating-flowcharts-with-ggplot2/
+
+#
+# filters <- MSTExplorer:::extract_filters()
+# report <- prioritise_targets_out$report
+# report$Rows_diff <- c(0,
+#                       report$Rows[seq(nrow(report)-1)+1] -
+#                         report$Rows[seq(nrow(report)-1)])
+# report <- merge(
+#   report,
+#   filters,
+#   all.x = TRUE,
+#   by="step"
+# )
+#
+# MSTExplorer::plot_report(rep_dt = report[Rows_diff!=0], results = results)
+# # data.table::fwrite(report[Rows_diff!=0,-c("ids")],"~/Downloads/report.csv")
+# report[,group:=level]
+# cdict <- KGExplorer::map_colors(report,
+#                                 columns = "group",
+#                                 as = "dict",
+#                                 preferred_palettes = "brewer.pastel1")[[1]]
+# nodes <- report[,c("level","name",
+#                    "color","title"):=list(.N,step,cdict[group],description)]
+# edges <- data.frame(from=seq(nrow(report)-1),
+#                     to=seq(nrow(report)-1)+1)
+# g <- tidygraph::tbl_graph(nodes = nodes, edges=edges)
+# coords <- igraph::layout_as_tree(g)
+# # dt <- KGExplorer::graph_to_dt(g)
+#
+# vn <- visNetwork::visIgraph(g, randomSeed = 42)|>
+#   visNetwork::visHierarchicalLayout(direction = "RL") |>
+#   visNetwork::visNodes(shadow=TRUE,
+#                        shape="box") |>
+#   visNetwork::visEdges(shadow = TRUE,
+#                        arrows =list(to = list(enabled = TRUE,
+#                                               scaleFactor = 2)
+#                        ),
+#                        color = list(color = "lightblue",
+#                                     highlight = "green")) |>
+#   visNetwork::visInteraction(tooltipStyle='position:fixed; visibility:visible;')|>
+#   visNetwork::visLegend(enabled = FALSE)
+# vn
+# custom_network <- visNetwork::visNetworkEditor(object = vn)
+# custom_network
+#
+# # edges <- data.frame(from=report$step[seq(nrow(report)-1)],
+# #                     to=report$step[seq(nrow(report)-1)+1])
+# # DiagrammeR::from_igraph(g)
+# # a_graph <-
+# #   DiagrammeR::create_graph() |>
+# #   DiagrammeR::add_nodes_from_table(
+# #     nodes,
+# #     label_col = "step"
+# #   )|>
+# #   DiagrammeR::add_edges_from_table(table = edges,
+# #                                    from_col = "from",
+# #                                    to_col = "to")
+# # render_graph(a_graph)
+#
+

@@ -129,16 +129,18 @@ Set to \code{NULL} to not save the plot.}
 Plot bar plot of enriched phenotypes per cell type per HPO branch.
 }
 \examples{
+hpo <- HPOExplorer::get_hpo()
+target_branches <- list("Recurrent bacterial infections"="leukocyte")
+lvl <- subset(hpo@elementMetadata,name==names(target_branches)[1])$ontLvl
 results <- load_example_results()
 results <- HPOExplorer::add_ancestor(results,
-                                     lvl = 7,
+                                     lvl = lvl,
                                      force_new = TRUE)
-target_branches <- list("Recurrent bacterial infections"="leukocyte")
 out <- plot_bar_dendro_facets(results=results,
                          target_branches=target_branches,
                          facets = "hpo_name",
                          legend.position="right",
-                         lvl=8,
+                         lvl=lvl+1,
                          ncol=2,
                          vlines="hepatoblast",
                          facets_n=NULL,

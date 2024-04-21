@@ -13,6 +13,8 @@
 #' }
 #' @param ancestor_var The name of the \code{results} column
 #'  containing the ancestor name.
+#' @param within_var Within-subject variable.
+#' @param method Methods to run stats with.
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams plot_bar_dendro
 #' @inheritParams plot_bar_dendro_facets
@@ -27,7 +29,8 @@ test_target_celltypes <- function(results=load_example_results(),
                                   tests=c("within_branches",
                                           "across_branches",
                                           "across_branches_per_celltype"),
-                                  within="hpo_id",
+                                  method=c("glm","anova"),
+                                  within_var="hpo_id",
                                   ancestor_var="ancestor_name",
                                   q_threshold=0.05,
                                   cores=1
@@ -36,6 +39,7 @@ test_target_celltypes <- function(results=load_example_results(),
   requireNamespace("rstatix")
   ancestor_name <- is_sig <- is_target <- valid <- cl_id <- NULL;
 
+  method <- match.arg(method)
   # results <- HPOExplorer::add_ancestor(results)
   results <- map_celltype(results)
   results[,is_sig:=q<q_threshold][,is_target:=get(celltype_col) %in%
@@ -51,7 +55,7 @@ test_target_celltypes <- function(results=load_example_results(),
       dplyr::group_by(!!dplyr::sym(ancestor_var))|>
       rstatix::anova_test(formula = is_sig ~ is_target,
                           # between = "is_target",
-                          within=dplyr::all_of(within)
+                          within=dplyr::all_of(within_var)
                           ) |>
       dplyr::ungroup() |>
       rstatix::adjust_pvalue(method = "bonf") |>
@@ -73,7 +77,7 @@ test_target_celltypes <- function(results=load_example_results(),
         d[get(celltype_col) %in% unlist(target_celltypes),]|>
           # dplyr::group_by(cl_name)|>
           rstatix::anova_test(formula = is_sig ~ is_target,
-                              within=dplyr::all_of(within)
+                              within=dplyr::all_of(within_var)
                               )
       }, mc.cores = cores) |> data.table::rbindlist(idcol = "ancestor_name")|>
       rstatix::adjust_pvalue(method = "bonf") |>
@@ -96,8 +100,8 @@ test_target_celltypes <- function(results=load_example_results(),
         d[,is_target:=(get(celltype_col) %in% target_celltypes[[b]]) &
             (ancestor_name==b)]
         ### Ensure there's enough variation to run tests
-        d[,valid:=(length(unique(is_target))>1) &
-            (length(unique(is_sig))>1), by=c(celltype_col)]
+        d[,valid:=(length(unique(is_target))>1) & (length(unique(is_sig))>1),
+          by=c(celltype_col)]
         d <- d[valid==TRUE]
         if(nrow(d)==0){
           messager("Skipping tests.")
@@ -105,12 +109,32 @@ test_target_celltypes <- function(results=load_example_results(),
         }
         d[,is_sig:=q<0.05][,is_target:=get(celltype_col) %in%
                              target_celltypes[b][[ancestor_name]], by=.I]
-        d|>
-          dplyr::group_by(cl_id)|>
-          rstatix::anova_test(formula = is_sig ~ is_target,
-                              within=dplyr::all_of(within)
-                              )
-      }, mc.cores = cores) |> data.table::rbindlist(idcol = "ancestor_name")|>
+        if(method=="anova"){
+          d2 <- d|>
+            dplyr::group_by(cl_id)|>
+            rstatix::anova_test(formula = is_sig ~ is_target,
+                                within=dplyr::all_of(within_var)
+            )
+        } else{
+          ## This method becomes horribly slow (never finishes)
+          ## if you try to include hpo_id as a within-subject variable.
+          lapply(unique(d[[celltype_col]]), function(x){
+            d2 <- d[get(celltype_col)==x]|>
+              stats::glm(formula= is_sig ~ is_target,
+                         family="binomial") |>
+              rstatix::tidy()
+            d2[[celltype_col]] <- x
+            d2
+          })|>data.table::rbindlist(fill=TRUE)
+        }
+        # lme4::lmer(data=d[get(celltype_col)==x],
+        #            formula= is_sig ~ is_target + (1|hpo_id),
+        #            control=lme4::lmerControl(check.nobs.vs.nlev = "ignore",
+        #                                      check.nobs.vs.rankZ = "ignore",
+        #                                      check.nobs.vs.nRE="ignore")) |>
+        #   summary() |>as.data.frame()
+      }, mc.cores = cores) |>
+      data.table::rbindlist(idcol = "ancestor_name")|>
       rstatix::adjust_pvalue(method = "bonf") |>
       rstatix::add_significance()
   }

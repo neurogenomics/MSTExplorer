@@ -64,6 +64,8 @@ Set to \code{NULL} to not save the plot.}
 overlap between symptom genes (genes annotated to a phenotype
 via a specific disease) and the driver genes
 (genes driving a signficant phenotype-cell type association).}
+    \item{\code{drop_subthreshold}}{Drop rows that don't meet the
+\code{proportion_driver_genes_symptom_threshold} criterion.}
     \item{\code{top_n}}{Top N genes to keep when grouping by \code{group_vars}.}
     \item{\code{ctd_list}}{A named list of CellTypeDataset objects each
 created with \link[EWCE]{generate_celltype_data}.}

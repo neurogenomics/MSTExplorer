@@ -30,59 +30,61 @@
 #' @inheritParams ggplot2::facet_wrap
 #' @export
 #' @examples
+#' hpo <- HPOExplorer::get_hpo()
+#' target_branches <- list("Recurrent bacterial infections"="leukocyte")
+#' lvl <- subset(hpo@elementMetadata,name==names(target_branches)[1])$ontLvl
 #' results <- load_example_results()
 #' results <- HPOExplorer::add_ancestor(results,
-#'                                      lvl = 7,
+#'                                      lvl = lvl,
 #'                                      force_new = TRUE)
-#' target_branches <- list("Recurrent bacterial infections"="leukocyte")
 #' out <- plot_bar_dendro_facets(results=results,
 #'                          target_branches=target_branches,
 #'                          facets = "hpo_name",
 #'                          legend.position="right",
-#'                          lvl=8,
+#'                          lvl=lvl+1,
 #'                          ncol=2,
 #'                          vlines="hepatoblast",
 #'                          facets_n=NULL,
 #'                          q_threshold=0.05,
 #'                          background_full=FALSE)
 plot_bar_dendro_facets <- function(results = load_example_results(),
-                              results_full = NULL,
-                              target_branches = get_target_branches(),
-                              keep_ancestors = names(target_branches),
-                              target_celltypes = get_target_celltypes(
-                                target_branches=target_branches
-                              ),
-                              target_branches_keep = NULL,
-                              celltype_col = "cl_name",
-                              keep_ont_levels=NULL,
-                              add_test_target_celltypes=TRUE,
-                              color_map=NULL,
-                              color_vector=NULL,
-                              preferred_palettes = "gnuplot",
-                              legend.position="none",
-                              fill_var="ancestor_name",
-                              facets = fill_var,
-                              scales="free_y",
-                              q_threshold=NULL,
-                              lvl=NULL,
-                              facets_n="phenotypes_per_ancestor",
-                              suffix="phenotypes",
-                              vlines=NULL,
-                              ncol=1,
-                              cols=NULL,
-                              y_lab="Significant phenotypes",
-                              normalise_by=NULL,
-                              background_full=TRUE,
-                              save_path=NULL,
-                              width=NULL,
-                              height=NULL){
+                                  results_full = NULL,
+                                  target_branches = get_target_branches(),
+                                  keep_ancestors = names(target_branches),
+                                  target_celltypes = get_target_celltypes(
+                                    target_branches=target_branches
+                                  ),
+                                  target_branches_keep = NULL,
+                                  celltype_col = "cl_name",
+                                  keep_ont_levels=NULL,
+                                  add_test_target_celltypes=TRUE,
+                                  color_map=NULL,
+                                  color_vector=NULL,
+                                  preferred_palettes = "gnuplot",
+                                  legend.position="none",
+                                  fill_var="ancestor_name",
+                                  facets = fill_var,
+                                  scales="free_y",
+                                  q_threshold=NULL,
+                                  lvl=NULL,
+                                  facets_n="phenotypes_per_ancestor",
+                                  suffix="phenotypes",
+                                  vlines=NULL,
+                                  ncol=1,
+                                  cols=NULL,
+                                  y_lab="Significant phenotypes",
+                                  normalise_by=NULL,
+                                  background_full=TRUE,
+                                  save_path=NULL,
+                                  width=NULL,
+                                  height=NULL){
   requireNamespace("ggplot2")
-  hpo_id <- p.adj.signif <- ancestor_name_original <- ancestor_name <-
+  hpo_id <- ancestor_name_original <- ancestor_name <-
     sig_phenotypes <- phenotypes_per_ancestor <- NULL;
 
   results <- map_celltype(results)
   if(!"sig_phenotypes" %in% names(results)){
-    results[, sig_phenotypes:=data.table::uniqueN(hpo_id[q<q_threshold],
+    results[,sig_phenotypes:=data.table::uniqueN(hpo_id[q<q_threshold],
                                                        na.rm = TRUE),
             by=c(celltype_col,"cl_id","ancestor","ancestor_name")]
   }
@@ -92,7 +94,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
   }
   if(!is.null(lvl)){
     if("ancestor_name" %in% names(results)){
-      results[,ancestor_name_original:=ancestor_name]
+      results[,ancestor_name_original:=data.table::copy(ancestor_name)]
     }
     results <- HPOExplorer::add_ancestor(results,
                                          lvl = lvl,
@@ -126,12 +128,19 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
     #### Reassign target_celltypes by inheriting from ancestor_name_original ####
     new_ancestors <- unique(dat$ancestor_name)
     target_celltypes <- lapply(stats::setNames(new_ancestors,
-                                               new_ancestors),
+                                                new_ancestors),
                                function(b){
       target_celltypes[
         unique(dat[ancestor_name==b,]$ancestor_name_original)
       ]|>unlist(use.names = FALSE) |> unique()
     })
+    target_branches <- lapply(stats::setNames(new_ancestors,
+                                               new_ancestors),
+                     function(b){
+                       target_branches[
+                         unique(dat[ancestor_name==b,]$ancestor_name_original)
+                       ]|>unlist(use.names = FALSE) |> unique()
+                     })
   }
   #### Select background to test for enrichment agains t####
   results <- if(isTRUE(background_full)){
@@ -154,18 +163,17 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
       data_summary <- NULL
     } else {
       dat <- merge(dat,
-                   target_tests[[1]][,-c("p")],
+                   target_tests[[1]][term=="is_targetTRUE"],
                    all.x = TRUE,
                    by=c("ancestor_name","cl_id"))
-      dat[p.adj.signif=="ns",p.adj.signif:=NA]
+      dat[p.value.adj.signif=="ns",p.value.adj.signif:=NA]
       #### Add summary of results ####
-      Effect <- cl_name <- p.adj <- NULL;
+      cl_name <- p.value.adj <- NULL;
       data_summary <- dat[,list(
         target_celltypes=paste(target_branches[[ancestor_name]],collapse = "/"),
         phenotypes_per_ancestor=unique(phenotypes_per_ancestor),
-        n_celltypes=data.table::uniqueN(cl_name[Effect=="is_target"]),
-        n_celltypes_sig=data.table::uniqueN(cl_name[Effect=="is_target" &
-                                                    p.adj<0.05])
+        n_celltypes=data.table::uniqueN(cl_name),
+        n_celltypes_sig=data.table::uniqueN(cl_name[p.value.adj<0.05])
       ),
       by=c("ancestor_name")]
     }
@@ -177,9 +185,11 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
     dat <- dat[q<q_threshold]
   }
   #### Make facets ordered ####
+  dat |> data.table::setorderv(fill_var)
   dat[[facets]] <- factor(dat[[facets]],
+                          levels=unique(dat[[facets]]),
                           # set facet var in the order of the fill var to avoid reordering
-                          levels = rev(unique(names(target_celltypes))),
+                          # levels = rev(unique(names(target_celltypes))),
                           # levels=unique(dat[order(match(get(facets),get(fill_var))),][[facets]]),
                           ordered = TRUE)
   if(!is.null(normalise_by) && normalise_by %in% names(dat)){
@@ -224,7 +234,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
                                                         suffix=suffix))
   } else {
     ggbars <- ggbars +
-      ggplot2::facet_wrap(facets =facets,
+      ggplot2::facet_wrap(facets = facets,
                           as.table = FALSE,
                           scales = scales,
                           labeller = construct_labeller(dat=dat,
@@ -237,7 +247,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
   if(!is.null(vlines)){
     ggbars <- ggbars +
       ggplot2::geom_vline(xintercept = vlines,
-                          color="grey",alpha=1, linetype="dashed")
+                          color="grey50",alpha=1, linetype="dashed")
   }
   if(!is.null(color_map)){
     ggbars <- ggbars +
@@ -254,7 +264,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
   #### Add test results to bar plot ####
   if(isTRUE(add_test_target_celltypes)){
     ggbars <- ggbars +
-      ggplot2::geom_text(ggplot2::aes(label=p.adj.signif,
+      ggplot2::geom_text(ggplot2::aes(label=p.value.adj.signif,
                                       y=1.05*sig_phenotypes),
                                       # nudge_y=3,
                                       size=2,

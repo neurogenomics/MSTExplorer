@@ -9,7 +9,8 @@ test_target_celltypes(
   target_celltypes = get_target_celltypes(),
   celltype_col = "cl_id",
   tests = c("within_branches", "across_branches", "across_branches_per_celltype"),
-  within = "hpo_id",
+  method = c("glm", "anova"),
+  within_var = "hpo_id",
   ancestor_var = "ancestor_name",
   q_threshold = 0.05,
   cores = 1
@@ -35,7 +36,9 @@ Are on-target cell types enriched for significant results across
 branches per cell type?}
 }}
 
-\item{within}{(optional) within-subjects factor variables}
+\item{method}{Methods to run stats with.}
+
+\item{within_var}{Within-subject variable.}
 
 \item{ancestor_var}{The name of the \code{results} column
 containing the ancestor name.}

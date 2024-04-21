@@ -9,10 +9,10 @@
 #' (filters on maximum severity per disease).}
 #' \item{Phenotype-level: \code{prune_ancestors}: }{
 #' Remove redundant ancestral phenotypes when at least one of their
-#' descendants already exist.}
+#'  descendants already exist.}
 #' \item{Phenotype-level: \code{keep_descendants}: }{
 #' Remove phenotypes belonging to a certain branch of the HPO,
-#' as defined by an ancestor term.}
+#'  as defined by an ancestor term.}
 #' \item{Phenotype-level: \code{keep_ont_levels}: }{
 #' Keep only phenotypes at certain absolute ontology levels within the HPO.}
 #' \item{Phenotype-level: \code{pheno_ndiseases_threshold}: }{
@@ -27,7 +27,7 @@
 #' Keep only phenotypes with a minimum GPT severity score.}
 #' \item{Phenotype-level: \code{info_content_threshold}: }{
 #' Keep only phenotypes with a minimum information criterion score
-#' (computed from the HPO).}
+#'  (computed from the HPO).}
 #' \item{Symptom-level: \code{pheno_frequency_threshold}: }{
 #' Keep only phenotypes with mean frequency equal to or above the threshold
 #'  (i.e. how frequently a phenotype is associated with any diseases in
@@ -38,8 +38,8 @@
 #' Uncorrected p-value threshold to filter cell type-symptom associations by.}
 #' \item{Symptom-level: \code{symptom_intersection_threshold}: }{
 #' Minimum proportion of genes overlapping between a symptom gene list
-#' (phenotype-associated genes in the context of a particular disease)
-#' and the phenotype-cell type association driver genes.}
+#'  (phenotype-associated genes in the context of a particular disease)
+#'  and the phenotype-cell type association driver genes.}
 #' \item{Cell type-level: \code{q_threshold}: }{
 #' Keep only cell type-phenotype association results at q<=0.05.}
 #' \item{Cell type-level: \code{effect_threshold}: }{
@@ -54,7 +54,7 @@
 #' Keep only genes <4.3kb in length.}
 #' \item{Gene-level: \code{add_driver_genes}: }{
 #' Keep only genes that are driving the association with a given phenotype
-#' (inferred by the intersection of phenotype-associated genes and gene with
+#'  (inferred by the intersection of phenotype-associated genes and gene with
 #'  high-specificity quantiles in the target cell type).}
 #' \item{Gene-level: \code{keep_biotypes}: }{
 #' Keep only genes belonging to certain biotypes.}
@@ -63,13 +63,13 @@
 #'  (i.e. how frequently a gene is associated with a given phenotype
 #'  when observed within a disease).}
 #' \item{Gene-level: \code{keep_specificity_quantiles}: }{
-#'  Keep only genes in top specificity quantiles
+#' Keep only genes in top specificity quantiles
 #'  from the cell type dataset (\code{ctd}).}
 #' \item{Gene-level: \code{keep_mean_exp_quantiles}: }{
-#'  Keep only genes in top mean expression quantiles
+#' Keep only genes in top mean expression quantiles
 #'  from the cell type dataset (\code{ctd}).}
 #' \item{Gene-level: \code{symptom_gene_overlap}: }{
-#'  Ensure that genes nominated at the phenotype-level also
+#' Ensure that genes nominated at the phenotype-level also
 #'  appear in the genes overlapping at the cell type-specific symptom-level.}
 #' \item{All levels: \code{top_n}: }{
 #' Sort candidate targets by a preferred order of metrics and
@@ -207,7 +207,7 @@ prioritise_targets <- function(#### Input data ####
                                verbose = TRUE){
   q <- CellType <- width <- seqnames <- gene_biotype <-
     Severity_score <- cl_name <- cl_id <- Severity_score_max <-
-    info_content <- NULL;
+    info_content <- severity_score_gpt <- NULL;
 
   force(results)
   force(ctd_list)
@@ -487,6 +487,7 @@ prioritise_targets <- function(#### Input data ####
                                  phenotype_to_genes = phenotype_to_genes,
                                  keep_quantiles = keep_specificity_quantiles,
                                  top_n = NULL,
+                                 drop_subthreshold=TRUE,
                                  proportion_driver_genes_symptom_threshold=symptom_intersection_threshold)
   rep_dt <- report(dt = results,
                    rep_dt = rep_dt,
@@ -552,6 +553,10 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "end",
                    verbose = verbose)
+  ## Add row diff
+  rep_dt$Rows_diff <- c(0,
+                        rep_dt$Rows[seq(nrow(rep_dt)-1)+1] -
+                        rep_dt$Rows[seq(nrow(rep_dt)-1)])
   if(isTRUE(verbose)) round(difftime(Sys.time(),t1,units = "s"),0)
   #### Return ####
   if(isTRUE(return_report)){

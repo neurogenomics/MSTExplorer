@@ -33,7 +33,7 @@ prioritise_targets_network(
   add_visExport = FALSE,
   degree = 1,
   width = "100\%",
-  height = "90vh",
+  height = "100vh",
   main = "Rare Disease Celltyping",
   submain = "Prioritised Targets Network",
   preferred_palettes = "kovesi.linear_bmy_10_95_c78",
@@ -96,6 +96,9 @@ ancestor_name --> Phenotype --> CellType --> gene_symbol}
  \item{"customScalingFunction"}{ : Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.}
 }}
 
+\item{arrows}{: Named list or String. To draw an arrow with default settings a string can be supplied. For example: 'to, from,middle' or 'to;from', any combination with any seperating symbol is fine. 
+If you want to control the size of the arrowheads, you can supply an object. See \link[visNetwork]{visDocumentation}}
+
 \item{smooth}{: Boolean. Default to FALSE. Use smooth edges ?}
 
 \item{add_visExport}{Add PDF download button.}
@@ -105,9 +108,9 @@ Set high number to have the entire sub-network.
 In case of "hierarchical" algorithm, you can also pass a
 list(from = 1, to = 1) to control degree in both direction.}
 
-\item{width}{: Number. Default to 1. The width of the edge. If value is set, this is not used.}
+\item{width}{Width of the heatmap body.}
 
-\item{height}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
+\item{height}{Height of the heatmap body.}
 
 \item{main}{: For add a title. Character or a named list.
 \itemize{

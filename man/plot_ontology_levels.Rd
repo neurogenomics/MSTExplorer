@@ -25,7 +25,8 @@ plot_ontology_levels(
   save_path = NULL,
   height = 7,
   width = length(x_vars) * 5.75,
-  smooth.line.args = list(method = "loess", se = FALSE)
+  smooth.line.args = list(method = "loess", se = FALSE),
+  return_data = TRUE
 )
 }
 \arguments{
@@ -85,6 +86,8 @@ Set to \code{NULL} to not save the plot.}
 
 \item{smooth.line.args}{A list of additional aesthetic arguments to be passed
 to \code{geom_smooth} geom used to display the regression line.}
+
+\item{return_data}{Return the full long data used in the plots.}
 }
 \value{
 A named list containing the data and the plot.

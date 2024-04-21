@@ -10,7 +10,8 @@
 #' overlap between symptom genes (genes annotated to a phenotype
 #' via a specific disease) and the driver genes
 #' (genes driving a signficant phenotype-cell type association).
-#'
+#' @param drop_subthreshold Drop rows that don't meet the
+#'  \code{proportion_driver_genes_symptom_threshold} criterion.
 #' @inheritParams prioritise_targets
 #'
 #' @export
@@ -29,7 +30,8 @@ add_symptom_results <- function(results = load_example_results(),
                                 annotLevels =  map_ctd_levels(results),
                                 keep_quantiles = seq(30,40),
                                 top_n = NULL,
-                                proportion_driver_genes_symptom_threshold=.25
+                                proportion_driver_genes_symptom_threshold=.25,
+                                drop_subthreshold=FALSE
                                 ){
   n_genes_hpo_id <- n_genes_disease_id <- n_genes_symptom <- gene_symbol <-
     celltype_symptom <- n_driver_genes_symptom <-
@@ -74,5 +76,12 @@ add_symptom_results <- function(results = load_example_results(),
   phenos[,proportion_driver_genes_symptom:=(n_driver_genes_symptom/n_genes_symptom)]
   phenos[proportion_driver_genes_symptom>=proportion_driver_genes_symptom_threshold,
          celltype_symptom:=get(celltype_col)]
+  #### Drop subthreshold symptoms ####
+  if(isTRUE(drop_subthreshold) &&
+     !is.null(proportion_driver_genes_symptom_threshold)){
+    messager("Dropping subthreshold symptoms.")
+    phenos <- phenos[
+      proportion_driver_genes_symptom>proportion_driver_genes_symptom_threshold,]
+  }
   return(phenos)
 }

@@ -15,7 +15,8 @@ add_symptom_results(
   annotLevels = map_ctd_levels(results),
   keep_quantiles = seq(30, 40),
   top_n = NULL,
-  proportion_driver_genes_symptom_threshold = 0.25
+  proportion_driver_genes_symptom_threshold = 0.25,
+  drop_subthreshold = FALSE
 )
 }
 \arguments{
@@ -49,6 +50,9 @@ to gene annotations.}
 overlap between symptom genes (genes annotated to a phenotype
 via a specific disease) and the driver genes
 (genes driving a signficant phenotype-cell type association).}
+
+\item{drop_subthreshold}{Drop rows that don't meet the
+\code{proportion_driver_genes_symptom_threshold} criterion.}
 }
 \description{
 Add symptom results to the results data.table.

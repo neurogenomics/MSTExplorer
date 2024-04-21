@@ -58,8 +58,8 @@ Set to \code{NULL} to not save the plot.}
 \item{...}{
   Arguments passed on to \code{\link[KGExplorer:plot_]{KGExplorer::plot_save}}
   \describe{
-    \item{\code{width}}{: Number. Default to 1. The width of the edge. If value is set, this is not used.}
-    \item{\code{height}}{: String. Default to "100\%". The height of the network in pixels or as a percentage.}
+    \item{\code{height}}{Height of the heatmap body.}
+    \item{\code{width}}{Width of the heatmap body.}
   }}
 }
 \description{

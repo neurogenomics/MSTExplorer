@@ -4,15 +4,19 @@ plot_density_cor <- function(res,
                              point.args = list(alpha=.01),
                              density_alpha=.7,
                              min_colors=15,
-                             log_vars=FALSE){
+                             log_vars=FALSE,
+                             show.legend=FALSE){
   res <- res[!is.na(get(x)) & !is.na(get(y))]
   p<- res |>
     ggstatsplot::ggscatterstats(x=!!ggplot2::sym(x),
                                 y=!!ggplot2::sym(y),
-                                xsidehistogram.args = list(fill="magenta", color="white"),
-                                ysidehistogram.args = list(fill="blue", color="white"),
+                                xsidehistogram.args = list(fill="magenta",
+                                                           color="white"),
+                                ysidehistogram.args = list(fill="blue",
+                                                           color="white"),
                                 point.args = point.args) +
-    ggplot2::geom_density_2d_filled(alpha=density_alpha) +
+    ggplot2::geom_density_2d_filled(alpha=density_alpha,
+                                    show.legend = show.legend) +
     ggplot2::scale_fill_manual(
       values = c(ggplot2::alpha("white",0),
                  ggplot2::alpha(pals::gnuplot(min_colors)[-1],density_alpha)

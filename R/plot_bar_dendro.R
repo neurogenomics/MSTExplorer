@@ -35,11 +35,14 @@ plot_bar_dendro <- function(results = load_example_results(),
                             target_branches = get_target_branches(),
                             keep_ancestors=names(target_branches),
                             hpo = HPOExplorer::get_hpo(),
+                            cl = KGExplorer::get_ontology(name = "cl",
+                                                          add_ancestors = 1,
+                                                          remove_rings = TRUE),
                             facets = "ancestor_name",
                             add_test_target_celltypes=TRUE,
                             preferred_palettes = "tol",
                             legend.position="none",
-                            heights = c(.3,1,.3,.3),
+                            heights = c(.3,1,.15,.3),
                             expand_dendro_x =rep(0.01,2),
                             q_threshold=0.05,
                             show_plot=TRUE,
@@ -73,9 +76,6 @@ plot_bar_dendro <- function(results = load_example_results(),
   }
   ## Convert ontology to dendrogram ontology
   {
-    cl <- KGExplorer::get_ontology(name = "cl",
-                                   add_ancestors = 1,
-                                   remove_rings=TRUE)
     ddata <- ontology_to_ggdendro(ont=cl,
                                   terms=as.character(unique(results$cl_id)))
     #### Make celltypes an ordered factor based on the clustering #####
