@@ -7,6 +7,7 @@
 plot_bar_dendro_facets(
   results = load_example_results(),
   results_full = NULL,
+  hpo = HPOExplorer::get_hpo(),
   target_branches = get_target_branches(),
   keep_ancestors = names(target_branches),
   target_celltypes = get_target_celltypes(target_branches = target_branches),
@@ -44,6 +45,9 @@ and merged together with \link[MSTExplorer]{merge_results}}
 \item{results_full}{A full set of results (not just those selected for
 plotting in \code{results}) to be used as a background during proportional
 enrichment testing.}
+
+\item{hpo}{Human Phenotype Ontology object,
+loaded from \link[KGExplorer]{get_ontology}.}
 
 \item{target_branches}{A named list of HPO
 branches each matched with CL cell type branches that

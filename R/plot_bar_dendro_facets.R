@@ -49,6 +49,7 @@
 #'                          background_full=FALSE)
 plot_bar_dendro_facets <- function(results = load_example_results(),
                                   results_full = NULL,
+                                  hpo=HPOExplorer::get_hpo(),
                                   target_branches = get_target_branches(),
                                   keep_ancestors = names(target_branches),
                                   target_celltypes = get_target_celltypes(
@@ -98,18 +99,21 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
     }
     results <- HPOExplorer::add_ancestor(results,
                                          lvl = lvl,
+                                         hpo=hpo,
                                          force_new = TRUE)
     results[, phenotypes_per_ancestor:=data.table::uniqueN(hpo_id),
             by=c("ancestor","ancestor_name")]
   }
   if("hpo_name" %in% c(fill_var,facets)){
-    results <- HPOExplorer::add_hpo_name(results)
+    results <- HPOExplorer::add_hpo_name(results,
+                                         hpo=hpo)
   }
   #### Create filtered dataset for plotting ####
   {
     if(!is.null(keep_ancestors) &&
        "hpo_name" %in% names(results)){
       dat <- HPOExplorer::filter_descendants(phenos = results,
+                                             hpo = hpo,
                                              keep_descendants = keep_ancestors)
     } else {
       dat <- data.table::copy(results)
@@ -117,6 +121,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
     if(nrow(dat)==0) stopper("0 associations remaining.")
     if(!is.null(keep_ont_levels) || "ontLvl" %in% c(facets,cols)){
       dat <- HPOExplorer::add_ont_lvl(dat,
+                                      hpo=hpo,
                                       keep_ont_levels = keep_ont_levels)
     }
     if(!is.null(target_branches_keep)){
@@ -172,8 +177,8 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
       data_summary <- dat[,list(
         target_celltypes=paste(target_branches[[ancestor_name]],collapse = "/"),
         phenotypes_per_ancestor=unique(phenotypes_per_ancestor),
-        n_celltypes=data.table::uniqueN(cl_name),
-        n_celltypes_sig=data.table::uniqueN(cl_name[p.value.adj<0.05])
+        n_celltypes=data.table::uniqueN(cl_name[term=="is_targetTRUE"]),
+        n_celltypes_sig=data.table::uniqueN(cl_name[term=="is_targetTRUE" & p.value.adj<0.05])
       ),
       by=c("ancestor_name")]
     }

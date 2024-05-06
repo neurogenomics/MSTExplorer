@@ -16,6 +16,8 @@
 #' denoted by "*" above its bar.
 #' @param expand_dendro_x Passed to \link[ggplot2]{scale_x_discrete}
 #' in the cell type dendrogram.
+#' @param cl Cell Ontology (CL) object from
+#'  \code{KGExplorer::get_ontology("cl")}.
 #' @inheritParams plot_
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams HPOExplorer::add_ancestor
@@ -133,7 +135,8 @@ plot_bar_dendro <- function(results = load_example_results(),
                                   color_vector=color_vector,
                                   legend.position=legend.position,
                                   q_threshold=q_threshold,
-                                  facets=facets)
+                                  facets=facets,
+                                  hpo=hpo)
   ggbars <- ggbars_out$plot
   #### Create dendrogram plot ####
   ggdend <-

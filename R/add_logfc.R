@@ -16,8 +16,8 @@ add_logfc <- function(results,
     messager("Adding logFC column.")
     # results[,logFC:=log10(scales::rescale(estimate,c(.Machine$double.xmin, 1)))]
     # results[,logFC:=logFC/mean(results$logFC)]
-    results[,logFC:=get(effect_var)+abs(min(get(effect_var)))]
-    results[,logFC:=log2(logFC/mean(results$logFC))]
+    results[,logFC:=(get(effect_var)+abs(min(get(effect_var))))]
+    results[,logFC:=(log2(logFC/mean(results$logFC)))]
     # hist(results$logFC)
   } else {
     messager("logFC already exists in results.",

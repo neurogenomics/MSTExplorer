@@ -41,6 +41,9 @@ correspond to on-target cell types across the two ontologies.}
 \item{hpo}{Human Phenotype Ontology object,
 loaded from \link[KGExplorer]{get_ontology}.}
 
+\item{cl}{Cell Ontology (CL) object from
+\code{KGExplorer::get_ontology("cl")}.}
+
 \item{facets}{A set of variables or expressions quoted by \code{\link[ggplot2:vars]{vars()}}
 and defining faceting groups on the rows or columns dimension.
 The variables can be named (the names are passed to \code{labeller}).

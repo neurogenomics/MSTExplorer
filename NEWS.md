@@ -1,3 +1,11 @@
+# MSTExplorer 1.0.1
+
+## Bug fixes
+
+* `plot_bar_dendro_facets`
+  - Add `hpo` arg to pass HPO directly.
+  - Fix `data_summary` so that denominator is the number of on-target cell types only.
+
 # MSTExplorer 1.0.0
 
 ## New features
