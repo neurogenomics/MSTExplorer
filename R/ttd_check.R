@@ -15,6 +15,7 @@
 #' @inheritParams plot_
 #' @inheritParams load_example_ctd
 #' @inheritParams data.table::merge.data.table
+#' @inheritParams KGExplorer::get_ttd
 #'
 #' @export
 #' @importFrom utils tail
@@ -26,11 +27,14 @@ ttd_check <- function(top_targets,
                       failed_status = c(
                         "Terminated",
                         "Withdrawn from market",
+                        "Discontinued*",
                         NA
                       ),
                       keep_status = NULL,
                       remove_status=c(NA),
                       allow.cartesian = FALSE,
+                      run_map_genes = TRUE,
+                      force_new=FALSE,
                       show_plot = TRUE,
                       save_path = NULL,
                       height=NULL,
@@ -63,7 +67,8 @@ ttd_check <- function(top_targets,
   TARGETID <- DRUGNAME <- DRUGTYPE <- DRUGID <-
     GENENAME2 <- prioritised <- HIGHEST_STATUS <- NULL;
 
-  ttdi <- KGExplorer::get_ttd()
+  ttdi <- KGExplorer::get_ttd(force_new = force_new,
+                              run_map_genes = run_map_genes)
   #### Remove results that can't be linked to specific genes #####
   dat_sub <- ttdi$merged[!is.na(TARGETID) &
                          !is.na(GENENAME2) &
@@ -81,7 +86,10 @@ ttd_check <- function(top_targets,
   if(!is.null(remove_status)){
     dat_sub <- dat_sub[!HIGHEST_STATUS %in% remove_status,]
   }
-  dat_sub[,failed:=HIGHEST_STATUS %in% failed_status]
+  dat_sub[,failed:=(
+    HIGHEST_STATUS %in% failed_status |
+    (grepl(paste(failed_status,collapse = "|"),HIGHEST_STATUS))
+  )]
   #### Filter to only those in top_targets ####
   dat_sub2 <- (merge(
         dat_sub[failed==FALSE],
@@ -101,7 +109,6 @@ ttd_check <- function(top_targets,
   #                      dat_sub2$GENENAME2)))
   dat_sub[,prioritised:=(DRUGID %in% dat_sub2$DRUGID)]
   #### Hypergeometric test ####
-  dat_sub[,failed:=HIGHEST_STATUS %in% failed_status]
   fail <- dat_sub[failed==TRUE,drop=FALSE]
   notfail <- dat_sub[failed==FALSE,drop=FALSE]
   ttd_hypergeo_out <- ttd_hypergeo(fail=fail,

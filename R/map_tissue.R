@@ -17,10 +17,9 @@ map_tissue <- function(results = NULL,
                        map = KGExplorer::get_data_package(
                            package = "MSTExplorer",
                            name="tissue_maps"),
-                       add_ancestors=10,
-                       uberon = KGExplorer::get_ontology(
-                         name = "uberon",
-                         add_ancestors=add_ancestors),
+                       lvl=10,
+                       uberon = KGExplorer::get_ontology(name = "uberon",
+                                                         lvl=lvl),
                        return_agg=FALSE
                        ){
   ancestor <- ancestor_name <- cl_count <- uberon_id <- uberon_name <- id <-
@@ -47,7 +46,7 @@ map_tissue <- function(results = NULL,
                        ),
     by=by]
   #### Get the ancestor for each tissue #####
-  if(!isFALSE(add_ancestors)){
+  if(!isFALSE(lvl)){
     map_agg2 <- merge(map_agg,
                       data.table::data.table(
                         uberon@elementMetadata

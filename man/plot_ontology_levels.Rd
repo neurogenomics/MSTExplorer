@@ -21,6 +21,7 @@ plot_ontology_levels(
   n.breaks = 4,
   notch = FALSE,
   nrow = 2,
+  add_arrow = TRUE,
   show_plot = TRUE,
   save_path = NULL,
   height = 7,
@@ -74,6 +75,9 @@ if the notches of two boxes do not overlap, this suggests that the medians
 are significantly different.}
 
 \item{nrow}{Number of facet rows for the plot.}
+
+\item{add_arrow}{Add arrows indicating whether phenotypes are more broader
+or more specific across ontology levels.}
 
 \item{show_plot}{Print the plot to the console.}
 

@@ -30,6 +30,8 @@
 #'  In case of "hierarchical" algorithm, you can also pass a
 #'  list(from = 1, to = 1) to control degree in both direction.
 #' @param verbose Print messages.
+#' @param agg_fun Function to aggregate edge values with when there
+#' are multiple edges between a given pair of nodes.
 #' @inheritParams prioritise_targets
 #' @inheritParams KGExplorer::plot_graph_visnetwork
 #' @returns A named list containing the \link[visNetwork]{visNetwork} plot
@@ -48,9 +50,12 @@ prioritise_targets_network <- function(top_targets,
                                                        "cl_name",
                                                        "gene_symbol"),
                                        group_var = vertex_vars[[1]],
+                                       agg_fun=mean,
                                        colour_var = "node_type",
-                                       edge_color_var = "logFC",
-                                       edge_size_var = "logFC",
+                                       edge_color_var = "estimate",
+                                       edge_size_var = edge_color_var,
+                                       node_opacity = .75,
+                                       edge_opacity = .5,
                                        # mediator_var = list(),
                                        mediator_var = list(c(1,2),c(2,3),c(3,4),c(1,3)),
                                        layout = "layout_with_sugiyama",
@@ -97,6 +102,7 @@ prioritise_targets_network <- function(top_targets,
   g <- targets_to_graph(top_targets = top_targets,
                         vertex_vars = c(group_var,vertex_vars),
                         group_var = group_var,
+                        agg_fun = agg_fun,
                         edge_color_var = edge_color_var,
                         edge_size_var = edge_size_var,
                         mediator_var = mediator_var,
@@ -105,6 +111,8 @@ prioritise_targets_network <- function(top_targets,
     g = g,
     label_var = "name",
     colour_var = colour_var,
+    node_opacity = node_opacity,
+    edge_opacity = edge_opacity,
     save_path = save_path,
     preferred_palettes = preferred_palettes,
     layout = layout,

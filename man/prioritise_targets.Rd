@@ -173,14 +173,20 @@ Prioritise target genes based on a procedure:\cr
 \item{Disease-level: \code{keep_deaths}: }{
 Keep only diseases with a certain age of death.}
 \item{Disease-level: \code{severity_threshold_max}: }{
+\preformatted{
 Keep only diseases annotated as a certain degree of severity or greater
-(filters on maximum severity per disease).}
+ (filters on maximum severity per disease).}
+}
 \item{Phenotype-level: \code{prune_ancestors}: }{
+\preformatted{
 Remove redundant ancestral phenotypes when at least one of their
-descendants already exist.}
+ descendants already exist.}
+}
 \item{Phenotype-level: \code{keep_descendants}: }{
+\preformatted{
 Remove phenotypes belonging to a certain branch of the HPO,
-as defined by an ancestor term.}
+ as defined by an ancestor term.}
+}
 \item{Phenotype-level: \code{keep_ont_levels}: }{
 Keep only phenotypes at certain absolute ontology levels within the HPO.}
 \item{Phenotype-level: \code{pheno_ndiseases_threshold}: }{
@@ -190,26 +196,37 @@ Keep only phenotypes with high severity Tiers.}
 \item{Phenotype-level: \code{severity_threshold}: }{
 Keep only phenotypes with mean Severity equal to or below the threshold.}
 \item{Phenotype-level: \code{gpt_filters}: }{
-Keep only phenotypes with certain GPT annotations in specific severity metrics.}
+\preformatted{
+Keep only phenotypes with certain GPT annotations in specific
+ severity metrics.}
+}
 \item{Phenotype-level: \code{severity_score_gpt_threshold}: }{
 Keep only phenotypes with a minimum GPT severity score.}
 \item{Phenotype-level: \code{info_content_threshold}: }{
+\preformatted{
 Keep only phenotypes with a minimum information criterion score
-(computed from the HPO).}
+ (computed from the HPO).}
+}
 \item{Symptom-level: \code{pheno_frequency_threshold}: }{
+\preformatted{
 Keep only phenotypes with mean frequency equal to or above the threshold
-(i.e. how frequently a phenotype is associated with any diseases in
-which it occurs).}
+ (i.e. how frequently a phenotype is associated with any diseases in
+ which it occurs).}
+}
 \item{Symptom-level: \code{keep_onsets}: }{
 Keep only symptoms with a certain age of onset.}
 \item{Symptom-level: \code{symptom_p_threshold}: }{
 Uncorrected p-value threshold to filter cell type-symptom associations by.}
 \item{Symptom-level: \code{symptom_intersection_threshold}: }{
+\preformatted{
 Minimum proportion of genes overlapping between a symptom gene list
-(phenotype-associated genes in the context of a particular disease)
-and the phenotype-cell type association driver genes.}
+ (phenotype-associated genes in the context of a particular disease)
+ and the phenotype-cell type association driver genes.}
+}
 \item{Cell type-level: \code{q_threshold}: }{
+\preformatted{
 Keep only cell type-phenotype association results at q<=0.05.}
+}
 \item{Cell type-level: \code{effect_threshold}: }{
 Keep only cell type-phenotype association results at effect size>=1.}
 \item{Cell type-level: \code{keep_celltypes}: }{
@@ -217,44 +234,76 @@ Keep only terminally differentiated cell types.}
 \item{Gene-level: \code{keep_chr}: }{
 Remove genes on non-standard chromosomes.}
 \item{Gene-level: \code{evidence_score_threshold}: }{
-Remove genes that are below an aggregate phenotype-gene evidence score threshold.}
+\preformatted{
+Remove genes that are below an aggregate phenotype-gene
+ evidence score threshold.}
+}
 \item{Gene-level: \code{gene_size}: }{
 Keep only genes <4.3kb in length.}
 \item{Gene-level: \code{add_driver_genes}: }{
+\preformatted{
 Keep only genes that are driving the association with a given phenotype
-(inferred by the intersection of phenotype-associated genes and gene with
-high-specificity quantiles in the target cell type).}
+ (inferred by the intersection of phenotype-associated genes and gene with
+ high-specificity quantiles in the target cell type).}
+}
 \item{Gene-level: \code{keep_biotypes}: }{
 Keep only genes belonging to certain biotypes.}
 \item{Gene-level: \code{gene_frequency_threshold}: }{
+\preformatted{
 Keep only genes at or above a certain mean frequency threshold
-(i.e. how frequently a gene is associated with a given phenotype
-when observed within a disease).}
+ (i.e. how frequently a gene is associated with a given phenotype
+ when observed within a disease).}
+}
 \item{Gene-level: \code{keep_specificity_quantiles}: }{
+\preformatted{
 Keep only genes in top specificity quantiles
-from the cell type dataset (\code{ctd}).}
+ from the cell type dataset (CTD).}
+}
 \item{Gene-level: \code{keep_mean_exp_quantiles}: }{
+\preformatted{
 Keep only genes in top mean expression quantiles
-from the cell type dataset (\code{ctd}).}
+ from the cell type dataset (CTD).}
+}
 \item{Gene-level: \code{symptom_gene_overlap}: }{
+\preformatted{
 Ensure that genes nominated at the phenotype-level also
-appear in the genes overlapping at the cell type-specific symptom-level.}
+ appear in the genes overlapping at the cell type-specific symptom-level.}
+}
+\item{All levels: \code{sort_cols}: }{
+\preformatted{
+Sort candidate targets by one or more columns
+ (e.g. "severity_score_gpt", "q").
+}
+}
 \item{All levels: \code{top_n}: }{
-Sort candidate targets by a preferred order of metrics and
-only return the top N targets per cell type-phenotype combination.}
+\preformatted{
+Only return the top N targets per variable group
+ (specified with the "group_vars" argument).
+ For example, setting "group_vars" to "hpo_id" and "top_n" to 1 would
+ only return one target (row) per phenotype ID after sorting.}
+}
 }
 }
 \details{
 Term key:\cr
 \itemize{
-\item{Disease: }{A disease defined in the database
+\item{Disease: }{
+\preformatted{
+A disease defined in the database
 OMIM, DECIPHER and/or Orphanet.}
+}
 \item{Phenotype: }{A clinical feature associated with one or more diseases.}
-\item{Symptom: }{A phenotype within the context of a particular disease.
+\item{Symptom: }{
+\preformatted{
+A phenotype within the context of a particular disease.
 Within a given phenotype, there may be multiple symptoms with
-partially overlapping genetic mechanisms.}
-\item{Assocation: }{A cell type-specific enrichment test result conducted
+ partially overlapping genetic mechanisms.}
+}
+\item{Assocation: }{
+\preformatted{
+A cell type-specific enrichment test result conducted
 at the disease-level, phenotype-level, or symptom-level.}
+}
 }
 }
 \examples{

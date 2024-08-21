@@ -7,10 +7,12 @@
 ttd_check(
   top_targets,
   drug_types = NULL,
-  failed_status = c("Terminated", "Withdrawn from market", NA),
+  failed_status = c("Terminated", "Withdrawn from market", "Discontinued*", NA),
   keep_status = NULL,
   remove_status = c(NA),
   allow.cartesian = FALSE,
+  run_map_genes = TRUE,
+  force_new = FALSE,
   show_plot = TRUE,
   save_path = NULL,
   height = NULL,
@@ -32,6 +34,11 @@ the drug failed.}
 \item{remove_status}{Remove results by drug approval status.}
 
 \item{allow.cartesian}{See \code{allow.cartesian} in \code{\link[data.table]{[.data.table}}.}
+
+\item{run_map_genes}{Map genes to standardised HGNC symbols using 
+\link[orthogene]{map_genes}.}
+
+\item{force_new}{If TRUE, force a new download.}
 
 \item{show_plot}{Print the plot to the console.}
 

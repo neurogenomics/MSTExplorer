@@ -23,8 +23,9 @@ targets_to_graph <- function(top_targets,
                                              #      value = TRUE)
                                              ) |> unique(),
                              edge_color_var = "effect",
-                             edge_size_var = "effect",
+                             edge_size_var = edge_color_var,
                              mediator_var = "gene_symbol",
+                             agg_fun=mean,
                              format="visnetwork",
                              verbose=TRUE){
   # devoptera::args2vars(targets_to_graph)
@@ -48,6 +49,11 @@ targets_to_graph <- function(top_targets,
   if("disease_name" %in% vertex_vars){
     top_targets[,disease_name:=data.table::fcoalesce(disease_name,disease_id)]
   }
+  #### Aggregate ####
+  if(!is.null(agg_fun)){
+    top_targets[,c(edge_color_var,edge_size_var):=list(agg_fun(get(edge_color_var)), agg_fun(get(edge_size_var))), by=vertex_vars]
+  }
+
   #### Make vertex metadata ####
   metadata_vars <- metadata_vars[metadata_vars %in% names(top_targets)]
   lcols <- names(top_targets)[unlist(lapply(top_targets, methods::is, "list"))]

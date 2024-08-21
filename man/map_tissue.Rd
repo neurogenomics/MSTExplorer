@@ -7,8 +7,8 @@
 map_tissue(
   results = NULL,
   map = KGExplorer::get_data_package(package = "MSTExplorer", name = "tissue_maps"),
-  add_ancestors = 10,
-  uberon = KGExplorer::get_ontology(name = "uberon", add_ancestors = add_ancestors),
+  lvl = 10,
+  uberon = KGExplorer::get_ontology(name = "uberon", lvl = lvl),
   return_agg = FALSE
 )
 }
@@ -20,7 +20,8 @@ and merged together with \link[MSTExplorer]{merge_results}}
 \item{map}{Many:many mapping between tissue ontology terms and cell type
 ontology terms.}
 
-\item{add_ancestors}{Add ancestors for each term.}
+\item{lvl}{Depth of the ancestor terms to add. 
+Will get the closest ancestor to this level if none have this exact level.}
 
 \item{uberon}{UBERON ontology object of class \link[simona]{ontology_DAG}.}
 

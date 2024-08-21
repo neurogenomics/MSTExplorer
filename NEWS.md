@@ -1,3 +1,16 @@
+# MSTExplorer 1.0.3
+
+## New features
+
+* add function `run_congenital_enrichment`
+* add function `plot_celltype_severity`
+
+# MSTExplorer 1.0.2
+
+## New features
+
+* add function `prioritise_targets_grid`
+
 # MSTExplorer 1.0.1
 
 ## Bug fixes

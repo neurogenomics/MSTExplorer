@@ -167,13 +167,13 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
       add_test_target_celltypes <- FALSE
       data_summary <- NULL
     } else {
-      dat <- merge(dat,
+      cl_name <- p.value.adj <- term <- p.value.adj.signif <- NULL;
+      dat <- merge(dat[,-c("term")],
                    target_tests[[1]][term=="is_targetTRUE"],
                    all.x = TRUE,
                    by=c("ancestor_name","cl_id"))
       dat[p.value.adj.signif=="ns",p.value.adj.signif:=NA]
       #### Add summary of results ####
-      cl_name <- p.value.adj <- NULL;
       data_summary <- dat[,list(
         target_celltypes=paste(target_branches[[ancestor_name]],collapse = "/"),
         phenotypes_per_ancestor=unique(phenotypes_per_ancestor),

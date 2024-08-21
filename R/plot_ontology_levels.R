@@ -13,6 +13,8 @@
 #' @param log_vars Logical vector indicating which variables to log-transform.
 #' @param sig_vars Logical vector indicating which variables to only plot
 #' for significant results.
+#' @param add_arrow Add arrows indicating whether phenotypes are more broader
+#' or more specific across ontology levels.
 #' @param return_data Return the full long data used in the plots.
 #' @inheritParams plot_
 #' @inheritParams ggpubr::stat_cor
@@ -53,6 +55,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                          n.breaks = 4,
                          notch = FALSE,
                          nrow = 2,
+                         add_arrow=TRUE,
                          show_plot=TRUE,
                          save_path=NULL,
                          height=7,
@@ -123,6 +126,7 @@ plot_ontology_levels <- function(results = load_example_results(),
     title <- paste("Phenotype level vs.",x_var)
     #### Filter to only sig vars ####
     if(sig_vars[which(x_vars==x_var)]){
+      messager("Filtering q-values <",q_threshold,":",shQuote(x_var))
       r2 <- data.table::copy(r2[q<q_threshold,])
       group_vars <- union(group_vars,"CellType")
       title <- paste(title,"(FDR<0.05)")
@@ -134,6 +138,10 @@ plot_ontology_levels <- function(results = load_example_results(),
       y_lab <- paste0("log10(",y_lab,")")
       # y_lab <- substitute(expression(log[10](y_lab)),
       #                     list(y_lab=y_lab))
+      ## replace 0s ###
+      r2[get(x_var)==0, c(x_var):=.Machine$double.xmin]
+      messager(trans,"transforming x-axis:",shQuote(x_var))
+      r2[,c(x_var):=get(trans)(get(x_var))]
     }
     if(!is.null(reduce_fun)){
       dat <- r2[!is.na(get(x_var)),
@@ -245,6 +253,10 @@ plot_ontology_levels <- function(results = load_example_results(),
                            axes="collect")
   #### Extract ggstatsplot results ####
   data_stats <- get_ggstatsplot_stats(plts2)
+  if(add_arrow){
+    gp_arrow <- HPOExplorer::plot_arrow()
+    plts2 <- (gp_arrow | plts2) + patchwork::plot_layout(widths = c(.1, 1))
+  }
   #### Show plot ####
   if(show_plot) methods::show(plts2)
   #### Save plot ####

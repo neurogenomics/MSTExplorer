@@ -19,9 +19,12 @@ prioritise_targets_network(
   top_targets,
   vertex_vars = c("disease_name", "hpo_name", "cl_name", "gene_symbol"),
   group_var = vertex_vars[[1]],
+  agg_fun = mean,
   colour_var = "node_type",
-  edge_color_var = "logFC",
-  edge_size_var = "logFC",
+  edge_color_var = "estimate",
+  edge_size_var = edge_color_var,
+  node_opacity = 0.75,
+  edge_opacity = 0.5,
   mediator_var = list(c(1, 2), c(2, 3), c(3, 4), c(1, 3)),
   layout = "layout_with_sugiyama",
   solver = "forceAtlas2Based",
@@ -52,11 +55,18 @@ to include as vertices/nodes within the network.}
 
 \item{group_var}{Variable to group nodes by.}
 
+\item{agg_fun}{Function to aggregate edge values with when there
+are multiple edges between a given pair of nodes.}
+
 \item{colour_var}{Column to color nodes by.}
 
 \item{edge_color_var}{Variable to color edges by.}
 
 \item{edge_size_var}{Variable to scale edges by.}
+
+\item{node_opacity}{Node opacity.}
+
+\item{edge_opacity}{Edge opacity.}
 
 \item{mediator_var}{Variable to connect cell types and phenotypes by
 (i.e. "gene_symbol").
