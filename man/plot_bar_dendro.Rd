@@ -10,7 +10,7 @@ plot_bar_dendro(
   target_branches = get_target_branches(),
   keep_ancestors = names(target_branches),
   hpo = HPOExplorer::get_hpo(),
-  cl = KGExplorer::get_ontology(name = "cl", add_ancestors = 1, remove_rings = TRUE),
+  cl = KGExplorer::get_ontology(name = "cl", lvl = 1, remove_rings = TRUE),
   facets = "ancestor_name",
   add_test_target_celltypes = TRUE,
   preferred_palettes = "tol",

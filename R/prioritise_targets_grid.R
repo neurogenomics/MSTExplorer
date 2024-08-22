@@ -47,6 +47,8 @@ prioritise_targets_grid <- function(top_targets,
 
   top_targets <- top_targets|> data.table::copy()
   top_targets <- map_celltype(top_targets)
+  top_targets <- HPOExplorer::add_disease(top_targets,
+                                          add_descriptions = TRUE)
   #### Filter severity classes ####
   if(!is.null(keep_severity_class)){
     res_class <- res_class[severity_class %in% keep_severity_class]

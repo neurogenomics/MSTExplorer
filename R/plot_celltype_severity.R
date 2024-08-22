@@ -19,7 +19,7 @@ plot_celltype_severity <- function(results,
                                        keep_descendants = "cell"
                                      ),
                                    q_threshold=.05,
-                                   top_n=10,
+                                   top_n=3,
                                    types=c("bar","dot")){
 
   requireNamespace("ggplot2")

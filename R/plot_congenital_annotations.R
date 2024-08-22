@@ -125,14 +125,14 @@ plot_congenital_annotations <- function(results,
      ggbar <- ggbar +
        ggplot2::geom_hline(yintercept=baseline,
                            linetype="dashed",
-                           color="black", alpha=.8) +
-       ggplot2::annotate("text",
-                         size=3,
-                         x=1,
-                         y=baseline,
-                         label=paste0("Baseline: ",round(baseline*100),"%"),
-                         hjust=0.8,
-                         vjust=-1)
+                           color="black", alpha=.8)
+       # ggplot2::annotate("text",
+       #                   size=3,
+       #                   x=1,
+       #                   y=baseline,
+       #                   label=paste0("Baseline: ",round(baseline*100),"%"),
+       #                   hjust=0.8,
+       #                   vjust=-1)
    }
   ## Extract test results
   data_stats <- get_ggstatsplot_stats(ggbar)

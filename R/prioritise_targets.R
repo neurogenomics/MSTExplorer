@@ -181,7 +181,7 @@
 #' @import data.table
 #' @importFrom utils head
 #' @examples
-#' results = load_example_results()[seq(5000),]
+#' results = load_example_results()[q<0.05]
 #' out <- prioritise_targets(results=results)
 prioritise_targets <- function(#### Input data ####
                                results = load_example_results(),
@@ -280,7 +280,9 @@ prioritise_targets <- function(#### Input data ####
   #### Add disease columns ####
   ## Add this early so I can get a count of the number of diseases
   ## in the final report plot.
+  ## Add disease descriptions AFTER all other steps to avoid memory explosion.
   results <- HPOExplorer::add_disease(phenos = results,
+                                      add_descriptions = FALSE,
                                       allow.cartesian = TRUE)
   #### start ####
   rep_dt <- report(dt = results,
@@ -601,6 +603,10 @@ prioritise_targets <- function(#### Input data ####
                    rep_dt = rep_dt,
                    step = "end",
                    verbose = verbose)
+  ## Add disease descriptions AFTER all other steps to avoid memory explosion.
+  top_targets <- HPOExplorer::add_disease(phenos = top_targets,
+                                          add_descriptions = TRUE,
+                                          allow.cartesian = TRUE)
   ## Add row diff
   rep_dt$Rows_diff <- c(0,
                         rep_dt$Rows[seq(nrow(rep_dt)-1)+1] -

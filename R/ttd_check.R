@@ -67,6 +67,8 @@ ttd_check <- function(top_targets,
   TARGETID <- DRUGNAME <- DRUGTYPE <- DRUGID <-
     GENENAME2 <- prioritised <- HIGHEST_STATUS <- NULL;
 
+  top_targets <- HPOExplorer::add_disease(top_targets,
+                                          add_descriptions = TRUE)
   ttdi <- KGExplorer::get_ttd(force_new = force_new,
                               run_map_genes = run_map_genes)
   #### Remove results that can't be linked to specific genes #####

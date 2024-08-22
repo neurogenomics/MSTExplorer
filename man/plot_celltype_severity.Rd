@@ -9,7 +9,7 @@ plot_celltype_severity(
   cl = KGExplorer::filter_ontology(KGExplorer::get_ontology("cl"), keep_descendants =
     "cell"),
   q_threshold = 0.05,
-  top_n = 10,
+  top_n = 3,
   types = c("bar", "dot")
 )
 }

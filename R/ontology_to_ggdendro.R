@@ -1,8 +1,7 @@
-ontology_to_ggdendro <- function(ont=KGExplorer::get_ontology(
-  name = "cl",
-  add_ancestors = 1),
-  terms=NULL #as.character(unique(results$cl_id))
-  ){
+ontology_to_ggdendro <- function(ont=KGExplorer::get_ontology(name = "cl",
+                                                              lvl = 1),
+                                 terms=NULL #as.character(unique(results$cl_id))
+                                 ){
   #### Get celltype dendrogram ####
   ## From CTD
   # ctd1 <- get_data("ctd_HumanCellLandscape.rds")
