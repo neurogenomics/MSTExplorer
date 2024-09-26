@@ -19,14 +19,13 @@
 #'                          save_path=tempfile())
 #' }
 run_phenomix <- function(ctd_name,
-                         annotLevel,
+                         annotLevel = seq(length(ctd)),
                          ymat,
                          test_method="glm",
                          metric="specificity",
                          ctd = load_example_ctd(
                            file = paste0("ctd_",ctd_name,".rds")
                            ),
-                         xmat = ctd[[annotLevel]][[metric]],
                          save_path = file.path(
                            tempfile(),
                            # here::here(),
@@ -49,18 +48,22 @@ run_phenomix <- function(ctd_name,
     test_method <- "glm"
     multivariate <- FALSE
   }
-  lm_res <- phenomix::iterate_lm(xmat = xmat,
-                                 ymat = ymat,
-                                 test_method = test_method,
-                                 multivariate = multivariate,
-                                 workers = workers,
-                                 ...)
+  ## Iterate over each CTD level
+  lm_res <- lapply(stats::setNames(annotLevel,annotLevel), function(lvl){
+    messager("Running phenomix with CTD annotLevel:",lvl)
+    phenomix::iterate_lm(xmat = ctd[[lvl]][[metric]],
+                         ymat = ymat,
+                         test_method = test_method,
+                         multivariate = multivariate,
+                         workers = workers,
+                         ...)
+  }) |> data.table::rbindlist(idcol = "annotLevel")
+
   run_phenomix_postprocess <- function(lm_res,
                                        annotLevel,
                                        effect_var = c("estimate","statistic",
                                                       "ges","F")){
     effect_var <- intersect(effect_var,names(lm_res))[1]
-    lm_res[,annotLevel:=annotLevel]
     data.table::setnames(lm_res,
                          c("xvar","yvar"),
                          c("CellType","hpo_id"))

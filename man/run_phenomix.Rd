@@ -6,12 +6,11 @@
 \usage{
 run_phenomix(
   ctd_name,
-  annotLevel,
+  annotLevel = seq(length(ctd)),
   ymat,
   test_method = "glm",
   metric = "specificity",
   ctd = load_example_ctd(file = paste0("ctd_", ctd_name, ".rds")),
-  xmat = ctd[[annotLevel]][[metric]],
   save_path = file.path(tempfile(), "results", paste0("phenomix_", test_method, "_",
     metric), paste0("phenomix_", ctd_name, "_results.tsv.gz")),
   multivariate = FALSE,
@@ -35,8 +34,6 @@ analyse (\emph{Default: 1}).}
 
 \item{ctd}{CellTypeDataset generated using
 \link[EWCE]{generate_celltype_data}.}
-
-\item{xmat}{gene x trait matrix.}
 
 \item{save_path}{Path to save the table of aggregated results to.}
 

@@ -1,3 +1,9 @@
+# MSTExplorer 1.0.4
+
+## New features
+
+* `run_phenomix`: can now take multiple `annotLevel`s at once (will iterate).
+
 # MSTExplorer 1.0.3
 
 ## New features
