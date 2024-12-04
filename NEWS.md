@@ -10,6 +10,11 @@
   - Return `results` with new column rather than directly modifying the original
   input.
   - Update references (`add_logfc(results)` -> `results <- add_logfc(results)`).
+* `ttd_check`
+  - Add check for disease column names before executing
+  `HPOExplorer::add_disease` on input.
+* `plot_ttd`
+  - Remove `fill` aesthetic for `geom_text` (doesn't exist anymore).
 
 # MSTExplorer 1.0.4
 
