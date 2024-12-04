@@ -3,7 +3,7 @@ MSTExplorer
 <img src='https://github.com/neurogenomics/MSTExplorer/raw/master/inst/hex/hex.png' title='Hex sticker for MSTExplorer' height='300'><br>
 [![License:
 GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
-[![](https://img.shields.io/badge/devel%20version-1.0.0-black.svg)](https://github.com/neurogenomics/MSTExplorer)
+[![](https://img.shields.io/badge/devel%20version-1.0.5-black.svg)](https://github.com/neurogenomics/MSTExplorer)
 [![](https://img.shields.io/github/languages/code-size/neurogenomics/MSTExplorer.svg)](https://github.com/neurogenomics/MSTExplorer)
 [![](https://img.shields.io/github/last-commit/neurogenomics/MSTExplorer.svg)](https://github.com/neurogenomics/MSTExplorer/commits/master)
 <br> [![R build
@@ -12,10 +12,11 @@ status](https://github.com/neurogenomics/MSTExplorer/workflows/rworkflows/badge.
 <br>
 <a href='https://app.codecov.io/gh/neurogenomics/MSTExplorer/tree/master' target='_blank'><img src='https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graphs/icicle.svg' title='Codecov icicle graph' width='200' height='50' style='vertical-align: top;'></a>  
 <h4>  
-Authors: <i>Brian Schilder, Robert Gordon-Smith, Nathan Skene</i>  
+Authors: <i>Brian Schilder, Robert Gordon-Smith, Nathan Skene,
+Hiranyamaya Dash</i>  
 </h4>
 <h4>  
-README updated: <i>Feb-24-2024</i>  
+README updated: <i>Dec-04-2024</i>  
 </h4>
 
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->

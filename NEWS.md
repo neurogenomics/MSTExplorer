@@ -1,3 +1,16 @@
+# MSTExplorer 1.0.5
+
+## Bug fixes
+
+* Tests
+  - Use `force_new=TRUE` where some tests occasionally fail with cached
+  files.
+  - `test-load_example_results`: Update test files.
+* `add_logfc`
+  - Return `results` with new column rather than directly modifying the original
+  input.
+  - Update references (`add_logfc(results)` -> `results <- add_logfc(results)`).
+
 # MSTExplorer 1.0.4
 
 ## New features

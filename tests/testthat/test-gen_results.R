@@ -7,7 +7,8 @@ test_that("gen_results works", {
   all_results <- gen_results(ctd = ctd,
                              gene_data = gene_data,
                              list_names = list_names,
-                             reps = 10)
+                             reps = 10,
+                             force_new = TRUE)
   testthat::expect_true(methods::is(all_results$results,"data.table"))
   testthat::expect_true(methods::is(all_results$gene_data,"data.table"))
   testthat::expect_gte(sum(list_names %in% unique(all_results$results$hpo_id)),
