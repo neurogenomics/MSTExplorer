@@ -265,7 +265,7 @@ prioritise_targets <- function(#### Input data ####
   t1 <- Sys.time()
   messager("Prioritising gene targets.",v=verbose)
   #### Add logFC ####
-  add_logfc(results = results)
+  results <- add_logfc(results)
   #### add_hpo_id  #####
   results <- HPOExplorer::add_hpo_id(phenos = results,
                                      hpo = hpo)

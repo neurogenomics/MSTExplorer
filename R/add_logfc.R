@@ -14,13 +14,12 @@ add_logfc <- function(results,
   logFC <- NULL;
   if(!"logFC" %in% names(results) || isTRUE(force_new)){
     messager("Adding logFC column.")
-    # results[,logFC:=log10(scales::rescale(estimate,c(.Machine$double.xmin, 1)))]
-    # results[,logFC:=logFC/mean(results$logFC)]
-    results[,logFC:=(get(effect_var)+abs(min(get(effect_var))))]
-    results[,logFC:=(log2(logFC/mean(results$logFC)))]
-    # hist(results$logFC)
+    results$logFC <- results[[effect_var]]+abs(min(results[[effect_var]]))
+    results$logFC <- log2(results$logFC/mean(results$logFC))
+    return(results)
   } else {
     messager("logFC already exists in results.",
              "Use `force_new=TRUE` to overwrite.")
+    return(results)
   }
 }
