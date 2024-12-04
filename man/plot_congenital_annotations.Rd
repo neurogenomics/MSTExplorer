@@ -56,7 +56,7 @@ be extracted. The available palettes and packages can be checked by running
 
 \item{proportion.test}{Decides whether proportion test for \code{x} variable is to
 be carried out for each level of \code{y}. Defaults to \code{results.subtitle}. In
-\code{ggbarstats}, only \emph{p}-values from this test will be displayed.}
+\code{\link[ggstatsplot:ggbarstats]{ggbarstats()}}, only \emph{p}-values from this test will be displayed.}
 
 \item{add_baseline}{Add a horizontal line showing the proportions
 expected by random.}
@@ -78,7 +78,7 @@ Please note that if there are empty factor levels in your variable, they
 will be dropped. Default is \code{NULL}. If \code{NULL}, one-sample proportion test
 (a goodness of fit test) will be run for the \code{x} variable. Otherwise an
 appropriate association test will be run. This argument can not be \code{NULL}
-for \code{ggbarstats} function.}
+for \code{\link[ggstatsplot:ggbarstats]{ggbarstats()}}.}
     \item{\code{counts}}{The variable in data containing counts, or \code{NULL} if each row
 represents a single observation.}
     \item{\code{type}}{A character specifying the type of statistical approach:
@@ -99,17 +99,17 @@ the plot will be returned.}
 on the label in each pie slice. Possible options are \code{"percentage"}
 (default), \code{"counts"}, \code{"both"}.}
     \item{\code{label.args}}{Additional aesthetic arguments that will be passed to
-\code{ggplot2::geom_label()}.}
-    \item{\code{sample.size.label.args}}{Additional aesthetic arguments that will be passed to
-\code{ggplot2::geom_text()}.}
+\code{\link[ggplot2:geom_text]{ggplot2::geom_label()}}.}
+    \item{\code{sample.size.label.args}}{Additional aesthetic arguments that will be
+passed to \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
     \item{\code{digits}}{Number of digits for rounding or significant figures. May also
 be \code{"signif"} to return significant figures or \code{"scientific"}
 to return scientific notation. Control the number of digits by adding the
 value as suffix, e.g. \code{digits = "scientific4"} to have scientific
 notation with 4 decimal places, or \code{digits = "signif5"} for 5
 significant figures (see also \code{\link[=signif]{signif()}}).}
-    \item{\code{digits.perc}}{Numeric that decides number of decimal places for percentage
-labels (Default: \code{0L}).}
+    \item{\code{digits.perc}}{Numeric that decides number of decimal places for
+percentage labels (Default: \code{0L}).}
     \item{\code{bf.message}}{Logical that decides whether to display Bayes Factor in
 favor of the \emph{null} hypothesis. This argument is relevant only \strong{for
 parametric test} (Default: \code{TRUE}).}
@@ -121,10 +121,14 @@ E.g., \code{ratio = c(0.5, 0.5)} for two levels,
     \item{\code{conf.level}}{Scalar between \code{0} and \code{1} (default: \verb{95\%}
 confidence/credible intervals, \code{0.95}). If \code{NULL}, no confidence intervals
 will be computed.}
-    \item{\code{sampling.plan}}{Character describing the sampling plan. Possible options
-are \code{"indepMulti"} (independent multinomial; default), \code{"poisson"},
-\code{"jointMulti"} (joint multinomial), \code{"hypergeom"} (hypergeometric). For
-more, see \code{?BayesFactor::contingencyTableBF()}.}
+    \item{\code{sampling.plan}}{Character describing the sampling plan. Possible options:
+\itemize{
+\item \code{"indepMulti"} (independent multinomial; default)
+\item \code{"poisson"}
+\item \code{"jointMulti"} (joint multinomial)
+\item \code{"hypergeom"} (hypergeometric).
+For more, see \code{\link[BayesFactor:contingencyTableBF]{BayesFactor::contingencyTableBF()}}.
+}}
     \item{\code{fixed.margin}}{For the independent multinomial sampling plan, which
 margin is fixed (\code{"rows"} or \code{"cols"}). Defaults to \code{"rows"}.}
     \item{\code{prior.concentration}}{Specifies the prior concentration parameter, set
@@ -142,13 +146,13 @@ variable name for \code{x} will be used.}
     \item{\code{ylab}}{Labels for \code{y} axis variable. If \code{NULL} (default),
 variable name for \code{y} will be used.}
     \item{\code{ggtheme}}{A \code{{ggplot2}} theme. Default value is
-\code{ggstatsplot::theme_ggstatsplot()}. Any of the \code{{ggplot2}} themes (e.g.,
-\code{theme_bw()}), or themes from extension packages are allowed (e.g.,
-\code{ggthemes::theme_fivethirtyeight()}, \code{hrbrthemes::theme_ipsum_ps()}, etc.).
-But note that sometimes these themes will remove some of the details that
-\code{{ggstatsplot}} plots typically contains. For example, if relevant,
-\code{ggbetweenstats()} shows details about multiple comparison test as a label
-on the secondary Y-axis. Some themes (e.g.
+\code{\link[ggstatsplot:theme_ggstatsplot]{theme_ggstatsplot()}}. Any of the \code{{ggplot2}} themes (e.g.,
+\code{\link[ggplot2:ggtheme]{ggplot2::theme_bw()}}), or themes from extension packages are allowed
+(e.g., \code{ggthemes::theme_fivethirtyeight()}, \code{hrbrthemes::theme_ipsum_ps()},
+etc.). But note that sometimes these themes will remove some of the details
+that \code{{ggstatsplot}} plots typically contains. For example, if relevant,
+\code{\link[ggstatsplot:ggbetweenstats]{ggbetweenstats()}} shows details about multiple comparison test as a
+label on the secondary Y-axis. Some themes (e.g.
 \code{ggthemes::theme_fivethirtyeight()}) will remove the secondary Y-axis and
 thus the details as well.}
     \item{\code{package,palette}}{Name of the package from which the given palette is to
