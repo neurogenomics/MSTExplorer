@@ -6,6 +6,7 @@
   - Use `force_new=TRUE` where some tests occasionally fail with cached
   files.
   - `test-load_example_results`: Update test files.
+  - `test-prioritise_targets`: Remove unused arguments and change input size.
 * `add_logfc`
   - Return `results` with new column rather than directly modifying the original
   input.
