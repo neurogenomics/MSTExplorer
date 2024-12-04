@@ -21,6 +21,9 @@
 * `extract_help`
   - [DEVELOPEMENT ONLY] Look for help docs only in legitimate pkg installation
   paths.
+* `subset_results`
+  - Add new `effect_var` argument.
+  - Adjust default `effect_threshold` to 0.1.
 
 # MSTExplorer 1.0.4
 
