@@ -15,6 +15,9 @@
   `HPOExplorer::add_disease` on input.
 * `plot_ttd`
   - Remove `fill` aesthetic for `geom_text` (doesn't exist anymore).
+* `extract_help`
+  - [DEVELOPEMENT ONLY] Look for help docs only in legitimate pkg installation
+  paths.
 
 # MSTExplorer 1.0.4
 

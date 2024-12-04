@@ -14,7 +14,7 @@ extract_help <- function(pkg,
   requireNamespace("tools")
 
   to <- match.arg(to)
-  rdbfile <- file.path(find.package(pkg), "help", pkg)
+  rdbfile <- file.path(find.package(pkg, lib.loc = .libPaths()), "help", pkg)
   fetchRdDB <- utils::getFromNamespace("fetchRdDB","tools")
   rdb <- fetchRdDB(rdbfile, key = fn)
   convertor <- switch(to,
