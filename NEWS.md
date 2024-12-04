@@ -7,6 +7,8 @@
   files.
   - `test-load_example_results`: Update test files.
   - `test-prioritise_targets`: Remove unused arguments and change input size.
+  - `test-prioritise_targets_network`: Process `top_targets` to include effect
+  variable.
 * `add_logfc`
   - Return `results` with new column rather than directly modifying the original
   input.
