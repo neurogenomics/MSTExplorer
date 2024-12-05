@@ -12,6 +12,7 @@
   `patchwork::wrap_plots`.
   - `test-plot_differential_outcomes`: Wrap p3 in `expect_error` to prevent
   test failure even if error was handled.
+  - `test-report_plot`: Fix detection for ggplot object.
   variable.
 * Vignettes
   - `MSTExplorer`: Update effect variable to `fold_change`.
