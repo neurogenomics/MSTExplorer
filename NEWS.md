@@ -36,6 +36,9 @@
   column duplicates with altered names).
 * `map_tissue`
   - Rewrite merge logic to fix error: attempt to replicate non-vector.
+* `test_target_celltypes`
+  - Uncomment `add_ancestors(results)` to ensure required ancestor columns are
+  present.
 * Add missing import: simona
 
 # MSTExplorer 1.0.4
