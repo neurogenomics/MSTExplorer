@@ -34,6 +34,8 @@
 * `add_symptom_results`
   - Only merge `results` and `phenotypes_to_genes` if required (prevents
   column duplicates with altered names).
+* `map_tissue`
+  - Rewrite merge logic to fix error: attempt to replicate non-vector.
 * Add missing import: simona
 
 # MSTExplorer 1.0.4
