@@ -58,6 +58,6 @@ via a specific disease) and the driver genes
 Add symptom results to the results data.table.
 }
 \examples{
-results = load_example_results()[seq(5000)]
-results <- add_symptom_results()
+results <- load_example_results()[seq(5000)]
+results <- add_symptom_results(results)
 }
