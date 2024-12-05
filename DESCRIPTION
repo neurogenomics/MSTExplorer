@@ -54,7 +54,8 @@ Imports:
     future,
     furrr,
     tidygraph,
-    rstatix
+    rstatix,
+    simona
 Suggests: 
     rmarkdown,
     knitr,
