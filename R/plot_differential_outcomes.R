@@ -39,6 +39,10 @@ plot_differential_outcomes <- function(results,
 
   {
     results <- HPOExplorer::add_hpo_name(results)
+    if ("disease_name" %in% c(facet_var, x_var, y_var) &&
+        !"disease_name" %in% names(results)) {
+      results <- HPOExplorer::add_disease(results, add_descriptions = TRUE)
+    }
     plot_dat <- results[!is.na(get(y_var)),]
     plot_dat[,n_celltype:=length(unique(get(x_var))),by=c(facet_var)]
     plot_dat[,n_ids:=.N, by=c(facet_var)]
