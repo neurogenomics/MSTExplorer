@@ -10,6 +10,8 @@
   - `test-prioritise_targets_network`: Process `top_targets` to include effect
   - `test-plot_differential_outcomes`: Use non-specific plot name in
   `patchwork::wrap_plots`.
+  - `test-plot_differential_outcomes`: Wrap p3 in `expect_error` to prevent
+  test failure even if error was handled.
   variable.
 * `add_logfc`
   - Return `results` with new column rather than directly modifying the original
