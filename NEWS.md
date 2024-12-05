@@ -13,6 +13,8 @@
   - `test-plot_differential_outcomes`: Wrap p3 in `expect_error` to prevent
   test failure even if error was handled.
   variable.
+* Vignettes
+  - `MSTExplorer`: Update effect variable to `fold_change`.
 * `add_logfc`
   - Return `results` with new column rather than directly modifying the original
   input.
