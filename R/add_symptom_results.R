@@ -16,8 +16,8 @@
 #'
 #' @export
 #' @examples
-#' results = load_example_results()[seq(5000)]
-#' results <- add_symptom_results()
+#' results <- load_example_results()[seq(5000)]
+#' results <- add_symptom_results(results)
 add_symptom_results <- function(results = load_example_results(),
                                 q_threshold = 0.05,
                                 effect_threshold = NULL,
@@ -57,13 +57,19 @@ add_symptom_results <- function(results = load_example_results(),
   results <- HPOExplorer::add_genes(results,
                                     phenotype_to_genes = phenotype_to_genes,
                                     allow.cartesian = TRUE)
-  results_annot <- data.table::merge.data.table(
-    results,
-    unique(phenotype_to_genes[,c("hpo_id","disease_id",
-                                 "n_genes_hpo_id",
-                                 "n_genes_disease_id",
-                                 "n_genes_symptom")]),
-    by=c("hpo_id","disease_id"))
+  merge_cols <- c("hpo_id",
+                  "disease_id",
+                  "n_genes_hpo_id",
+                  "n_genes_disease_id",
+                  "n_genes_symptom")
+  if(all(merge_cols %in% colnames(results))){
+    results_annot <- results
+  }else{
+    results_annot <- data.table::merge.data.table(
+      results,
+      unique(phenotype_to_genes[,..merge_cols]),
+      by=c("hpo_id","disease_id"))
+  }
   #### Add genes that intersect between the
   phenos <- add_driver_genes(results = results_annot,
                              ctd_list = ctd_list,

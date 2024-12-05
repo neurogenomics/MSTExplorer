@@ -8,6 +8,8 @@
   - `test-load_example_results`: Update test files.
   - `test-prioritise_targets`: Remove unused arguments and change input size.
   - `test-prioritise_targets_network`: Process `top_targets` to include effect
+  - `test-plot_differential_outcomes`: Use non-specific plot name in
+  `patchwork::wrap_plots`.
   variable.
 * `add_logfc`
   - Return `results` with new column rather than directly modifying the original
@@ -24,6 +26,9 @@
 * `subset_results`
   - Add new `effect_var` argument.
   - Adjust default `effect_threshold` to 0.1.
+* `add_symptom_results`
+  - Only merge `results` and `phenotypes_to_genes` if required (prevents
+  column duplicates with altered names).
 
 # MSTExplorer 1.0.4
 
