@@ -20,8 +20,8 @@
   - Return `results` with new column rather than directly modifying the original
   input.
   - Update references (`add_logfc(results)` -> `results <- add_logfc(results)`).
-* `ttd_check`, `plot_differential_outcomes`
-  - Add check for disease column names before executing, if required.
+* `ttd_check`, `plot_differential_outcomes`, `prioritise_targets_grid`
+  - Add check for `disease_name` column before executing
   `HPOExplorer::add_disease` on input.
 * `plot_ttd`
   - Remove `fill` aesthetic for `geom_text` (doesn't exist anymore).
