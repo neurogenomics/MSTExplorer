@@ -1,3 +1,9 @@
+# MSTExplorer 1.0.6
+
+## Bug fixes
+* `get_color_map`
+  - Fix `color_vector` assignment.
+
 # MSTExplorer 1.0.5
 
 ## Bug fixes

@@ -3,7 +3,7 @@ MSTExplorer
 <img src='https://github.com/neurogenomics/MSTExplorer/raw/master/inst/hex/hex.png' title='Hex sticker for MSTExplorer' height='300'><br>
 [![License:
 GPL-3](https://img.shields.io/badge/license-GPL--3-blue.svg)](https://cran.r-project.org/web/licenses/GPL-3)
-[![](https://img.shields.io/badge/devel%20version-1.0.5-black.svg)](https://github.com/neurogenomics/MSTExplorer)
+[![](https://img.shields.io/badge/devel%20version-1.0.6-black.svg)](https://github.com/neurogenomics/MSTExplorer)
 [![](https://img.shields.io/github/languages/code-size/neurogenomics/MSTExplorer.svg)](https://github.com/neurogenomics/MSTExplorer)
 [![](https://img.shields.io/github/last-commit/neurogenomics/MSTExplorer.svg)](https://github.com/neurogenomics/MSTExplorer/commits/master)
 <br> [![R build
@@ -16,7 +16,7 @@ Authors: <i>Brian Schilder, Robert Gordon-Smith, Nathan Skene,
 Hiranyamaya Dash</i>  
 </h4>
 <h4>  
-README updated: <i>Dec-05-2024</i>  
+README updated: <i>Dec-16-2024</i>  
 </h4>
 
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->
