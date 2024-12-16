@@ -5,28 +5,21 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ontology-scale Cell Type Enrichment Analyses • MultiEWCE</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<title>Multi-Scale Target Explorer • MSTExplorer</title>
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Ontology-scale Cell Type Enrichment Analyses">
-<meta property="og:description" content="The `MultiEWCE` R package allows you to run 
-  [Expression Weighted Celltype Enrichment 
-  (EWCE)](https://github.com/NathanSkene/EWCE) 
-  on multiple gene lists in parallel. It was primarily designed for use with
-  the [Human Phenotype Ontology](https://hpo.jax.org/), 
-  but can be easily adapted to any other gene lists. Finally, it includes 
-  pipelines for the systematic identification of cell type-specific gene therapy
-  targets of diseases.">
+<script src="pkgdown.js"></script><meta property="og:title" content="Multi-Scale Target Explorer">
+<meta property="og:description" content="Multi-Scale Target Explorer (`MSTExplorer`) systematically identifies, prioritises, and visualises cell-type-specific gene therapy targets across the phenome.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
+
 
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -39,15 +32,15 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">MultiEWCE</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.9</span>
+        <a class="navbar-link" href="index.html">MSTExplorer</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="articles/MultiEWCE.html">Get started</a>
+  <a href="articles/MSTExplorer.html">Get started</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
@@ -55,7 +48,7 @@
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
-     
+
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
@@ -70,9 +63,9 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/neurogenomics/MultiEWCE/" class="external-link">
+  <a href="https://github.com/neurogenomics/MSTExplorer/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
-     
+
   </a>
 </li>
       </ul>
@@ -83,30 +76,30 @@
 </div>
 <!--/.navbar -->
 
-      
+
 
       </header><div class="row">
   <div class="contents col-md-9">
 <div class="section level1">
-<div class="page-header"><h1 id="multiewce">MultiEWCE<a class="anchor" aria-label="anchor" href="#multiewce"></a>
+<div class="page-header"><h1 id="mstexplorer">MSTExplorer<a class="anchor" aria-label="anchor" href="#mstexplorer"></a>
 </h1></div>
-<img src="https://github.com/neurogenomics/MultiEWCE/raw/master/inst/hex/hex.png" title="Hex sticker for MultiEWCE" height="300"><br><a href="https://cran.r-project.org/web/licenses/GPL-3" class="external-link"><img src="https://img.shields.io/badge/license-GPL--3-blue.svg" alt="License: GPL-3"></a> <a href="https://github.com/neurogenomics/MultiEWCE" class="external-link"><img src="https://img.shields.io/badge/devel%20version-0.1.9-black.svg"></a> <a href="https://github.com/neurogenomics/MultiEWCE" class="external-link"><img src="https://img.shields.io/github/languages/code-size/neurogenomics/MultiEWCE.svg"></a> <a href="https://github.com/neurogenomics/MultiEWCE/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/neurogenomics/MultiEWCE.svg"></a> <br><a href="https://github.com/neurogenomics/MultiEWCE/actions" class="external-link"><img src="https://github.com/neurogenomics/MultiEWCE/workflows/rworkflows/badge.svg" alt="R build status"></a> <a href="https://app.codecov.io/gh/neurogenomics/MultiEWCE" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MultiEWCE/branch/master/graph/badge.svg"></a> <br><a href="https://app.codecov.io/gh/neurogenomics/MultiEWCE/tree/master" target="_blank" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MultiEWCE/branch/master/graphs/icicle.svg" title="Codecov icicle graph" width="200" height="50" style="vertical-align: top;"></a><br><h4 id="multiewce-1">
-Authors: <i>Robert Gordon-Smith, Brian Schilder, Nathan Skene</i>
-<a class="anchor" aria-label="anchor" href="#multiewce-1"></a>
+<img src="https://github.com/neurogenomics/MSTExplorer/raw/master/inst/hex/hex.png" title="Hex sticker for MSTExplorer" height="300"><br><a href="https://cran.r-project.org/web/licenses/GPL-3" class="external-link"><img src="https://img.shields.io/badge/license-GPL--3-blue.svg" alt="License: GPL-3"></a> <a href="https://github.com/neurogenomics/MSTExplorer" class="external-link"><img src="https://img.shields.io/badge/devel%20version-1.0.6-black.svg"></a> <a href="https://github.com/neurogenomics/MSTExplorer" class="external-link"><img src="https://img.shields.io/github/languages/code-size/neurogenomics/MSTExplorer.svg"></a> <a href="https://github.com/neurogenomics/MSTExplorer/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/neurogenomics/MSTExplorer.svg"></a> <br><a href="https://github.com/neurogenomics/MSTExplorer/actions" class="external-link"><img src="https://github.com/neurogenomics/MSTExplorer/workflows/rworkflows/badge.svg" alt="R build status"></a> <a href="https://app.codecov.io/gh/neurogenomics/MSTExplorer" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graph/badge.svg"></a> <br><a href="https://app.codecov.io/gh/neurogenomics/MSTExplorer/tree/master" target="_blank" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graphs/icicle.svg" title="Codecov icicle graph" width="200" height="50" style="vertical-align: top;"></a><br><h4 id="mstexplorer-1">
+Authors: <i>Brian Schilder, Robert Gordon-Smith, Nathan Skene, Hiranyamaya Dash</i>
+<a class="anchor" aria-label="anchor" href="#mstexplorer-1"></a>
 </h4>
-<h4 id="multiewce-2">
-README updated: <i>Nov-14-2023</i>
-<a class="anchor" aria-label="anchor" href="#multiewce-2"></a>
+<h4 id="mstexplorer-2">
+README updated: <i>Dec-16-2024</i>
+<a class="anchor" aria-label="anchor" href="#mstexplorer-2"></a>
 </h4>
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->
 <div class="section level2">
-<h2 id="multiewce-ontology-scale-cell-type-enrichment-analyses">
-<code>MultiEWCE</code>: Ontology-scale Cell Type Enrichment Analyses<a class="anchor" aria-label="anchor" href="#multiewce-ontology-scale-cell-type-enrichment-analyses"></a>
+<h2 id="mstexplorer-multi-scale-target-explorer">
+<code>MSTExplorer</code>: Multi-Scale Target Explorer<a class="anchor" aria-label="anchor" href="#mstexplorer-multi-scale-target-explorer"></a>
 </h2>
 <div class="section level3">
-<h3 id="the-multiewce-r-package-allows-you-to-run-expression-weighted-celltype-enrichment-ewce-on-multiple-gene-lists-in-parallel-it-was-primarily-designed-for-use-with-the-human-phenotype-ontology-but-can-be-easily-adapted-to-any-other-gene-lists-finally-it-includes-pipelines-for-the-systematic-identification-of-cell-type-specific-gene-therapy-targets-of-diseases">The <code>MultiEWCE</code> R package allows you to run <a href="https://github.com/NathanSkene/EWCE" class="external-link">Expression Weighted Celltype Enrichment (EWCE)</a> on multiple gene lists in parallel. It was primarily designed for use with the <a href="https://hpo.jax.org/" class="external-link">Human Phenotype Ontology</a>, but can be easily adapted to any other gene lists. Finally, it includes pipelines for the systematic identification of cell type-specific gene therapy targets of diseases.<a class="anchor" aria-label="anchor" href="#the-multiewce-r-package-allows-you-to-run-expression-weighted-celltype-enrichment-ewce-on-multiple-gene-lists-in-parallel-it-was-primarily-designed-for-use-with-the-human-phenotype-ontology-but-can-be-easily-adapted-to-any-other-gene-lists-finally-it-includes-pipelines-for-the-systematic-identification-of-cell-type-specific-gene-therapy-targets-of-diseases"></a>
+<h3 id="multi-scale-target-explorer-mstexplorer-systematically-identifies-prioritises-and-visualises-cell-type-specific-gene-therapy-targets-across-the-phenome">Multi-Scale Target Explorer (<code>MSTExplorer</code>) systematically identifies, prioritises, and visualises cell-type-specific gene therapy targets across the phenome.<a class="anchor" aria-label="anchor" href="#multi-scale-target-explorer-mstexplorer-systematically-identifies-prioritises-and-visualises-cell-type-specific-gene-therapy-targets-across-the-phenome"></a>
 </h3>
-<p>If you use <code>MultiEWCE</code>, please cite:</p>
+<p>If you use <code>MSTExplorer</code>, please cite:</p>
 <!-- Modify this by editing the file: inst/CITATION  -->
 <blockquote>
 <p>Kitty B. Murphy, Robert Gordon-Smith, Jai Chapman, Momoko Otani, Brian M. Schilder, Nathan G. Skene (2023) Identification of cell type-specific gene targets underlying thousands of rare diseases and subtraits. medRxiv, <a href="https://doi.org/10.1101/2023.02.13.23285820" class="external-link uri">https://doi.org/10.1101/2023.02.13.23285820</a></p>
@@ -119,20 +112,20 @@ README updated: <i>Nov-14-2023</i>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"neurogenomics/MultiEWCE"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/MultiEWCE" class="external-link">MultiEWCE</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"neurogenomics/MSTExplorer"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/MSTExplorer" class="external-link">MSTExplorer</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
 <div class="section level3">
 <h3 id="website">
-<a href="https://neurogenomics.github.io/MultiEWCE" class="external-link">Website</a><a class="anchor" aria-label="anchor" href="#website"></a>
+<a href="https://neurogenomics.github.io/MSTExplorer" class="external-link">Website</a><a class="anchor" aria-label="anchor" href="#website"></a>
 </h3>
 </div>
 <div class="section level3">
 <h3 id="get-started">
-<a href="https://neurogenomics.github.io/MultiEWCE/articles/MultiEWCE" class="external-link">Get started</a><a class="anchor" aria-label="anchor" href="#get-started"></a>
+<a href="https://neurogenomics.github.io/MSTExplorer/articles/MSTExplorer" class="external-link">Get started</a><a class="anchor" aria-label="anchor" href="#get-started"></a>
 </h3>
 <p><br></p>
 </div>
@@ -144,8 +137,8 @@ README updated: <i>Nov-14-2023</i>
     <div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/neurogenomics/MultiEWCE/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/neurogenomics/MultiEWCE/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/neurogenomics/MSTExplorer/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/neurogenomics/MSTExplorer/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -160,16 +153,17 @@ README updated: <i>Nov-14-2023</i>
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing MultiEWCE</a></li>
+<li><a href="authors.html#citation">Citing MSTExplorer</a></li>
 </ul>
 </div>
 
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Robert Gordon-Smith <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-6698-7387" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Brian Schilder <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-5949-2191" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Brian Schilder <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5949-2191" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Robert Gordon-Smith <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-6698-7387" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Nathan Skene <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6807-3180" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
 
@@ -181,21 +175,21 @@ README updated: <i>Nov-14-2023</i>
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Robert Gordon-Smith, Brian Schilder, Nathan Skene.</p>
+<p>Developed by Brian Schilder, Robert Gordon-Smith, Nathan Skene.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
       </footer>
 </div>
 
-  
 
 
-  
+
+
 
   </body>
 </html>

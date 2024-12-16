@@ -1,135 +1,66 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/articles/MultiEWCE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/docker.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/news/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/add_ctd.html</loc>
-  </url>
-  <url>
-    <loc>/reference/agg_results.html</loc>
-  </url>
-  <url>
-    <loc>/reference/correlation_heatmap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/create_dt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ewce_para.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ewce_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/example_targets.html</loc>
-  </url>
-  <url>
-    <loc>/reference/extract_help.html</loc>
-  </url>
-  <url>
-    <loc>/reference/frequency_barplot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/frequency_histogram.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gen_overlap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gen_results.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_bg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_unfinished_list_names.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_valid_gene_lists.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ggnetwork_plot_full.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is_not_analysed.html</loc>
-  </url>
-  <url>
-    <loc>/reference/load_example_CTD.html</loc>
-  </url>
-  <url>
-    <loc>/reference/load_example_results.html</loc>
-  </url>
-  <url>
-    <loc>/reference/load_hpo_graph.html</loc>
-  </url>
-  <url>
-    <loc>/reference/map_tissues.html</loc>
-  </url>
-  <url>
-    <loc>/reference/merge_results.html</loc>
-  </url>
-  <url>
-    <loc>/reference/messager.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ontology_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_ont_lvl.html</loc>
-  </url>
-  <url>
-    <loc>/reference/prioritise_targets.html</loc>
-  </url>
-  <url>
-    <loc>/reference/prioritise_targets_network.html</loc>
-  </url>
-  <url>
-    <loc>/reference/report_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/standardise_genes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/stopper.html</loc>
-  </url>
-  <url>
-    <loc>/reference/subset_phenos.html</loc>
-  </url>
-  <url>
-    <loc>/reference/subset_results.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary_plot.html</loc>
-  </url>
-  <url>
-    <loc>/reference/terminal_celltypes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ttd_check.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/articles/MSTExplorer.html</loc></url>
+<url><loc>/articles/docker.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/news/index.html</loc></url>
+<url><loc>/reference/add_ctd.html</loc></url>
+<url><loc>/reference/add_logfc.html</loc></url>
+<url><loc>/reference/add_symptom_results.html</loc></url>
+<url><loc>/reference/agg_results.html</loc></url>
+<url><loc>/reference/celltype_maps.html</loc></url>
+<url><loc>/reference/correlation_heatmap.html</loc></url>
+<url><loc>/reference/create_dt.html</loc></url>
+<url><loc>/reference/ewce_para.html</loc></url>
+<url><loc>/reference/example_targets.html</loc></url>
+<url><loc>/reference/extract_help.html</loc></url>
+<url><loc>/reference/gen_overlap.html</loc></url>
+<url><loc>/reference/gen_results.html</loc></url>
+<url><loc>/reference/get_bg.html</loc></url>
+<url><loc>/reference/get_data.html</loc></url>
+<url><loc>/reference/get_target_branches.html</loc></url>
+<url><loc>/reference/get_unfinished_list_names.html</loc></url>
+<url><loc>/reference/get_valid_gene_lists.html</loc></url>
+<url><loc>/reference/ggnetwork_plot_full.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/is_not_analysed.html</loc></url>
+<url><loc>/reference/load_example_CTD.html</loc></url>
+<url><loc>/reference/load_example_results.html</loc></url>
+<url><loc>/reference/map_celltype.html</loc></url>
+<url><loc>/reference/map_tissue.html</loc></url>
+<url><loc>/reference/merge_results.html</loc></url>
+<url><loc>/reference/messager.html</loc></url>
+<url><loc>/reference/plot_.html</loc></url>
+<url><loc>/reference/plot_bar_dendro.html</loc></url>
+<url><loc>/reference/plot_bar_dendro_facets.html</loc></url>
+<url><loc>/reference/plot_bar_summary.html</loc></url>
+<url><loc>/reference/plot_celltype_severity.html</loc></url>
+<url><loc>/reference/plot_congenital_annotations.html</loc></url>
+<url><loc>/reference/plot_differential_outcomes.html</loc></url>
+<url><loc>/reference/plot_differential_outcomes_heatmap.html</loc></url>
+<url><loc>/reference/plot_frequency_bar.html</loc></url>
+<url><loc>/reference/plot_frequency_histogram.html</loc></url>
+<url><loc>/reference/plot_ontology_levels.html</loc></url>
+<url><loc>/reference/plot_report.html</loc></url>
+<url><loc>/reference/plot_results_distributions.html</loc></url>
+<url><loc>/reference/plot_ttd.html</loc></url>
+<url><loc>/reference/predict_celltypes.html</loc></url>
+<url><loc>/reference/prioritise_targets.html</loc></url>
+<url><loc>/reference/prioritise_targets_grid.html</loc></url>
+<url><loc>/reference/prioritise_targets_network.html</loc></url>
+<url><loc>/reference/run_congenital_enrichment.html</loc></url>
+<url><loc>/reference/run_phenomix.html</loc></url>
+<url><loc>/reference/stopper.html</loc></url>
+<url><loc>/reference/subset_phenos.html</loc></url>
+<url><loc>/reference/subset_results.html</loc></url>
+<url><loc>/reference/summarise_results.html</loc></url>
+<url><loc>/reference/terminal_celltypes.html</loc></url>
+<url><loc>/reference/test_target_celltypes.html</loc></url>
+<url><loc>/reference/tissue_maps.html</loc></url>
+<url><loc>/reference/ttd_check.html</loc></url>
+<url><loc>/reference/validate_associations_correlate_ctd.html</loc></url>
+<url><loc>/reference/validate_associations_mkg.html</loc></url>
 </urlset>
+
