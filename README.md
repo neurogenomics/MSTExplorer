@@ -28,13 +28,9 @@ The MSTExplorer package is an extension of the
 It is designed to run expression weighted celltype enrichment (EWCE) on
 multiple gene lists in parallel. The results are then stored both as
 separate .rds files, one for each individual EWCE analysis, as well as a
-in a single dataframe containing all the results.
-
-This package is useful in cases where you have a large number of
-related, but separate, gene lists. In this vignette we will use an
-example from the Human Phenotype Ontology (HPO). The HPO contains over
-9000 clinically relevant phenotypes annotated with lists of genes that
-have been found to be associated with the particular phenotype.
+in a single dataframe containing all the results. This package is useful
+in cases where you have a large number of related, but separate, gene
+lists.
 
 ## Installation
 
