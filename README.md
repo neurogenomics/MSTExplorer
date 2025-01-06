@@ -16,7 +16,7 @@ Authors: <i>Brian Schilder, Robert Gordon-Smith, Nathan Skene,
 Hiranyamaya Dash</i>  
 </h4>
 <h4>  
-README updated: <i>Jan-03-2025</i>  
+README updated: <i>Jan-06-2025</i>  
 </h4>
 
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->
@@ -64,7 +64,7 @@ If you use `MSTExplorer`, please cite:
 
 ## Contact
 
-### [Neurogenomics Lab](https://www.neurogenomics.co.uk/inst/report/EpiCompare.html)
+### [Neurogenomics Lab](https://www.neurogenomics.co.uk)
 
 UK Dementia Research Institute  
 Department of Brain Sciences  

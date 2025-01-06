@@ -53,7 +53,7 @@ If you use ``r pkg``, please cite:
 
 ## Contact
 
-### [Neurogenomics Lab](https://www.neurogenomics.co.uk/inst/report/EpiCompare.html)  
+### [Neurogenomics Lab](https://www.neurogenomics.co.uk)   
 UK Dementia Research Institute  
 Department of Brain Sciences  
 Faculty of Medicine  
