@@ -48,16 +48,17 @@ test_that("plot_differential_outcomes works", {
                                     facet_var = "disease_name",
                                     y_var = "cancer",
                                     run_stats = TRUE)
-  patchwork::wrap_plots(p1c$plot$`Granulomatosis with polyangiitis`)
+  patchwork::wrap_plots(p1c$plot[1])
   run_tests(p1c)
 
   # #### Multiple diseases per phenotype: Severity_score #####
   results <- HPOExplorer::add_severity(results)
-  p2 <- plot_differential_outcomes(results,
+  # Testthat interprets messages with errors as failures even with tryCatch()
+  testthat::expect_error(p2 <- plot_differential_outcomes(results,
                                    max_facets=10,
                                    facet_var = "hpo_name",
                                    y_var = "Severity_score",
-                                   run_stats = TRUE)
+                                   run_stats = TRUE))
 
   # #### Multiple diseases per phenotype: AgeOfDeath #####
   results <- HPOExplorer::add_death(results,

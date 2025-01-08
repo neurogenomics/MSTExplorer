@@ -40,7 +40,7 @@ test_target_celltypes <- function(results=load_example_results(),
   ancestor_name <- is_sig <- is_target <- valid <- cl_id <- NULL;
 
   method <- match.arg(method)
-  # results <- HPOExplorer::add_ancestor(results)
+  results <- HPOExplorer::add_ancestor(results)
   results <- map_celltype(results)
   results[,is_sig:=q<q_threshold][,is_target:=get(celltype_col) %in%
                                   target_celltypes[[get(ancestor_var)]],
