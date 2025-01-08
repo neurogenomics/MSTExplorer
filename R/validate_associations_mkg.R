@@ -30,7 +30,7 @@ validate_associations_mkg <- function(results=load_example_results(),
                                       ){
   from <- hpo_id <- NULL;
   # kg <- data.table::fread(here::here("data/monarch_kg_cells.csv"))
-  add_logfc(results)
+  results <- add_logfc(results)
   kg_og <- data.table::copy(kg)
   kg <- kg[grepl("HP:",from)][from %in% unique(results$hpo_id)]
   message(paste(

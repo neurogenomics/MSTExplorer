@@ -8,7 +8,8 @@ subset_results(
   filters = list(cl_name = NULL),
   results = load_example_results(),
   q_threshold = 5e-04,
-  effect_threshold = 1,
+  effect_threshold = 0.1,
+  effect_var = "fold_change",
   verbose = TRUE
 )
 }
@@ -25,6 +26,8 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{effect_threshold}{The minimum fold change in specific expression
 to subset the \code{results} by.}
+
+\item{effect_var}{Name of the effect size column in the \code{results}.}
 
 \item{verbose}{Print messages.}
 }

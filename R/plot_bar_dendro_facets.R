@@ -186,7 +186,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
       data_summary <- NULL
     } else {
       p.value.adj <- term <- p.value.adj.signif <- NULL;
-      dat <- merge(dat[,-c("term")],
+      dat <- merge(dat,
                    target_tests[[1]][term=="is_targetTRUE"],
                    all.x = TRUE,
                    by=c("ancestor_name","cl_id"))

@@ -48,7 +48,8 @@ ttd_check <- function(top_targets,
                       save_path = NULL,
                       height=NULL,
                       width=NULL,
-                      phenotype_to_genes=HPOExplorer::load_phenotype_to_genes()){
+                      phenotype_to_genes=HPOExplorer::load_phenotype_to_genes()
+                      ){
   # top_targets <- prioritise_targets()$top_targets
   # drug_types <- c("Gene therapy"
     # "Antisense drug",

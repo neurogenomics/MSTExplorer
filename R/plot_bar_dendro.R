@@ -88,7 +88,7 @@ plot_bar_dendro <- function(results = load_example_results(),
   }
   #### Filter the results ####
   by <- unique(c(celltype_col,"cl_id","ancestor","ancestor_name"))
-  add_logfc(results)
+  results <- add_logfc(results)
   dat <- results[q<q_threshold & cl_id %in% unique(ddata$labels$id),
                  lapply(.SD,mean),
                  by=by,
@@ -105,7 +105,7 @@ plot_bar_dendro <- function(results = load_example_results(),
                 normalise_group=TRUE)
   #### Color each cell type x-axis label by the most commonly enriched HPO category ####
   cmap <- get_color_map(dat=dat,
-                        columns = "top_ancestor_name",
+                        columns = "ancestor_name",
                         ddata=ddata,
                         celltype_col=celltype_col,
                         preferred_palettes=preferred_palettes)

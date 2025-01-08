@@ -1,6 +1,6 @@
 Package: MSTExplorer
 Title: Multi-Scale Target Explorer
-Version: 1.0.5
+Version: 1.0.6
 Authors@R:
     c(
     person(given = "Brian",
@@ -17,7 +17,12 @@ Authors@R:
            family = "Skene",
            role = c("aut"),
            email = "nathan.skene@gmail.com",
-           comment = c(ORCID = "0000-0002-6807-3180"))) 
+           comment = c(ORCID = "0000-0002-6807-3180")),
+    person(given = "Hiranyamaya",
+           family = "Dash",
+           role = c("ctb"),
+           email = "hdash.work@gmail.com",
+           comment = c(ORCID = "0009-0005-5514-505X"))) 
 Description: Multi-Scale Target Explorer (`MSTExplorer`) systematically identifies, prioritises, 
   and visualises cell-type-specific gene therapy targets across the phenome.
 License: GPL-3
@@ -50,7 +55,8 @@ Imports:
     future,
     furrr,
     tidygraph,
-    rstatix
+    rstatix,
+    simona
 Suggests: 
     rmarkdown,
     knitr,

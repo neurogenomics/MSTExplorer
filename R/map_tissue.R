@@ -47,12 +47,15 @@ map_tissue <- function(results = NULL,
     by=by]
   #### Get the ancestor for each tissue #####
   if(!isFALSE(lvl)){
+    ancestor_dat <- data.frame(uberon@elementMetadata@listData) |>
+      dplyr::select(id,ancestor,ancestor_name) |>
+      dplyr::rename(
+        uberon_id = id,
+        uberon_ancestor = ancestor,
+        uberon_ancestor_name = ancestor_name
+      )
     map_agg2 <- merge(map_agg,
-                      data.table::data.table(
-                        uberon@elementMetadata
-                      )[,list(uberon_id=id,
-                              uberon_ancestor=ancestor,
-                              uberon_ancestor_name=ancestor_name)],
+                      ancestor_dat,
                       all.x=TRUE,
                       by.x="top_uberon_id",
                       by.y="uberon_id")

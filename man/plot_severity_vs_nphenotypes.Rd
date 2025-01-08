@@ -15,6 +15,7 @@ plot_severity_vs_nphenotypes(
   remove_subtitle = FALSE,
   remove_caption = TRUE,
   point_fill = ggplot2::alpha("white", 0.75),
+  base_size = 8,
   run_prune_ancestors = FALSE,
   ...
 )
@@ -42,6 +43,8 @@ See \link[ggstatsplot]{ggscatterstats} for details.}
 
 \item{remove_caption}{Remove the formula in the caption.
 See \link[ggstatsplot]{ggscatterstats} for details.}
+
+\item{base_size}{base font size, given in pts.}
 
 \item{run_prune_ancestors}{Prune redundant ancestral terms if any of their
 descendants are present. Passes to \link[KGExplorer]{prune_ancestors}.}

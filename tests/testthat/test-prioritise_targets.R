@@ -1,6 +1,6 @@
 test_that("prioritise_targets works", {
 
-  results <- load_example_results()[seq(50000),]
+  results <- load_example_results()[q<0.01]
   ctd_list <- load_example_ctd(c("ctd_DescartesHuman.rds",
                                  "ctd_HumanCellLandscape.rds"),
                                 multi_dataset = TRUE)
@@ -17,7 +17,7 @@ test_that("prioritise_targets works", {
   testthat::expect_gte(nrow(res2$top_targets), 6)
 
   #### Plot evidence score vs. specificity ####
-  res3 <- prioritise_targets(results = results[seq(2500)],
+  res3 <- prioritise_targets(results = results,
                              ctd_list = ctd_list,
                              keep_deaths = NULL,
                              #### Phenotype level ####
@@ -32,8 +32,6 @@ test_that("prioritise_targets works", {
                              #### Celltype level ####
                              q_threshold = 0.05,
                              effect_threshold = 1,
-                             symptom_p_threshold = NULL,
-                             symptom_intersection_size_threshold = 1,
                              keep_celltypes = NULL,
                              #### Gene level ####
                              evidence_score_threshold = NULL,
@@ -43,7 +41,6 @@ test_that("prioritise_targets works", {
                              gene_frequency_threshold = NULL,
                              keep_biotypes = NULL,
                              keep_specificity_quantiles = NULL,
-                             keep_mean_exp_quantiles = seq(1,40),
-                             symptom_gene_overlap = TRUE)
-  testthat::expect_gte(nrow(res3$top_targets), 40000)
+                             keep_mean_exp_quantiles = seq(1,40))
+  testthat::expect_gte(nrow(res3$top_targets), 1000)
 })

@@ -4,6 +4,7 @@
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams KGExplorer::filter_dt
 #' @inheritParams HPOExplorer::make_phenos_dataframe
+#' @inheritParams add_logfc
 #' @returns A data frame of the selected subset of RD EWCE results
 #' with HPO ID column added.
 #'
@@ -13,7 +14,8 @@
 subset_results <- function(filters = list(cl_name=NULL),
                            results = load_example_results(),
                            q_threshold = 0.0005,
-                           effect_threshold = 1,
+                           effect_threshold = 0.1,
+                           effect_var = "fold_change",
                            verbose = TRUE){
   effect <-  hpo_id <- hpo_id <- NULL;
 
@@ -24,7 +26,7 @@ subset_results <- function(filters = list(cl_name=NULL),
     results_sig <- results_sig[q<q_threshold]
   }
   if(is.numeric(effect_threshold)){
-    results_sig <- results_sig[effect>effect_threshold]
+    results_sig <- results_sig[results_sig[[effect_var]]>effect_threshold,]
   }
   #### Check that celltype is available ####
   if(nrow(results_sig)==0){
