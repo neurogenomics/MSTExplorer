@@ -78,7 +78,7 @@ predict_celltypes <- function(phenotypes,
     hpo_ids <- HPOExplorer::map_phenotypes(terms = phenotypes,
                                            to = "id")
     res <- data.table::copy(results)
-    add_logfc(res)
+    res <- add_logfc(res)
     res[,effect:=scales::rescale(get(effect_var),c(0,1))]
     # res <- res[q<0.05]
     # res[,effect:=scales::rescale(abs(effect))]

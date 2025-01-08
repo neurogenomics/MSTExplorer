@@ -113,7 +113,7 @@ library(data.table)
 #### Aggregate results ####
 n_signif <- results[q<=0.05 & !is.na(q),
                         list(sig_enrichments = .N,
-                             mean_effect=mean(effect)), 
+                             mean_effect=mean(fold_change)), 
                         by="hpo_id"]
 #### Plot #### 
 plot1 <-  ggplot(n_signif, aes(x = stringr::str_wrap(hpo_id,width = 10),

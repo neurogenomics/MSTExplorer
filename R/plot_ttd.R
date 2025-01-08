@@ -33,7 +33,7 @@ plot_ttd <- function(dat_sub,
         size=label_size,
         angle=90,
         hjust=1,
-        ggplot2::aes(x=HIGHEST_STATUS, fill=prioritised,
+        ggplot2::aes(x=HIGHEST_STATUS,
                      label=paste0("n=",n_drugs), y=.95),
         # fill="white", alpha=.75,
         inherit.aes = FALSE) +

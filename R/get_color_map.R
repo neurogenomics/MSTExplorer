@@ -14,7 +14,7 @@ get_color_map <- function(dat,
   if(!is.null(celltype_col_order)){
     dat2 <- dat2[order(match(dat2[[celltype_col]],celltype_col_order)),]
   }
-  dat2[,ancestor_color:=color_map[top_ancestor_name]]
+  dat2$ancestor_color<-color_map[dat2[[columns]]]
   color_vector <- dat2$ancestor_color
   return(list(
     color_map=color_map,

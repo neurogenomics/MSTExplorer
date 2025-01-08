@@ -85,10 +85,14 @@ prioritise_targets_grid <- function(top_targets,
                         size=3){
     if(!is.null(labels)) labels <- stats::setNames(labels,as.character(x_pos))
     dat <- merge(dt1[,-c("hpo_id")],
-                 dt2, by="hpo_name", sort=FALSE)|>
-      data.table::melt.data.table(
-        id.vars=c("hpo_id","hpo_name","severity_class","p"),
-        measure.vars=unique(c(label_cols,"gene_symbol")))
+                 dt2, by="hpo_name", sort=FALSE)
+    # Check for disease_name
+    if("disease_name" %in% label_cols && !"disease_name" %in% names(dat)){
+      dat <- HPOExplorer::add_disease(dat, add_descriptions = TRUE)
+    }
+    dat <- data.table::melt.data.table(dat,
+            id.vars=c("hpo_id","hpo_name","severity_class","p"),
+            measure.vars=unique(c(label_cols,"gene_symbol")))
     dat[,hpo_name:=factor(hpo_name,
                           levels=rev(levels(dt1$hpo_name)), ordered=TRUE)]
     dat[startsWith(value,"GRANULOMATOUS"), value:=stringr::str_to_title(value)]

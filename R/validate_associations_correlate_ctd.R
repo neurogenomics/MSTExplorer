@@ -29,7 +29,7 @@ validate_associations_correlate_ctd <- function(results=load_example_results(),
                                                 ...){
   test_id <- NULL;
   results <- map_celltype(results)
-  add_logfc(results)
+  results <- add_logfc(results)
   results <- KGExplorer::filter_dt(results,
                                    filters = filters)
   group_values <- unique(results[[group_var]])

@@ -1,3 +1,52 @@
+# MSTExplorer 1.0.6
+
+## Bug fixes
+* `get_color_map`
+  - Fix `color_vector` assignment.
+
+# MSTExplorer 1.0.5
+
+## Bug fixes
+
+* Tests
+  - Use `force_new=TRUE` where some tests occasionally fail with cached
+  files.
+  - `test-load_example_results`: Update test files.
+  - `test-prioritise_targets`: Remove unused arguments and change input size.
+  - `test-prioritise_targets_network`: Process `top_targets` to include effect
+  - `test-plot_differential_outcomes`: Use non-specific plot name in
+  `patchwork::wrap_plots`.
+  - `test-plot_differential_outcomes`: Wrap p3 in `expect_error` to prevent
+  test failure even if error was handled.
+  - `test-report_plot`: Fix detection for ggplot object.
+  variable.
+* Vignettes
+  - `MSTExplorer`: Update effect variable to `fold_change`.
+* `add_logfc`
+  - Return `results` with new column rather than directly modifying the original
+  input.
+  - Update references (`add_logfc(results)` -> `results <- add_logfc(results)`).
+* `ttd_check`, `plot_differential_outcomes`, `prioritise_targets_grid`
+  - Add check for `disease_name` column before executing
+  `HPOExplorer::add_disease` on input.
+* `plot_ttd`
+  - Remove `fill` aesthetic for `geom_text` (doesn't exist anymore).
+* `extract_help`
+  - [DEVELOPEMENT ONLY] Look for help docs only in legitimate pkg installation
+  paths.
+* `subset_results`
+  - Add new `effect_var` argument.
+  - Adjust default `effect_threshold` to 0.1.
+* `add_symptom_results`
+  - Only merge `results` and `phenotypes_to_genes` if required (prevents
+  column duplicates with altered names).
+* `map_tissue`
+  - Rewrite merge logic to fix error: attempt to replicate non-vector.
+* `test_target_celltypes`
+  - Uncomment `add_ancestors(results)` to ensure required ancestor columns are
+  present.
+* Add missing import: simona
+
 # MSTExplorer 1.0.4
 
 ## New features
