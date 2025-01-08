@@ -1,3 +1,10 @@
+# MSTExplorer 1.0.5
+
+## Bug fixes
+
+* `ttd_hypergeo` via `ttd_check`: Missing column (NULL) made overlap always 0, 
+and thus hypergeo p-value always equal 1.
+
 # MSTExplorer 1.0.4
 
 ## New features

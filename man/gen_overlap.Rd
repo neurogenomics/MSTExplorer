@@ -48,8 +48,7 @@ Otherwise, genes will be collapsed into a list column (\code{TRUE}).}
 
 \item{save_dir}{Directory to save results to.}
 
-\item{force_new}{Overwrite previous results
-in the \code{save_dir_tmp}.}
+\item{force_new}{Don't use previously saved results when \code{TRUE}.}
 
 \item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
 

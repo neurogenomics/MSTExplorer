@@ -41,7 +41,9 @@ prioritise_targets(
   top_n = NULL,
   group_vars = c("hpo_id"),
   return_report = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  save_path = tempfile(fileext = ".rds"),
+  force_new = FALSE
 )
 }
 \arguments{
@@ -162,6 +164,10 @@ and values will be supplied to the \code{order=} argument.}
 phenotypes/celltypes/genes remaining after each filtering step.}
 
 \item{verbose}{Print messages.}
+
+\item{save_path}{Path to save results to.}
+
+\item{force_new}{Don't use previously saved results when \code{TRUE}.}
 }
 \value{
 A data.table of the prioritised phenotype- and

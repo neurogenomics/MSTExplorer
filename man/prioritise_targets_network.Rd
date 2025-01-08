@@ -142,8 +142,7 @@ list(from = 1, to = 1) to control degree in both direction.}
 
 \item{show_plot}{Print the plot after it's been generated.}
 
-\item{save_path}{Path to save interactive plot to
-as a self-contained HTML file.}
+\item{save_path}{Path to save results to.}
 
 \item{run_prune_ancestors}{Prune redundant ancestral terms if any of their
 descendants are present. Passes to \link[KGExplorer]{prune_ancestors}.}

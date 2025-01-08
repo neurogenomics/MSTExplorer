@@ -1,6 +1,6 @@
 Package: MSTExplorer
 Title: Multi-Scale Target Explorer
-Version: 1.0.4
+Version: 1.0.5
 Authors@R:
     c(
     person(given = "Brian",
@@ -35,6 +35,7 @@ Imports:
     data.table,
     EWCE (>= 1.0.0),
     parallel,
+    BiocParallel,
     stringr,
     piggyback,
     stats,

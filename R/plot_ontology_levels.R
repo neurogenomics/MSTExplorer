@@ -8,11 +8,14 @@
 #'  reduce computational load.
 #' @param p2g Phenotype to gene data.
 #' @param x_vars Variables to plot on the x-axis of each subplot.
+#' @param y_vars Variables to plot on the y-axis of each subplot.
 #' @param min_value Minimum value for the \code{specificity} metric.
 #' @param n.breaks Passed to \link[ggplot2]{scale_fill_viridis_c}.
 #' @param log_vars Logical vector indicating which variables to log-transform.
 #' @param sig_vars Logical vector indicating which variables to only plot
 #' for significant results.
+#' @param neg_vars Names of variables to make negative if they are detected
+#' in the post-processed data.
 #' @param add_arrow Add arrows indicating whether phenotypes are more broader
 #' or more specific across ontology levels.
 #' @param return_data Return the full long data used in the plots.
@@ -37,17 +40,22 @@ plot_ontology_levels <- function(results = load_example_results(),
                                     "cell types",
                                     "estimate",
                                     "mean_specificity"),
+                         y_vars = rep("info_content", length(x_vars)),
                          log_vars=x_vars %in% c("estimate","statistic",
                                                 "F","ges",
+                                                "p",
                                                 "effect"),
                          sig_vars=x_vars %in% c("estimate","statistic",
                                                 "F","ges",
+                                                "p",
                                                 "effect",
                                                 "cell types",
                                                 "mean_specificity"),
+                         neg_vars=c("log2(p)","log2(FDR)"),
                          group_vars=c("hpo_id",
-                                      "ontLvl",
+                                      unique(y_vars),
                                       "ctd"),
+                         geom="ggscatterstats",
                          q_threshold=0.05,
                          min_value=NULL,
                          label.x.npc = .05,
@@ -60,7 +68,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                          save_path=NULL,
                          height=7,
                          width=length(x_vars)*5.75,
-                         smooth.line.args=list(method = "loess",
+                         smooth.line.args=list(method = "lm",
                                                se = FALSE),
                          return_data=TRUE
                          ){
@@ -70,8 +78,8 @@ plot_ontology_levels <- function(results = load_example_results(),
   requireNamespace("ggpubr")
   requireNamespace("ggstatsplot")
   requireNamespace("gginnards")
-  gene_symbol <- CellType <- specificity <- `cell types` <- NULL;
-
+  gene_symbol <- CellType <- specificity <- `cell types` <- info_content <-
+    NULL;
   #### Check input variables
   ## log_vars
   if(length(log_vars)!=length(x_vars)){
@@ -81,13 +89,23 @@ plot_ontology_levels <- function(results = load_example_results(),
   if(length(sig_vars)!=length(x_vars)){
     stopper("sig_vars must be the same length as x_vars")
   }
+  ## Add IC
+  if(any(y_vars=="info_content")){
+    results <- HPOExplorer::add_info_content(phenos = results)
+    ## Bin continuous variable
+    results[,info_content:=as.integer(round(info_content))]
+  }
+  ## Add ontLvl
+  if(any(y_vars=="ontLvl")){
+    results <- HPOExplorer::add_ont_lvl(results)
+  }
   #### Preprocess data ####
-  results <- HPOExplorer::add_ont_lvl(results)
   q_tmp <- if(sig_vars[which(x_vars=="cell types")]) q_threshold else 1
   results[,`cell types`:=length(unique(CellType[q<q_tmp])),
           by=group_vars]
   #### Add specificity of DRIVER GENES ####
-  if(sum(grepl("specificity$",x_vars))>0){
+  if(sum(grepl("specificity$",x_vars))>0 &&
+     (!"max_specificity" %in% names(results))){
     driver_genes <- add_driver_genes(results[q<q_threshold],
                                      ctd_list = ctd_list,
                                      metric="specificity",
@@ -111,10 +129,10 @@ plot_ontology_levels <- function(results = load_example_results(),
               by="hpo_id")
   group_vars <- group_vars[group_vars %in% names(r2)]
   #### iterator plot function
+  ###. -------- <---------> ---------- ###
   plot_func <- function(x_var="genes",
-                        y_var="ontLvl",
                         geom="boxplot",
-                        method = "loess",
+                        method = method,
                         span = 0.75,
                         direction = 1,
                         trans=NULL,
@@ -133,9 +151,9 @@ plot_ontology_levels <- function(results = load_example_results(),
     }
     #### Log vars ####
     if(log_vars[which(x_vars==x_var)]){
-      trans <- "log10"
+      trans <- "log2"
       ## ggstatsplot doesn't understand how to handle expressions...
-      y_lab <- paste0("log10(",y_lab,")")
+      y_lab <- paste0(trans,"(",y_lab,")")
       # y_lab <- substitute(expression(log[10](y_lab)),
       #                     list(y_lab=y_lab))
       ## replace 0s ###
@@ -143,15 +161,30 @@ plot_ontology_levels <- function(results = load_example_results(),
       messager(trans,"transforming x-axis:",shQuote(x_var))
       r2[,c(x_var):=get(trans)(get(x_var))]
     }
+    if(y_lab %in% neg_vars){
+      y_lab <- paste0("-",y_lab)
+      r2[,c(x_var):=-(get(x_var))]
+    }
+    ## Select y_var
+    y_var <- y_vars[which(x_vars==x_var)]
     if(!is.null(reduce_fun)){
       dat <- r2[!is.na(get(x_var)),
                 list(reduce_fun(get(x_var)))|>
                   `names<-`(x_var), by=group_vars]
+      fill_var <- "mean"
     } else {
       dat <- r2[!is.na(get(x_var))]
+      fill_var <- x_var
     }
+    x_lab <- if(y_var=="ontLvl"){
+      "Phenotype ontology level"
+    } else if (y_var=="info_content"){
+      "Phenotype information content"
+    } else {y_var}
     #### Compute mean value per ont level for color #####
-    dat[,mean:=mean(get(x_var), na.rm=TRUE),by=y_var]
+    if(!is.null(reduce_fun)){
+      dat[,mean:=reduce_fun(get(x_var), na.rm=TRUE), by=y_var]
+    }
     ####
     if(geom=="ggscatterstats"){
       p <- ggstatsplot::ggscatterstats(data = dat,
@@ -159,6 +192,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                                        y = !!ggplot2::sym(x_var),
                                        marginal=FALSE,
                                        bf.message=FALSE,
+                                       point.width.jitter = 0.1,
                                        # k = 1L,
                                        type =type,
                                        point.args = list(alpha=.1),
@@ -166,7 +200,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                                        smooth.line.args=smooth.line.args) +
         ggplot2::geom_boxplot(orientation = "x",
                               ggplot2::aes(group= !!ggplot2::sym(y_var),
-                                           fill=mean),
+                                           fill=!!ggplot2::sym(fill_var)),
                               position = "dodge",
                               outlier.alpha = 0) +
         ggplot2::scale_fill_viridis_c(option = "plasma",
@@ -174,9 +208,9 @@ plot_ontology_levels <- function(results = load_example_results(),
                                       direction = direction) +
         ggplot2::coord_flip() +
         ggplot2::scale_x_reverse() +
-        ggplot2::labs(x="Phenotype ontology level",
+        ggplot2::labs(x=x_lab,
                       y=y_lab,
-                      fill="Per-level mean"
+                      fill="Bin mean"
                       ) +
         ggplot2::theme(legend.position = "bottom",
                        legend.key.width=ggplot2::unit(1,"cm"),
@@ -190,8 +224,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                           na.rm = TRUE,
                           ggplot2::aes(x=!!ggplot2::sym(y_var),
                                        y=!!ggplot2::sym(x_var),
-                                       fill=mean
-                                       # color=ctd
+                                       fill=!!ggplot2::sym(fill_var)
                                        )
                           ) +
       ggplot2::scale_fill_viridis_c(option = "plasma",
@@ -205,18 +238,21 @@ plot_ontology_levels <- function(results = load_example_results(),
       gp <- gp + ggplot2::geom_hex(...)
     } else if(geom=="violin"){
       gp <- gp + ggplot2::geom_violin(orientation = "x",
-                                      ggplot2::aes(fill=ontLvl),
+                                      ggplot2::aes(fill=!!ggplot2::sym(y_var)),
                              ...)
     } else if(geom=="boxplot"){
       gp <- gp + ggplot2::geom_boxplot(orientation = "x",
-                                     ggplot2::aes(group=ontLvl),
+                                     ggplot2::aes(group=!!ggplot2::sym(y_var)),
                                      position = "dodge",
-                                     outlier.alpha = 0.25,
+                                     outlier.alpha = 0.1,
                               ...)
     } else if (geom=="jitter") {
       gp <- gp + ggplot2::geom_jitter(width = 0,
-                                      alpha=.25,
+                                      alpha=.1,
                             ...)
+    } else if(geom=="point"){
+      gp <- gp + ggplot2::geom_point(alpha=.1,
+                                     ...)
     }
     gp <- gp +
       ggplot2::geom_smooth(method = method,
@@ -227,7 +263,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                        label.y.npc = label.y.npc) +
       ggplot2::coord_flip() +
       ggplot2::scale_x_reverse() +
-      ggplot2::labs(x="Phenotype ontology level",
+      ggplot2::labs(x=x_lab,
                     y=y_lab,
                     title=title) +
       ggplot2::theme_bw() +
@@ -239,16 +275,17 @@ plot_ontology_levels <- function(results = load_example_results(),
   #### Create plots ####
   plts2 <- lapply(stats::setNames(x_vars,x_vars),
                   plot_func,
-                  y_var="ontLvl",
                   geom="ggscatterstats",
                   type="parametric",
-                  method = "loess",
+                  method = smooth.line.args$method,
                   span = .5,
                   direction = 1,
                   notch=notch)
   #### Merge plots ####
-  plts2 <- patchwork::wrap_plots(plts2, nrow = nrow) +
-    patchwork::plot_annotation(tag_levels = letters[seq_len(length(plts2))]) +
+  plts2 <- patchwork::wrap_plots(plts2,
+                                 tag_level="new",
+                                 nrow = nrow) +
+    patchwork::plot_annotation(tag_levels = "a") +
     patchwork::plot_layout(axis_titles = "collect",
                            axes="collect")
   #### Extract ggstatsplot results ####

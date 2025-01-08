@@ -14,6 +14,7 @@ plot_bar_dendro_facets(
   target_branches_keep = NULL,
   celltype_col = "cl_name",
   keep_ont_levels = NULL,
+  add_prop_test = FALSE,
   add_test_target_celltypes = TRUE,
   color_map = NULL,
   color_vector = NULL,
@@ -34,7 +35,8 @@ plot_bar_dendro_facets(
   background_full = TRUE,
   save_path = NULL,
   width = NULL,
-  height = NULL
+  height = NULL,
+  cores = NULL
 )
 }
 \arguments{

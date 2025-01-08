@@ -44,7 +44,7 @@ plot_congenital_annotations <- function(results,
                                         ...){
   requireNamespace("ggstatsplot")
   fetal_celltype <- ancestor_name <- congenital_onset <- has_adult_and_fetal <-
-    NULL;
+    hpo_name <- hpo_id <- NULL;
   x_var <- match.arg(x_var)
   {
     results <- prepare_congenital_annotations(results = results,
@@ -64,6 +64,8 @@ plot_congenital_annotations <- function(results,
   #### Bar plot ####
   if(by_branch){
     #### Branches plot ####
+
+    dat <- dat[hpo_name!=keep_descendants & hpo_id!=keep_descendants]
     dat[,c("fetal_celltype_prop","fetal_only_prop"):=list(
       mean(fetal_celltype),
       mean(fetal_only)

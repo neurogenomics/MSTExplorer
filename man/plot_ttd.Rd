@@ -4,7 +4,13 @@
 \alias{plot_ttd}
 \title{Plot TTD}
 \usage{
-plot_ttd(dat_sub, label_size = 3, failed_status = NULL)
+plot_ttd(
+  dat_sub,
+  base_size = 9,
+  label_size = 2,
+  as_percent = TRUE,
+  baseline = NULL
+)
 }
 \description{
 Plot overlap between your targets and TTD targets.

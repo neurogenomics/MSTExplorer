@@ -58,6 +58,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
                                   target_branches_keep = NULL,
                                   celltype_col = "cl_name",
                                   keep_ont_levels=NULL,
+                                  add_prop_test=FALSE,
                                   add_test_target_celltypes=TRUE,
                                   color_map=NULL,
                                   color_vector=NULL,
@@ -78,7 +79,8 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
                                   background_full=TRUE,
                                   save_path=NULL,
                                   width=NULL,
-                                  height=NULL){
+                                  height=NULL,
+                                  cores=NULL){
   requireNamespace("ggplot2")
   hpo_id <- ancestor_name_original <- ancestor_name <-
     sig_phenotypes <- phenotypes_per_ancestor <- NULL;
@@ -157,6 +159,22 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
     dat
   }
   #### Run tests ####
+  if (isTRUE(add_prop_test)){
+      prop_tests <- run_prop_tests(results=results,
+                                   celltype_col = celltype_col,
+                                   cores=cores)
+      names(prop_tests)[-seq(2)] <- paste0("prop_test.",names(prop_tests)[-seq(2)])
+      dat <- merge(dat,
+                   prop_tests,
+                   all.x = TRUE,
+                   by=c("ancestor_name","cl_name"))
+      data_summary <- dat[,list(
+        phenotypes_per_ancestor=unique(phenotypes_per_ancestor),
+        n_celltypes=data.table::uniqueN(cl_name),
+        n_celltypes_sig=data.table::uniqueN(cl_name[prop_test.q <0.05])
+      ),
+      by=c("ancestor_name")]
+  }
   if(isTRUE(add_test_target_celltypes)){
     target_tests <- test_target_celltypes(results=results,
                                           tests="across_branches_per_celltype",
@@ -167,7 +185,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
       add_test_target_celltypes <- FALSE
       data_summary <- NULL
     } else {
-      cl_name <- p.value.adj <- term <- p.value.adj.signif <- NULL;
+      p.value.adj <- term <- p.value.adj.signif <- NULL;
       dat <- merge(dat[,-c("term")],
                    target_tests[[1]][term=="is_targetTRUE"],
                    all.x = TRUE,
@@ -231,7 +249,8 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
   #### Add facets ####
   if(!is.null(cols)){
     ggbars <- ggbars +
-      ggplot2::facet_grid(facets = paste(facets,"~",cols),
+      ggplot2::facet_grid(rows = facets,
+                          cols = cols,
                           scales = scales,
                           labeller = construct_labeller(dat=dat,
                                                         facets=facets,
@@ -267,9 +286,20 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
     )
   }
   #### Add test results to bar plot ####
+  if(isTRUE(add_prop_test)){
+    ggbars <- ggbars +
+      ggplot2::geom_text(ggplot2::aes(label=dat$prop_test.q_signif,
+                                      y=1.05*sig_phenotypes),
+                         # nudge_y=3,
+                         size=2,
+                         color="black",
+                         alpha=.8,
+                         na.rm = TRUE) +
+      ggplot2::scale_y_continuous(expand = ggplot2::expansion(mult = c(0, .2)))
+  }
   if(isTRUE(add_test_target_celltypes)){
     ggbars <- ggbars +
-      ggplot2::geom_text(ggplot2::aes(label=p.value.adj.signif,
+      ggplot2::geom_text(ggplot2::aes(label=dat$p.value.adj.signif,
                                       y=1.05*sig_phenotypes),
                                       # nudge_y=3,
                                       size=2,

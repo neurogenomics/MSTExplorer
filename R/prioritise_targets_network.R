@@ -88,9 +88,10 @@ prioritise_targets_network <- function(top_targets,
   requireNamespace("ggplot2")
   requireNamespace("pals")
 
+
   add_logfc(top_targets)
   if(any(c("cl_name","cl_id") %in% vertex_vars)){
-    map_celltype(top_targets)
+    top_targets <- map_celltype(top_targets)
   }
   if(isTRUE(run_prune_ancestors)){
     hpo <- HPOExplorer::get_hpo()

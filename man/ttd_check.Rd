@@ -11,8 +11,12 @@ ttd_check(
   keep_status = NULL,
   remove_status = c(NA),
   allow.cartesian = FALSE,
-  run_map_genes = TRUE,
+  run_map_genes = FALSE,
+  add_descriptions = FALSE,
   force_new = FALSE,
+  as_percent = TRUE,
+  base_size = 9,
+  label_size = 2,
   show_plot = TRUE,
   save_path = NULL,
   height = NULL,
@@ -38,7 +42,13 @@ the drug failed.}
 \item{run_map_genes}{Map genes to standardised HGNC symbols using 
 \link[orthogene]{map_genes}.}
 
+\item{add_descriptions}{Add disease names and descriptions.}
+
 \item{force_new}{If TRUE, force a new download.}
+
+\item{as_percent}{Show the plot's y-axis as a percentage within each
+x-axis group (TRUE).
+Otherwise, show y-axis as the number of drugs within that x-axis group.}
 
 \item{show_plot}{Print the plot to the console.}
 
@@ -57,9 +67,10 @@ Identify the overlap between your prioritised list of gene therapy targets
 and currently existing gene therapy targets that are currently on the market
 or are in clinical trials. Uses data from the
 \href{https://db.idrblab.net/ttd/full-data-download}{
-Therapuetic Target Database}.
+Therapeutic Target Database}.
 }
 \examples{
 top_targets <- MSTExplorer::example_targets$top_targets
-res <- ttd_check(top_targets=top_targets)
+res <- ttd_check(top_targets=top_targets,
+                 run_map_genes=FALSE)
 }

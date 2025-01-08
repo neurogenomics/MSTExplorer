@@ -42,6 +42,7 @@ plot_bar_dendro <- function(results = load_example_results(),
                                                           remove_rings = TRUE),
                             facets = "ancestor_name",
                             add_test_target_celltypes=TRUE,
+                            add_prop_test=FALSE,
                             preferred_palettes = "tol",
                             legend.position="none",
                             heights = c(.3,1,.15,.3),
@@ -126,17 +127,18 @@ plot_bar_dendro <- function(results = load_example_results(),
                    )
   #### Create faceted bar plot ####
   ggbars_out <- plot_bar_dendro_facets(results=dat,
-                                  results_full=results_full,
-                                  target_branches=target_branches,
-                                  target_celltypes=target_celltypes,
-                                  celltype_col=celltype_col,
-                                  add_test_target_celltypes=add_test_target_celltypes,
-                                  color_map=color_map,
-                                  color_vector=color_vector,
-                                  legend.position=legend.position,
-                                  q_threshold=q_threshold,
-                                  facets=facets,
-                                  hpo=hpo)
+                                       results_full=results_full,
+                                       target_branches=target_branches,
+                                       target_celltypes=target_celltypes,
+                                       celltype_col=celltype_col,
+                                       add_test_target_celltypes=add_test_target_celltypes,
+                                       color_map=color_map,
+                                       color_vector=color_vector,
+                                       legend.position=legend.position,
+                                       q_threshold=q_threshold,
+                                       add_prop_test=add_prop_test,
+                                       facets=facets,
+                                       hpo=hpo)
   ggbars <- ggbars_out$plot
   #### Create dendrogram plot ####
   ggdend <-

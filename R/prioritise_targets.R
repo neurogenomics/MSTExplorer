@@ -168,6 +168,8 @@
 #' @param effect_var Name of the effect size column in the \code{results}.
 #' @param info_content_threshold Minimum phenotype information content
 #' threshold.
+#' @param save_path Path to save results to.
+#' @param force_new Don't use previously saved results when \code{TRUE}.
 #' @inheritParams ewce_para
 #' @inheritParams ggnetwork_plot_full
 #' @inheritParams EWCE::bootstrap_enrichment_test
@@ -253,11 +255,19 @@ prioritise_targets <- function(#### Input data ####
                                               # "CellType"
                                               ),
                                return_report = TRUE,
-                               verbose = TRUE){
+                               verbose = TRUE,
+                               save_path=tempfile(fileext = ".rds"),
+                               force_new=FALSE){
   q <- CellType <- width <- seqnames <- gene_biotype <-
     Severity_score <- cl_name <- cl_id <- Severity_score_max <-
     info_content <- severity_score_gpt <- NULL;
 
+  if(!is.null(save_path) && file.exists(save_path) && isFALSE(force_new)){
+    messager("Loading cached results:",save_path)
+    return(
+      readRDS(save_path)
+    )
+  }
   force(results)
   force(ctd_list)
   force(hpo)
@@ -614,9 +624,14 @@ prioritise_targets <- function(#### Input data ####
   if(isTRUE(verbose)) round(difftime(Sys.time(),t1,units = "s"),0)
   #### Return ####
   if(isTRUE(return_report)){
+    KGExplorer::cache_save(obj = list(top_targets=top_targets,
+                                      report=rep_dt),
+                           save_path = save_path)
     return(list(top_targets=top_targets,
                 report=rep_dt))
   } else {
+    KGExplorer::cache_save(obj = top_targets,
+                           save_path = save_path)
     return(top_targets)
   }
 }

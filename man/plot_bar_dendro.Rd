@@ -13,6 +13,7 @@ plot_bar_dendro(
   cl = KGExplorer::get_ontology(name = "cl", lvl = 1, remove_rings = TRUE),
   facets = "ancestor_name",
   add_test_target_celltypes = TRUE,
+  add_prop_test = FALSE,
   preferred_palettes = "tol",
   legend.position = "none",
   heights = c(0.3, 1, 0.15, 0.3),

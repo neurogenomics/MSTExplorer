@@ -10,10 +10,13 @@ plot_ontology_levels(
   ctd_list = load_example_ctd(file = paste0("ctd_", unique(results$ctd), ".rds"),
     multi_dataset = TRUE),
   x_vars = c("genes", "cell types", "estimate", "mean_specificity"),
-  log_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "effect"),
-  sig_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "effect", "cell types",
-    "mean_specificity"),
-  group_vars = c("hpo_id", "ontLvl", "ctd"),
+  y_vars = rep("info_content", length(x_vars)),
+  log_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "p", "effect"),
+  sig_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "p", "effect",
+    "cell types", "mean_specificity"),
+  neg_vars = c("log2(p)", "log2(FDR)"),
+  group_vars = c("hpo_id", unique(y_vars), "ctd"),
+  geom = "ggscatterstats",
   q_threshold = 0.05,
   min_value = NULL,
   label.x.npc = 0.05,
@@ -26,7 +29,7 @@ plot_ontology_levels(
   save_path = NULL,
   height = 7,
   width = length(x_vars) * 5.75,
-  smooth.line.args = list(method = "loess", se = FALSE),
+  smooth.line.args = list(method = "lm", se = FALSE),
   return_data = TRUE
 )
 }
@@ -42,15 +45,24 @@ created with \link[EWCE]{generate_celltype_data}.}
 
 \item{x_vars}{Variables to plot on the x-axis of each subplot.}
 
+\item{y_vars}{Variables to plot on the y-axis of each subplot.}
+
 \item{log_vars}{Logical vector indicating which variables to log-transform.}
 
 \item{sig_vars}{Logical vector indicating which variables to only plot
 for significant results.}
 
+\item{neg_vars}{Names of variables to make negative if they are detected
+in the post-processed data.}
+
 \item{group_vars}{Compute the mean value for each \code{x_vars}
 grouped by the \code{group_vars}.
 This can be less accurate for some metrics but helps to drastically
 reduce computational load.}
+
+\item{geom}{The geometric object to use to display the data, either as a
+\code{ggproto} \code{Geom} subclass or as a string naming the geom stripped of the
+\code{geom_} prefix (e.g. \code{"point"} rather than \code{"geom_point"})}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
