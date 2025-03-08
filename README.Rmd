@@ -17,16 +17,19 @@ owner <- strsplit(URL,"/")[[1]][4]
 repo <-strsplit(URL,"/")[[1]][5]
 ```
  
-## ``r pkg``: `r title`
+## Introduction
 
-### `r description`
- 
-If you use ``r pkg``, please cite: 
-
-<!-- Modify this by editing the file: inst/CITATION  -->
-> `r utils::citation(pkg)$textVersion`
+The MSTExplorer package is an extension of the
+[EWCE](https://nathanskene.github.io/EWCE/articles/EWCE.html) package. It is
+designed to run expression weighted celltype enrichment (EWCE) on multiple gene
+lists in parallel. The results are then stored both as separate .rds files, one
+for each  individual EWCE analysis, as well as a in a single dataframe
+containing all the results. This package is useful in cases where you have a
+large number of related, but separate, gene lists.
 
 ## Installation 
+
+Within R: 
 
 ```R
 if(!require("remotes")) install.packages("remotes")
@@ -34,9 +37,36 @@ if(!require("remotes")) install.packages("remotes")
 remotes::install_github("`r paste(owner,repo,sep='/')`")
 library(`r pkg`)
 ```
+
 ## Documentation 
 
-### [Website](https://`r owner`.github.io/`r pkg`) 
-### [Get started](https://`r owner`.github.io/`r pkg`/articles/`r pkg`) 
+#### [Website](https://`r owner`.github.io/`r pkg`) 
+#### [Get started](https://`r owner`.github.io/`r pkg`/articles/`r pkg`)
+#### [Docker/Singularity Container](https://`r owner`.github.io/`r pkg`/articles/docker.html)
 
-<br>
+## Citation
+
+If you use ``r pkg``, please cite: 
+
+<!-- Modify this by editing the file: inst/CITATION  -->
+> `r utils::citation(pkg)$textVersion`
+
+## Contact
+
+### [Neurogenomics Lab](https://www.neurogenomics.co.uk)   
+UK Dementia Research Institute  
+Department of Brain Sciences  
+Faculty of Medicine  
+Imperial College London  
+[GitHub](https://github.com/neurogenomics)
+
+## Session Info 
+
+<details> 
+
+```{r Session Info}
+utils::sessionInfo()
+```
+
+</details>  
+<hr>
