@@ -8,8 +8,7 @@ validate_associations_mkg(
   results = load_example_results(),
   kg = get_data("monarch_kg_cells.csv"),
   q_threshold = 0.05,
-  cl = KGExplorer::get_ontology(name = "cl", remove_cyclic_paths = TRUE, remove_rings =
-    TRUE),
+  cl = get_cl(),
   alt_ids = c(`CL:0000111` = "CL:2000032"),
   metric = c("dist_nca.min_adj", "dist_lca.min_adj", "dist_nca.min", "dist_lca.min")[1]
 )

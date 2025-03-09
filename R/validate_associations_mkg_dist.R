@@ -1,9 +1,6 @@
 validate_associations_mkg_dist <- function(results,
                                            kg=get_data("monarch_kg_cells.csv"),
-                                           cl=KGExplorer::get_ontology(
-                                             name = "cl",
-                                             remove_cyclic_paths = TRUE,
-                                             remove_rings = TRUE),
+                                           cl=get_cl(),
                                            q_threshold=0.05,
                                            alt_ids=c("CL:0000111"="CL:2000032"),
                                            metric = c("dist_nca.min_adj",

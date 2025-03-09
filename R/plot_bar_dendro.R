@@ -37,9 +37,7 @@ plot_bar_dendro <- function(results = load_example_results(),
                             target_branches = get_target_branches(),
                             keep_ancestors=names(target_branches),
                             hpo = HPOExplorer::get_hpo(),
-                            cl = KGExplorer::get_ontology(name = "cl",
-                                                          lvl = 1,
-                                                          remove_rings = TRUE),
+                            cl = get_cl(),
                             facets = "ancestor_name",
                             add_test_target_celltypes=TRUE,
                             add_prop_test=FALSE,
@@ -116,6 +114,7 @@ plot_bar_dendro <- function(results = load_example_results(),
   tissue_plots <- plot_tissues(results = results,
                                facet_var = "dummy",
                                types = "bar")
+
   ggsummary <- tissue_plots$bar_plot +
                   ggplot2::labs(x=NULL, y=NULL) +
                   ggplot2::scale_fill_gradient(low="black",high="grey") +

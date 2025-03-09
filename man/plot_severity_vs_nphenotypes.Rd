@@ -7,7 +7,7 @@
 plot_severity_vs_nphenotypes(
   results,
   gpt_annot = HPOExplorer::gpt_annot_codify(),
-  cl = KGExplorer::get_ontology("cl", remove_rings = TRUE),
+  cl = get_cl(),
   q_threshold = 0.5,
   n_label = 3,
   size = 3,

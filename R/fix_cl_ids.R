@@ -1,5 +1,5 @@
 fix_cl_ids <- function(dat,
-                       ont=KGExplorer::get_ontology("cl"),
+                       ont=get_cl(),
                        replace_map=list(
                          "CSH1_CSH2_positive_cells"="CL:0000351",
                          "SLC26A4_PAEP_positive_cells"="CL:0002097",

@@ -35,6 +35,11 @@ plot_tissues <- function(results,
                                                          hjust = 1, vjust=0.5),
                      strip.background = ggplot2::element_rect(fill="transparent")
       )
+    #### Add facets ####
+    if(!is.null(facet_var)){
+      res[["tile_plot"]]  <- res[["tile_plot"]] +
+        ggplot2::facet_wrap(facets=facet_var)
+    }
   }
 
   if("bar" %in% types){
@@ -61,14 +66,13 @@ plot_tissues <- function(results,
                      axis.ticks.x = ggplot2::element_blank(),
                      strip.background = ggplot2::element_rect(fill = "transparent")
       )
+    #### Add facets ####
+    if(!is.null(facet_var)){
+      res[["bar_plot"]] <- res[["bar_plot"]] +
+        ggplot2::facet_wrap(facets=facet_var)
+    }
   }
-  #### Add facets ####
-  if(!is.null(facet_var)){
-    res[["tile_plot"]]  <- res[["tile_plot"]] +
-      ggplot2::facet_wrap(facets=facet_var)
-    res[["bar_plot"]] <- res[["bar_plot"]] +
-      ggplot2::facet_wrap(facets=facet_var)
-  }
+
   #### Return ####
   return(res)
 }

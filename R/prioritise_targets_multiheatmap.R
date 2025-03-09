@@ -1,7 +1,7 @@
 #' Prioritise targets: multi-heatmap
 #'
 #' @param top_targets A results table after it has been annotated with
-#' \link[MSTExplorer]{add_disease} and \link[MSTExplorer]{add_symptom_results}.
+#' \link[HPOExplorer]{add_disease} and \link[MSTExplorer]{add_symptom_results}.
 #' @param prioritise_targets_network_out Output of
 #' \link[MSTExplorer]{prioritise_targets_network}.
 #' @param gene_order The order in which to show genes in heatmap x-axis.

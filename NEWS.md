@@ -1,10 +1,15 @@
 # MSTExplorer 1.0.7
 
+## New features
+* `get_cl`: new wrapper for getting the exact version of the 
+  Cell Ontology used in our original study.
+
 ## Bug fixes
-* M
+* Use `BiocMananger` to install in README.
+* `plot_bar_dendro`: Fix https://github.com/neurogenomics/MSTExplorer/issues/22
+* `plot_tissues`: Don't try to facet plot types that aren't requested.
 
 # MSTExplorer 1.0.6
-
 ## Bug fixes
 * `get_color_map`
   - Fix `color_vector` assignment.

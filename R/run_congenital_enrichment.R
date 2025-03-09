@@ -29,10 +29,7 @@
 #' out <- run_congenital_enrichment(results=results)
 run_congenital_enrichment <- function(results,
                                       hpo=HPOExplorer::get_hpo(),
-                                      cl=KGExplorer::get_ontology("cl")|>
-                                        KGExplorer::filter_ontology(
-                                          keep_descendants = "cell"
-                                        ),
+                                      cl=get_cl(),
                                       gpt_annot = HPOExplorer::gpt_annot_codify(),
                                       fetal_keywords=c("fetal",
                                                        "fetus",

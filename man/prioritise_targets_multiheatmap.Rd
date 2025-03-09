@@ -20,7 +20,7 @@ prioritise_targets_multiheatmap(
 }
 \arguments{
 \item{top_targets}{A results table after it has been annotated with
-\link[MSTExplorer]{add_disease} and \link[MSTExplorer]{add_symptom_results}.}
+\link[HPOExplorer]{add_disease} and \link[MSTExplorer]{add_symptom_results}.}
 
 \item{prioritise_targets_network_out}{Output of
 \link[MSTExplorer]{prioritise_targets_network}.}

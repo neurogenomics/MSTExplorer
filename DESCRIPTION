@@ -1,6 +1,6 @@
 Package: MSTExplorer
 Title: Multi-Scale Target Explorer
-Version: 1.0.6
+Version: 1.0.7
 Authors@R:
     c(
     person(given = "Brian",

@@ -7,8 +7,7 @@
 run_congenital_enrichment(
   results,
   hpo = HPOExplorer::get_hpo(),
-  cl = KGExplorer::filter_ontology(KGExplorer::get_ontology("cl"), keep_descendants =
-    "cell"),
+  cl = get_cl(),
   gpt_annot = HPOExplorer::gpt_annot_codify(),
   fetal_keywords = c("fetal", "fetus", "primordial", "hESC", "embryonic"),
   celltype_col = "author_celltype",

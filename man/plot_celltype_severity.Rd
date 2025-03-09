@@ -6,8 +6,7 @@
 \usage{
 plot_celltype_severity(
   results,
-  cl = KGExplorer::filter_ontology(KGExplorer::get_ontology("cl", remove_rings = TRUE),
-    keep_descendants = "cell"),
+  cl = get_cl(),
   q_threshold = 0.05,
   run_enrichment = TRUE,
   top_n = 3,

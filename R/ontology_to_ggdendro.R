@@ -1,5 +1,4 @@
-ontology_to_ggdendro <- function(ont=KGExplorer::get_ontology(name = "cl",
-                                                              lvl = 1),
+ontology_to_ggdendro <- function(ont=get_cl(),
                                  terms=NULL #as.character(unique(results$cl_id))
                                  ){
   #### Get celltype dendrogram ####

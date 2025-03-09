@@ -26,10 +26,7 @@
 #' results <- results[sample(seq(nrow(results)), 5000),]
 #' out <- plot_celltype_severity(results)
 plot_celltype_severity <- function(results,
-                                   cl = KGExplorer::get_ontology("cl", remove_rings=TRUE)|>
-                                     KGExplorer::filter_ontology(
-                                       keep_descendants = "cell"
-                                     ),
+                                   cl = get_cl(),
                                    q_threshold=.05,
                                    run_enrichment=TRUE,
                                    top_n=3,

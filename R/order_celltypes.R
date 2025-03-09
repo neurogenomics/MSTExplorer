@@ -1,8 +1,5 @@
 order_celltypes <- function(dt,
-                            cl=KGExplorer::get_ontology("cl")|>
-                              KGExplorer::filter_ontology(
-                                keep_descendants = "cell"
-                              ),
+                            cl=get_cl(),
                             levels=NULL
                             ){
   cl_id <- cl_name <- NULL;
