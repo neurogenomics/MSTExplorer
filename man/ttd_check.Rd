@@ -50,6 +50,10 @@ the drug failed.}
 x-axis group (TRUE).
 Otherwise, show y-axis as the number of drugs within that x-axis group.}
 
+\item{base_size}{Base size for ggplot2 theme.}
+
+\item{label_size}{Size of labels in plot.}
+
 \item{show_plot}{Print the plot to the console.}
 
 \item{save_path}{Save the plot to a file.

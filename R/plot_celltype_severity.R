@@ -14,9 +14,11 @@
 #' a given cell type and all other cell types.
 #' Tests are repeated across each GPT annotation separately using
 #' \link[dplyr]{group_by} and \link[rstatix]{wilcox_test}.
+#' @param nonsig_fill Fill colour for non-significant results.
 #' @inheritParams prioritise_targets
 #' @inheritParams plot_bar_dendro
 #' @inheritParams ggplot2::theme_bw
+#' @inheritParams KGExplorer::set_cores
 #' @returns Named list of ggplot and data.table objects.
 #'
 #' @export
@@ -35,7 +37,8 @@ plot_celltype_severity <- function(results,
                                    nonsig_fill=ggplot2::alpha("grey90",.001),
                                    force_new=FALSE,
                                    base_size=8,
-                                   save_path=tempfile(fileext = ".rds")){
+                                   save_path=tempfile(fileext = ".rds"),
+                                   workers=1){
 
   requireNamespace("ggplot2")
   severity_score_gpt <- cl_name <- cl_id <- value <- variable <- p <- FDR <-
@@ -111,14 +114,23 @@ plot_celltype_severity <- function(results,
         wt_res <- readRDS(save_path)
       } else {
         ## Run new tests
-        BPPARAM <- KGExplorer::set_cores()
+        BPPARAM <- KGExplorer::set_cores(workers = workers)
         messager("Running Wilcoxon rank-sum tests:")
         wt_res <- BiocParallel::bplapply(
           unique(agg_gpt$cl_id),
           function(ct){
             # messager("Running Wilcoxon rank-sum test:",ct)
             tmp <- agg_gpt[,group:=cl_id==ct][,value:=as.numeric(value)]
-            tmp[!is.na(value)]|>
+            tmp <- tmp[!is.na(value)]
+            # Remove groups there's not enough samples to run tests on
+            tmp[,n_samples:=data.table::uniqueN(value), by=variable]
+            tmp[,n_groups:=data.table::uniqueN(group), by=variable]
+            tmp <- tmp[n_samples>=2 & n_groups>=2]
+            if (nrow(tmp) == 0) {
+              return(NULL)
+            }
+
+            tmp |>
               dplyr::group_by(variable)|>
               rstatix::wilcox_test(value ~ group,
                                    ref.group = "FALSE",

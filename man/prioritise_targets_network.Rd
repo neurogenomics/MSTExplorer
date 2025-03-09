@@ -161,8 +161,6 @@ See \href{https://rpubs.com/JanpuHou/337696}{here} for some visualized
 examples of each layout.
 }
 \examples{
-top_targets <- MSTExplorer::example_targets$top_targets[1:10]
-top_targets[,estimate:=fold_change]
-top_targets <- map_celltype(top_targets)
+top_targets <- example_targets$top_targets[seq(10)]
 vn <- prioritise_targets_network(top_targets = top_targets)
 }

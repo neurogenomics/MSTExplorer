@@ -15,6 +15,8 @@
 #' See \link[ggstatsplot]{ggscatterstats} for details.
 #' @param remove_caption Remove the formula in the caption.
 #' See \link[ggstatsplot]{ggscatterstats} for details.
+#' @param cl Cell Ontology object.
+#' @param point_fill Fill color of the points.
 #' @inheritParams ggplot2::theme_bw
 #' @export
 #' @examples
@@ -34,6 +36,7 @@ plot_severity_vs_nphenotypes <- function(results,
                                          run_prune_ancestors=FALSE,
                                          ...){
   requireNamespace("ggstatsplot")
+  requireNamespace("ggrepel")
   severity_score_gpt <- hpo_id <- phenotypes_per_celltype <- .I <- NULL;
 
   ## Merge and annotate results

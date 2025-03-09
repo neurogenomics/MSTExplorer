@@ -75,7 +75,9 @@ Suggests:
     paletteer,
     tibble,
     tidytext,
-    phenomix
+    phenomix,
+    ggrepel,
+    gtools
 Remotes: 
   github::neurogenomics/HPOExplorer,
   github::neurogenomics/KGExplorer,

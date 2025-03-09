@@ -23,6 +23,8 @@
 #' variable (e.g. "ancestor_name").
 #' @param background_full Whether to use the full set of results as a
 #' background for proportional enrichment testing.
+#' @param cores Number of CPU cores to parallelise the
+#' proportional enrichment tests across.
 #' @inheritParams plot_
 #' @inheritParams plot_bar_dendro
 #' @inheritParams ggnetwork_plot_full

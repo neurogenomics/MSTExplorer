@@ -24,6 +24,8 @@ GitHub.}}
 \item{lvl}{Depth of the ancestor terms to add. 
 Will get the closest ancestor to this level if none have this exact level.}
 
+\item{remove_rings}{Parameter passed to \code{simona::import_ontology}.}
+
 \item{...}{
   Arguments passed on to \code{\link[KGExplorer:get_]{KGExplorer::get_ontology}}
   \describe{

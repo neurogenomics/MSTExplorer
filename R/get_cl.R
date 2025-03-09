@@ -3,7 +3,7 @@
 #' A thin wrapper around \link[KGExplorer]{get_ontology} to get the
 #' specific version of the Cell Ontology used in the original analyses that
 #' produced the results stored in \link{load_example_results}.
-#'
+#' @param remove_rings Parameter passed to \code{simona::import_ontology}.
 #' @inheritParams KGExplorer::get_ontology
 #' @inheritDotParams KGExplorer::get_ontology
 #' @export

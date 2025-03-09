@@ -14,6 +14,8 @@
 #' determine whether each cell type is overrepresented in a given HPO branch
 #' relative to all other HPO branches. Overrepresented cell types will be
 #' denoted by "*" above its bar.
+#' @param add_prop_test Add proportional enrichment results
+#' using \code{run_prop_tests}.
 #' @param expand_dendro_x Passed to \link[ggplot2]{scale_x_discrete}
 #' in the cell type dendrogram.
 #' @param cl Cell Ontology (CL) object from

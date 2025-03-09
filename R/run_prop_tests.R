@@ -1,8 +1,11 @@
-
+#' Run proportional enrichment tests
+#'
+#' Run a series of proportional enrichment tests on the results of a
+#' phenotype to cell type association test.
+#' @keywords internal
 #' @examples
 #' results <- load_example_results()
 #' results <- HPOExplorer::add_ancestor(results)
-#'
 run_prop_tests <- function(results,
                            branch_col="ancestor_name",
                            celltype_col="CellType",
@@ -57,6 +60,7 @@ run_prop_tests <- function(results,
     })|> data.table::rbindlist(fill = TRUE)
   # MTC
   if(nrow(test_res)>0){
+    requireNamespace("gtools")
     test_res <- test_res |>
       dplyr::mutate(q=stats::p.adjust(p,"fdr"))|>
       dplyr::mutate(q_signif=gtools::stars.pval(p.value = q))

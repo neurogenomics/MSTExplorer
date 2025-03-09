@@ -15,7 +15,8 @@ plot_celltype_severity(
   nonsig_fill = ggplot2::alpha("grey90", 0.001),
   force_new = FALSE,
   base_size = 8,
-  save_path = tempfile(fileext = ".rds")
+  save_path = tempfile(fileext = ".rds"),
+  workers = 1
 )
 }
 \arguments{
@@ -44,12 +45,16 @@ Tests are repeated across each GPT annotation separately using
 \item{run_prune_ancestors}{Prune redundant ancestral terms if any of their
 descendants are present. Passes to \link[KGExplorer]{prune_ancestors}.}
 
+\item{nonsig_fill}{Fill colour for non-significant results.}
+
 \item{force_new}{Run a new set of enrichment tests even when cached
 results are found. Only used when \code{run_enrichment=FALSE}.}
 
 \item{base_size}{base font size, given in pts.}
 
 \item{save_path}{Path to save results to.}
+
+\item{workers}{Number (>1) or proportion (<1) of worker cores to use.}
 }
 \value{
 Named list of ggplot and data.table objects.

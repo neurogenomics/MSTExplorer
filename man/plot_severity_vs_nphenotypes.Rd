@@ -27,6 +27,8 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{gpt_annot}{A data.table of GPT annotations.}
 
+\item{cl}{Cell Ontology object.}
+
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
 \item{n_label}{The number of top and bottom cell types to label in the plot.
@@ -43,6 +45,8 @@ See \link[ggstatsplot]{ggscatterstats} for details.}
 
 \item{remove_caption}{Remove the formula in the caption.
 See \link[ggstatsplot]{ggscatterstats} for details.}
+
+\item{point_fill}{Fill color of the points.}
 
 \item{base_size}{base font size, given in pts.}
 

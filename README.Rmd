@@ -19,13 +19,29 @@ repo <-strsplit(URL,"/")[[1]][5]
  
 ## Introduction
 
-The MSTExplorer package is an extension of the
-[EWCE](https://nathanskene.github.io/EWCE/articles/EWCE.html) package. It is
-designed to run expression weighted celltype enrichment (EWCE) on multiple gene
-lists in parallel. The results are then stored both as separate .rds files, one
-for each  individual EWCE analysis, as well as a in a single dataframe
-containing all the results. This package is useful in cases where you have a
-large number of related, but separate, gene lists.
+Many genes have been associated with diseases 
+Multi-Scale Target Explorer (`MSTExplorer`) systematically identifies, prioritises, and visualises cell-type-specific gene therapy targets across the phenome. 
+
+Core functionalities include:  
+
+**1. Conducting phenotype x cell type genetic association tests at scale**
+  
+  - The [Human Phenotype Ontology](https://hpo.jax.org/) (integrated with gene annotations from [OMIM](https://omim.org/) / [DECIPHER](https://www.deciphergenomics.org/) / [ORPHANET](https://www.orpha.net/)) is used as the source of phenotype gene signatures. Each gene-phenotype associated is given a continuous score that approximates the current strength of evidence for the association (using data derived from [GenCC](https://thegencc.org/)).  
+    
+  - Whole-body scRNA-seq atlases from humans (across multiple developmental stages) are used as a data-driven source of cell type-specific gene markers.  
+  - The underlying association tests are designed for both speed and accuracy using memory-efficient data structures, and a highly parallelisable implementation of Generalised Linear Regression (GLM). For example, associations for all pairwise combinations of >11k phenotypes x >200 cell types (>2,200,000 associations) can be in <30 minutes on a Macbook laptop with 10 CPU cores).
+
+**2. Inferring multi-scale causal graphs of disease**
+
+`MSTExplorer` allows users to easily infer and construct multi-scale causal graphs of Diseases (blue nodes) -> Phenotypes (purple nodes) -> Cell types (orange nodes) -> Genes (yellow nodes).  
+
+![*Example multi-scale network focused on lethal skeletal dysplasia, a phenotype of multiple diseases*](https://github.com/neurogenomics/rare_disease_celltyping/blob/299abe0ccd00644bc2f05a1389704fe196a3e868/manuscript/_manuscript/img/fig-therapy-examples-supp/lethal_skeletal_dysplasia.png?raw=true){height=400px}
+
+[See here for more example networks.](https://github.com/neurogenomics/rare_disease_celltyping/tree/299abe0ccd00644bc2f05a1389704fe196a3e868/manuscript/_manuscript/img/fig-therapy-examples-supp).
+
+**3. Prioritising cell-type-specific gene therapy targets**
+
+`MSTExplorer` also provides a comprehensive and customisable pipeline that can be run via a single function (`prioritise_targets()`) to produce the most promising cell-type-specific gene therapy targets across the phenome.
 
 ## Installation 
 

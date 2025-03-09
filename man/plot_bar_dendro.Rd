@@ -59,6 +59,9 @@ determine whether each cell type is overrepresented in a given HPO branch
 relative to all other HPO branches. Overrepresented cell types will be
 denoted by "*" above its bar.}
 
+\item{add_prop_test}{Add proportional enrichment results
+using \code{run_prop_tests}.}
+
 \item{preferred_palettes}{Preferred palettes to use for each column.}
 
 \item{legend.position}{the default position of legends ("none", "left",

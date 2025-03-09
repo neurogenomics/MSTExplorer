@@ -14,7 +14,14 @@
 #' @inheritDotParams ggstatsplot::ggbetweenstats
 #' @export
 #' @examples
-#' results <- add_symptom_results()
+#' results <- load_example_results()
+#' ## Reduce the CTD list for example purposes
+#' ctd_list <- load_example_ctd("ctd_DescartesHuman.rds",
+#'                              multi_dataset = TRUE)
+#' results <- add_symptom_results(results=results[ctd=="DescartesHuman"],
+#'                                ctd_list=ctd_list)
+#' ## Reduce the number of diseases for example purposes
+#' results <- results[disease_id %in% unique(results$disease_id)[seq(6)]]
 #' #### Multiple phenotypes per disease #####
 #' results <- HPOExplorer::add_gpt_annotations(results)
 #' p1 <- plot_differential_outcomes(results,

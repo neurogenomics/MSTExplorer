@@ -45,7 +45,8 @@ containing the ancestor name.}
 
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
-\item{cores}{The number of cores to run in parallel (e.g. 8) \code{int}.}
+\item{cores}{Number of CPU cores to parallelise the
+proportional enrichment tests across.}
 }
 \description{
 Test the following hypotheses across \link{gen_results} enrichment results.

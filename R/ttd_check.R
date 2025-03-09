@@ -15,6 +15,8 @@
 #' @param as_percent Show the plot's y-axis as a percentage within each
 #'  x-axis group (TRUE).
 #'  Otherwise, show y-axis as the number of drugs within that x-axis group.
+#' @param base_size Base size for ggplot2 theme.
+#' @param label_size Size of labels in plot.
 #' @inheritParams plot_
 #' @inheritParams load_example_ctd
 #' @inheritParams data.table::merge.data.table

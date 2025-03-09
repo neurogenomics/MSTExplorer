@@ -68,6 +68,9 @@ correspond to on-target cell types across the two ontologies.}
 ontology levels to keep.
 See \link[HPOExplorer]{add_ont_lvl} for details.}
 
+\item{add_prop_test}{Add proportional enrichment results
+using \code{run_prop_tests}.}
+
 \item{add_test_target_celltypes}{Using the significant phenotype-cell type
 association \code{results}, run proportional enrichment tests to
 determine whether each cell type is overrepresented in a given HPO branch
@@ -130,6 +133,9 @@ Set to \code{NULL} to not save the plot.}
 \item{width}{Width of the saved plot.}
 
 \item{height}{Height of the saved plot.}
+
+\item{cores}{Number of CPU cores to parallelise the
+proportional enrichment tests across.}
 }
 \description{
 Plot bar plot of enriched phenotypes per cell type per HPO branch.
