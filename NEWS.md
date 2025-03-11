@@ -1,3 +1,9 @@
+# MSTExplorer 1.0.8
+
+## Miscellaneous
+* Clear cache before running tests for `prioritise_targets`.
+
+
 # MSTExplorer 1.0.7
 
 ## New features

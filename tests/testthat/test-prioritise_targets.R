@@ -1,4 +1,5 @@
 test_that("prioritise_targets works", {
+  KGExplorer::cache_clear()
 
   results <- load_example_results()[q<0.01]
   ctd_list <- load_example_ctd(c("ctd_DescartesHuman.rds",
