@@ -18,23 +18,55 @@ get_ggstatsplot_stats <- function(plts,
     #### get pairwise comparisons results ####
     pairwise_data <- lapply(seq(length(plts)),
                             function(i){
-                              ggstatsplot::extract_stats(plts[[i]])$pairwise_comparisons_data
+                              key_select <- c("pairwise_comparisons_data",
+                                              "one_sample_data")
+                              stats <- ggstatsplot::extract_stats(plts[[i]])
+                              # Get the keys whose values in stats are not null and use the first one
+                              {
+                                key <- key_select[
+                                  sapply(key_select, function(k){
+                                    !is.null(stats[[k]])
+                                  })][1]
+                              }
+                              stats[[key]]
                             }) |> data.table::rbindlist(idcol = "plot_id", fill=TRUE)
     pairwise_data[,facet:=titles[plot_id]]
 
+    stats <- list(
+      summary_data = summary_data,
+      pairwise_data = pairwise_data
+    )
+
     #### ggplot object ####
   } else if(methods::is(plts,"ggplot")){
-    summary_data <- ggstatsplot::extract_stats(plts)$subtitle_data
-    pairwise_data <- ggstatsplot::extract_stats(plts)$pairwise_comparisons_data
+    stats <- ggstatsplot::extract_stats(plts)
+    summary_data <- data.table::data.table(stats$subtitle_data)
+    # Get pairwise results
+    if("pairwise_comparisons_data" %in% names(stats) &
+       !is.null(stats$pairwise_comparisons_data) ){
+      pairwise_data <- data.table::data.table(stats$pairwise_comparisons_data)
+    } else if ("one_sample_data"  %in%  names(stats) &
+               !is.null(stats$one_sample_data) ){
+      pairwise_data <- data.table::data.table(stats$one_sample_data)
+    } else{
+      pairwise_data <- NULL
+    }
   } else {
     stopper("plts must be of class patchwork or ggplot")
   }
+
   #### Add multiple-testing correction ####
-  summary_data$q.value <- stats::p.adjust(summary_data$p.value,
-                                          method = method)
-  pairwise_data$q.value <- stats::p.adjust(pairwise_data$p.value,
-                                           method = method)
+  if(!is.null(summary_data)){
+    summary_data$q.value <- stats::p.adjust(summary_data$p.value,
+                                            method = method)
+  }
+  if(!is.null(pairwise_data)){
+    pairwise_data$q.value <- stats::p.adjust(pairwise_data$p.value,
+                                             method = method)
+  }
   #### Return ####
-  return(list(summary_data = summary_data,
-              pairwise_data = pairwise_data))
+  return(list(
+    summary_data =  summary_data,
+    pairwise_data =  pairwise_data
+  ))
 }

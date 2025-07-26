@@ -67,7 +67,7 @@ between a given phenotype and the congenital and non-congenital versions
 of a cell type (the \code{fetal_nonfetal_pdiff} column).
 It then sorts the results from the largest to the smallest difference.
 Here, a positive difference indicates that the phenotype is more associated
-with the fetal/embryonic version of the cell type, while a negative difference
+with the foetal/embryonic version of the cell type, while a negative difference
 indicates that the phenotype is more associated with the adult version.
 Next, it runs enrichment analyses for the top and bottom N phenotypes
 using the \link[simona]{dag_enrich_on_offsprings} function.

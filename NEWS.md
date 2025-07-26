@@ -1,3 +1,10 @@
+# MSTExplorer 1.0.8
+
+## Bug fixes
+* `plot_celltype_severity`: Ensure cell types are ordered by composite severity.
+* `get_ggstatsplot_stats`: Return all stats, not just specific labels.
+
+
 # MSTExplorer 1.0.7
 
 ## New features

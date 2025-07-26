@@ -26,7 +26,7 @@
 #' set.seed(2025)
 #' results <- load_example_results()
 #' results <- results[sample(seq(nrow(results)), 5000),]
-#' out <- plot_celltype_severity(results)
+#' out <- plot_celltype_severity(results, types="bar")
 plot_celltype_severity <- function(results,
                                    cl = get_cl(),
                                    q_threshold=.05,
@@ -52,6 +52,10 @@ plot_celltype_severity <- function(results,
                 by=c("cl_id","cl_name")]|>
       data.table::setorderv("severity_score_gpt",-1, na.last = TRUE)
   )
+  # Set celltype name order
+  celltype_order = unique(celltypes_gpt$cl_name)|>rev()
+  celltypes_gpt[,cl_name:=factor(cl_name, levels = celltype_order,ordered = TRUE)]
+
   agg_gpt <- (
     results_gpt[q<q_threshold,
                 c("cl_id","cl_name",
@@ -62,7 +66,10 @@ plot_celltype_severity <- function(results,
       data.table::melt.data.table(id.vars=c("cl_id","cl_name"))
   )[,value:=factor(value,levels = c(0:3),ordered = TRUE)]
   agg_gpt[,variable:=gsub("_"," ",variable)]
-  agg_gpt[,variable:=factor(variable,levels = unique(variable),ordered = TRUE)]
+  agg_gpt[,variable:=factor(variable, levels = unique(variable),ordered = TRUE)]
+  # Set celltype name order
+  agg_gpt[,cl_name:=factor(cl_name, levels = celltype_order,ordered = TRUE)]
+
   # Prune redundant cell types
   if(run_prune_ancestors){
     agg_gpt <- KGExplorer::prune_ancestors(dat = agg_gpt,

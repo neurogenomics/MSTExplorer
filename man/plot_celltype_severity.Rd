@@ -67,5 +67,5 @@ the cell types each phenotype is significantly associated with.
 set.seed(2025)
 results <- load_example_results()
 results <- results[sample(seq(nrow(results)), 5000),]
-out <- plot_celltype_severity(results)
+out <- plot_celltype_severity(results, types="bar")
 }

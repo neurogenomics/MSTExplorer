@@ -1,23 +1,35 @@
 test_that("prioritise_targets works", {
 
-  results <- load_example_results()[q<0.01]
+  # Tag the specific HPO release version for reproducibility
+  tag <- "2024-02-08"
+  phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(tag=tag)
+  hpo = HPOExplorer::get_hpo(tag = tag)
+
+  # Tag the specific MSTExplorer release version for reproducibility
+  results <- load_example_results(tag = "v0.1.10" )[q<0.01]
   ctd_list <- load_example_ctd(c("ctd_DescartesHuman.rds",
                                  "ctd_HumanCellLandscape.rds"),
                                 multi_dataset = TRUE)
 
   #### Top only ####
   res1 <- prioritise_targets(results = results,
+                             phenotype_to_genes = phenotype_to_genes,
+                             hpo = hpo,
                              ctd_list = ctd_list)
   testthat::expect_gte(nrow(res1$top_targets), 6)
 
   #### All results ####
   res2 <- prioritise_targets(results = results,
+                             phenotype_to_genes = phenotype_to_genes,
+                             hpo = hpo,
                              ctd_list = ctd_list,
                              top_n = 2)
   testthat::expect_gte(nrow(res2$top_targets), 6)
 
   #### Plot evidence score vs. specificity ####
   res3 <- prioritise_targets(results = results,
+                             phenotype_to_genes = phenotype_to_genes,
+                             hpo = hpo,
                              ctd_list = ctd_list,
                              keep_deaths = NULL,
                              #### Phenotype level ####
