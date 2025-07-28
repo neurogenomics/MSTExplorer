@@ -6,6 +6,7 @@
 #' that contains the group variable to compare across.
 #' @param celltype_var A character string specifying the column in \code{results}
 #' that contains the cell type variable to compare across.
+#' @param downsample Downsample the data to this many points when plotting.
 #' @param ... Additional arguments passed to \code{plot_density_cor}.
 #' @inheritParams prioritise_targets
 #' @inheritParams KGExplorer::filter_dt
@@ -26,6 +27,7 @@ validate_associations_correlate_ctd <- function(results=load_example_results(),
                                                 group_var="ctd",
                                                 celltype_var="cl_name",
                                                 q_threshold=0.05,
+                                                downsample=NULL,
                                                 ...){
   test_id <- NULL;
   results <- map_celltype(results)
@@ -60,21 +62,29 @@ validate_associations_correlate_ctd <- function(results=load_example_results(),
            paste0("@FDR<",q_threshold,"."))
   #### Plot ####
   messager("Generating plots.")
+
+
+
   plots <- list()
   plots[["p.all"]] <- plot_density_cor(res2,
                                        x=paste0("p_",group_values[1]),
-                                       y=paste0("p_",group_values[2])
+                                       y=paste0("p_",group_values[2]),
+                                       downsample=downsample,
                                        )
   plots[["logFC.all"]] <- plot_density_cor(res2,
                                            x=paste0("logFC_",group_values[1]),
-                                           y=paste0("logFC_",group_values[2])
+                                           y=paste0("logFC_",group_values[2]),
+                                           downsample=downsample
                                            )
   plots[["p.significant"]] <- plot_density_cor(res_sig,
                                                x=paste0("p_",group_values[1]),
-                                               y=paste0("p_",group_values[2]))
+                                               y=paste0("p_",group_values[2]),
+                                               downsample=downsample
+                                               )
   plots[["logFC.significant"]] <- plot_density_cor(res_sig,
                                                    x=paste0("logFC_",group_values[1]),
-                                                   y=paste0("logFC_",group_values[2])
+                                                   y=paste0("logFC_",group_values[2]),
+                                                   downsample=downsample
                                                    )
   messager("Gathering statistics.")
   data_stats <- lapply(plots, get_ggstatsplot_stats)

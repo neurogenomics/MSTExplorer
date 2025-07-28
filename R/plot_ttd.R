@@ -21,8 +21,8 @@ plot_ttd <- function(dat_sub,
                         subtitle = paste0(
                           subtitle_prefix,
                           "(",
-                            round(sum(dat_sub[prioritised==TRUE,]$n_drugs)/
-                                    sum(dat_sub$n_drugs)*100,2),
+                            round(sum(dat_sub$prioritised)/
+                                  nrow(dat_sub)*100,2),
                             "% prioritised)"
                           ),
                         width = NULL,
@@ -124,6 +124,14 @@ plot_ttd <- function(dat_sub,
                         as_percent = as_percent)
     ylims <- c(0,
                max(p1$data$n_drugs_total))
+
+    if (nrow(fail) == 0) {
+      messager("No failed therapeutics found, only plotting non-failed therapeutics.")
+      return(list(
+        plot = p1,
+        data = dat_sub
+      ))
+    }
     p2 <- plot_ttd_make(fail,
                         subtitle_prefix="Failed therapeutics\n",
                         as_percent = as_percent,
@@ -142,5 +150,8 @@ plot_ttd <- function(dat_sub,
     plt <- plot_ttd_make(dat_sub,
                          as_percent = as_percent)
   }
-  return(plt)
+  return(list(
+    plot= plt,
+    data= dat_sub
+  ))
 }

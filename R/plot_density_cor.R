@@ -5,8 +5,18 @@ plot_density_cor <- function(res,
                              density_alpha=.7,
                              min_colors=15,
                              log_vars=FALSE,
+                             downsample=NULL,
                              show.legend=FALSE){
+  res <- data.table::copy(res)
   res <- res[!is.na(get(x)) & !is.na(get(y))]
+
+  ### Downsample for plotting
+  if (!is.null(downsample) && downsample < nrow(res)) {
+    downsample <- min(downsample, nrow(res))
+    messager("Downsampling to", downsample, "points.")
+    res <- res[sample(.N, downsample)]
+  }
+
   p<- res |>
     ggstatsplot::ggscatterstats(x=!!ggplot2::sym(x),
                                 y=!!ggplot2::sym(y),

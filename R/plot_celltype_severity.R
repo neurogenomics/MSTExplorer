@@ -26,7 +26,7 @@
 #' set.seed(2025)
 #' results <- load_example_results()
 #' results <- results[sample(seq(nrow(results)), 5000),]
-#' out <- plot_celltype_severity(results, types="bar")
+#' out <- plot_celltype_severity(results, types=c("bar","dot"))
 plot_celltype_severity <- function(results,
                                    cl = get_cl(),
                                    q_threshold=.05,
@@ -64,9 +64,14 @@ plot_celltype_severity <- function(results,
                   "blindness","sensory_impairments","immunodeficiency","cancer",
                   "reduced_fertility","congenital_onset")]|>
       data.table::melt.data.table(id.vars=c("cl_id","cl_name"))
+
   )[,value:=factor(value,levels = c(0:3),ordered = TRUE)]
+
+  # Split variable names for plotting
   agg_gpt[,variable:=gsub("_"," ",variable)]
-  agg_gpt[,variable:=factor(variable, levels = unique(variable),ordered = TRUE)]
+  agg_gpt[,variable_split:=gsub(" ","\n",variable)]
+  agg_gpt[variable_split=="immunodeficiency",variable_split:="immuno-\ndeficiency"]
+  agg_gpt[,variable_split:=factor(variable_split, levels = unique(variable_split),ordered = TRUE)]
   # Set celltype name order
   agg_gpt[,cl_name:=factor(cl_name, levels = celltype_order,ordered = TRUE)]
 
@@ -80,6 +85,8 @@ plot_celltype_severity <- function(results,
   out <- list()
   if("bar" %in% types){
     messager("Creating bar plot.")
+
+    # Subplot with composite severity scores
     gg_severity <- ggplot2::ggplot(celltypes_gpt,
                                    ggplot2::aes(x=cl_name,y=severity_score_gpt,
                                                 fill=severity_score_gpt)) +
@@ -89,9 +96,11 @@ plot_celltype_severity <- function(results,
                     fill="GPT\nseverity\nscore") +
       ggplot2::coord_flip()+
       ggplot2::theme_minimal()
+
+    # Subplot with individual severity annotations
     gg_annot <- ggplot2::ggplot(agg_gpt[!is.na(value)],
                                 ggplot2::aes(x=cl_name, y=1, fill=value))+
-      ggplot2::facet_grid(.~variable, scales="free_y")+
+      ggplot2::facet_grid(.~variable_split, scales="free_y")+
       ggplot2::geom_bar(stat="identity", position="fill")+
       ggplot2::scale_fill_viridis_d(option="plasma",
                                     labels=c(`0`="never",
@@ -101,7 +110,8 @@ plot_celltype_severity <- function(results,
       ggplot2::scale_y_continuous(breaks = c(0,.5,1), labels=c("0","0.5","1")) +
       ggplot2::labs(y="Proportion of associated phenotypes", x="Cell type") +
       ggplot2::coord_flip()+
-      ggplot2::theme_minimal()
+      ggplot2::theme_minimal() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(vjust = 1) )
 
     out[["bar"]][["plot"]] <- (gg_annot | gg_severity) +
       patchwork::plot_layout(axes = "collect", widths = c(1,.1))

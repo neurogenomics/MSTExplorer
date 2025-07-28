@@ -3,7 +3,14 @@
 ## Bug fixes
 * `plot_celltype_severity`: Ensure cell types are ordered by composite severity.
 * `get_ggstatsplot_stats`: Return all stats, not just specific labels.
+* `ttd_check` \ `ttd_plot` 
+  - Make % prioritised targets a percentage of the total number of rows.
+  - Fix mistake where I was including non-gene therapies too 
+    (due to how grepping collapsed listed works in data.tables).
+  - Account for situations when there's no failed targets to check.
 
+## New features
+* `validate_associations_correlate_ctd`: Add `downsample` arg to reduce plot size.
 
 # MSTExplorer 1.0.7
 

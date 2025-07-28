@@ -93,13 +93,14 @@ ttd_check <- function(top_targets,
     baseline <- dat_sub[,list(
       baseline_prop=sum(GENENAME3 %in% unique(phenotype_to_genes$gene_symbol))/.N
     ), by=c("HIGHEST_STATUS")]
+
     #### Filter by drug type ####
     if(!is.null(drug_types)){
       dat_sub <- dat_sub[
         tolower(DRUGNAME) %in% tolower(drug_types) |
-          tolower(DRUGTYPE) %in% tolower(drug_types) |
-          grepl(paste(drug_types,collapse = "|"),DRUGNAME,ignore.case = TRUE) |
-          grepl(paste(drug_types,collapse = "|"),DRUGTYPE,ignore.case = TRUE),
+          tolower(DRUGTYPE) %in% tolower(drug_types),
+          # grepl(paste(drug_types,collapse = "|"),DRUGNAME,ignore.case = TRUE) |
+          # grepl(paste(drug_types,collapse = "|"),DRUGTYPE,ignore.case = TRUE),
       ]
     }
     #### Filter by status ####
@@ -147,18 +148,18 @@ ttd_check <- function(top_targets,
                   base_size = base_size,
                   label_size = label_size)
   #### Show ####
-  if(isTRUE(show_plot)) methods::show(plt)
+  if(isTRUE(show_plot)) methods::show(plt$plot)
   #### Save ####
-  KGExplorer::plot_save(plt = plt,
+  KGExplorer::plot_save(plt = plt$plot,
                         save_path=save_path,
                         height=height,
                         width=width)
   #### Return ####
   return(
-    list(data=dat_sub,
+    list(data=plt$data,
          data_overlap=dat_sub2,
          pct_captured,
-         plot=plt,
+         plot=plt$plot,
          ttd_hypergeo_out=ttd_hypergeo_out)
   )
 }
