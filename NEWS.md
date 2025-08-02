@@ -8,6 +8,7 @@
   - Fix mistake where I was including non-gene therapies too 
     (due to how grepping collapsed listed works in data.tables).
   - Account for situations when there's no failed targets to check.
+* `plot_bar_dendro`: Pass "top_ancestor_name" to `get_color_map=` arg instead of "ancestor_name".
 
 ## New features
 * `validate_associations_correlate_ctd`: Add `downsample` arg to reduce plot size.

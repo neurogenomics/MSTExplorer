@@ -105,7 +105,7 @@ plot_bar_dendro <- function(results = load_example_results(),
                 normalise_group=TRUE)
   #### Color each cell type x-axis label by the most commonly enriched HPO category ####
   cmap <- get_color_map(dat=dat,
-                        columns = "ancestor_name",
+                        columns = "top_ancestor_name",
                         ddata=ddata,
                         celltype_col=celltype_col,
                         preferred_palettes=preferred_palettes)

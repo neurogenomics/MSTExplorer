@@ -9,7 +9,7 @@ get_color_map <- function(dat,
                                       columns = columns,
                                       preferred_palettes = preferred_palettes,
                                       as="dict")[[1]]
-  ####sort dat rows by levels in ddata$labels$id
+  #### sort dat rows by levels in ddata$labels$id
   dat2 <- unique(dat[,c(celltype_col,columns), with=FALSE])
   if(!is.null(celltype_col_order)){
     dat2 <- dat2[order(match(dat2[[celltype_col]],celltype_col_order)),]
