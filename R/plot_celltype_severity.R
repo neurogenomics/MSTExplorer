@@ -22,6 +22,7 @@
 #' @returns Named list of ggplot and data.table objects.
 #'
 #' @export
+#' @importFrom stats dist
 #' @examples
 #' set.seed(2025)
 #' results <- load_example_results()

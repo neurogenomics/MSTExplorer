@@ -37,8 +37,8 @@ analyse (\emph{Default: 1}).}
 
 \item{save_path}{Path to save the table of aggregated results to.}
 
-\item{multivariate}{If \code{TRUE}, runs tests with each column in 
-\code{xmat} as a multivariate predictor in a single model 
+\item{multivariate}{If \code{TRUE}, runs tests with each column in
+\code{xmat} as a multivariate predictor in a single model
 (one model per column in \code{yvar}). If\code{FALSE},
 runs tests with each column in \code{xmat} as a univariate predictor in
 separate models (one model per column in \code{yvar}).}
@@ -52,7 +52,7 @@ in the \code{save_dir_tmp}.}
 }
 \description{
 Run many phenotype-cell type association tests in parallel using
-\link[phenomix]{iterate_lm}.
+\link{iterate_lm}.
 }
 \examples{
 \dontrun{

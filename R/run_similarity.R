@@ -38,10 +38,10 @@ run_similarity <- function(X_list=NULL){
     #                  method="C",
     #                  n.comp=100)
     # a$X %*% a$K
-    phenomix::run_pca(mat = X,
-                      transpose = TRUE,
-                      ncomp = 100)
-  })
+    run_pca(mat = X,
+            transpose = TRUE,
+            ncomp = 100)
+})
   # tmp <- Seurat::RunPCA( Xcor_list[["ontology"]])
   # pca_dt <- data.frame(variance_explained=(pca$sdev^2/sum(pca$sdev^2))[1:100],
   #                      PC=1:100) |>

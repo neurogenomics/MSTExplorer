@@ -1,13 +1,13 @@
 #' Run phenomix
 #'
 #' Run many phenotype-cell type association tests in parallel using
-#' \link[phenomix]{iterate_lm}.
+#' \link{iterate_lm}.
 #' @param ctd_name Name of the CTD to load.
 #' @param metric Which matrix within the CTD to use
 #' (e.g. "mean_exp","specificity","specificity_quantiles").
 #' @param save_path Path to save the table of aggregated results to.
 #' @inheritParams ewce_para
-#' @inheritParams phenomix::iterate_lm
+#' @inheritParams phenomix.core::iterate_lm
 #' @export
 #' @examples
 #' \dontrun{
@@ -37,7 +37,6 @@ run_phenomix <- function(ctd_name,
                          force_new = FALSE,
                          ...
 ){
-  requireNamespace("phenomix")
   effect <- NULL;
 
   if(file.exists(save_path) && isFALSE(force_new)){
@@ -51,7 +50,7 @@ run_phenomix <- function(ctd_name,
   ## Iterate over each CTD level
   lm_res <- lapply(stats::setNames(annotLevel,annotLevel), function(lvl){
     messager("Running phenomix with CTD annotLevel:",lvl)
-    phenomix::iterate_lm(xmat = ctd[[lvl]][[metric]],
+    phenomix.core::iterate_lm(xmat = ctd[[lvl]][[metric]],
                          ymat = ymat,
                          test_method = test_method,
                          multivariate = multivariate,

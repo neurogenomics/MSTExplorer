@@ -1,6 +1,6 @@
 Package: MSTExplorer
 Title: Multi-Scale Target Explorer
-Version: 1.0.8
+Version: 1.0.9
 Authors@R:
     c(
     person(given = "Brian",
@@ -57,7 +57,7 @@ Imports:
     tidygraph,
     rstatix,
     simona,
-    phenomix
+    phenomix.core
 Suggests: 
     rmarkdown,
     knitr,
@@ -81,7 +81,7 @@ Suggests:
 Remotes: 
   github::neurogenomics/HPOExplorer,
   github::neurogenomics/KGExplorer,
-  github::neurogenomics/phenomix,
+  github::neurogenomics/phenomix.core,
   github::NathanSkene/EWCE
 VignetteBuilder: knitr
 Config/testthat/edition: 3

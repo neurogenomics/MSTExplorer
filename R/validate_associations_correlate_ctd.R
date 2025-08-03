@@ -12,6 +12,7 @@
 #' @inheritParams KGExplorer::filter_dt
 #' @export
 #' @import data.table
+#' @importFrom stats as.formula complete.cases
 #' @examples
 #' results <- load_example_results()[,.SD[seq(10000)],by="ctd"]
 #' #### Across CTD ####
@@ -40,11 +41,11 @@ validate_associations_correlate_ctd <- function(results=load_example_results(),
   messager("Casting results.")
   res2 <- results |>
     data.table::dcast.data.table(
-      formula = as.formula(paste0("hpo_id+",celltype_var,"~",group_var)),
+      formula = stats::as.formula(paste0("hpo_id+",celltype_var,"~",group_var)),
       fun.aggregate = mean,
       drop = TRUE,
       value.var = value.var)
-  res2 <- res2[complete.cases(res2)][,test_id:=.I]
+  res2 <- res2[stats::complete.cases(res2)][,test_id:=.I]
   ### All results ####
   n_celltypes.all <- length(unique(res2$cl_name))
   n_phenotypes.all <- length(unique(res2$hpo_id))

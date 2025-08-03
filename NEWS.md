@@ -1,3 +1,10 @@
+# MSTExplorer 1.0.9
+
+## New features
+* Copy all core `phenomix` functions used in `MSTExplorer` 
+  into new package `phenomix.core` to reduce dependencies and issues
+  installing `phenomix` (which requires `scKirby` and `echoconda`).
+
 # MSTExplorer 1.0.8
 
 ## Bug fixes
