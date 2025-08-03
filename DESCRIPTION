@@ -56,7 +56,8 @@ Imports:
     furrr,
     tidygraph,
     rstatix,
-    simona
+    simona,
+    phenomix
 Suggests: 
     rmarkdown,
     knitr,
@@ -75,7 +76,6 @@ Suggests:
     paletteer,
     tibble,
     tidytext,
-    phenomix,
     ggrepel,
     gtools
 Remotes: 
