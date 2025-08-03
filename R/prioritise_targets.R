@@ -183,8 +183,10 @@
 #' @import data.table
 #' @importFrom utils head
 #' @examples
+#' \dontrun{
 #' results = load_example_results()[q<0.05]
 #' out <- prioritise_targets(results=results)
+#' }
 prioritise_targets <- function(#### Input data ####
                                results = load_example_results(),
                                ctd_list = load_example_ctd(
