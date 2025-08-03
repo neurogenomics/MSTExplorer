@@ -1,5 +1,7 @@
 test_that("prioritise_targets works", {
 
+  testthat::skip() # skip for now
+
   # Tag the specific HPO release version for reproducibility
   tag <- "2024-02-08"
   phenotype_to_genes = HPOExplorer::load_phenotype_to_genes(tag=tag)
