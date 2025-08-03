@@ -313,6 +313,8 @@ at the disease-level, phenotype-level, or symptom-level.}
 }
 }
 \examples{
+\dontrun{
 results = load_example_results()[q<0.05]
 out <- prioritise_targets(results=results)
+}
 }
