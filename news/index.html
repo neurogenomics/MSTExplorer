@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -57,9 +57,61 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0.9" id="mstexplorer-109">MSTExplorer 1.0.9<a class="anchor" aria-label="anchor" href="#mstexplorer-109"></a></h2>
+<div class="section level3">
+<h3 id="new-features-1-0-9">New features<a class="anchor" aria-label="anchor" href="#new-features-1-0-9"></a></h3>
+<ul><li>Copy all core <code>phenomix</code> functions used in <code>MSTExplorer</code> into new package <code>phenomix.core</code> to reduce dependencies and issues installing <code>phenomix</code> (which requires <code>scKirby</code> and <code>echoconda</code>).</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0.8" id="mstexplorer-108">MSTExplorer 1.0.8<a class="anchor" aria-label="anchor" href="#mstexplorer-108"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-1-0-8">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-8"></a></h3>
+<ul><li>
+<code>plot_celltype_severity</code>: Ensure cell types are ordered by composite severity.</li>
+<li>
+<code>get_ggstatsplot_stats</code>: Return all stats, not just specific labels.</li>
+<li>
+<code>ttd_check</code>  <code>ttd_plot</code>
+<ul><li>Make % prioritised targets a percentage of the total number of rows.</li>
+<li>Fix mistake where I was including non-gene therapies too (due to how grepping collapsed listed works in data.tables).</li>
+<li>Account for situations when there’s no failed targets to check.</li>
+</ul></li>
+<li>
+<code>plot_bar_dendro</code>: Pass “top_ancestor_name” to <code>get_color_map=</code> arg instead of “ancestor_name”.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-1-0-8">New features<a class="anchor" aria-label="anchor" href="#new-features-1-0-8"></a></h3>
+<ul><li>
+<code>validate_associations_correlate_ctd</code>: Add <code>downsample</code> arg to reduce plot size.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="1.0.7" id="mstexplorer-107">MSTExplorer 1.0.7<a class="anchor" aria-label="anchor" href="#mstexplorer-107"></a></h2>
+<div class="section level3">
+<h3 id="new-features-1-0-7">New features<a class="anchor" aria-label="anchor" href="#new-features-1-0-7"></a></h3>
+<ul><li>
+<code>get_cl</code>: new wrapper for getting the exact version of the Cell Ontology used in our original study.</li>
+<li>Update README to better reflect the package’s current state.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-0-7">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-7"></a></h3>
+<ul><li>Use <code>BiocMananger</code> to install in README.</li>
+<li>
+<code>plot_bar_dendro</code>: Fix <a href="https://github.com/neurogenomics/MSTExplorer/issues/22" class="external-link uri">https://github.com/neurogenomics/MSTExplorer/issues/22</a>
+</li>
+<li>
+<code>plot_tissues</code>: Don’t try to facet plot types that aren’t requested.</li>
+<li>
+<code>prioritise_targets_network</code>: Fix examples and tests.</li>
+<li>
+<code>plot_celltype_severity</code>: Fix tests.</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="1.0.6" id="mstexplorer-106">MSTExplorer 1.0.6<a class="anchor" aria-label="anchor" href="#mstexplorer-106"></a></h2>
 <div class="section level3">
@@ -74,7 +126,9 @@
 <h2 class="page-header" data-toc-text="1.0.5" id="mstexplorer-105">MSTExplorer 1.0.5<a class="anchor" aria-label="anchor" href="#mstexplorer-105"></a></h2>
 <div class="section level3">
 <h3 id="bug-fixes-1-0-5">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-5"></a></h3>
-<ul><li>Tests
+<ul><li><p><code>ttd_hypergeo</code> via <code>ttd_check</code>: Missing column (NULL) made overlap always 0, and thus hypergeo p-value always equal 1.</p></li>
+<li>
+<p>Tests</p>
 <ul><li>Use <code>force_new=TRUE</code> where some tests occasionally fail with cached files.</li>
 <li>
 <code>test-load_example_results</code>: Update test files.</li>
@@ -89,45 +143,46 @@
 <li>
 <code>test-report_plot</code>: Fix detection for ggplot object. variable.</li>
 </ul></li>
-<li>Vignettes
+<li>
+<p>Vignettes</p>
 <ul><li>
 <code>MSTExplorer</code>: Update effect variable to <code>fold_change</code>.</li>
 </ul></li>
 <li>
-<code>add_logfc</code>
+<p><code>add_logfc</code></p>
 <ul><li>Return <code>results</code> with new column rather than directly modifying the original input.</li>
 <li>Update references (<code>add_logfc(results)</code> -&gt; <code>results &lt;- add_logfc(results)</code>).</li>
 </ul></li>
 <li>
-<code>ttd_check</code>, <code>plot_differential_outcomes</code>, <code>prioritise_targets_grid</code>
+<p><code>ttd_check</code>, <code>plot_differential_outcomes</code>, <code>prioritise_targets_grid</code></p>
 <ul><li>Add check for <code>disease_name</code> column before executing <code><a href="https://rdrr.io/pkg/HPOExplorer/man/add_disease.html" class="external-link">HPOExplorer::add_disease</a></code> on input.</li>
 </ul></li>
 <li>
-<code>plot_ttd</code>
+<p><code>plot_ttd</code></p>
 <ul><li>Remove <code>fill</code> aesthetic for <code>geom_text</code> (doesn’t exist anymore).</li>
 </ul></li>
 <li>
-<code>extract_help</code>
+<p><code>extract_help</code></p>
 <ul><li>[DEVELOPEMENT ONLY] Look for help docs only in legitimate pkg installation paths.</li>
 </ul></li>
 <li>
-<code>subset_results</code>
+<p><code>subset_results</code></p>
 <ul><li>Add new <code>effect_var</code> argument.</li>
 <li>Adjust default <code>effect_threshold</code> to 0.1.</li>
 </ul></li>
 <li>
-<code>add_symptom_results</code>
+<p><code>add_symptom_results</code></p>
 <ul><li>Only merge <code>results</code> and <code>phenotypes_to_genes</code> if required (prevents column duplicates with altered names).</li>
 </ul></li>
 <li>
-<code>map_tissue</code>
+<p><code>map_tissue</code></p>
 <ul><li>Rewrite merge logic to fix error: attempt to replicate non-vector.</li>
 </ul></li>
 <li>
-<code>test_target_celltypes</code>
+<p><code>test_target_celltypes</code></p>
 <ul><li>Uncomment <code>add_ancestors(results)</code> to ensure required ancestor columns are present.</li>
 </ul></li>
-<li>Add missing import: simona</li>
+<li><p>Add missing import: simona</p></li>
 </ul></div>
 </div>
     <div class="section level2">
@@ -189,7 +244,7 @@
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

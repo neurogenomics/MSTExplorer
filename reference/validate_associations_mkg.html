@@ -20,7 +20,7 @@ that are present in the MKG."><!-- mathjax --><script src="https://cdnjs.cloudfl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -60,7 +60,7 @@ that are present in the MKG."><!-- mathjax --><script src="https://cdnjs.cloudfl
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Validate associations with the Monarch Knowledge Graph</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/validate_associations_mkg.R" class="external-link"><code>R/validate_associations_mkg.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/validate_associations_mkg.R" class="external-link"><code>R/validate_associations_mkg.R</code></a></small>
     <div class="hidden name"><code>validate_associations_mkg.Rd</code></div>
     </div>
 
@@ -76,8 +76,7 @@ that are present in the MKG.</p>
 <span>  results <span class="op">=</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  kg <span class="op">=</span> <span class="fu"><a href="get_data.html">get_data</a></span><span class="op">(</span><span class="st">"monarch_kg_cells.csv"</span><span class="op">)</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
-<span>  cl <span class="op">=</span> <span class="fu">KGExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/KGExplorer/man/get_.html" class="external-link">get_ontology</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"cl"</span>, remove_cyclic_paths <span class="op">=</span> <span class="cn">TRUE</span>, remove_rings <span class="op">=</span></span>
-<span>    <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  cl <span class="op">=</span> <span class="fu"><a href="get_cl.html">get_cl</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  alt_ids <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>`CL:0000111` <span class="op">=</span> <span class="st">"CL:2000032"</span><span class="op">)</span>,</span>
 <span>  metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dist_nca.min_adj"</span>, <span class="st">"dist_lca.min_adj"</span>, <span class="st">"dist_nca.min"</span>, <span class="st">"dist_lca.min"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -127,7 +126,11 @@ the Monarch Knowledge Graph.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping cell types to cell ontology terms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding stage information.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [i=1] cl_id: CL:0000000 &amp; hpo_id: HP:0025354</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading cached ontology: /github/home/.cache/R/KGExplorer/cl.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached ontology file (1/1):</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  /github/home/.cache/R/KGExplorer/ontologies/github/cl_v2023-09-21.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Keeping descendants of 2 term(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,711 terms remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [i=2] cl_id: CL:0000000 &amp; hpo_id: HP:0005374</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [i=3] cl_id: CL:0000015 &amp; hpo_id: HP:0012863</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> [i=4] cl_id: CL:0000019 &amp; hpo_id: HP:0000027</span>
@@ -223,7 +226,7 @@ the Monarch Knowledge Graph.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

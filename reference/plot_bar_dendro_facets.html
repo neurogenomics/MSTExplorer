@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot bar branches</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/plot_bar_dendro_facets.R" class="external-link"><code>R/plot_bar_dendro_facets.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/plot_bar_dendro_facets.R" class="external-link"><code>R/plot_bar_dendro_facets.R</code></a></small>
     <div class="hidden name"><code>plot_bar_dendro_facets.Rd</code></div>
     </div>
 
@@ -76,6 +76,7 @@
 <span>  target_branches_keep <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  celltype_col <span class="op">=</span> <span class="st">"cl_name"</span>,</span>
 <span>  keep_ont_levels <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  add_prop_test <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  add_test_target_celltypes <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  color_map <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  color_vector <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -96,7 +97,8 @@
 <span>  background_full <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  save_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  width <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  height <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  height <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cores <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -148,6 +150,11 @@ correspond to on-target cell types across the two ontologies.</p></dd>
 <dd><p>Only keep phenotypes at certain <em>absolute</em>
 ontology levels to keep.
 See <a href="https://rdrr.io/pkg/HPOExplorer/man/add_.html" class="external-link">add_ont_lvl</a> for details.</p></dd>
+
+
+<dt id="arg-add-prop-test">add_prop_test<a class="anchor" aria-label="anchor" href="#arg-add-prop-test"></a></dt>
+<dd><p>Add proportional enrichment results
+using <code>run_prop_tests</code>.</p></dd>
 
 
 <dt id="arg-add-test-target-celltypes">add_test_target_celltypes<a class="anchor" aria-label="anchor" href="#arg-add-test-target-celltypes"></a></dt>
@@ -253,6 +260,11 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 <dt id="arg-height">height<a class="anchor" aria-label="anchor" href="#arg-height"></a></dt>
 <dd><p>Height of the saved plot.</p></dd>
 
+
+<dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
+<dd><p>Number of CPU cores to parallelise the
+proportional enrichment tests across.</p></dd>
+
 </dl></div>
 
     <div id="ref-examples">
@@ -269,10 +281,10 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor_name', but this column does not exist to remove</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-6 ancestor to each HPO ID.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 19,025 IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2815 ancestors found at level 6</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 18,082 IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2690 ancestors found at level 6</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,201,892 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,206,994 associations remain after filtering.</span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_bar_dendro_facets</span><span class="op">(</span>results<span class="op">=</span><span class="va">results</span>,</span></span>
 <span class="r-in"><span>                         target_branches<span class="op">=</span><span class="va">target_branches</span>,</span></span>
 <span class="r-in"><span>                         facets <span class="op">=</span> <span class="st">"hpo_name"</span>,</span></span>
@@ -288,10 +300,10 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Force new. Removing existing ancestor columns.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-7 ancestor to each HPO ID.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 19,025 IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 3143 ancestors found at level 7</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 18,082 IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3027 ancestors found at level 7</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,201,892 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,206,994 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding HPO names.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
@@ -299,7 +311,11 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 20 terms remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 4,020 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading cached ontology: /github/home/.cache/R/KGExplorer/cl.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached ontology file (1/1):</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  /github/home/.cache/R/KGExplorer/ontologies/github/cl_v2023-09-21.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Keeping descendants of 2 term(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,711 terms remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor columns already present. Skipping.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 4,020 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Cell type columns already present. Skipping mapping.</span>
@@ -319,7 +335,7 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ several other metrics."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -58,7 +58,7 @@ several other metrics."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot ontology levels</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/plot_ontology_levels.R" class="external-link"><code>R/plot_ontology_levels.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/plot_ontology_levels.R" class="external-link"><code>R/plot_ontology_levels.R</code></a></small>
     <div class="hidden name"><code>plot_ontology_levels.Rd</code></div>
     </div>
 
@@ -74,10 +74,13 @@ several other metrics.</p>
 <span>  ctd_list <span class="op">=</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"ctd_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">ctd</span><span class="op">)</span>, <span class="st">".rds"</span><span class="op">)</span>,</span>
 <span>    multi_dataset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  x_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"genes"</span>, <span class="st">"cell types"</span>, <span class="st">"estimate"</span>, <span class="st">"mean_specificity"</span><span class="op">)</span>,</span>
-<span>  log_vars <span class="op">=</span> <span class="va">x_vars</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"statistic"</span>, <span class="st">"F"</span>, <span class="st">"ges"</span>, <span class="st">"effect"</span><span class="op">)</span>,</span>
-<span>  sig_vars <span class="op">=</span> <span class="va">x_vars</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"statistic"</span>, <span class="st">"F"</span>, <span class="st">"ges"</span>, <span class="st">"effect"</span>, <span class="st">"cell types"</span>,</span>
-<span>    <span class="st">"mean_specificity"</span><span class="op">)</span>,</span>
-<span>  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hpo_id"</span>, <span class="st">"ontLvl"</span>, <span class="st">"ctd"</span><span class="op">)</span>,</span>
+<span>  y_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"info_content"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x_vars</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  log_vars <span class="op">=</span> <span class="va">x_vars</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"statistic"</span>, <span class="st">"F"</span>, <span class="st">"ges"</span>, <span class="st">"p"</span>, <span class="st">"effect"</span><span class="op">)</span>,</span>
+<span>  sig_vars <span class="op">=</span> <span class="va">x_vars</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"statistic"</span>, <span class="st">"F"</span>, <span class="st">"ges"</span>, <span class="st">"p"</span>, <span class="st">"effect"</span>,</span>
+<span>    <span class="st">"cell types"</span>, <span class="st">"mean_specificity"</span><span class="op">)</span>,</span>
+<span>  neg_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"log2(p)"</span>, <span class="st">"log2(FDR)"</span><span class="op">)</span>,</span>
+<span>  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hpo_id"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">y_vars</span><span class="op">)</span>, <span class="st">"ctd"</span><span class="op">)</span>,</span>
+<span>  geom <span class="op">=</span> <span class="st">"ggscatterstats"</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  min_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label.x.npc <span class="op">=</span> <span class="fl">0.05</span>,</span>
@@ -90,7 +93,7 @@ several other metrics.</p>
 <span>  save_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  height <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>  width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x_vars</span><span class="op">)</span> <span class="op">*</span> <span class="fl">5.75</span>,</span>
-<span>  smooth.line.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  smooth.line.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  return_data <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -118,6 +121,10 @@ created with <a href="https://rdrr.io/pkg/EWCE/man/generate_celltype_data.html" 
 <dd><p>Variables to plot on the x-axis of each subplot.</p></dd>
 
 
+<dt id="arg-y-vars">y_vars<a class="anchor" aria-label="anchor" href="#arg-y-vars"></a></dt>
+<dd><p>Variables to plot on the y-axis of each subplot.</p></dd>
+
+
 <dt id="arg-log-vars">log_vars<a class="anchor" aria-label="anchor" href="#arg-log-vars"></a></dt>
 <dd><p>Logical vector indicating which variables to log-transform.</p></dd>
 
@@ -127,11 +134,29 @@ created with <a href="https://rdrr.io/pkg/EWCE/man/generate_celltype_data.html" 
 for significant results.</p></dd>
 
 
+<dt id="arg-neg-vars">neg_vars<a class="anchor" aria-label="anchor" href="#arg-neg-vars"></a></dt>
+<dd><p>Names of variables to make negative if they are detected
+in the post-processed data.</p></dd>
+
+
 <dt id="arg-group-vars">group_vars<a class="anchor" aria-label="anchor" href="#arg-group-vars"></a></dt>
 <dd><p>Compute the mean value for each <code>x_vars</code>
 grouped by the <code>group_vars</code>.
 This can be less accurate for some metrics but helps to drastically
 reduce computational load.</p></dd>
+
+
+<dt id="arg-geom">geom<a class="anchor" aria-label="anchor" href="#arg-geom"></a></dt>
+<dd><p>The geometric object to use to display the data for this layer.
+When using a <code>stat_*()</code> function to construct a layer, the <code>geom</code> argument
+can be used to override the default coupling between stats and geoms. The
+<code>geom</code> argument accepts the following:</p><ul><li><p>A <code>Geom</code> ggproto subclass, for example <code>GeomPoint</code>.</p></li>
+<li><p>A string naming the geom. To give the geom as a string, strip the
+function name of the <code>geom_</code> prefix. For example, to use <code>geom_point()</code>,
+give the geom as <code>"point"</code>.</p></li>
+<li><p>For more information and other ways to specify the geom, see the
+<a href="https://ggplot2.tidyverse.org/reference/layer_geoms.html" class="external-link">layer geom</a> documentation.</p></li>
+</ul></dd>
 
 
 <dt id="arg-q-threshold">q_threshold<a class="anchor" aria-label="anchor" href="#arg-q-threshold"></a></dt>
@@ -210,17 +235,17 @@ to <code>geom_smooth</code> geom used to display the regression line.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_ontology_levels</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: gginnards</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 19,025 IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding information_content scores.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding genes and disease IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman.rds</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_HumanCellLandscape.rds</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering q-values &lt; 0.05 : 'cell types'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering q-values &lt; 0.05 : 'estimate'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> log10 transforming x-axis: 'estimate'</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> log2 transforming x-axis: 'estimate'</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering q-values &lt; 0.05 : 'mean_specificity'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using formula = 'y ~ x'</span>
@@ -242,7 +267,7 @@ to <code>geom_smooth</code> geom used to display the regression line.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

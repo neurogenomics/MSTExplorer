@@ -20,7 +20,7 @@ files will be searched for and imported."><!-- mathjax --><script src="https://c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -60,7 +60,7 @@ files will be searched for and imported."><!-- mathjax --><script src="https://c
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Merge results</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/merge_results.R" class="external-link"><code>R/merge_results.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/merge_results.R" class="external-link"><code>R/merge_results.R</code></a></small>
     <div class="hidden name"><code>merge_results.Rd</code></div>
     </div>
 
@@ -103,7 +103,7 @@ that has the gene list names.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2023</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
 <span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman_example.rds</span>
 <span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_id</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
@@ -118,10 +118,10 @@ that has the gene list names.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping species name: human</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Common name mapping found for human</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1 organism identified from search: hsapiens</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene table with 63,150 rows retrieved.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Returning all 63,150 genes from human.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Returning 63,150 unique genes from entire human genome.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2024-12-19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Gene table with 78,687 rows retrieved.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Returning all 78,687 genes from human.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Returning 78,687 unique genes from entire human genome.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2025-08-03</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing gene counts.</span>
 <span class="r-in"><span><span class="va">all_results</span> <span class="op">&lt;-</span> <span class="fu">merge_results</span><span class="op">(</span>res_files<span class="op">=</span><span class="va">res_files</span><span class="op">)</span></span></span>
 </code></pre></div>
@@ -138,7 +138,7 @@ that has the gene list names.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

@@ -18,7 +18,7 @@ in different cell types via particular phenotypes."><!-- mathjax --><script src=
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -58,7 +58,7 @@ in different cell types via particular phenotypes."><!-- mathjax --><script src=
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot differential outcomes</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/plot_differential_outcomes.R" class="external-link"><code>R/plot_differential_outcomes.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/plot_differential_outcomes.R" class="external-link"><code>R/plot_differential_outcomes.R</code></a></small>
     <div class="hidden name"><code>plot_differential_outcomes.Rd</code></div>
     </div>
 
@@ -314,24 +314,30 @@ be entered as a <code>{ggplot2}</code> function or a list of <code>{ggplot2}</co
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="add_symptom_results.html">add_symptom_results</a></span><span class="op">(</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## Reduce the CTD list for example purposes</span></span></span>
+<span class="r-in"><span><span class="va">ctd_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="st">"ctd_DescartesHuman.rds"</span>,</span></span>
+<span class="r-in"><span>                             multi_dataset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman.rds</span>
+<span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="add_symptom_results.html">add_symptom_results</a></span><span class="op">(</span>results<span class="op">=</span><span class="va">results</span><span class="op">[</span><span class="va">ctd</span><span class="op">==</span><span class="st">"DescartesHuman"</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                               ctd_list<span class="op">=</span><span class="va">ctd_list</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding symptom-level results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by q_threshold and effect.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 46,514 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 19,929 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding genes and disease IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_HumanCellLandscape.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-in"><span><span class="co">## Reduce the number of diseases for example purposes</span></span></span>
+<span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">[</span><span class="va">disease_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">disease_id</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="co">#### Multiple phenotypes per disease #####</span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/add_.html" class="external-link">add_gpt_annotations</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 383 phenotypes do not have matching HPO IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,753 phenotypes.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 151 phenotypes do not have matching HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,982 phenotypes.</span>
 <span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plot_differential_outcomes</span><span class="op">(</span><span class="va">results</span>,</span></span>
 <span class="r-in"><span>                           facet_var <span class="op">=</span> <span class="st">"disease_name"</span>,</span></span>
 <span class="r-in"><span>                           y_var <span class="op">=</span> <span class="st">"severity_score_gpt"</span><span class="op">)</span></span></span>
@@ -351,7 +357,7 @@ be entered as a <code>{ggplot2}</code> function or a list of <code>{ggplot2}</co
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

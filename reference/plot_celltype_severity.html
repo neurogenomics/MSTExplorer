@@ -18,7 +18,7 @@ the cell types each phenotype is significantly associated with."><!-- mathjax --
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -58,7 +58,7 @@ the cell types each phenotype is significantly associated with."><!-- mathjax --
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Plot cell type severity</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/plot_celltype_severity.R" class="external-link"><code>R/plot_celltype_severity.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/plot_celltype_severity.R" class="external-link"><code>R/plot_celltype_severity.R</code></a></small>
     <div class="hidden name"><code>plot_celltype_severity.Rd</code></div>
     </div>
 
@@ -70,11 +70,17 @@ the cell types each phenotype is significantly associated with.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_celltype_severity</span><span class="op">(</span></span>
 <span>  <span class="va">results</span>,</span>
-<span>  cl <span class="op">=</span> <span class="fu">KGExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/KGExplorer/man/filter_.html" class="external-link">filter_ontology</a></span><span class="op">(</span><span class="fu">KGExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/KGExplorer/man/get_.html" class="external-link">get_ontology</a></span><span class="op">(</span><span class="st">"cl"</span><span class="op">)</span>, keep_descendants <span class="op">=</span></span>
-<span>    <span class="st">"cell"</span><span class="op">)</span>,</span>
+<span>  cl <span class="op">=</span> <span class="fu"><a href="get_cl.html">get_cl</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  run_enrichment <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  top_n <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bar"</span>, <span class="st">"dot"</span><span class="op">)</span></span>
+<span>  types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"dot"</span>, <span class="st">"bar"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span>
+<span>  run_prune_ancestors <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nonsig_fill <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/alpha.html" class="external-link">alpha</a></span><span class="op">(</span><span class="st">"grey90"</span>, <span class="fl">0.001</span><span class="op">)</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  base_size <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>  save_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".rds"</span><span class="op">)</span>,</span>
+<span>  workers <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -97,6 +103,16 @@ and merged together with <a href="merge_results.html">merge_results</a></p></dd>
 <dd><p>The q value threshold to subset the <code>results</code> by.</p></dd>
 
 
+<dt id="arg-run-enrichment">run_enrichment<a class="anchor" aria-label="anchor" href="#arg-run-enrichment"></a></dt>
+<dd><p>Instead of simply taking the top N results,
+run a series of one-sided Wilcoxan rank-sum tests to determine whether the
+distribution of ordinal severity values
+(never=0, rarely=1, often=2, always=3) are significantly different between
+a given cell type and all other cell types.
+Tests are repeated across each GPT annotation separately using
+<a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a> and <a href="https://rpkgs.datanovia.com/rstatix/reference/wilcox_test.html" class="external-link">wilcox_test</a>.</p></dd>
+
+
 <dt id="arg-top-n">top_n<a class="anchor" aria-label="anchor" href="#arg-top-n"></a></dt>
 <dd><p>Top and bottom number of cell types to show per annotation
 (used in dot plot only).</p></dd>
@@ -104,6 +120,32 @@ and merged together with <a href="merge_results.html">merge_results</a></p></dd>
 
 <dt id="arg-types">types<a class="anchor" aria-label="anchor" href="#arg-types"></a></dt>
 <dd><p>Which types of plots of create.</p></dd>
+
+
+<dt id="arg-run-prune-ancestors">run_prune_ancestors<a class="anchor" aria-label="anchor" href="#arg-run-prune-ancestors"></a></dt>
+<dd><p>Prune redundant ancestral terms if any of their
+descendants are present. Passes to <a href="https://rdrr.io/pkg/KGExplorer/man/prune_ancestors.html" class="external-link">prune_ancestors</a>.</p></dd>
+
+
+<dt id="arg-nonsig-fill">nonsig_fill<a class="anchor" aria-label="anchor" href="#arg-nonsig-fill"></a></dt>
+<dd><p>Fill colour for non-significant results.</p></dd>
+
+
+<dt id="arg-force-new">force_new<a class="anchor" aria-label="anchor" href="#arg-force-new"></a></dt>
+<dd><p>Run a new set of enrichment tests even when cached
+results are found. Only used when <code>run_enrichment=FALSE</code>.</p></dd>
+
+
+<dt id="arg-base-size">base_size<a class="anchor" aria-label="anchor" href="#arg-base-size"></a></dt>
+<dd><p>base font size, given in pts.</p></dd>
+
+
+<dt id="arg-save-path">save_path<a class="anchor" aria-label="anchor" href="#arg-save-path"></a></dt>
+<dd><p>Path to save results to.</p></dd>
+
+
+<dt id="arg-workers">workers<a class="anchor" aria-label="anchor" href="#arg-workers"></a></dt>
+<dd><p>Number (&gt;1) or proportion (&lt;1) of worker cores to use.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -113,29 +155,24 @@ and merged together with <a href="merge_results.html">merge_results</a></p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_celltype_severity</span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">2025</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span><span class="op">)</span>, <span class="fl">5000</span><span class="op">)</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_celltype_severity</span><span class="op">(</span><span class="va">results</span>, types<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bar"</span>,<span class="st">"dot"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping cell types to cell ontology terms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding stage information.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 383 phenotypes do not have matching HPO IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,753 phenotypes.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 151 phenotypes do not have matching HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,982 phenotypes.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating bar plot.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating dot plot.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading cached ontology: /github/home/.cache/R/KGExplorer/cl.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Keeping descendants of 1 term(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,801 terms remain after filtering.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> going through 1000 / 2801 nodes ...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> going through 2000 / 2801 nodes ...</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> going through 2801 / 2801 nodes ... Done.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converted ontology to: dendrogram </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1 core(s) assigned as workers (3 reserved).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Running Wilcoxon rank-sum tests:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                                              |                                                                      |   0%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   4%  |                                                                              |====                                                                  |   5%  |                                                                              |=====                                                                 |   7%  |                                                                              |======                                                                |   9%  |                                                                              |========                                                              |  11%  |                                                                              |=========                                                             |  12%  |                                                                              |==========                                                            |  14%  |                                                                              |===========                                                           |  16%  |                                                                              |============                                                          |  18%  |                                                                              |==============                                                        |  20%  |                                                                              |===============                                                       |  21%  |                                                                              |================                                                      |  23%  |                                                                              |==================                                                    |  25%  |                                                                              |===================                                                   |  27%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |======================                                                |  32%  |                                                                              |========================                                              |  34%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  38%  |                                                                              |============================                                          |  39%  |                                                                              |=============================                                         |  41%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  45%  |                                                                              |================================                                      |  46%  |                                                                              |==================================                                    |  48%  |                                                                              |===================================                                   |  50%  |                                                                              |====================================                                  |  52%  |                                                                              |======================================                                |  54%  |                                                                              |=======================================                               |  55%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  59%  |                                                                              |==========================================                            |  61%  |                                                                              |============================================                          |  62%  |                                                                              |=============================================                         |  64%  |                                                                              |==============================================                        |  66%  |                                                                              |================================================                      |  68%  |                                                                              |=================================================                     |  70%  |                                                                              |==================================================                    |  71%  |                                                                              |===================================================                   |  73%  |                                                                              |====================================================                  |  75%  |                                                                              |======================================================                |  77%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  80%  |                                                                              |==========================================================            |  82%  |                                                                              |===========================================================           |  84%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |================================================================      |  91%  |                                                                              |=================================================================     |  93%  |                                                                              |==================================================================    |  95%  |                                                                              |====================================================================  |  96%  |                                                                              |===================================================================== |  98%  |                                                                              |======================================================================| 100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Caching Wilcoxon rank-sum test results: /tmp/Rtmpanixt9/file4b96632fc809.rds</span>
 </code></pre></div>
     </div>
   </div>
@@ -150,7 +187,7 @@ and merged together with <a href="merge_results.html">merge_results</a></p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

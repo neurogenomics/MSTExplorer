@@ -4,7 +4,7 @@ between a given phenotype and the congenital and non-congenital versions
 of a cell type (the fetal_nonfetal_pdiff column).
 It then sorts the results from the largest to the smallest difference.
 Here, a positive difference indicates that the phenotype is more associated
-with the fetal/embryonic version of the cell type, while a negative difference
+with the foetal/embryonic version of the cell type, while a negative difference
 indicates that the phenotype is more associated with the adult version.
 Next, it runs enrichment analyses for the top and bottom N phenotypes
 using the dag_enrich_on_offsprings function.
@@ -26,7 +26,7 @@ Finally, it run enrichment analyses for the top and bottom N cell types."><!-- m
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -66,7 +66,7 @@ Finally, it run enrichment analyses for the top and bottom N cell types."><!-- m
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Run congenital enrichment analyses</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/run_congenital_enrichment.R" class="external-link"><code>R/run_congenital_enrichment.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/run_congenital_enrichment.R" class="external-link"><code>R/run_congenital_enrichment.R</code></a></small>
     <div class="hidden name"><code>run_congenital_enrichment.Rd</code></div>
     </div>
 
@@ -76,7 +76,7 @@ between a given phenotype and the congenital and non-congenital versions
 of a cell type (the <code>fetal_nonfetal_pdiff</code> column).
 It then sorts the results from the largest to the smallest difference.
 Here, a positive difference indicates that the phenotype is more associated
-with the fetal/embryonic version of the cell type, while a negative difference
+with the foetal/embryonic version of the cell type, while a negative difference
 indicates that the phenotype is more associated with the adult version.
 Next, it runs enrichment analyses for the top and bottom N phenotypes
 using the <a href="https://rdrr.io/pkg/simona/man/dag_enrich_on_offsprings.html" class="external-link">dag_enrich_on_offsprings</a> function.
@@ -87,8 +87,7 @@ Finally, it run enrichment analyses for the top and bottom N cell types.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">run_congenital_enrichment</span><span class="op">(</span></span>
 <span>  <span class="va">results</span>,</span>
 <span>  hpo <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/get_.html" class="external-link">get_hpo</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  cl <span class="op">=</span> <span class="fu">KGExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/KGExplorer/man/filter_.html" class="external-link">filter_ontology</a></span><span class="op">(</span><span class="fu">KGExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/KGExplorer/man/get_.html" class="external-link">get_ontology</a></span><span class="op">(</span><span class="st">"cl"</span><span class="op">)</span>, keep_descendants <span class="op">=</span></span>
-<span>    <span class="st">"cell"</span><span class="op">)</span>,</span>
+<span>  cl <span class="op">=</span> <span class="fu"><a href="get_cl.html">get_cl</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gpt_annot <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/gpt_annot_codify.html" class="external-link">gpt_annot_codify</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  fetal_keywords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fetal"</span>, <span class="st">"fetus"</span>, <span class="st">"primordial"</span>, <span class="st">"hESC"</span>, <span class="st">"embryonic"</span><span class="op">)</span>,</span>
 <span>  celltype_col <span class="op">=</span> <span class="st">"author_celltype"</span>,</span>
@@ -184,19 +183,20 @@ using <a href="https://rdrr.io/pkg/KGExplorer/man/prune_ancestors.html" class="e
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">run_congenital_enrichment</span><span class="op">(</span>results<span class="op">=</span><span class="va">results</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 383 phenotypes do not have matching HPO IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,753 phenotypes.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 151 phenotypes do not have matching HPO IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,982 phenotypes.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping cell types to cell ontology terms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding stage information.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading cached ontology: /github/home/.cache/R/KGExplorer/cl.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Keeping descendants of 1 term(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,801 terms remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Using cached ontology file (1/1):</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>  /github/home/.cache/R/KGExplorer/ontologies/github/cl_v2023-09-21.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Keeping descendants of 2 term(s).</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2,711 terms remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Pruning ancestors.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 / 10 terms were kept after pruning.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 10 / 10 terms were kept after pruning.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Pruning ancestors.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2 / 9 terms were kept after pruning.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 9 / 9 terms were kept after pruning.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Pruning ancestors.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1 / 1 terms were kept after pruning.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Pruning ancestors.</span>
@@ -215,7 +215,7 @@ using <a href="https://rdrr.io/pkg/KGExplorer/man/prune_ancestors.html" class="e
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

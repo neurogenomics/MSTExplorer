@@ -23,7 +23,7 @@ examples of each layout.'><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -63,7 +63,7 @@ examples of each layout.'><!-- mathjax --><script src="https://cdnjs.cloudflare.
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Prioritise targets network</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/prioritise_targets_network.R" class="external-link"><code>R/prioritise_targets_network.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/prioritise_targets_network.R" class="external-link"><code>R/prioritise_targets_network.R</code></a></small>
     <div class="hidden name"><code>prioritise_targets_network.Rd</code></div>
     </div>
 
@@ -264,8 +264,7 @@ list(from = 1, to = 1) to control degree in both direction.</p></dd>
 
 
 <dt id="arg-save-path">save_path<a class="anchor" aria-label="anchor" href="#arg-save-path"></a></dt>
-<dd><p>Path to save interactive plot to
-as a self-contained HTML file.</p></dd>
+<dd><p>Path to save results to.</p></dd>
 
 
 <dt id="arg-run-prune-ancestors">run_prune_ancestors<a class="anchor" aria-label="anchor" href="#arg-run-prune-ancestors"></a></dt>
@@ -281,274 +280,19 @@ and the the graph used to make the plot.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">top_targets</span> <span class="op">&lt;-</span> <span class="fu">MSTExplorer</span><span class="fu">::</span><span class="va"><a href="example_targets.html">example_targets</a></span><span class="op">$</span><span class="va">top_targets</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">top_targets</span><span class="op">[</span>,<span class="va">estimate</span><span class="op">:=</span><span class="va">fold_change</span><span class="op">]</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         hpo_id gene_symbol              CellType  disease_id annotLevel     p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;char&gt;      &lt;char&gt;                &lt;char&gt;      &lt;char&gt;      &lt;num&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: HP:0001695       ACTN2        Cardiomyocytes OMIM:612158          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: HP:0011675       ACTN2        Cardiomyocytes OMIM:612158          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: HP:0011675         DSP        Cardiomyocytes OMIM:605676          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: HP:0200134    SLC25A22        Ganglion_cells OMIM:609304          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: HP:0200134    SLC25A22        Ganglion_cells OMIM:609304          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: HP:0011344      SLC9A6    Excitatory_neurons ORPHA:85278          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: HP:0012795        ATRX   Photoreceptor_cells   ORPHA:847          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: HP:0000648        ATRX   Photoreceptor_cells   ORPHA:847          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: HP:0002376      SLC9A6 Limbic_system_neurons ORPHA:85278          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: HP:0002376      SLC9A6    Inhibitory_neurons ORPHA:85278          1     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     fold_change sd_from_mean                          hpo_name     q</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;num&gt;        &lt;num&gt;                            &lt;char&gt; &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:    3.896919    13.716418                    Cardiac arrest     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:    2.915053    16.392754                        Arrhythmia     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:    2.915053    16.392754                        Arrhythmia     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:    2.311365     8.950861          Epileptic encephalopathy     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:    2.311365     8.950861          Epileptic encephalopathy     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:    2.099415     8.921895 Severe global developmental delay     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:    1.994699     8.523000     Abnormality of the optic disc     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:    1.953977     7.293145                     Optic atrophy     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:    1.707192     8.243906          Developmental regression     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:    1.640133     6.537439          Developmental regression     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          hpo_id.disease_id intersection_size union_size symptom.pval</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     &lt;char&gt;             &lt;int&gt;      &lt;int&gt;        &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: HP:0001695.OMIM:612158                 1       6515    0.1092974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: HP:0011675.OMIM:612158                 1       6515    0.1092974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: HP:0011675.OMIM:605676                 1       6515    0.1092974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: HP:0200134.OMIM:609304                 1       7158    0.1200846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: HP:0200134.OMIM:609304                 1       7158    0.1200846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: HP:0011344.ORPHA:85278                 1       7389    0.1239599</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:   HP:0012795.ORPHA:847                 1       6647    0.1115119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:   HP:0000648.ORPHA:847                 1       6647    0.1115119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: HP:0002376.ORPHA:85278                 1       8379    0.1405684</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: HP:0002376.ORPHA:85278                 1       7883    0.1322473</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     symptom.odds_ratio symptom.jaccard symptom.qval</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;num&gt;           &lt;num&gt;        &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                Inf    0.0001534919            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                Inf    0.0001534919            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                Inf    0.0001534919            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                Inf    0.0001397038            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                Inf    0.0001397038            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                Inf    0.0001353363            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                Inf    0.0001504438            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                Inf    0.0001504438            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                Inf    0.0001193460            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                Inf    0.0001268553            1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                  definition</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                                                                                                                                                                                                                                                                                                      &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                                                                                                                                                                                                                                                                                                                                                                                                                  "An abrupt loss of heart function." []</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                                                                                                                                                                      "Any cardiac rhythm other than the normal sinus rhythm. Such a rhythm may be either of sinus or ectopic origin and either regular or irregular. An arrhythmia may be due to a disturbance in impulse formation or conduction or both." [HPO_CONTRIBUTOR:DDD_dbrown, PMID:19063792]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                                                                                                                                                                      "Any cardiac rhythm other than the normal sinus rhythm. Such a rhythm may be either of sinus or ectopic origin and either regular or irregular. An arrhythmia may be due to a disturbance in impulse formation or conduction or both." [HPO_CONTRIBUTOR:DDD_dbrown, PMID:19063792]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: "A condition in which epileptiform abnormalities are believed to contribute to the progressive disturbance in cerebral function. Epileptic encephalaopathy is characterized by (1) electrographic EEG paroxysmal activity that is often aggressive, (2) seizures that are usually multiform and intractable, (3) cognitive, behavioral and neurological deficits that may be relentless, and (4) sometimes early death." [PMID:21590624, PMID:23213494]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: "A condition in which epileptiform abnormalities are believed to contribute to the progressive disturbance in cerebral function. Epileptic encephalaopathy is characterized by (1) electrographic EEG paroxysmal activity that is often aggressive, (2) seizures that are usually multiform and intractable, (3) cognitive, behavioral and neurological deficits that may be relentless, and (4) sometimes early death." [PMID:21590624, PMID:23213494]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                                                                                                                                                                                                                                                                                                     "A severe delay in the achievement of motor or mental milestones in the domains of development of a child." [https://orcid.org/0000-0002-6410-0882]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                                                                                                                                                                                                                                                                         "A morphological abnormality of the optic disc, i.e., of the portion of the optic nerve clinically visible on fundoscopic examination." [https://orcid.org/0000-0002-0736-9199]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                                                                                                                                                                                                                        "Atrophy of the optic nerve. Optic atrophy results from the death of the retinal ganglion cell axons that comprise the optic nerve and manifesting as a pale optic nerve on fundoscopy." [https://orcid.org/0000-0002-0736-9199]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                                                                                                                                                                                                                                                                                                                              "Loss of developmental skills, as manifested by loss of developmental milestones." [https://orcid.org/0000-0002-6410-0882]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                                                                                                                                                                                                                                                                                                                              "Loss of developmental skills, as manifested by loss of developmental milestones." [https://orcid.org/0000-0002-6410-0882]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                     disease_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                           &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: cardiomyopathy, dilated, 1aa, with or without left ventricular noncompaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: cardiomyopathy, dilated, 1aa, with or without left ventricular noncompaction</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                    cardiomyopathy, dilated, with woolly hair and keratoderma</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                                 developmental and epileptic encephalopathy 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                                 developmental and epileptic encephalopathy 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                                                        christianson syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                  alpha-thalassemia-x-linked intellectual disability syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                  alpha-thalassemia-x-linked intellectual disability syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                                                        christianson syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                                                        christianson syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                           Definitions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                                                                                                                &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                                                                                                                                                              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                                                                                                                                                              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                                                                                                                                                              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                                                                                                                                                              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                                                                                                                                                              &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                         a rare developmental defect during embryogenesis characterized by intellectual deficit, ataxia, postnatal microcephaly, and hyperkinesis.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: a rare x-linked syndromic intellectual disability characterized by profound developmental delay, facial dysmorphism, genital abnormalities and alpha thalassemia.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: a rare x-linked syndromic intellectual disability characterized by profound developmental delay, facial dysmorphism, genital abnormalities and alpha thalassemia.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                         a rare developmental defect during embryogenesis characterized by intellectual deficit, ataxia, postnatal microcephaly, and hyperkinesis.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                         a rare developmental defect during embryogenesis characterized by intellectual deficit, ataxia, postnatal microcephaly, and hyperkinesis.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                  Preferred.Label</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                           &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: CARDIOMYOPATHY, DILATED, 1AA, WITH OR WITHOUT LEFT VENTRICULAR NONCOMPACTION</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: CARDIOMYOPATHY, DILATED, 1AA, WITH OR WITHOUT LEFT VENTRICULAR NONCOMPACTION</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                    CARDIOMYOPATHY, DILATED, WITH WOOLLY HAIR AND KERATODERMA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                                 DEVELOPMENTAL AND EPILEPTIC ENCEPHALOPATHY 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                                 DEVELOPMENTAL AND EPILEPTIC ENCEPHALOPATHY 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                                                        Christianson syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                  Alpha-thalassemia-X-linked intellectual disability syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                  Alpha-thalassemia-X-linked intellectual disability syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                                                        Christianson syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                                                        Christianson syndrome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           MONDO_ID MONDO_name MONDO_definition AgeOfDeath AgeOfDeath_names</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             &lt;char&gt;     &lt;char&gt;           &lt;char&gt;     &lt;list&gt;           &lt;list&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: MONDO:00128083       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: MONDO:00128083       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: MONDO:00115814       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: MONDO:00122452       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: MONDO:00122452       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: MONDO:00102786       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: MONDO:00105197       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: MONDO:00105197       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: MONDO:00102786       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: MONDO:00102786       &lt;NA&gt;             &lt;NA&gt;                Death in....</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     AgeOfDeath_counts AgeOfDeath_score_mean AgeOfDeath_score_min</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                &lt;list&gt;                 &lt;num&gt;                &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                 1                   5.0                    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                 1                   5.0                    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:           1, 1, 1                   6.0                    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                 1                   5.0                    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                 1                   5.0                    5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:              1, 1                   6.5                    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                 1                   3.0                    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                 1                   3.0                    3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:              1, 1                   6.5                    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:              1, 1                   6.5                    6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     AgeOfDeath_score_max       AgeOfDeath_top      AgeOfDeath_earliest</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;num&gt;               &lt;char&gt;                   &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                    5 Death in adolescence     Death in adolescence</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                    5 Death in adolescence     Death in adolescence</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                    7 Death in adolescence     Death in adolescence</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                    5 Death in adolescence     Death in adolescence</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                    5 Death in adolescence     Death in adolescence</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                    7   Death in adulthood Death in early adulthood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                    3     Death in infancy         Death in infancy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                    3     Death in infancy         Death in infancy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                    7   Death in adulthood Death in early adulthood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                    7   Death in adulthood Death in early adulthood</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        AgeOfDeath_latest   ancestor                            ancestor_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                   &lt;char&gt;     &lt;char&gt;                                   &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: Death in adolescence HP:0001626 Abnormality of the cardiovascular system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: Death in adolescence HP:0001626 Abnormality of the cardiovascular system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:  Death in middle age HP:0001626 Abnormality of the cardiovascular system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: Death in adolescence HP:0000707        Abnormality of the nervous system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: Death in adolescence HP:0000707        Abnormality of the nervous system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:  Death in middle age HP:0000707        Abnormality of the nervous system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:     Death in infancy HP:0000478                   Abnormality of the eye</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     Death in infancy HP:0000478                   Abnormality of the eye</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:  Death in middle age HP:0000707        Abnormality of the nervous system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:  Death in middle age HP:0000707        Abnormality of the nervous system</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     ontLvl  onset onset_names onset_counts onset_score_mean onset_score_min</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      &lt;num&gt; &lt;char&gt;      &lt;char&gt;       &lt;char&gt;            &lt;num&gt;           &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:      1   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:      5   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:      5   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:      0   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:      0   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      0   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:      3   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:      1   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      1   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      1   &lt;NA&gt;        &lt;NA&gt;         &lt;NA&gt;               NA              NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     onset_score_max onset_top onset_earliest onset_latest</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               &lt;num&gt;    &lt;char&gt;         &lt;char&gt;       &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:              NA      &lt;NA&gt;           &lt;NA&gt;         &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           disease_characteristic  tier tier_auto tier_merge modifier_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                           &lt;char&gt; &lt;int&gt;     &lt;int&gt;      &lt;int&gt;        &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                         &lt;NA&gt;    NA         1          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                         &lt;NA&gt;    NA         1          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                         &lt;NA&gt;    NA         1          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: Shortened life span: infancy     1         1          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: Shortened life span: infancy     1         1          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:      Intellectual disability     1        NA          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                         &lt;NA&gt;    NA         1          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:   Sensory impairment: vision     3         1          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:      Intellectual disability     1        NA          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:      Intellectual disability     1        NA          1          &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Severity_score n_diseases        pheno_freq_name pheno_freq_min</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;num&gt;      &lt;int&gt;                 &lt;char&gt;          &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:             NA        116     Occasional (29-5%)              5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:             NA        455                   &lt;NA&gt;             NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:             NA        455                   &lt;NA&gt;             NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:             NA        122                  ratio            100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:             NA        122                  ratio            100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:             NA        232 Very frequent (99-80%)             80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:             NA        602                   &lt;NA&gt;             NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:             NA        599     Occasional (29-5%)              5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:             NA        340 Very frequent (99-80%)             80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:             NA        340 Very frequent (99-80%)             80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     pheno_freq_max pheno_freq_mean seqnames     start       end  width strand</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;num&gt;           &lt;num&gt;   &lt;fctr&gt;     &lt;int&gt;     &lt;int&gt;  &lt;int&gt; &lt;fctr&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:             29            17.0        1 236849754 236927931  78178      +</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:             NA              NA        1 236849754 236927931  78178      +</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:             NA              NA        6   7541808   7586950  45143      +</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:            100           100.0       11    790475    798316   7842      -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:            100           100.0       11    790475    798316   7842      -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:             99            89.5        X 135067598 135129423  61826      +</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:             NA              NA        X  76760356  77041702 281347      -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:             29            17.0        X  76760356  77041702 281347      -</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:             99            89.5        X 135067598 135129423  61826      +</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:             99            89.5        X 135067598 135129423  61826      +</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             gene_id gene_name   gene_biotype seq_coord_system entrezid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              &lt;char&gt;    &lt;char&gt;         &lt;char&gt;           &lt;char&gt;   &lt;list&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1: ENSG00000077522     ACTN2 protein_coding       chromosome       88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2: ENSG00000077522     ACTN2 protein_coding       chromosome       88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3: ENSG00000096696       DSP protein_coding       chromosome     1832</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: ENSG00000177542  SLC25A22 protein_coding       chromosome    79751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5: ENSG00000177542  SLC25A22 protein_coding       chromosome    79751</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: ENSG00000198689    SLC9A6 protein_coding       chromosome    10479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7: ENSG00000085224      ATRX protein_coding       chromosome      546</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8: ENSG00000085224      ATRX protein_coding       chromosome      546</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: ENSG00000198689    SLC9A6 protein_coding       chromosome    10479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: ENSG00000198689    SLC9A6 protein_coding       chromosome    10479</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     evidence_score_min evidence_score_max evidence_score_mean specificity</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                  &lt;num&gt;              &lt;num&gt;               &lt;num&gt;       &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                  4                  4                   4  0.18883881</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                  4                  4                   4  0.18883881</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                  5                  5                   5  0.02763754</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                  5                  5                   5  0.01810314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                  5                  5                   5  0.01810314</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                  3                  3                   3  0.02234209</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                  3                  3                   3  0.02155020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                  3                  3                   3  0.02155020</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                  3                  3                   3  0.03745019</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                  3                  3                   3  0.02911226</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     specificity_quantile mean_exp mean_exp_quantile  gene_freq</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                    &lt;num&gt;    &lt;num&gt;             &lt;num&gt;     &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:                   40   0.7154                40 HP:0040283</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                   40   0.7154                40       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                   35   0.1928                35       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4:                   30   0.0080                30 HP:0040281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                   30   0.0080                30        4/4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6:                   33   0.0454                33 HP:0040281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                   32   0.3288                32       &lt;NA&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:                   32   0.3288                32 HP:0040283</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9:                   36   0.1838                36 HP:0040281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10:                   34   0.0786                34 HP:0040281</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             gene_freq_name gene_freq_min gene_freq_max gene_freq_mean estimate</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                     &lt;char&gt;         &lt;num&gt;         &lt;num&gt;          &lt;num&gt;    &lt;num&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1:     Occasional (29-5%)             5            29           17.0 3.896919</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2:                   &lt;NA&gt;            NA            NA            NaN 2.915053</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3:                   &lt;NA&gt;            NA            NA            NaN 2.915053</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  4: Very frequent (99-80%)            80            99           89.5 2.311365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  5:                    4/4             1             1            1.0 2.311365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  6: Very frequent (99-80%)            80            99           89.5 2.099415</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  7:                   &lt;NA&gt;            NA            NA            NaN 1.994699</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  8:     Occasional (29-5%)             5            29           17.0 1.953977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  9: Very frequent (99-80%)            80            99           89.5 1.707192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10: Very frequent (99-80%)            80            99           89.5 1.640133</span>
-<span class="r-in"><span><span class="va">top_targets</span> <span class="op">&lt;-</span> <span class="fu"><a href="map_celltype.html">map_celltype</a></span><span class="op">(</span><span class="va">top_targets</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping cell types to cell ontology terms.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding stage information.</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">top_targets</span> <span class="op">&lt;-</span> <span class="va">example_targets</span><span class="op">$</span><span class="va">top_targets</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">vn</span> <span class="op">&lt;-</span> <span class="fu">prioritise_targets_network</span><span class="op">(</span>top_targets <span class="op">=</span> <span class="va">top_targets</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding logFC column.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Cell type columns already present. Skipping mapping.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping cell types to cell ontology terms.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding stage information.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating network.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Making hoverboxes from: 'node', 'node_type', 'q', 'CellType', 'ancestor_name', 'disease_id', 'ontLvl', 'definition', 'hpo_name', 'hpo_id', 'disease_name', 'shape', 'name'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding hoverboxes to data.table.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating visNetwork plot.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 'title' column already exists. Skipping hoverbox creation.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ‘title’ column already exists. Skipping hoverbox creation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using palette: kovesi.linear_bmy_10_95_c78</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Can't find 'name' in node data.frame</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot --&gt; /tmp/RtmpMmVOaL/file2ffc3a339e13_prioritise_targets_network.html</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot --&gt; /tmp/Rtmpanixt9/file4b964fe4b07a_prioritise_targets_network.html</span>
 </code></pre></div>
     </div>
   </div>
@@ -563,7 +307,7 @@ and the the graph used to make the plot.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

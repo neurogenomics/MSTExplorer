@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -83,52 +83,130 @@
 <div class="section level1">
 <div class="page-header"><h1 id="mstexplorer">MSTExplorer<a class="anchor" aria-label="anchor" href="#mstexplorer"></a>
 </h1></div>
-<img src="https://github.com/neurogenomics/MSTExplorer/raw/master/inst/hex/hex.png" title="Hex sticker for MSTExplorer" height="300"><br><a href="https://cran.r-project.org/web/licenses/GPL-3" class="external-link"><img src="https://img.shields.io/badge/license-GPL--3-blue.svg" alt="License: GPL-3"></a> <a href="https://github.com/neurogenomics/MSTExplorer" class="external-link"><img src="https://img.shields.io/badge/devel%20version-1.0.6-black.svg"></a> <a href="https://github.com/neurogenomics/MSTExplorer" class="external-link"><img src="https://img.shields.io/github/languages/code-size/neurogenomics/MSTExplorer.svg"></a> <a href="https://github.com/neurogenomics/MSTExplorer/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/neurogenomics/MSTExplorer.svg"></a> <br><a href="https://github.com/neurogenomics/MSTExplorer/actions" class="external-link"><img src="https://github.com/neurogenomics/MSTExplorer/workflows/rworkflows/badge.svg" alt="R build status"></a> <a href="https://app.codecov.io/gh/neurogenomics/MSTExplorer" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graph/badge.svg"></a> <br><a href="https://app.codecov.io/gh/neurogenomics/MSTExplorer/tree/master" target="_blank" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graphs/icicle.svg" title="Codecov icicle graph" width="200" height="50" style="vertical-align: top;"></a><br><h4 id="mstexplorer-1">
+<img src="https://github.com/neurogenomics/MSTExplorer/raw/master/inst/hex/hex.png" title="Hex sticker for MSTExplorer" height="300"><br><a href="https://cran.r-project.org/web/licenses/GPL-3" class="external-link"><img src="https://img.shields.io/badge/license-GPL--3-blue.svg" alt="License: GPL-3"></a> <a href="https://github.com/neurogenomics/MSTExplorer" class="external-link"><img src="https://img.shields.io/badge/devel%20version-1.0.9-black.svg"></a> <a href="https://github.com/neurogenomics/MSTExplorer" class="external-link"><img src="https://img.shields.io/github/languages/code-size/neurogenomics/MSTExplorer.svg"></a> <a href="https://github.com/neurogenomics/MSTExplorer/commits/master" class="external-link"><img src="https://img.shields.io/github/last-commit/neurogenomics/MSTExplorer.svg"></a> <br><a href="https://github.com/neurogenomics/MSTExplorer/actions" class="external-link"><img src="https://github.com/neurogenomics/MSTExplorer/workflows/rworkflows/badge.svg" alt="R build status"></a> <a href="https://app.codecov.io/gh/neurogenomics/MSTExplorer" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graph/badge.svg"></a> <br><a href="https://app.codecov.io/gh/neurogenomics/MSTExplorer/tree/master" target="_blank" class="external-link"><img src="https://codecov.io/gh/neurogenomics/MSTExplorer/branch/master/graphs/icicle.svg" title="Codecov icicle graph" width="200" height="50" style="vertical-align: top;"></a><br><h4 id="mstexplorer-1">
 Authors: <i>Brian Schilder, Robert Gordon-Smith, Nathan Skene, Hiranyamaya Dash</i>
 <a class="anchor" aria-label="anchor" href="#mstexplorer-1"></a>
 </h4>
 <h4 id="mstexplorer-2">
-README updated: <i>Dec-19-2024</i>
+README updated: <i>Aug-03-2025</i>
 <a class="anchor" aria-label="anchor" href="#mstexplorer-2"></a>
 </h4>
 <!-- To modify Package/Title/Description/Authors fields, edit the DESCRIPTION file -->
 <div class="section level2">
-<h2 id="mstexplorer-multi-scale-target-explorer">
-<code>MSTExplorer</code>: Multi-Scale Target Explorer<a class="anchor" aria-label="anchor" href="#mstexplorer-multi-scale-target-explorer"></a>
+<h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<div class="section level3">
-<h3 id="multi-scale-target-explorer-mstexplorer-systematically-identifies-prioritises-and-visualises-cell-type-specific-gene-therapy-targets-across-the-phenome">Multi-Scale Target Explorer (<code>MSTExplorer</code>) systematically identifies, prioritises, and visualises cell-type-specific gene therapy targets across the phenome.<a class="anchor" aria-label="anchor" href="#multi-scale-target-explorer-mstexplorer-systematically-identifies-prioritises-and-visualises-cell-type-specific-gene-therapy-targets-across-the-phenome"></a>
-</h3>
+<p>Many genes have been associated with diseases Multi-Scale Target Explorer (<code>MSTExplorer</code>) systematically identifies, prioritises, and visualises cell-type-specific gene therapy targets across the phenome.</p>
+<p>Core functionalities include:</p>
+<p><strong>1. Conducting phenotype x cell type genetic association tests at scale</strong></p>
+<ul>
+<li><p>The <a href="https://hpo.jax.org/" class="external-link">Human Phenotype Ontology</a> (integrated with gene annotations from <a href="https://omim.org/" class="external-link">OMIM</a> / <a href="https://www.deciphergenomics.org/" class="external-link">DECIPHER</a> / <a href="https://www.orpha.net/" class="external-link">ORPHANET</a>) is used as the source of phenotype gene signatures. Each gene-phenotype associated is given a continuous score that approximates the current strength of evidence for the association (using data derived from <a href="https://thegencc.org/" class="external-link">GenCC</a>).</p></li>
+<li><p>Whole-body scRNA-seq atlases from humans (across multiple developmental stages) are used as a data-driven source of cell type-specific gene markers.</p></li>
+<li><p>The underlying association tests are designed for both speed and accuracy using memory-efficient data structures, and a highly parallelisable implementation of Generalised Linear Regression (GLM). For example, associations for all pairwise combinations of &gt;11k phenotypes x &gt;200 cell types (&gt;2,200,000 associations) can be in &lt;30 minutes on a Macbook laptop with 10 CPU cores).</p></li>
+</ul>
+<p><strong>2. Inferring multi-scale causal graphs of disease</strong></p>
+<p><code>MSTExplorer</code> allows users to easily infer and construct multi-scale causal graphs of Diseases (blue nodes) -&gt; Phenotypes (purple nodes) -&gt; Cell types (orange nodes) -&gt; Genes (yellow nodes).</p>
+<figure><img src="https://github.com/neurogenomics/rare_disease_celltyping/blob/299abe0ccd00644bc2f05a1389704fe196a3e868/manuscript/_manuscript/img/fig-therapy-examples-supp/lethal_skeletal_dysplasia.png?raw=true" height="400" alt="Example multi-scale network focused on lethal skeletal dysplasia, a phenotype of multiple diseases"><figcaption aria-hidden="true"><em>Example multi-scale network focused on lethal skeletal dysplasia, a phenotype of multiple diseases</em>
+</figcaption></figure><p><a href="https://github.com/neurogenomics/rare_disease_celltyping/tree/299abe0ccd00644bc2f05a1389704fe196a3e868/manuscript/_manuscript/img/fig-therapy-examples-supp" class="external-link">See here for more example networks.</a>.</p>
+<p><strong>3. Prioritising cell-type-specific gene therapy targets</strong></p>
+<p><code>MSTExplorer</code> also provides a comprehensive and customisable pipeline that can be run via a single function (<code><a href="reference/prioritise_targets.html">prioritise_targets()</a></code>) to produce the most promising cell-type-specific gene therapy targets across the phenome.</p>
+</div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Within R:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://bioconductor.github.io/BiocManager/" class="external-link">"BiocManager"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://bioconductor.github.io/BiocManager/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"neurogenomics/MSTExplorer"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/MSTExplorer" class="external-link">MSTExplorer</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<div class="section level4">
+<h4 id="website">
+<a href="https://neurogenomics.github.io/MSTExplorer" class="external-link">Website</a><a class="anchor" aria-label="anchor" href="#website"></a>
+</h4>
+</div>
+<div class="section level4">
+<h4 id="get-started">
+<a href="https://neurogenomics.github.io/MSTExplorer/articles/MSTExplorer" class="external-link">Get started</a><a class="anchor" aria-label="anchor" href="#get-started"></a>
+</h4>
+</div>
+<div class="section level4">
+<h4 id="dockersingularity-container">
+<a href="https://neurogenomics.github.io/MSTExplorer/articles/docker.html" class="external-link">Docker/Singularity Container</a><a class="anchor" aria-label="anchor" href="#dockersingularity-container"></a>
+</h4>
+</div>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
 <p>If you use <code>MSTExplorer</code>, please cite:</p>
 <!-- Modify this by editing the file: inst/CITATION  -->
 <blockquote>
 <p>Kitty B. Murphy, Robert Gordon-Smith, Jai Chapman, Momoko Otani, Brian M. Schilder, Nathan G. Skene (2023) Identification of cell type-specific gene targets underlying thousands of rare diseases and subtraits. medRxiv, <a href="https://doi.org/10.1101/2023.02.13.23285820" class="external-link uri">https://doi.org/10.1101/2023.02.13.23285820</a></p>
 </blockquote>
 </div>
-</div>
 <div class="section level2">
-<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
-</h2>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://remotes.r-lib.org" class="external-link">"remotes"</a></span><span class="op">)</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"neurogenomics/MSTExplorer"</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/neurogenomics/MSTExplorer" class="external-link">MSTExplorer</a></span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+<h2 id="contact">Contact<a class="anchor" aria-label="anchor" href="#contact"></a>
 </h2>
 <div class="section level3">
-<h3 id="website">
-<a href="https://neurogenomics.github.io/MSTExplorer" class="external-link">Website</a><a class="anchor" aria-label="anchor" href="#website"></a>
+<h3 id="neurogenomics-lab">
+<a href="https://www.neurogenomics.co.uk" class="external-link">Neurogenomics Lab</a><a class="anchor" aria-label="anchor" href="#neurogenomics-lab"></a>
 </h3>
+<p>UK Dementia Research Institute<br>
+Department of Brain Sciences<br>
+Faculty of Medicine<br>
+Imperial College London<br><a href="https://github.com/neurogenomics" class="external-link">GitHub</a></p>
 </div>
-<div class="section level3">
-<h3 id="get-started">
-<a href="https://neurogenomics.github.io/MSTExplorer/articles/MSTExplorer" class="external-link">Get started</a><a class="anchor" aria-label="anchor" href="#get-started"></a>
-</h3>
-<p><br></p>
 </div>
+<div class="section level2">
+<h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
+<details><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="do">## R version 4.5.1 (2025-06-13)</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="do">## Platform: x86_64-pc-linux-gnu</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="do">## Running under: Ubuntu 24.04.2 LTS</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="do">## Matrix products: default</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="do">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="do">## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="do">## locale:</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="do">##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              </span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="do">##  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    </span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a><span class="do">##  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   </span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a><span class="do">##  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 </span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="do">##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            </span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a><span class="do">## [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       </span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="do">## time zone: UTC</span></span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a><span class="do">## tzcode source: system (glibc)</span></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="do">## attached base packages:</span></span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a><span class="do">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="do">## other attached packages:</span></span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="do">## [1] rmarkdown_2.29</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="do">## </span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="do">## loaded via a namespace (and not attached):</span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a><span class="do">##  [1] gtable_0.3.6        jsonlite_2.0.0      renv_1.1.5         </span></span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a><span class="do">##  [4] dplyr_1.1.4         compiler_4.5.1      BiocManager_1.30.26</span></span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a><span class="do">##  [7] tidyselect_1.2.1    dichromat_2.0-0.1   rvcheck_0.2.1      </span></span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a><span class="do">## [10] scales_1.4.0        yaml_2.3.10         fastmap_1.2.0      </span></span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a><span class="do">## [13] here_1.0.1          ggplot2_3.5.2       R6_2.6.1           </span></span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a><span class="do">## [16] generics_0.1.4      knitr_1.50          yulab.utils_0.2.0  </span></span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a><span class="do">## [19] tibble_3.3.0        desc_1.4.3          dlstats_0.1.7      </span></span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a><span class="do">## [22] rprojroot_2.1.0     pillar_1.11.0       RColorBrewer_1.1-3 </span></span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a><span class="do">## [25] rlang_1.1.6         badger_0.2.5        xfun_0.52          </span></span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a><span class="do">## [28] fs_1.6.6            cli_3.6.5           magrittr_2.0.3     </span></span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a><span class="do">## [31] rworkflows_1.0.6    digest_0.6.37       grid_4.5.1         </span></span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="do">## [34] lifecycle_1.0.4     vctrs_0.6.5         evaluate_1.0.4     </span></span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a><span class="do">## [37] glue_1.8.0          data.table_1.17.8   farver_2.1.2       </span></span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a><span class="do">## [40] tools_4.5.1         pkgconfig_2.0.3     htmltools_0.5.8.1</span></span></code></pre></div>
+</details><hr>
 </div>
 </div>
   </div>
@@ -160,9 +238,9 @@ README updated: <i>Dec-19-2024</i>
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Brian Schilder <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5949-2191" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Robert Gordon-Smith <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-6698-7387" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li>Nathan Skene <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6807-3180" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Brian Schilder <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5949-2191" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Robert Gordon-Smith <br><small class="roles"> Author, contributor </small> <a href="https://orcid.org/0000-0001-6698-7387" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
+<li>Nathan Skene <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-6807-3180" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a>  </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -180,7 +258,7 @@ README updated: <i>Dec-19-2024</i>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>

@@ -19,6 +19,7 @@
 <url><loc>/reference/gen_overlap.html</loc></url>
 <url><loc>/reference/gen_results.html</loc></url>
 <url><loc>/reference/get_bg.html</loc></url>
+<url><loc>/reference/get_cl.html</loc></url>
 <url><loc>/reference/get_data.html</loc></url>
 <url><loc>/reference/get_target_branches.html</loc></url>
 <url><loc>/reference/get_unfinished_list_names.html</loc></url>
@@ -45,13 +46,16 @@
 <url><loc>/reference/plot_ontology_levels.html</loc></url>
 <url><loc>/reference/plot_report.html</loc></url>
 <url><loc>/reference/plot_results_distributions.html</loc></url>
+<url><loc>/reference/plot_severity_vs_nphenotypes.html</loc></url>
 <url><loc>/reference/plot_ttd.html</loc></url>
 <url><loc>/reference/predict_celltypes.html</loc></url>
 <url><loc>/reference/prioritise_targets.html</loc></url>
 <url><loc>/reference/prioritise_targets_grid.html</loc></url>
+<url><loc>/reference/prioritise_targets_multiheatmap.html</loc></url>
 <url><loc>/reference/prioritise_targets_network.html</loc></url>
 <url><loc>/reference/run_congenital_enrichment.html</loc></url>
 <url><loc>/reference/run_phenomix.html</loc></url>
+<url><loc>/reference/run_prop_tests.html</loc></url>
 <url><loc>/reference/stopper.html</loc></url>
 <url><loc>/reference/subset_phenos.html</loc></url>
 <url><loc>/reference/subset_results.html</loc></url>

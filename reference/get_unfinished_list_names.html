@@ -21,7 +21,7 @@ re-analyse the already completed ones when you start again."><!-- mathjax --><sc
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -61,7 +61,7 @@ re-analyse the already completed ones when you start again."><!-- mathjax --><sc
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Get unfinished list names</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/get_unfinished_list_names.R" class="external-link"><code>R/get_unfinished_list_names.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/get_unfinished_list_names.R" class="external-link"><code>R/get_unfinished_list_names.R</code></a></small>
     <div class="hidden name"><code>get_unfinished_list_names.Rd</code></div>
     </div>
 
@@ -99,7 +99,7 @@ re-analyse the already completed ones when you start again.</p>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
 <span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_id</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">save_dir_tmp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">"results"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ctd</span> <span class="op">&lt;-</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span><span class="op">)</span></span></span>
@@ -110,7 +110,7 @@ re-analyse the already completed ones when you start again.</p>
 <span class="r-in"><span>                       reps <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>                       save_dir_tmp <span class="op">=</span> <span class="va">save_dir_tmp</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Useing cached bg.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2024-12-19</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2025-08-03</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing gene counts.</span>
 <span class="r-in"><span><span class="va">unfinished</span> <span class="op">&lt;-</span> <span class="fu">get_unfinished_list_names</span><span class="op">(</span>list_names <span class="op">=</span> <span class="va">gene_data</span><span class="op">$</span><span class="va">hpo_id</span>,</span></span>
 <span class="r-in"><span>                                        save_dir_tmp <span class="op">=</span> <span class="va">save_dir_tmp</span><span class="op">)</span></span></span>
@@ -128,7 +128,7 @@ re-analyse the already completed ones when you start again.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

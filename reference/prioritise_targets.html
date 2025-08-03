@@ -115,7 +115,7 @@ Only return the top N targets per variable group
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -155,7 +155,7 @@ Only return the top N targets per variable group
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Prioritise target genes</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/prioritise_targets.R" class="external-link"><code>R/prioritise_targets.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/prioritise_targets.R" class="external-link"><code>R/prioritise_targets.R</code></a></small>
     <div class="hidden name"><code>prioritise_targets.Rd</code></div>
     </div>
 
@@ -296,7 +296,9 @@ Only return the top N targets per variable group
 <span>  top_n <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hpo_id"</span><span class="op">)</span>,</span>
 <span>  return_report <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  save_path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempfile</a></span><span class="op">(</span>fileext <span class="op">=</span> <span class="st">".rds"</span><span class="op">)</span>,</span>
+<span>  force_new <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -467,7 +469,7 @@ mean expression quantiles to keep (max quantile is 40).</p></dd>
 
 
 <dt id="arg-sort-cols">sort_cols<a class="anchor" aria-label="anchor" href="#arg-sort-cols"></a></dt>
-<dd><p>How to sort the rows using <a href="https://rdrr.io/pkg/data.table/man/setorder.html" class="external-link">setorderv</a>.
+<dd><p>How to sort the rows using <a href="https://rdatatable.gitlab.io/data.table/reference/setorder.html" class="external-link">setorderv</a>.
 <code>names(sort_cols)</code> will be supplied to the <code>cols=</code> argument
 and values will be supplied to the <code>order=</code> argument.</p></dd>
 
@@ -488,6 +490,14 @@ phenotypes/celltypes/genes remaining after each filtering step.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Print messages.</p></dd>
+
+
+<dt id="arg-save-path">save_path<a class="anchor" aria-label="anchor" href="#arg-save-path"></a></dt>
+<dd><p>Path to save results to.</p></dd>
+
+
+<dt id="arg-force-new">force_new<a class="anchor" aria-label="anchor" href="#arg-force-new"></a></dt>
+<dd><p>Don't use previously saved results when <code>TRUE</code>.</p></dd>
 
 </dl></div>
     <div id="value">
@@ -515,236 +525,10 @@ at the disease-level, phenotype-level, or symptom-level.</code></pre></div></li>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">results</span> <span class="op">=</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="va">q</span><span class="op">&lt;</span><span class="fl">0.05</span><span class="op">]</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="va">results</span> <span class="op">=</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="va">q</span><span class="op">&lt;</span><span class="fl">0.05</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">prioritise_targets</span><span class="op">(</span>results<span class="op">=</span><span class="va">results</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_HumanCellLandscape.rds</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritising gene targets.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding logFC column.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding HPO names.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding term definitions.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding information_content scores.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding genes and disease IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='start' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 10,938,355 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 9,575 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 8,805 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 201 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 5,092</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering @ q-value &lt;= 0.05</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='q_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 10,938,355 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 9,575 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 8,805 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 201 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 5,092</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering @ logFC &gt;= 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='effect_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 16,235 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 637 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 2,664 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 130 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 2,364</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with AgeOfDeath.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_deaths' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 16,209 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 633 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 2,657 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 130 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 2,362</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-2 ancestor to each HPO ID.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Keeping descendants of 1 term(s).</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 18,379 terms remain after filtering.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 16,198 associations remain after filtering.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_descendants' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 16,198 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 627 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 2,653 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 130 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 2,362</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 19,025 IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_ont_levels' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 16,198 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 627 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 2,653 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 130 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 2,362</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 383 phenotypes do not have matching HPO IDs.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,753 phenotypes.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='gpt_filters' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 16,198 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 627 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 2,653 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 130 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 2,362</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='severity_score_gpt_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 5,157 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 258 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,459 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 89 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,457</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='info_content_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,605 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with onset.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_onsets' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,605 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with Tiers.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_tiers' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,605 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with modifiers</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='severity_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,605 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='severity_threshold_max' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,605 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenos with n_diseases</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: genes_to_phenotype.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype.hpoa</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='pheno_ndiseases_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,605 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating phenotype frequencies.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='pheno_frequency_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,614 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_celltypes' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,614 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 1,040 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,172</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Converting phenos to GRanges.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: ensembldb</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering metadata for 1172 unique genes.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: EnsDb.Hsapiens.v75</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='symptom_gene_overlap' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,235 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 997 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,097</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering by keep_chr.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_chr' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 3,235 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 219 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 997 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 88 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 1,097</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering by gene-disease association evidence.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating gene-disease associations with Evidence Score</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering data from GenCC.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Importing cached file.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Evidence scores for: </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - 10514 diseases </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - 5171 genes</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2024-12-19</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='evidence_score_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 288 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 70 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 138 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 36 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 139</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering by gene size.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 139 / 139 genes kept.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='gene_size' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 288 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 70 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 138 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 36 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 139</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='keep_biotypes' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 288 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 70 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 138 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 36 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 139</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='add_driver_genes' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 202 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 65 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 99 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 33 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 97</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding symptom-level results.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by q_threshold and effect.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 202 associations remain after filtering.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Dropping subthreshold symptoms.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='symptom_intersection_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 202 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 65 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 99 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 33 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 97</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating gene frequencies.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: genes_to_phenotype.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2024-12-12</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='gene_frequency_threshold' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 246 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 65 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 99 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 33 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 97</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Pruning ancestors.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 58 / 65 terms were kept after pruning.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='prune_ancestors' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 215 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 58 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 99 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 33 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 97</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Sorting rows.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Prioritised targets: step='end' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Rows: 215 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Phenotypes: 58 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Diseases: 99 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Cell types: 33 </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>  - Genes: 97</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding disease_name and disease_description.</span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -759,7 +543,7 @@ at the disease-level, phenotype-level, or symptom-level.</code></pre></div></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>

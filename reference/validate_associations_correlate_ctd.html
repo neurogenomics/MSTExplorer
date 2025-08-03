@@ -18,7 +18,7 @@ between results from different CellTypeDatasets."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
       </span>
     </div>
 
@@ -58,7 +58,7 @@ between results from different CellTypeDatasets."><!-- mathjax --><script src="h
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Validate associations: correlate CellTypeDataset</h1>
-    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/dev-hiru/R/validate_associations_correlate_ctd.R" class="external-link"><code>R/validate_associations_correlate_ctd.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/neurogenomics/MSTExplorer/blob/master/R/validate_associations_correlate_ctd.R" class="external-link"><code>R/validate_associations_correlate_ctd.R</code></a></small>
     <div class="hidden name"><code>validate_associations_correlate_ctd.Rd</code></div>
     </div>
 
@@ -74,6 +74,7 @@ between results from different CellTypeDatasets.</p>
 <span>  group_var <span class="op">=</span> <span class="st">"ctd"</span>,</span>
 <span>  celltype_var <span class="op">=</span> <span class="st">"cl_name"</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  downsample <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -108,6 +109,10 @@ that contains the cell type variable to compare across.</p></dd>
 <dd><p>The q value threshold to subset the <code>results</code> by.</p></dd>
 
 
+<dt id="arg-downsample">downsample<a class="anchor" aria-label="anchor" href="#arg-downsample"></a></dt>
+<dd><p>Downsample the data to this many points when plotting.</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments passed to <code>plot_density_cor</code>.</p></dd>
 
@@ -128,9 +133,6 @@ that contains the cell type variable to compare across.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 3 comparable celltypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 4 comparable phenotypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Generating plots.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 method overwritten by 'ggside':</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   method from   </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   +.gg   ggplot2</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering statistics.</span>
 <span class="r-in"><span><span class="co">#### Within CTD: across developmental stages ####</span></span></span>
 <span class="r-in"><span><span class="va">filters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ctd<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HumanCellLandscape"</span><span class="op">)</span>, stage<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fetus"</span>,<span class="st">"Adult"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -163,7 +165,7 @@ that contains the cell type variable to compare across.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer></div>
