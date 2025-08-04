@@ -1,6 +1,6 @@
 test_that("ttd_check works", {
 
-  if(.Platform$OS.type=="window") {
+  if(.Platform$OS.type=="windows") {
     testthat::skip() # Skip due to issues on GHA
   }
   top_targets <- MSTExplorer::example_targets$top_targets

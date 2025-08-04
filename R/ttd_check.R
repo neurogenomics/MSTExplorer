@@ -26,9 +26,11 @@
 #' @export
 #' @importFrom utils tail
 #' @examples
+#'  if(.Platform$OS.type!="windows") {
 #' top_targets <- MSTExplorer::example_targets$top_targets
 #' res <- ttd_check(top_targets=top_targets,
 #'                  run_map_genes=FALSE)
+#'  }
 ttd_check <- function(top_targets,
                       drug_types = NULL,
                       failed_status = c(

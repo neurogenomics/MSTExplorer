@@ -74,7 +74,9 @@ or are in clinical trials. Uses data from the
 Therapeutic Target Database}.
 }
 \examples{
+ if(.Platform$OS.type!="windows") {
 top_targets <- MSTExplorer::example_targets$top_targets
 res <- ttd_check(top_targets=top_targets,
                  run_map_genes=FALSE)
+ }
 }
