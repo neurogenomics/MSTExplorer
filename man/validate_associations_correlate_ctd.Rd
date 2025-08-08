@@ -7,6 +7,8 @@
 validate_associations_correlate_ctd(
   results = load_example_results(),
   filters = NULL,
+  hpo_agg_lvl = 3,
+  hpo = HPOExplorer::get_hpo(),
   group_var = "ctd",
   celltype_var = "cl_name",
   q_threshold = 0.05,
@@ -22,6 +24,12 @@ and merged together with \link[MSTExplorer]{merge_results}}
 \item{filters}{A named list, where each element in the list is the name of 
 a column in the data, and the vector within each element represents the 
 values to include in the final data.}
+
+\item{hpo_agg_lvl}{Aggregate the data to a specific HPO ancestor level
+during plotting to reduce figure size.}
+
+\item{hpo}{Human Phenotype Ontology object,
+loaded from \link[KGExplorer]{get_ontology}.}
 
 \item{group_var}{A character string specifying the column in \code{results}
 that contains the group variable to compare across.}

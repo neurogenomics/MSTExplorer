@@ -4,6 +4,9 @@
 * Copy all core `phenomix` functions used in `MSTExplorer` 
   into new package `phenomix.core` to reduce dependencies and issues
   installing `phenomix` (which requires `scKirby` and `echoconda`).
+* `validate_associations_correlate_ctd`: Drastically reduce figure size by aggregating  
+    data to ancestral phenotype groups first.
+  
 
 # MSTExplorer 1.0.8
 

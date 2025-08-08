@@ -1,6 +1,7 @@
 plot_density_cor <- function(res,
                              x="p_HumanCellLandscape",
                              y="p_DescartesHuman",
+                             agg_var=NULL,
                              point.args = list(alpha=.01),
                              density_alpha=.7,
                              min_colors=15,
@@ -15,6 +16,16 @@ plot_density_cor <- function(res,
     downsample <- min(downsample, nrow(res))
     messager("Downsampling to", downsample, "points.")
     res <- res[sample(.N, downsample)]
+  }
+
+  # Aggregate to reduce plot size
+  if(!is.null(agg_var)){
+    agg_dt <- res[,.(x=mean(get(x),na.rm=TRUE),
+                     y=mean(get(y),na.rm=TRUE)),
+                  by=agg_var]
+    res <- agg_dt
+    x <- "x"
+    y <- "y"
   }
 
   p<- res |>

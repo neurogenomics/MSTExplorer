@@ -6,6 +6,8 @@
 #' that contains the group variable to compare across.
 #' @param celltype_var A character string specifying the column in \code{results}
 #' that contains the cell type variable to compare across.
+#' @param hpo_agg_lvl Aggregate the data to a specific HPO ancestor level
+#' during plotting to reduce figure size.
 #' @param downsample Downsample the data to this many points when plotting.
 #' @param ... Additional arguments passed to \code{plot_density_cor}.
 #' @inheritParams prioritise_targets
@@ -25,6 +27,8 @@
 #'                                             group_var="stage")
 validate_associations_correlate_ctd <- function(results=load_example_results(),
                                                 filters=NULL,
+                                                hpo_agg_lvl=3,
+                                                hpo=HPOExplorer::get_hpo(),
                                                 group_var="ctd",
                                                 celltype_var="cl_name",
                                                 q_threshold=0.05,
@@ -38,6 +42,8 @@ validate_associations_correlate_ctd <- function(results=load_example_results(),
   group_values <- unique(results[[group_var]])
   value.var <- intersect(c("p","q","logFC","estimate"),
                          names(results))
+
+
   messager("Casting results.")
   res2 <- results |>
     data.table::dcast.data.table(
@@ -65,27 +71,43 @@ validate_associations_correlate_ctd <- function(results=load_example_results(),
   messager("Generating plots.")
 
 
+  if(!is.null(hpo_agg_lvl)){
+    res2 <- HPOExplorer::add_ancestor(res2,
+                                      lvl = hpo_agg_lvl,
+                                      hpo=hpo)
+    res_sig <- HPOExplorer::add_ancestor(res_sig,
+                                         lvl = hpo_agg_lvl,
+                                         hpo=hpo)
+    agg_var <- "ancestor_name"
+  } else{
+    agg_var <- NULL
+  }
+
 
   plots <- list()
   plots[["p.all"]] <- plot_density_cor(res2,
                                        x=paste0("p_",group_values[1]),
                                        y=paste0("p_",group_values[2]),
+                                       agg_var=agg_var,
                                        downsample=downsample,
                                        )
   plots[["logFC.all"]] <- plot_density_cor(res2,
                                            x=paste0("logFC_",group_values[1]),
                                            y=paste0("logFC_",group_values[2]),
-                                           downsample=downsample
+                                           downsample=downsample,
+                                           agg_var=agg_var,
                                            )
   plots[["p.significant"]] <- plot_density_cor(res_sig,
                                                x=paste0("p_",group_values[1]),
                                                y=paste0("p_",group_values[2]),
-                                               downsample=downsample
+                                               downsample=downsample,
+                                               agg_var=agg_var,
                                                )
   plots[["logFC.significant"]] <- plot_density_cor(res_sig,
                                                    x=paste0("logFC_",group_values[1]),
                                                    y=paste0("logFC_",group_values[2]),
-                                                   downsample=downsample
+                                                   downsample=downsample,
+                                                   agg_var=agg_var,
                                                    )
   messager("Gathering statistics.")
   data_stats <- lapply(plots, get_ggstatsplot_stats)
