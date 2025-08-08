@@ -71,6 +71,8 @@ between results from different CellTypeDatasets.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">validate_associations_correlate_ctd</span><span class="op">(</span></span>
 <span>  results <span class="op">=</span> <span class="fu"><a href="load_example_results.html">load_example_results</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  filters <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  hpo_agg_lvl <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  hpo <span class="op">=</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/get_.html" class="external-link">get_hpo</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  group_var <span class="op">=</span> <span class="st">"ctd"</span>,</span>
 <span>  celltype_var <span class="op">=</span> <span class="st">"cl_name"</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
@@ -93,6 +95,16 @@ and merged together with <a href="merge_results.html">merge_results</a></p></dd>
 <dd><p>A named list, where each element in the list is the name of
 a column in the data, and the vector within each element represents the
 values to include in the final data.</p></dd>
+
+
+<dt id="arg-hpo-agg-lvl">hpo_agg_lvl<a class="anchor" aria-label="anchor" href="#arg-hpo-agg-lvl"></a></dt>
+<dd><p>Aggregate the data to a specific HPO ancestor level
+during plotting to reduce figure size.</p></dd>
+
+
+<dt id="arg-hpo">hpo<a class="anchor" aria-label="anchor" href="#arg-hpo"></a></dt>
+<dd><p>Human Phenotype Ontology object,
+loaded from <a href="https://rdrr.io/pkg/KGExplorer/man/get_.html" class="external-link">get_ontology</a>.</p></dd>
 
 
 <dt id="arg-group-var">group_var<a class="anchor" aria-label="anchor" href="#arg-group-var"></a></dt>
@@ -133,6 +145,14 @@ that contains the cell type variable to compare across.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 3 comparable celltypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 4 comparable phenotypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Generating plots.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 804 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 4 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering statistics.</span>
 <span class="r-in"><span><span class="co">#### Within CTD: across developmental stages ####</span></span></span>
 <span class="r-in"><span><span class="va">filters</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>ctd<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HumanCellLandscape"</span><span class="op">)</span>, stage<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Fetus"</span>,<span class="st">"Adult"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -150,6 +170,14 @@ that contains the cell type variable to compare across.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 9 comparable celltypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 14 comparable phenotypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Generating plots.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 3,062 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 17 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering statistics.</span>
 </code></pre></div>
     </div>
