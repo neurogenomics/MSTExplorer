@@ -71,7 +71,7 @@ predict_celltypes <- function(phenotypes,
                               height=NULL){
   requireNamespace("ggplot2")
   gene_symbol <- hpo_id <-
-    disease_id <- p <- gene_factor <- score <- score_mean <-
+    disease_id <- p <- gene_factor <- score <- score_mean <- effect <-
     score_sum <- score_median <- n_phenotypes <- specificity <- NULL;
 
   {

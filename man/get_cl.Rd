@@ -7,7 +7,7 @@
 get_cl(name = "cl", tag = "v2023-09-21", lvl = 1, remove_rings = TRUE, ...)
 }
 \arguments{
-\item{name}{\itemize{
+\item{name}{\describe{
 \item{<...>}{Any ontology name from \link[KGExplorer]{get_ols_options}}
 \item{"mondo"}{
 Import the \href{https://mondo.monarchinitiative.org/}{Mondo} ontology.
@@ -32,9 +32,9 @@ Will get the closest ancestor to this level if none have this exact level.}
     \item{\code{save_dir}}{Directory to save a file to.}
     \item{\code{force_new}}{If TRUE, force a new download.}
     \item{\code{method}}{Compute ontology levels using:
-\itemize{
- \item{"height" (default)} \link[simona]{dag_height}.
- \item{"depth"} \link[simona]{dag_depth}.
+\describe{
+ \item{"height" (default)}{\link[simona]{dag_height}.}
+ \item{"depth"}{\link[simona]{dag_depth}.}
 }}
     \item{\code{filetype}}{File type to search for.}
     \item{\code{import_func}}{Function to import the ontology with. 

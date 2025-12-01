@@ -72,7 +72,7 @@ and merged together with \link[MSTExplorer]{merge_results}}
 \item{subtitle_size}{Size of the plot subtitle.}
 
 \item{plot.margin}{margin around entire plot (\code{unit} with the sizes of
-the top, right, bottom, and left margins)}
+the top, right, bottom, and left margins); inherits from \code{margin}.}
 
 \item{show_plot}{Print the plot to the console.}
 

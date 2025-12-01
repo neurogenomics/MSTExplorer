@@ -3,6 +3,7 @@ construct_labeller <- function(dat,
                                facets_n,
                                suffix="phenotypes"){
   facet_label <- NULL;
+  dat <- data.table::copy(dat)
   if(is.null(facets_n) ||
      !facets_n %in% names(dat)) {
     "label_value"

@@ -37,7 +37,8 @@ plot_report <- function(rep_dt,
   # devoptera::args2vars(plot_report)
   requireNamespace("ggplot2")
   requireNamespace("patchwork")
-  Tier <- Tier_count <- value <- step <- hpo_id <- level <- NULL;
+  Tier <- Tier_count <- value <- step <- hpo_id <- level <- variable <- NULL;
+
   messager("plot_report:: Preparing data.",v=verbose)
   gp_list <- list()
   if(add_tiers){
@@ -87,7 +88,11 @@ plot_report <- function(rep_dt,
     dt1 <- NULL
   }
   #### Remove cols ####
-  rep_dt <- rep_dt[,-remove_cols, with=FALSE]
+  remove_cols <- remove_cols[remove_cols %in% names(rep_dt)]
+  if (length(remove_cols)>0){
+    rep_dt <- rep_dt[,-remove_cols, with=FALSE]
+  }
+
   #### Fill missing values ####
   total_diseases <- length(unique(annot[hpo_id %in% results$hpo_id,]$disease_name))
   total_genes <- length(unique(phenotype_to_genes$gene_symbol))
@@ -97,6 +102,7 @@ plot_report <- function(rep_dt,
   #### Add step levels/descriptions ####
   filters <- extract_filters()
   #### Make plot data ####
+
   dt2 <- data.table::merge.data.table(x = rep_dt,
                                      y = filters,
                                      by="step",
@@ -108,6 +114,7 @@ plot_report <- function(rep_dt,
                     labels = paste0(seq(length(unique(dt2$step))),". ",
                                     unique(dt2$step)),
                     ordered = TRUE)
+
   messager("plot_report:: Preparing plot.",v=verbose)
   gp_list[["filters"]] <- ggplot2::ggplot(dt2, ggplot2::aes(x=step,
                                    y=value,
@@ -116,7 +123,7 @@ plot_report <- function(rep_dt,
     ggplot2::geom_bar(stat = "identity",
                       alpha=1,
                       color="grey80") +
-    ggplot2::facet_grid(rows = "variable",
+    ggplot2::facet_grid(rows = ggplot2::vars(variable),
                         scales = "free") +
     ggplot2::geom_label(fill="black",
                         color="white",
@@ -142,7 +149,9 @@ plot_report <- function(rep_dt,
   if(length(gp_list)>1){
     gp <- gp + patchwork::plot_annotation(tag_levels = letters)
   }
+
   if(isTRUE(show_plot)) methods::show(gp)
+
   if(!is.null(save_path)){
     messager("Saving plot ==>",save_path,v=verbose)
     dir.create(dirname(save_path), showWarnings = FALSE, recursive = TRUE)

@@ -47,7 +47,7 @@ loaded from \link[KGExplorer]{get_ontology}.}
 Prioritise targets: multi-heatmap
 }
 \examples{
-top_targets <- MSTExplorer::example_targets$top_targets[1:10]
+top_targets <- MSTExplorer::example_targets$top_targets[seq(10)]
 prioritise_targets_network_out <- prioritise_targets_network(
   top_targets = top_targets)
 

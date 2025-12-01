@@ -43,7 +43,7 @@ plot_celltype_severity <- function(results,
 
   requireNamespace("ggplot2")
   severity_score_gpt <- cl_name <- cl_id <- value <- variable <- p <- FDR <-
-    statistic <- NULL;
+    statistic <- variable_split <- group <- n_samples <- n_groups <- NULL;
 
   results <- map_celltype(results)
   results_gpt <- HPOExplorer::add_gpt_annotations(results)
@@ -101,7 +101,8 @@ plot_celltype_severity <- function(results,
     # Subplot with individual severity annotations
     gg_annot <- ggplot2::ggplot(agg_gpt[!is.na(value)],
                                 ggplot2::aes(x=cl_name, y=1, fill=value))+
-      ggplot2::facet_grid(.~variable_split, scales="free_y")+
+      ggplot2::facet_grid(cols = ggplot2::vars(variable_split),
+                          scales="free_y")+
       ggplot2::geom_bar(stat="identity", position="fill")+
       ggplot2::scale_fill_viridis_d(option="plasma",
                                     labels=c(`0`="never",

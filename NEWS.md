@@ -1,3 +1,13 @@
+# MSTExplorer 1.0.10
+
+## New features
+* `run_permutation_test_cor`: New function to run permutation tests.
+* `plot_ontology_levels`: Add more args. Make "info_content_binned" 
+  a separate col from raw "info_content".
+
+## Bug fixes
+* Update all calls to `facet_grid` to not use deprecated `facets` arg.
+
 # MSTExplorer 1.0.9
 
 ## New features

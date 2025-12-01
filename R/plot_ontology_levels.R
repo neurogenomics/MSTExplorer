@@ -19,11 +19,14 @@
 #' @param add_arrow Add arrows indicating whether phenotypes are more broader
 #' or more specific across ontology levels.
 #' @param return_data Return the full long data used in the plots.
+#' @param rasterize_points Whether to rasterize the points in the scatter plots.
 #' @inheritParams plot_
 #' @inheritParams ggpubr::stat_cor
 #' @inheritParams prioritise_targets
+#' @inheritParams filter_ggstatsplot_subtitle
 #' @inheritParams ggplot2::geom_boxplot
 #' @inheritParams ggstatsplot::ggscatterstats
+#' @inheritParams ggrastr::rasterize
 #' @returns A named list containing the data and the plot.
 #'
 #' @export
@@ -40,7 +43,7 @@ plot_ontology_levels <- function(results = load_example_results(),
                                     "cell types",
                                     "estimate",
                                     "mean_specificity"),
-                         y_vars = rep("info_content", length(x_vars)),
+                         y_vars = rep("info_content_binned", length(x_vars)),
                          log_vars=x_vars %in% c("estimate","statistic",
                                                 "F","ges",
                                                 "p",
@@ -56,6 +59,8 @@ plot_ontology_levels <- function(results = load_example_results(),
                                       unique(y_vars),
                                       "ctd"),
                          geom="ggscatterstats",
+                         type="parametric",
+                         stats_idx=NULL,
                          q_threshold=0.05,
                          min_value=NULL,
                          label.x.npc = .05,
@@ -70,7 +75,9 @@ plot_ontology_levels <- function(results = load_example_results(),
                          width=length(x_vars)*5.75,
                          smooth.line.args=list(method = "lm",
                                                se = FALSE),
-                         return_data=TRUE
+                         return_data=TRUE,
+                         rasterize_points=TRUE,
+                         dpi=100
                          ){
 
   requireNamespace("ggplot2")
@@ -78,8 +85,10 @@ plot_ontology_levels <- function(results = load_example_results(),
   requireNamespace("ggpubr")
   requireNamespace("ggstatsplot")
   requireNamespace("gginnards")
+  requireNamespace("ggrastr")
+
   gene_symbol <- CellType <- specificity <- `cell types` <- info_content <-
-    NULL;
+    info_content_binned <- NULL;
   #### Check input variables
   ## log_vars
   if(length(log_vars)!=length(x_vars)){
@@ -90,10 +99,13 @@ plot_ontology_levels <- function(results = load_example_results(),
     stopper("sig_vars must be the same length as x_vars")
   }
   ## Add IC
-  if(any(y_vars=="info_content")){
+  if(any(y_vars %in% c("info_content","info_content_binned"))){
     results <- HPOExplorer::add_info_content(phenos = results)
     ## Bin continuous variable
-    results[,info_content:=as.integer(round(info_content))]
+    if (!"info_content_binned" %in% names(results)) {
+      results[,info_content_binned:=as.integer(round(info_content))]
+    }
+
   }
   ## Add ontLvl
   if(any(y_vars=="ontLvl")){
@@ -138,6 +150,8 @@ plot_ontology_levels <- function(results = load_example_results(),
                         trans=NULL,
                         reduce_fun=mean,
                         type ="nonparametric",
+                        rasterize_points=TRUE,
+                        dpi=100,
                         ...){
     # devoptera::args2vars(plot_func)
     y_lab <- x_var
@@ -178,15 +192,21 @@ plot_ontology_levels <- function(results = load_example_results(),
     }
     x_lab <- if(y_var=="ontLvl"){
       "Phenotype ontology level"
-    } else if (y_var=="info_content"){
+    } else if (y_var %in% c("info_content","info_content_binned")){
       "Phenotype information content"
-    } else {y_var}
+    } else {
+      y_var
+    }
     #### Compute mean value per ont level for color #####
     if(!is.null(reduce_fun)){
       dat[,mean:=reduce_fun(get(x_var), na.rm=TRUE), by=y_var]
     }
-    ####
+
+
+    #### Create ggstatsplot ####
     if(geom=="ggscatterstats"){
+
+
       p <- ggstatsplot::ggscatterstats(data = dat,
                                        x = !!ggplot2::sym(y_var),
                                        y = !!ggplot2::sym(x_var),
@@ -197,7 +217,9 @@ plot_ontology_levels <- function(results = load_example_results(),
                                        type =type,
                                        point.args = list(alpha=.1),
                                        title=title,
-                                       smooth.line.args=smooth.line.args) +
+                                       smooth.line.args=smooth.line.args,
+                                       # ggplot.component=ggplot.component
+                                       ) +
         ggplot2::geom_boxplot(orientation = "x",
                               ggplot2::aes(group= !!ggplot2::sym(y_var),
                                            fill=!!ggplot2::sym(fill_var)),
@@ -213,9 +235,19 @@ plot_ontology_levels <- function(results = load_example_results(),
                       fill="Bin mean"
                       ) +
         ggplot2::theme(legend.position = "bottom",
-                       legend.key.width=ggplot2::unit(1,"cm"),
+                       legend.key.width = ggplot2::unit(1,"cm"),
                        plot.subtitle = ggplot2::element_text(size=10)
       )
+
+      # Rasterize points to reduce file size
+      if (rasterize_points){
+        p <- ggrastr::rasterize(p, layers = "Point", dpi = dpi)
+      }
+
+      # Filter subtitle stats
+      p <- filter_ggstatsplot_subtitle(p, stats_idx = stats_idx)
+
+      # Move boxplot layer to top
       p <- gginnards::move_layers(p,idx = 2, position = "top")
       return(p)
     }
@@ -276,11 +308,13 @@ plot_ontology_levels <- function(results = load_example_results(),
   plts2 <- lapply(stats::setNames(x_vars,x_vars),
                   plot_func,
                   geom="ggscatterstats",
-                  type="parametric",
+                  type=type,
                   method = smooth.line.args$method,
                   span = .5,
                   direction = 1,
-                  notch=notch)
+                  notch=notch,
+                  rasterize_points=rasterize_points,
+                  dpi=dpi)
   #### Merge plots ####
   plts2 <- patchwork::wrap_plots(plts2,
                                  tag_level="new",

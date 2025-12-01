@@ -32,7 +32,8 @@ and merged together with \link[MSTExplorer]{merge_results}}
 
 \item{remove_cols}{Columns to remove from \code{rep_dt}.}
 
-\item{label.size}{Size of label border, in mm.}
+\item{label.size}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} Replaced by the
+\code{linewidth} aesthetic. Size of label border, in mm.}
 
 \item{show_plot}{Print the plot to the console.}
 
@@ -61,7 +62,8 @@ If not supplied, uses the size of the current graphics device.}
     \item{\code{units}}{One of the following units in which the \code{width} and \code{height}
 arguments are expressed: \code{"in"}, \code{"cm"}, \code{"mm"} or \code{"px"}.}
     \item{\code{dpi}}{Plot resolution. Also accepts a string input: "retina" (320),
-"print" (300), or "screen" (72). Applies only to raster output types.}
+"print" (300), or "screen" (72). Only applies when converting pixel units,
+as is typical for raster output types.}
     \item{\code{limitsize}}{When \code{TRUE} (the default), \code{ggsave()} will not
 save images larger than 50x50 inches, to prevent the common error of
 specifying dimensions in pixels.}

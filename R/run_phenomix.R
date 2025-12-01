@@ -1,7 +1,7 @@
 #' Run phenomix
 #'
 #' Run many phenotype-cell type association tests in parallel using
-#' \link{iterate_lm}.
+#' \link[phenomix.core]{iterate_lm}.
 #' @param ctd_name Name of the CTD to load.
 #' @param metric Which matrix within the CTD to use
 #' (e.g. "mean_exp","specificity","specificity_quantiles").
@@ -35,8 +35,7 @@ run_phenomix <- function(ctd_name,
                          multivariate=FALSE,
                          workers = NULL,
                          force_new = FALSE,
-                         ...
-){
+                         ...){
   effect <- NULL;
 
   if(file.exists(save_path) && isFALSE(force_new)){

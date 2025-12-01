@@ -2,8 +2,10 @@ prepare_congenital_annotations <- function(results,
                                            fetal_keywords,
                                            celltype_col="author_celltype",
                                            gpt_annot = HPOExplorer::gpt_annot_codify()){
+
   fetal_celltype <- fetal_nonfetal_pdiff <- stage <-
-    has_adult_and_fetal <- NULL;
+    has_adult_and_fetal <- p <- NULL;
+
   #### Prepare data ####
   results <- HPOExplorer::add_gpt_annotations(results,
                                               annot = gpt_annot$annot)

@@ -26,6 +26,7 @@ validate_associations_mkg <- function(results=load_example_results(),
                                                  "dist_lca.min")[1]
                                       ){
   from <- hpo_id <- NULL;
+
   # kg <- data.table::fread(here::here("data/monarch_kg_cells.csv"))
   results <- add_logfc(results)
   kg_og <- data.table::copy(kg)

@@ -26,7 +26,7 @@ and merged together with \link[MSTExplorer]{merge_results}}
 \item{celltype_col}{Name of the cell type column in the \code{results}.}
 
 \item{tests}{The types of tests to conduct.
-\itemize{
+\describe{
 \item{"within_branches"}{
 Are on-target cell types enriched for significant results?}
 \item{"across_branches"}{

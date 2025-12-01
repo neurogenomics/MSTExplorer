@@ -10,7 +10,8 @@ plot_ttd <- function(dat_sub,
                      baseline=NULL){
   requireNamespace("ggplot2")
   requireNamespace("scales")
-  HIGHEST_STATUS<- prioritised <- n_drugs <- failed <- baseline_prop <- NULL;
+  HIGHEST_STATUS<- prioritised <- n_drugs <- failed <- baseline_prop <-
+    n_drugs_total <- prioritised_pct <- baseline_n <- NULL;
 
   dat_sub[,n_drugs:=.N,
           by=c("HIGHEST_STATUS","prioritised")]
@@ -25,7 +26,6 @@ plot_ttd <- function(dat_sub,
                                   nrow(dat_sub)*100,2),
                             "% prioritised)"
                           ),
-                        width = NULL,
                         show.legend=TRUE,
                         as_percent=TRUE,
                         ylims=NULL){
@@ -36,7 +36,6 @@ plot_ttd <- function(dat_sub,
                                    fill=prioritised,
                                    label=n_drugs)) +
         ggplot2::geom_bar(position = ggplot2::position_fill(),
-          width = width,
           show.legend = show.legend) +
         ggplot2::scale_y_continuous(labels = scales::percent) +
         ggplot2::geom_text(
@@ -64,8 +63,7 @@ plot_ttd <- function(dat_sub,
                                    y=n_drugs,
                                    fill=prioritised,
                                    label=n_drugs)) +
-        ggplot2::geom_col(width = width,
-                          show.legend = show.legend) +
+        ggplot2::geom_col(show.legend = show.legend) +
       ggplot2::geom_text(
         data = (data.table::setorderv(plt_dat,"prioritised_pct", na.last = TRUE)
                 )[,.SD[1], by=c("HIGHEST_STATUS")],

@@ -42,8 +42,9 @@ prioritise_targets_grid <- function(top_targets,
                                     show_plot=TRUE,
                                     ...
                                     ){
+
   hpo_name <- severity_class <- physical_malformations <- value <- variable <-
-    p <- species <- NULL;
+    p <- species <- x <- hpo_id <- ortholog_gene <- NULL;
 
   top_targets <- top_targets|> data.table::copy()
   top_targets <- map_celltype(top_targets)
@@ -111,7 +112,8 @@ prioritise_targets_grid <- function(top_targets,
       ggplot2::theme_classic() +
       ggplot2::scale_x_continuous(labels=labels, breaks=x_pos,
                                   limits=c(min(x_pos), max(x_pos)*1.2)) +
-      ggplot2::facet_grid(severity_class~., scales = "free_y") +
+      ggplot2::facet_grid(rows=ggplot2::vars(severity_class),
+                          scales = "free_y") +
       ggplot2::labs(x=NULL, y=NULL, subtitle=subtitle[1]) +
       ggplot2::theme(axis.text.y = ggplot2::element_blank(),
                      strip.text=ggplot2::element_blank(),
@@ -147,7 +149,8 @@ prioritise_targets_grid <- function(top_targets,
       ggplot2::geom_tile(color="grey20", fill="white") +
       ggplot2::geom_text(color="black", size=size, check_overlap = TRUE) +
       ggplot2::theme_minimal() +
-      ggplot2::facet_grid(severity_class~., scales = "free_y") +
+      ggplot2::facet_grid(rows=ggplot2::vars(severity_class),
+                          scales = "free_y") +
       ggplot2::theme(#axis.text.x=ggplot2::element_text(angle=45, hjust=1),
         axis.text.y=ggplot2::element_blank(),
         panel.grid.major.x = ggplot2::element_blank(),

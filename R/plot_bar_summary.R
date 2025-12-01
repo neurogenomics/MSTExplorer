@@ -29,8 +29,8 @@ plot_bar_summary <- function(results = load_example_results(),
                             count_var = "hpo_name",
                             group_var = "CellType",
                             keywords = NULL,
-                            q_threshold = 0.0005,
-                            effect_threshold = 1,
+                            q_threshold = 0.05,
+                            effect_threshold = NULL,
                             filters = NULL,
                             keep_descendants = NULL,
                             hpo = HPOExplorer::get_hpo(),
@@ -39,6 +39,7 @@ plot_bar_summary <- function(results = load_example_results(),
                             show_plot=TRUE,
                             verbose = TRUE){
   requireNamespace("ggplot2")
+
   #### Subset results ####
   phenos <- subset_phenos(keep_descendants = keep_descendants,
                           results = results,
@@ -73,9 +74,9 @@ plot_bar_summary <- function(results = load_example_results(),
   plt <- ggplot2::ggplot(counts_df,
                          ggplot2::aes(x = !!ggplot2::sym(group_var),
                            y = !!ggplot2::sym(n_count_var),
-                           fill = !!ggplot2::sym("mean_effect"),
+                           fill = !!ggplot2::sym("mean_estimate"),
                            mean_q = !!ggplot2::sym("mean_q"),
-                           mean_sd_from_mean = !!ggplot2::sym("mean_sd_from_mean"),
+                           mean_sd_from_mean = !!ggplot2::sym("mean_std.error"),
                            values = !!ggplot2::sym(tolower(count_var))
                            )
                 ) +

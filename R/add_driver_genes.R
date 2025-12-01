@@ -1,10 +1,29 @@
+#' Add driver genes
+#'
+#' This function identifies "driver genes" from phenotype-cell type association analyses.
+#' For a given phenotype-cell type pair, driver genes are defined as the intersect of genes that had a
+#' phenotype evidence score >0 and were within the top 75th expression specificity percentile
+#' (quantiles 30-40 out of 40) for the associated cell type.
+#'
+#' @param min_value Miniumum specificity quantile to keep.
+#' @param metric Which metric to use in the CellTypeDatasets.
+#' @param group_var Grouping variable to use when selecting top N genes.
+#' Only used when \code{top_n!=NULL}.
+#' @param celltype_var The name of the cell type column to merge on.
+#' @inheritParams prioritise_targets
+#' @inheritParams add_symptom_results
+#' @inheritDotParams HPOExplorer::add_genes
+#' @export
+#' @examples
+#' res <- load_example_results()[seq(100)]
+#' res <- add_driver_genes(results=res)
 add_driver_genes <- function(results = load_example_results(),
                              ctd_list = load_example_ctd(
                                file = paste0("ctd_",unique(results$ctd),".rds"),
                                multi_dataset = TRUE
                                ),
                              annotLevels = map_ctd_levels(results),
-                             keep_quantiles = NULL,
+                             keep_quantiles = seq(30,40),
                              min_value = NULL,
                              metric = "specificity_quantiles",
                              top_n = NULL,

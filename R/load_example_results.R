@@ -4,19 +4,19 @@
 #' using the Human Phenotype Ontology and a given CellTypeDataset (CTD).
 #' Results were then merged together with  \link[MSTExplorer]{merge_results}.
 #' @param file File to load:
-#' \itemize{
-#' \item{"Descartes_All_Results_extras.symptoms.full_join.rds":}{
+#' \describe{
+#' \item{"Descartes_All_Results_extras.symptoms.full_join.rds"}{
 #' Contains cell type-phenotype and cell type-symptom (phenotype + disease)
 #' enrichment results merged into one table.
 #' Used the \href{https://descartes.brotmanbaty.org/}{Descartes}
 #' CTD ( annotation level 1).
 #' }
-#' \item{"Descartes_All_Results_extras.rds":}{
+#' \item{"Descartes_All_Results_extras.rds"}{
 #' Contains cell type-phenotype enrichment results.
 #' Used the \href{https://descartes.brotmanbaty.org/}{Descartes}
 #' CTD ( annotation level 1).
 #' }
-#' \item{"tabulamuris_merged.rds":}{
+#' \item{"tabulamuris_merged.rds"}{
 #' Contains cell type-phenotype enrichment results.
 #' Used the \href{https://tabula-muris.ds.czbiohub.org/}{Tabula Muris}
 #' CTD.
@@ -117,6 +117,7 @@ load_example_results <- function(file=c(
                            "hpo_id.disease_id","disease_id"),
                          skip_absent = TRUE)
     names(results) <- gsub("^symptoms\\.","symptom.",names(results))
+
     return(results)
   }
 

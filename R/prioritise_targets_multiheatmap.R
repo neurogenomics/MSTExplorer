@@ -14,7 +14,7 @@
 #' @inheritParams stringr::str_wrap
 #' @export
 #' @examples
-#' top_targets <- MSTExplorer::example_targets$top_targets[1:10]
+#' top_targets <- MSTExplorer::example_targets$top_targets[seq(10)]
 #' prioritise_targets_network_out <- prioritise_targets_network(
 #'   top_targets = top_targets)
 #'
@@ -42,7 +42,8 @@ prioritise_targets_multiheatmap <- function(top_targets,
                                             show_plot=TRUE
                                             ){
   node_type <- gene_symbol <- disease_id <- specificity <- evidence_score_sum <-
-    disease_name <- hpo_name <- mean_specificity <- cl_name <- NULL;
+    disease_name <- hpo_name <- mean_specificity <- cl_name <- hpo_id <- ctd <-
+    evidence_score <- NULL;
 
   ctd_list <- ctd_list[unique(top_targets$ctd)]
   if(length(ctd_list)==0){

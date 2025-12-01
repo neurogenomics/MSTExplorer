@@ -21,6 +21,7 @@
 #' @param subtitle_size Size of the plot subtitle.
 #' @param phenotype_to_genes Phenotype to gene mapping from
 #' \link[HPOExplorer]{load_phenotype_to_genes}.
+#' @param dpi Resolution of image after rasterization.
 #' @family plot_
 #' @returns R object.
 #' @name plot_

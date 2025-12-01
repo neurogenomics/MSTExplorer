@@ -16,7 +16,9 @@ run_prop_tests <- function(results,
                            alternative = "greater",
                            cores=NULL,
                            ...){
-  sig_phenos <- total_phenos <- NULL;
+
+  sig_phenos <- total_phenos <- target_ancestor <- prop_phenos <- p <- NULL;
+
   sig_counts <- results[,list(sig_phenos=sum(q<.05),
                               nonsig_phenos=sum(q>=0.05),
                               total_phenos=.N),

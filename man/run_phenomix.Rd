@@ -52,7 +52,7 @@ in the \code{save_dir_tmp}.}
 }
 \description{
 Run many phenotype-cell type association tests in parallel using
-\link{iterate_lm}.
+\link[phenomix.core]{iterate_lm}.
 }
 \examples{
 \dontrun{

@@ -39,6 +39,8 @@ Set to \code{NULL} to not save the plot.}
 
 \item{phenotype_to_genes}{Phenotype to gene mapping from
 \link[HPOExplorer]{load_phenotype_to_genes}.}
+
+\item{dpi}{Resolution of image after rasterization.}
 }
 \value{
 R object.

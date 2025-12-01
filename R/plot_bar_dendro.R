@@ -27,7 +27,6 @@
 #' @inheritParams KGExplorer::plot_save
 #' @inheritParams ggplot2::facet_wrap
 #' @inheritParams ggplot2::theme
-#' @inheritDotParams EWCE::ewce_plot
 #' @returns A bar chart with dendrogram of EWCE results in each cell type.
 #'
 #' @export
@@ -51,8 +50,7 @@ plot_bar_dendro <- function(results = load_example_results(),
                             show_plot=TRUE,
                             save_path=NULL,
                             height = 16,
-                            width = 13,
-                            ...) {
+                            width = 13) {
   requireNamespace("ggplot2")
   requireNamespace("patchwork")
   requireNamespace("ggdendro")

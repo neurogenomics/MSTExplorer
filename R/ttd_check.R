@@ -79,7 +79,7 @@ ttd_check <- function(top_targets,
   # )
 
   TARGETID <- DRUGNAME <- DRUGTYPE <- DRUGID <-
-    GENENAME2 <- GENENAME3 <- prioritised <- HIGHEST_STATUS <- NULL;
+    GENENAME2 <- GENENAME3 <- prioritised <- HIGHEST_STATUS <- failed <- NULL;
 
   {
     top_targets <- HPOExplorer::add_disease(top_targets,
@@ -93,7 +93,9 @@ ttd_check <- function(top_targets,
     #### Create baseline ####
     # Must be computed BEFORE drug_types filtering
     baseline <- dat_sub[,list(
-      baseline_prop=sum(GENENAME3 %in% unique(phenotype_to_genes$gene_symbol))/.N
+      baseline_prop=sum(
+        GENENAME3 %in% unique(phenotype_to_genes$gene_symbol)
+        )/.N
     ), by=c("HIGHEST_STATUS")]
 
     #### Filter by drug type ####
@@ -138,10 +140,12 @@ ttd_check <- function(top_targets,
     #### Hypergeometric test ####
     fail <- dat_sub[failed==TRUE,drop=FALSE]
     notfail <- dat_sub[failed==FALSE,drop=FALSE]
-    ttd_hypergeo_out <- ttd_hypergeo(fail=fail,
-                                     notfail=notfail,
-                                     top_targets=top_targets,
-                                     p2g=phenotype_to_genes)
+
+    hypergeo <- ttd_hypergeo(fail=fail,
+                                    notfail = notfail,
+                                    top_targets=top_targets,
+                                    p2g=phenotype_to_genes,
+                                    return_long=TRUE)
   }
   #### Plot ####
   plt <- plot_ttd(dat_sub = dat_sub,
@@ -162,6 +166,6 @@ ttd_check <- function(top_targets,
          data_overlap=dat_sub2,
          pct_captured,
          plot=plt$plot,
-         ttd_hypergeo_out=ttd_hypergeo_out)
+         hypergeo=hypergeo)
   )
 }

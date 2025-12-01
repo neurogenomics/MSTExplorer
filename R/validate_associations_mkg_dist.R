@@ -10,7 +10,8 @@ validate_associations_mkg_dist <- function(results,
                                            ){
   from <- to <- cl_id <- dist_nca.min <- all_dist_nca.min <-
     dist_lca.min <- all_dist_lca.min <- dist_nca.min_adj <- dist_lca.min_adj <-
-    NULL;
+    hpo_id <- pct <- NULL;
+
   results <- map_celltype(results)
   kg <- kg[grepl("HP:",from)][from %in% unique(results$hpo_id)]
   results$cl_id <- as.character(results$cl_id)

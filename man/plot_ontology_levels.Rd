@@ -10,13 +10,15 @@ plot_ontology_levels(
   ctd_list = load_example_ctd(file = paste0("ctd_", unique(results$ctd), ".rds"),
     multi_dataset = TRUE),
   x_vars = c("genes", "cell types", "estimate", "mean_specificity"),
-  y_vars = rep("info_content", length(x_vars)),
+  y_vars = rep("info_content_binned", length(x_vars)),
   log_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "p", "effect"),
   sig_vars = x_vars \%in\% c("estimate", "statistic", "F", "ges", "p", "effect",
     "cell types", "mean_specificity"),
   neg_vars = c("log2(p)", "log2(FDR)"),
   group_vars = c("hpo_id", unique(y_vars), "ctd"),
   geom = "ggscatterstats",
+  type = "parametric",
+  stats_idx = NULL,
   q_threshold = 0.05,
   min_value = NULL,
   label.x.npc = 0.05,
@@ -30,7 +32,9 @@ plot_ontology_levels(
   height = 7,
   width = length(x_vars) * 5.75,
   smooth.line.args = list(method = "lm", se = FALSE),
-  return_data = TRUE
+  return_data = TRUE,
+  rasterize_points = TRUE,
+  dpi = 100
 )
 }
 \arguments{
@@ -73,6 +77,18 @@ give the geom as \code{"point"}.
 \link[ggplot2:layer_geoms]{layer geom} documentation.
 }}
 
+\item{type}{A character specifying the type of statistical approach:
+\itemize{
+\item \code{"parametric"}
+\item \code{"nonparametric"}
+\item \code{"robust"}
+\item \code{"bayes"}
+}
+
+You can specify just the initial letter.}
+
+\item{stats_idx}{Indices of statistics to keep in subtitle}
+
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
 \item{min_value}{Minimum value for the \code{specificity} metric.}
@@ -113,6 +129,10 @@ Set to \code{NULL} to not save the plot.}
 to \code{geom_smooth} geom used to display the regression line.}
 
 \item{return_data}{Return the full long data used in the plots.}
+
+\item{rasterize_points}{Whether to rasterize the points in the scatter plots.}
+
+\item{dpi}{Resolution of image after rasterization.}
 }
 \value{
 A named list containing the data and the plot.

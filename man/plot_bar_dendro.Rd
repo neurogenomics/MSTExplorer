@@ -22,8 +22,7 @@ plot_bar_dendro(
   show_plot = TRUE,
   save_path = NULL,
   height = 16,
-  width = 13,
-  ...
+  width = 13
 )
 }
 \arguments{
@@ -82,27 +81,6 @@ Set to \code{NULL} to not save the plot.}
 \item{height}{Height of the saved plot.}
 
 \item{width}{Width of the saved plot.}
-
-\item{...}{
-  Arguments passed on to \code{\link[EWCE:ewce_plot]{EWCE::ewce_plot}}
-  \describe{
-    \item{\code{total_res}}{Results data.frame generated using
-\link[EWCE]{bootstrap_enrichment_test} or
-\link[EWCE]{ewce_expression_data} functions.
-Multiple results tables can be
-merged into one results table, as long as the 'list' column is set to
-distinguish them.
-Multiple testing correction is then applied across all merged results.}
-    \item{\code{mtc_method}}{Method to be used for multiple testing correction.
-Argument is passed to \link[stats]{p.adjust} (DEFAULT: "bonferroni).}
-    \item{\code{ctd}}{CellTypeDataset object.
-Should be provided so that the dendrogram can be taken from it
-and added to plots.}
-    \item{\code{annotLevel}}{An integer indicating which level of \code{ctd} to
-analyse (\emph{Default: 1}).}
-    \item{\code{make_dendro}}{Add a dendrogram (requires \code{ctd}).}
-    \item{\code{verbose}}{Print messages.}
-  }}
 }
 \value{
 A bar chart with dendrogram of EWCE results in each cell type.

@@ -16,17 +16,27 @@
 #' phenos <- subset_results(filters = list(CellType="Microglia"))
 #' agg_res <- agg_results(phenos = phenos)
 agg_results <- function(phenos,
-                        count_var = "hpo_name",
+                        count_var = "hpo_id",
                         group_var = "CellType",
                         sep="; ",
                         verbose = TRUE){
-  effect <- sd_from_mean <- . <- gene_symbol <- NULL;
+  estimate <- std.error <- sd_from_mean <- . <- gene_symbol <- NULL;
+
+
+  group_var <- group_var[group_var %in% names(phenos)]
+  if("sd_from_mean" %in% names(phenos)){
+    phenos$std.error <- phenos$sd_from_mean
+  }
+
   messager("Aggregating results by",
            paste0("group_var=",paste(shQuote(group_var),collapse = "/")),
            v=verbose)
+
   phenos <- HPOExplorer::add_hpo_name(phenos)
+
   #### Aggregate ####
-  counts_df <- unique(phenos[,.(
+  counts_df <- unique(
+    phenos[,.(
     count=data.table::uniqueN(eval(parse(text = count_var))),
     n_genes=if("gene_symbol" %in% names(phenos)) {
       data.table::uniqueN(gene_symbol,na.rm = TRUE)
@@ -34,9 +44,9 @@ agg_results <- function(phenos,
     genes=if("gene_symbol" %in% names(phenos)){
       paste(unique(gene_symbol),collapse = sep)
     } else NA,
-    mean_effect=round(mean(effect),3),
+    mean_estimate=round(mean(estimate),3),
     mean_q=round(mean(q),3),
-    mean_sd_from_mean=round(mean(sd_from_mean),3),
+    mean_std.error=round(mean(std.error),3),
     values=paste(
       stringr::str_wrap(paste(unique(eval(parse(text = count_var))),
                               collapse = sep)),
@@ -46,10 +56,11 @@ agg_results <- function(phenos,
                    "count",
                    "n_genes",
                    "genes",
-                   "mean_effect",
+                   "mean_estimate",
                    "mean_q",
-                   "mean_sd_from_mean",
-                   "values"), with=FALSE])
+                   "mean_std.error",
+                   "values"), with=FALSE]
+  )
   data.table::setnames(counts_df,
                        c("count","values"),
                        c(paste("n",paste0(tolower(count_var),"s"),sep="_"),

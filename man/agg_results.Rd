@@ -6,7 +6,7 @@
 \usage{
 agg_results(
   phenos,
-  count_var = "hpo_name",
+  count_var = "hpo_id",
   group_var = "CellType",
   sep = "; ",
   verbose = TRUE

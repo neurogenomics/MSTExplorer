@@ -44,7 +44,7 @@ plot_congenital_annotations <- function(results,
                                         ...){
   requireNamespace("ggstatsplot")
   fetal_celltype <- ancestor_name <- congenital_onset <- has_adult_and_fetal <-
-    hpo_name <- hpo_id <- NULL;
+    hpo_name <- hpo_id <- fetal_only <- p <- NULL;
   x_var <- match.arg(x_var)
   {
     results <- prepare_congenital_annotations(results = results,

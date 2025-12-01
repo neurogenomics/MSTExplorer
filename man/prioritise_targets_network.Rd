@@ -81,33 +81,33 @@ ancestor_name --> Phenotype --> CellType --> gene_symbol}
 
 \item{forceAtlas2Based}{named list of options
 \itemize{
- \item{"theta"}{ : Number. Default to 0.5. This parameter determines the boundary between consolidated long range forces and individual short range forces. To oversimplify higher values are faster but generate more errors, lower values are slower but with less errors.}
- \item{"gravitationalConstant"}{ : Number. Default to -50. Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).}
- \item{"centralGravity"}{ : Number. Default to 0.01. There is a central gravity attractor to pull the entire network back to the center.}
- \item{"springLength"}{ : Number. Default to 100. The edges are modelled as springs. This springLength here is the the rest length of the spring.}
- \item{"springConstant"}{ : Number. Default to 0.08. This is how 'sturdy' the springs are. Higher values mean stronger springs.}
- \item{"damping"}{ : Number. Default to 0.4. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.}
- \item{"avoidOverlap"}{ : Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.}
+ \item "theta" Number. Default to 0.5. This parameter determines the boundary between consolidated long range forces and individual short range forces. To oversimplify higher values are faster but generate more errors, lower values are slower but with less errors.
+ \item "gravitationalConstant" Number. Default to -50. Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).
+ \item "centralGravity" Number. Default to 0.01. There is a central gravity attractor to pull the entire network back to the center.
+ \item "springLength" Number. Default to 100. The edges are modelled as springs. This springLength here is the the rest length of the spring.
+ \item "springConstant" Number. Default to 0.08. This is how 'sturdy' the springs are. Higher values mean stronger springs.
+ \item "damping" Number. Default to 0.4. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.
+ \item "avoidOverlap" Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.
 }}
 
 \item{scaling}{: Named list.  If the value option is specified, the size of the nodes will be scaled according to the properties in this object.
 \itemize{
- \item{"min"}{ :  Number. Default to 10. If nodes have a value, their sizes are determined by the value, the scaling function and the min max values.}
- \item{"max"}{ : Number. Default to 30. This is the maximum allowed size when the nodes are scaled using the value option.}
- \item{"label"}{ : Named list or Boolean. Default to Named list. This can be false if the label is not allowed to scale with the node. If true it will scale using default settigns. For further customization, you can supply an object.
+ \item "min"  Number. Default to 10. If nodes have a value, their sizes are determined by the value, the scaling function and the min max values.
+ \item "max" Number. Default to 30. This is the maximum allowed size when the nodes are scaled using the value option.
+ \item "label" Named list or Boolean. Default to Named list. This can be false if the label is not allowed to scale with the node. If true it will scale using default settigns. For further customization, you can supply an object.
    \itemize{
-     \item{"enabled"}{ : Boolean. Default to false. Toggle the scaling of the label on or off. If this option is not defined, it is set to true if any of the properties in this object are defined.}
-     \item{"min"}{ : Number. Default to 14. The minimum font-size used for labels when scaling.}
-     \item{"max"}{ : Number. Default to 30. The maximum font-size used for labels when scaling.}
-     \item{"maxVisible"}{ :   Number. Default to 30. When zooming in, the font is drawn larger as well. You can limit the perceived font size using this option. If set to 30, the font will never look larger than size 30 zoomed at 100\%.}
-     \item{"drawThreshold"}{ : Number. Default to 5. When zooming out, the font will be drawn smaller. This defines a lower limit for when the font is drawn. When using font scaling, you can use this together with the maxVisible to first show labels of important nodes when zoomed out and only show the rest when zooming in.}
+     \item "enabled" Boolean. Default to false. Toggle the scaling of the label on or off. If this option is not defined, it is set to true if any of the properties in this object are defined.
+     \item "min" Number. Default to 14. The minimum font-size used for labels when scaling.
+     \item "max" Number. Default to 30. The maximum font-size used for labels when scaling.
+     \item "maxVisible"   Number. Default to 30. When zooming in, the font is drawn larger as well. You can limit the perceived font size using this option. If set to 30, the font will never look larger than size 30 zoomed at 100\%.
+     \item "drawThreshold" Number. Default to 5. When zooming out, the font will be drawn smaller. This defines a lower limit for when the font is drawn. When using font scaling, you can use this together with the maxVisible to first show labels of important nodes when zoomed out and only show the rest when zooming in.
    }
- }
- \item{"customScalingFunction"}{ : Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.}
+ 
+ \item "customScalingFunction" Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.
 }}
 
 \item{arrows}{: Named list or String. To draw an arrow with default settings a string can be supplied. For example: 'to, from,middle' or 'to;from', any combination with any seperating symbol is fine. 
-If you want to control the size of the arrowheads, you can supply an object. See \link[visNetwork]{visDocumentation}}
+If you want to control the size of the arrowheads, you can supply an object. See  \link[visNetwork]{visDocumentation}}
 
 \item{smooth}{: Boolean. Default to FALSE. Use smooth edges ?}
 
@@ -124,14 +124,14 @@ list(from = 1, to = 1) to control degree in both direction.}
 
 \item{main}{: For add a title. Character or a named list.
 \itemize{
- \item{"text"}{ : Character. Title.}
- \item{"style"}{ : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'.}
+ \item "text" Character. Title.
+ \item "style" Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'.
 }}
 
 \item{submain}{: For add a subtitle. Character or a named list.
 \itemize{
- \item{"text"}{ : Character. Subtitle.}
- \item{"style"}{ : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.}
+ \item "text" Character. Subtitle.
+ \item "style" Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.
 }}
 
 \item{preferred_palettes}{Preferred palettes to use for each column.}

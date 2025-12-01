@@ -2,7 +2,7 @@
 #'
 #' Test the following hypotheses across \link{gen_results} enrichment results.
 #' @param tests The types of tests to conduct.
-#' \itemize{
+#' \describe{
 #' \item{"within_branches"}{
 #' Are on-target cell types enriched for significant results?}
 #' \item{"across_branches"}{

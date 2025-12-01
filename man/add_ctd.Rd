@@ -55,11 +55,11 @@ If \code{y} has no key columns, this defaults to the key of \code{x}.}
 \description{
 Annotate genes in \code{results} with data from a CellTypeDataset (CTD).
 The following columns will be added:
-\itemize{
-\item{"specificity"} Cell-type specificity score.
-\item{"specificity_quantiles"} Cell-type specificity quantile.
-\item{"mean_exp"} Mean expression per cell-type.
-\item{"mean_exp_quantiles"} Mean expression quantile per cell-type.
+\describe{
+\item{"specificity"}{Cell-type specificity score.}
+\item{"specificity_quantiles"}{Cell-type specificity quantile.}
+\item{"mean_exp"}{Mean expression per cell-type.}
+\item{"mean_exp_quantiles"}{Mean expression quantile per cell-type.}
 }
 }
 \examples{

@@ -35,7 +35,7 @@ add_symptom_results <- function(results = load_example_results(),
                                 ){
   n_genes_hpo_id <- n_genes_disease_id <- n_genes_symptom <- gene_symbol <-
     celltype_symptom <- n_driver_genes_symptom <-
-    proportion_driver_genes_symptom <- NULL;
+    proportion_driver_genes_symptom <- ..merge_cols <- NULL;
 
   if("proportion_driver_genes_symptom" %in% names(results)){
     messager("Symptom results already present in input.")

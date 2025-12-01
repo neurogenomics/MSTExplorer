@@ -12,7 +12,7 @@ ggnetwork_plot_full(
   q_threshold = 5e-04,
   effect_threshold = 1,
   columns = HPOExplorer::list_columns(),
-  colour_var = "effect",
+  colour_var = "estimate",
   size_var = "ontLvl_relative",
   add_ont_lvl_absolute = TRUE,
   add_ont_lvl_relative = TRUE,

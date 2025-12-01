@@ -85,7 +85,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
                                   cores=NULL){
   requireNamespace("ggplot2")
   hpo_id <- ancestor_name_original <- ancestor_name <-
-    sig_phenotypes <- phenotypes_per_ancestor <- NULL;
+    sig_phenotypes <- phenotypes_per_ancestor <- cl_name <- prop_test.q <- NULL;
 
   results <- map_celltype(results)
   if(!"sig_phenotypes" %in% names(results)){
@@ -251,7 +251,7 @@ plot_bar_dendro_facets <- function(results = load_example_results(),
   #### Add facets ####
   if(!is.null(cols)){
     ggbars <- ggbars +
-      ggplot2::facet_grid(rows = facets,
+      ggplot2::facet_grid(rows = ggplot2::vars(!!facets),
                           cols = cols,
                           scales = scales,
                           labeller = construct_labeller(dat=dat,

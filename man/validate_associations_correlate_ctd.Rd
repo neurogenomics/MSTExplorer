@@ -13,6 +13,12 @@ validate_associations_correlate_ctd(
   celltype_var = "cl_name",
   q_threshold = 0.05,
   downsample = NULL,
+  add_density = TRUE,
+  marginal = FALSE,
+  rasterize_points = TRUE,
+  dpi = 100,
+  point.args = list(alpha = 0.5),
+  stats_idx = c(1, 3, 4, 7),
   ...
 )
 }
@@ -40,6 +46,21 @@ that contains the cell type variable to compare across.}
 \item{q_threshold}{The q value threshold to subset the \code{results} by.}
 
 \item{downsample}{Downsample the data to this many points when plotting.}
+
+\item{add_density}{Add 2D density plots to the scatter plots.}
+
+\item{marginal}{Decides whether marginal distributions will be plotted on
+axes using \code{{ggside}} functions. The default is \code{TRUE}. The package
+\code{{ggside}} must already be installed by the user.}
+
+\item{rasterize_points}{Whether to rasterize the points in the scatter plots.}
+
+\item{dpi}{Resolution of image after rasterization.}
+
+\item{point.args}{A list of additional aesthetic arguments to be passed to
+the \code{\link[ggplot2:geom_point]{ggplot2::geom_point()}}.}
+
+\item{stats_idx}{Indices of statistics to keep in subtitle}
 
 \item{...}{Additional arguments passed to \code{plot_density_cor}.}
 }

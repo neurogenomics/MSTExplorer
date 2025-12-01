@@ -37,7 +37,8 @@ plot_severity_vs_nphenotypes <- function(results,
                                          ...){
   requireNamespace("ggstatsplot")
   requireNamespace("ggrepel")
-  severity_score_gpt <- hpo_id <- phenotypes_per_celltype <- .I <- NULL;
+  severity_score_gpt <- hpo_id <- phenotypes_per_celltype <- .I <- xy_mean <-
+    cl_name <- NULL;
 
   ## Merge and annotate results
   severity_vs_npheno <- merge(gpt_annot$annot_weighted,
