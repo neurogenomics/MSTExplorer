@@ -20,7 +20,7 @@ relationships using the Cell Ontology (CL)."><!-- mathjax --><script src="https:
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -90,8 +90,7 @@ relationships using the Cell Ontology (CL).</p>
 <span>  show_plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  save_path <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  height <span class="op">=</span> <span class="fl">16</span>,</span>
-<span>  width <span class="op">=</span> <span class="fl">13</span>,</span>
-<span>  <span class="va">...</span></span>
+<span>  width <span class="op">=</span> <span class="fl">13</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -189,39 +188,6 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 <dt id="arg-width">width<a class="anchor" aria-label="anchor" href="#arg-width"></a></dt>
 <dd><p>Width of the saved plot.</p></dd>
 
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Arguments passed on to <code><a href="https://rdrr.io/pkg/EWCE/man/ewce_plot.html" class="external-link">EWCE::ewce_plot</a></code></p><dl><dt><code>total_res</code></dt>
-<dd><p>Results data.frame generated using
-<a href="https://rdrr.io/pkg/EWCE/man/bootstrap_enrichment_test.html" class="external-link">bootstrap_enrichment_test</a> or
-<a href="https://rdrr.io/pkg/EWCE/man/ewce_expression_data.html" class="external-link">ewce_expression_data</a> functions.
-Multiple results tables can be
-merged into one results table, as long as the 'list' column is set to
-distinguish them.
-Multiple testing correction is then applied across all merged results.</p></dd>
-
-    <dt><code>mtc_method</code></dt>
-<dd><p>Method to be used for multiple testing correction.
-Argument is passed to <a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">p.adjust</a> (DEFAULT: "bonferroni).</p></dd>
-
-    <dt><code>ctd</code></dt>
-<dd><p>CellTypeDataset object.
-Should be provided so that the dendrogram can be taken from it
-and added to plots.</p></dd>
-
-    <dt><code>annotLevel</code></dt>
-<dd><p>An integer indicating which level of <code>ctd</code> to
-analyse (<em>Default: 1</em>).</p></dd>
-
-    <dt><code>make_dendro</code></dt>
-<dd><p>Add a dendrogram (requires <code>ctd</code>).</p></dd>
-
-    <dt><code>verbose</code></dt>
-<dd><p>Print messages.</p></dd>
-
-
-</dl></dd>
-
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -271,7 +237,6 @@ analyse (<em>Default: 1</em>).</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 2,206,994 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Cell type columns already present. Skipping mapping.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Running tests: across_branches_per_celltype</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>A shallow copy of this data.table was taken so that := can add or remove 1 columns by reference. At an earlier point, this data.table was copied by R (or was created manually using structure() or similar). Avoid names&lt;- and attr&lt;- which in R currently (and oddly) may copy the whole data.table. Use set* syntax instead to avoid copying: ?set, ?setnames and ?setattr. It's also not unusual for data.table-agnostic packages to produce tables affected by this issue. If this message doesn't help, please report your use case to the data.table issue tracker so the root cause can be fixed or this message improved.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">x</span> is already present.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding another scale for <span style="color: #00BB00;">x</span>, which will replace the existing scale.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Scale for <span style="color: #00BB00;">y</span> is already present.</span>
@@ -297,6 +262,10 @@ analyse (<em>Default: 1</em>).</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - pct_max_mean: 39.9</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - pct_max_sd: 17.66</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - enrichment_mean: 4.75</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Arguments in `...` must be used.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Problematic argument:</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> na.rm = TRUE</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Did you misspell an argument name?</span>
 <span class="r-plt img"><img src="plot_bar_dendro-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -312,7 +281,7 @@ analyse (<em>Default: 1</em>).</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

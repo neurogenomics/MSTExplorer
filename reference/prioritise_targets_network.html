@@ -23,7 +23,7 @@ examples of each layout.'><!-- mathjax --><script src="https://cdnjs.cloudflare.
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -183,33 +183,32 @@ ancestor_name –&gt; Phenotype –&gt; CellType –&gt; gene_symbol</p></dd>
 
 
 <dt id="arg-forceatlas-based">forceAtlas2Based<a class="anchor" aria-label="anchor" href="#arg-forceatlas-based"></a></dt>
-<dd><p>named list of options</p><ul><li><p>"theta" : Number. Default to 0.5. This parameter determines the boundary between consolidated long range forces and individual short range forces. To oversimplify higher values are faster but generate more errors, lower values are slower but with less errors.</p></li>
-<li><p>"gravitationalConstant" : Number. Default to -50. Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).</p></li>
-<li><p>"centralGravity" : Number. Default to 0.01. There is a central gravity attractor to pull the entire network back to the center.</p></li>
-<li><p>"springLength" : Number. Default to 100. The edges are modelled as springs. This springLength here is the the rest length of the spring.</p></li>
-<li><p>"springConstant" : Number. Default to 0.08. This is how 'sturdy' the springs are. Higher values mean stronger springs.</p></li>
-<li><p>"damping" : Number. Default to 0.4. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.</p></li>
-<li><p>"avoidOverlap" : Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.</p></li>
+<dd><p>named list of options</p><ul><li><p>"theta" Number. Default to 0.5. This parameter determines the boundary between consolidated long range forces and individual short range forces. To oversimplify higher values are faster but generate more errors, lower values are slower but with less errors.</p></li>
+<li><p>"gravitationalConstant" Number. Default to -50. Gravity attracts. We like repulsion. So the value is negative. If you want the repulsion to be stronger, decrease the value (so -10000, -50000).</p></li>
+<li><p>"centralGravity" Number. Default to 0.01. There is a central gravity attractor to pull the entire network back to the center.</p></li>
+<li><p>"springLength" Number. Default to 100. The edges are modelled as springs. This springLength here is the the rest length of the spring.</p></li>
+<li><p>"springConstant" Number. Default to 0.08. This is how 'sturdy' the springs are. Higher values mean stronger springs.</p></li>
+<li><p>"damping" Number. Default to 0.4. Accepted range: [0 .. 1]. The damping factor is how much of the velocity from the previous physics simulation iteration carries over to the next iteration.</p></li>
+<li><p>"avoidOverlap" Number. Default to 0. Accepted range: [0 .. 1]. When larger than 0, the size of the node is taken into account. The distance will be calculated from the radius of the encompassing circle of the node for both the gravity model. Value 1 is maximum overlap avoidance.</p></li>
 </ul></dd>
 
 
 <dt id="arg-scaling">scaling<a class="anchor" aria-label="anchor" href="#arg-scaling"></a></dt>
-<dd><p>: Named list.  If the value option is specified, the size of the nodes will be scaled according to the properties in this object.</p><ul><li><p>"min" :  Number. Default to 10. If nodes have a value, their sizes are determined by the value, the scaling function and the min max values.</p></li>
-<li><p>"max" : Number. Default to 30. This is the maximum allowed size when the nodes are scaled using the value option.</p></li>
-<li><p>"label" : Named list or Boolean. Default to Named list. This can be false if the label is not allowed to scale with the node. If true it will scale using default settigns. For further customization, you can supply an object.
-   </p><ul><li><p>"enabled" : Boolean. Default to false. Toggle the scaling of the label on or off. If this option is not defined, it is set to true if any of the properties in this object are defined.</p></li>
-<li><p>"min" : Number. Default to 14. The minimum font-size used for labels when scaling.</p></li>
-<li><p>"max" : Number. Default to 30. The maximum font-size used for labels when scaling.</p></li>
-<li><p>"maxVisible" :   Number. Default to 30. When zooming in, the font is drawn larger as well. You can limit the perceived font size using this option. If set to 30, the font will never look larger than size 30 zoomed at 100%.</p></li>
-<li><p>"drawThreshold" : Number. Default to 5. When zooming out, the font will be drawn smaller. This defines a lower limit for when the font is drawn. When using font scaling, you can use this together with the maxVisible to first show labels of important nodes when zoomed out and only show the rest when zooming in.</p></li>
+<dd><p>: Named list.  If the value option is specified, the size of the nodes will be scaled according to the properties in this object.</p><ul><li><p>"min"  Number. Default to 10. If nodes have a value, their sizes are determined by the value, the scaling function and the min max values.</p></li>
+<li><p>"max" Number. Default to 30. This is the maximum allowed size when the nodes are scaled using the value option.</p></li>
+<li><p>"label" Named list or Boolean. Default to Named list. This can be false if the label is not allowed to scale with the node. If true it will scale using default settigns. For further customization, you can supply an object.</p><ul><li><p>"enabled" Boolean. Default to false. Toggle the scaling of the label on or off. If this option is not defined, it is set to true if any of the properties in this object are defined.</p></li>
+<li><p>"min" Number. Default to 14. The minimum font-size used for labels when scaling.</p></li>
+<li><p>"max" Number. Default to 30. The maximum font-size used for labels when scaling.</p></li>
+<li><p>"maxVisible"   Number. Default to 30. When zooming in, the font is drawn larger as well. You can limit the perceived font size using this option. If set to 30, the font will never look larger than size 30 zoomed at 100%.</p></li>
+<li><p>"drawThreshold" Number. Default to 5. When zooming out, the font will be drawn smaller. This defines a lower limit for when the font is drawn. When using font scaling, you can use this together with the maxVisible to first show labels of important nodes when zoomed out and only show the rest when zooming in.</p></li>
 </ul></li>
-<li><p>"customScalingFunction" : Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.</p></li>
+<li><p>"customScalingFunction" Function. If nodes have value fields, this function determines how the size of the nodes are scaled based on their values.</p></li>
 </ul></dd>
 
 
 <dt id="arg-arrows">arrows<a class="anchor" aria-label="anchor" href="#arg-arrows"></a></dt>
 <dd><p>: Named list or String. To draw an arrow with default settings a string can be supplied. For example: 'to, from,middle' or 'to;from', any combination with any seperating symbol is fine.
-If you want to control the size of the arrowheads, you can supply an object. See <a href="https://rdrr.io/pkg/visNetwork/man/visDocumentation.html" class="external-link">visDocumentation</a></p></dd>
+If you want to control the size of the arrowheads, you can supply an object. See  <a href="https://rdrr.io/pkg/visNetwork/man/visDocumentation.html" class="external-link">visDocumentation</a></p></dd>
 
 
 <dt id="arg-smooth">smooth<a class="anchor" aria-label="anchor" href="#arg-smooth"></a></dt>
@@ -236,14 +235,14 @@ list(from = 1, to = 1) to control degree in both direction.</p></dd>
 
 
 <dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>
-<dd><p>: For add a title. Character or a named list.</p><ul><li><p>"text" : Character. Title.</p></li>
-<li><p>"style" : Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'.</p></li>
+<dd><p>: For add a title. Character or a named list.</p><ul><li><p>"text" Character. Title.</p></li>
+<li><p>"style" Optional. Character. HTML style of title. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-weight:bold;font-size:20px;text-align:center;'.</p></li>
 </ul></dd>
 
 
 <dt id="arg-submain">submain<a class="anchor" aria-label="anchor" href="#arg-submain"></a></dt>
-<dd><p>: For add a subtitle. Character or a named list.</p><ul><li><p>"text" : Character. Subtitle.</p></li>
-<li><p>"style" : Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.</p></li>
+<dd><p>: For add a subtitle. Character or a named list.</p><ul><li><p>"text" Character. Subtitle.</p></li>
+<li><p>"style" Optional. Character. HTML style of submain. Default to 'font-family:Georgia, Times New Roman, Times, serif;font-size:12px;text-align:center;'.</p></li>
 </ul></dd>
 
 
@@ -292,7 +291,7 @@ and the the graph used to make the plot.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ‘title’ column already exists. Skipping hoverbox creation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Using palette: kovesi.linear_bmy_10_95_c78</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Can't find 'name' in node data.frame</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot --&gt; /tmp/RtmpsW0tFt/file100e36f6644f_prioritise_targets_network.html</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot --&gt; /tmp/RtmpVBwwhm/file6aff2eed5eeb_prioritise_targets_network.html</span>
 </code></pre></div>
     </div>
   </div>
@@ -307,7 +306,7 @@ and the the graph used to make the plot.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

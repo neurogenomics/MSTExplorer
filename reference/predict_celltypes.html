@@ -18,7 +18,7 @@ varying degree of prior knowledge."><!-- mathjax --><script src="https://cdnjs.c
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -173,7 +173,7 @@ and merged together with <a href="merge_results.html">merge_results</a></p></dd>
 
 <dt id="arg-plot-margin">plot.margin<a class="anchor" aria-label="anchor" href="#arg-plot-margin"></a></dt>
 <dd><p>margin around entire plot (<code>unit</code> with the sizes of
-the top, right, bottom, and left margins)</p></dd>
+the top, right, bottom, and left margins); inherits from <code>margin</code>.</p></dd>
 
 
 <dt id="arg-show-plot">show_plot<a class="anchor" aria-label="anchor" href="#arg-show-plot"></a></dt>
@@ -218,12 +218,12 @@ Only applied when <code>genes_include</code> or <code>genes_exclude</code> is pr
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding logFC column.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding genes and disease IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Mapping cell types to cell ontology terms.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding stage information.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman.rds</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_HumanCellLandscape.rds</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Annotating gene-disease associations with Evidence Score</span>
@@ -232,8 +232,19 @@ Only applied when <code>genes_include</code> or <code>genes_exclude</code> is pr
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Evidence scores for: </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - 11050 diseases </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>  - 5533 genes</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2025-08-08</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: 2025-12-01</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to min; returning Inf</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>A shallow copy of this data.table was taken so that := can add or remove 1 columns by reference. At an earlier point, this data.table was copied by R (or was created manually using structure() or similar). Avoid names&lt;- and attr&lt;- which in R currently (and oddly) may copy the whole data.table. Use set* syntax instead to avoid copying: ?set, ?setnames and ?setattr. It's also not unusual for data.table-agnostic packages to produce tables affected by this issue. If this message doesn't help, please report your use case to the data.table issue tracker so the root cause can be fixed or this message improved.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_hline()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_hline()`).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Removed 1 row containing missing values or values outside the scale range</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> (`geom_hline()`).</span>
 <span class="r-plt img"><img src="predict_celltypes-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -249,7 +260,7 @@ Only applied when <code>genes_include</code> or <code>genes_exclude</code> is pr
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

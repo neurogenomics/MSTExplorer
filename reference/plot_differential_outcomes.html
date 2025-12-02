@@ -18,7 +18,7 @@ in different cell types via particular phenotypes."><!-- mathjax --><script src=
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -270,7 +270,11 @@ the <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" clas
 
     <dt><code>boxplot.args</code></dt>
 <dd><p>A list of additional aesthetic arguments passed on to
-<code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">ggplot2::geom_boxplot()</a></code>.</p></dd>
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">ggplot2::geom_boxplot()</a></code>. By default, the whiskers extend to 1.5 times
+the interquartile range (IQR) from the box (Tukey-style). To customize
+whisker length, you can use the <code>coef</code> parameter, e.g.,
+<code>boxplot.args = list(coef = 3)</code> for whiskers extending to 3 * IQR, or
+<code>boxplot.args = list(coef = 0)</code> to show only the range of the data.</p></dd>
 
     <dt><code>violin.args</code></dt>
 <dd><p>A list of additional aesthetic arguments to be passed to
@@ -323,19 +327,19 @@ be entered as a <code>{ggplot2}</code> function or a list of <code>{ggplot2}</co
 <span class="r-in"><span>                               ctd_list<span class="op">=</span><span class="va">ctd_list</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding symptom-level results.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Subsetting results by q_threshold and effect.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 19,929 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding genes and disease IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-in"><span><span class="co">## Reduce the number of diseases for example purposes</span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="va">results</span><span class="op">[</span><span class="va">disease_id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">disease_id</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span><span class="op">]</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="co">#### Multiple phenotypes per disease #####</span></span></span>
 <span class="r-in"><span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/add_.html" class="external-link">add_gpt_annotations</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to ids.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 151 phenotypes do not have matching HPO IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading in GPT annotations for 16,982 phenotypes.</span>
 <span class="r-in"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu">plot_differential_outcomes</span><span class="op">(</span><span class="va">results</span>,</span></span>
@@ -357,7 +361,7 @@ be entered as a <code>{ggplot2}</code> function or a list of <code>{ggplot2}</co
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

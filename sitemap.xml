@@ -7,6 +7,7 @@
 <url><loc>/index.html</loc></url>
 <url><loc>/news/index.html</loc></url>
 <url><loc>/reference/add_ctd.html</loc></url>
+<url><loc>/reference/add_driver_genes.html</loc></url>
 <url><loc>/reference/add_logfc.html</loc></url>
 <url><loc>/reference/add_symptom_results.html</loc></url>
 <url><loc>/reference/agg_results.html</loc></url>
@@ -16,11 +17,13 @@
 <url><loc>/reference/ewce_para.html</loc></url>
 <url><loc>/reference/example_targets.html</loc></url>
 <url><loc>/reference/extract_help.html</loc></url>
+<url><loc>/reference/filter_ggstatsplot_subtitle.html</loc></url>
 <url><loc>/reference/gen_overlap.html</loc></url>
 <url><loc>/reference/gen_results.html</loc></url>
 <url><loc>/reference/get_bg.html</loc></url>
 <url><loc>/reference/get_cl.html</loc></url>
 <url><loc>/reference/get_data.html</loc></url>
+<url><loc>/reference/get_replication_rate.html</loc></url>
 <url><loc>/reference/get_target_branches.html</loc></url>
 <url><loc>/reference/get_unfinished_list_names.html</loc></url>
 <url><loc>/reference/get_valid_gene_lists.html</loc></url>
@@ -54,6 +57,7 @@
 <url><loc>/reference/prioritise_targets_multiheatmap.html</loc></url>
 <url><loc>/reference/prioritise_targets_network.html</loc></url>
 <url><loc>/reference/run_congenital_enrichment.html</loc></url>
+<url><loc>/reference/run_permutation_test_cor.html</loc></url>
 <url><loc>/reference/run_phenomix.html</loc></url>
 <url><loc>/reference/run_prop_tests.html</loc></url>
 <url><loc>/reference/stopper.html</loc></url>

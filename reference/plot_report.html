@@ -18,7 +18,7 @@ prioritise_targets."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/a
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -111,7 +111,8 @@ and merged together with <a href="merge_results.html">merge_results</a></p></dd>
 
 
 <dt id="arg-label-size">label.size<a class="anchor" aria-label="anchor" href="#arg-label-size"></a></dt>
-<dd><p>Size of label border, in mm.</p></dd>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated" class="external-link"><img src="figures/lifecycle-deprecated.svg" alt="[Deprecated]"></a> Replaced by the
+<code>linewidth</code> aesthetic. Size of label border, in mm.</p></dd>
 
 
 <dt id="arg-show-plot">show_plot<a class="anchor" aria-label="anchor" href="#arg-show-plot"></a></dt>
@@ -162,7 +163,8 @@ arguments are expressed: <code>"in"</code>, <code>"cm"</code>, <code>"mm"</code>
 
     <dt><code>dpi</code></dt>
 <dd><p>Plot resolution. Also accepts a string input: "retina" (320),
-"print" (300), or "screen" (72). Applies only to raster output types.</p></dd>
+"print" (300), or "screen" (72). Only applies when converting pixel units,
+as is typical for raster output types.</p></dd>
 
     <dt><code>limitsize</code></dt>
 <dd><p>When <code>TRUE</code> (the default), <code>ggsave()</code> will not
@@ -194,14 +196,13 @@ a prompt will appear asking to create a new directory when necessary.</p></dd>
 <span class="r-in"><span><span class="va">rep_dt</span> <span class="op">&lt;-</span> <span class="va">example_targets</span><span class="op">$</span><span class="va">report</span></span></span>
 <span class="r-in"><span><span class="va">gp</span> <span class="op">&lt;-</span> <span class="fu">plot_report</span><span class="op">(</span>rep_dt<span class="op">=</span><span class="va">rep_dt</span>, results<span class="op">=</span><span class="va">results</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> plot_report:: Preparing data.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>column not removed because not found: [Rows_diff]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype.hpoa</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> plot_report:: Preparing plot.</span>
 <span class="r-plt img"><img src="plot_report-1.png" alt="" width="700" height="433"></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot ==&gt; /tmp/RtmpsW0tFt/file100e7455410d_plot_report.pdf</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving plot ==&gt; /tmp/RtmpVBwwhm/file6aff6f0af1ed_plot_report.pdf</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving 6.67 x 6.67 in image</span>
 </code></pre></div>
     </div>
@@ -217,7 +218,7 @@ a prompt will appear asking to create a new directory when necessary.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

@@ -19,7 +19,7 @@ gene setvs. celltype gene set
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -165,15 +165,15 @@ It also only requires &gt;=1 gene per disease/phenotype, as opposed to &gt;=4.</
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">gene_data</span> <span class="op">&lt;-</span> <span class="fu">HPOExplorer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/HPOExplorer/man/load_phenotype_to_genes.html" class="external-link">load_phenotype_to_genes</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-in"><span><span class="va">list_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">gene_data</span><span class="op">$</span><span class="va">disease_id</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">overlap</span> <span class="op">&lt;-</span> <span class="fu">gen_overlap</span><span class="op">(</span>gene_data <span class="op">=</span> <span class="va">gene_data</span>,</span></span>
 <span class="r-in"><span>                       list_names <span class="op">=</span> <span class="va">list_names</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman_example.rds</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Splitting data.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.979416370391846</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 1.15629386901855</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving results ==&gt; /tmp/RtmpsW0tFt/gen_overlap.rds</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving results ==&gt; /tmp/RtmpVBwwhm/gen_overlap.rds</span>
 </code></pre></div>
     </div>
   </div>
@@ -188,7 +188,7 @@ It also only requires &gt;=1 gene per disease/phenotype, as opposed to &gt;=4.</
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

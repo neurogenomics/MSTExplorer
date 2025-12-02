@@ -18,7 +18,7 @@ association results."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -106,10 +106,9 @@ or a character vector, <code>c("a", "b")</code>.</p></dd>
 
 <dt id="arg-binwidth">binwidth<a class="anchor" aria-label="anchor" href="#arg-binwidth"></a></dt>
 <dd><p>The width of the bins. Can be specified as a numeric value
-or as a function that calculates width from unscaled x. Here, "unscaled x"
-refers to the original x values in the data, before application of any
-scale transformation. When specifying a function along with a grouping
-structure, the function will be called once per group.
+or as a function that takes x after scale transformation as input and
+returns a single numeric value. When specifying a function along with a
+grouping structure, the function will be called once per group.
 The default is to use the number of bins in <code>bins</code>,
 covering the range of the data. You should always override
 this value, exploring multiple widths to find the best to illustrate the
@@ -208,7 +207,7 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 99125:          2   0.3814374        1.376419</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 99126:          2   0.3600692        1.344689</span>
 <span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_results_distributions</span><span class="op">(</span><span class="va">results</span>, x_var<span class="op">=</span><span class="st">"estimate_scaled"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> `stat_bin()` using `bins = 30`. Pick better value `binwidth`.</span>
 <span class="r-plt img"><img src="plot_results_distributions-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -224,7 +223,7 @@ Set to <code>NULL</code> to not save the plot.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

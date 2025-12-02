@@ -19,7 +19,7 @@ produced the results stored in load_example_results."><!-- mathjax --><script sr
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -78,16 +78,21 @@ produced the results stored in <a href="load_example_results.html">load_example_
 
 
 <dl><dt id="arg-name">name<a class="anchor" aria-label="anchor" href="#arg-name"></a></dt>
-<dd><ul><li><p>&lt;...&gt;Any ontology name from <a href="https://rdrr.io/pkg/KGExplorer/man/get_.html" class="external-link">get_ols_options</a></p></li>
-<li><p>"mondo"
-Import the <a href="https://mondo.monarchinitiative.org/" class="external-link">Mondo</a> ontology.
+<dd><dl><dt>&lt;...&gt;</dt>
+<dd><p>Any ontology name from <a href="https://rdrr.io/pkg/KGExplorer/man/get_.html" class="external-link">get_ols_options</a></p></dd>
+
+<dt>"mondo"</dt>
+<dd><p>Import the <a href="https://mondo.monarchinitiative.org/" class="external-link">Mondo</a> ontology.
 <a href="https://github.com/monarch-initiative/mondo/release" class="external-link">
-GitHub.</a>.</p></li>
-<li><p>"hpo"
-Import the <a href="https://hpo.jax.org/app/" class="external-link">Human Phenotype Ontology</a>.
+GitHub.</a></p></dd>
+.
+<dt>"hpo"</dt>
+<dd><p>Import the <a href="https://hpo.jax.org/app/" class="external-link">Human Phenotype Ontology</a>.
 <a href="https://github.com/obophenotype/human-phenotype-ontology/release" class="external-link">
-GitHub.</a></p></li>
-</ul></dd>
+GitHub.</a></p></dd>
+
+
+</dl></dd>
 
 
 <dt id="arg-tag">tag<a class="anchor" aria-label="anchor" href="#arg-tag"></a></dt>
@@ -111,9 +116,14 @@ Will get the closest ancestor to this level if none have this exact level.</p></
 <dd><p>If TRUE, force a new download.</p></dd>
 
     <dt><code>method</code></dt>
-<dd><p>Compute ontology levels using:</p><ul><li><p>"height" (default) <a href="https://rdrr.io/pkg/simona/man/dag_depth.html" class="external-link">dag_height</a>.</p></li>
-<li><p>"depth" <a href="https://rdrr.io/pkg/simona/man/dag_depth.html" class="external-link">dag_depth</a>.</p></li>
-</ul></dd>
+<dd><p>Compute ontology levels using:</p><dl><dt>"height" (default)</dt>
+<dd><p><a href="https://rdrr.io/pkg/simona/man/dag_depth.html" class="external-link">dag_height</a>.</p></dd>
+
+ <dt>"depth"</dt>
+<dd><p><a href="https://rdrr.io/pkg/simona/man/dag_depth.html" class="external-link">dag_depth</a>.</p></dd>
+
+
+</dl></dd>
 
     <dt><code>filetype</code></dt>
 <dd><p>File type to search for.</p></dd>
@@ -161,7 +171,7 @@ If <code>NULL</code>, automatically tries to choose the correct function.</p></d
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

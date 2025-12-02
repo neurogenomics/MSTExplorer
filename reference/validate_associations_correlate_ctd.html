@@ -18,7 +18,7 @@ between results from different CellTypeDatasets."><!-- mathjax --><script src="h
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -77,6 +77,12 @@ between results from different CellTypeDatasets.</p>
 <span>  celltype_var <span class="op">=</span> <span class="st">"cl_name"</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  downsample <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  add_density <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  marginal <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  rasterize_points <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dpi <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  point.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>  stats_idx <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">7</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -125,6 +131,33 @@ that contains the cell type variable to compare across.</p></dd>
 <dd><p>Downsample the data to this many points when plotting.</p></dd>
 
 
+<dt id="arg-add-density">add_density<a class="anchor" aria-label="anchor" href="#arg-add-density"></a></dt>
+<dd><p>Add 2D density plots to the scatter plots.</p></dd>
+
+
+<dt id="arg-marginal">marginal<a class="anchor" aria-label="anchor" href="#arg-marginal"></a></dt>
+<dd><p>Decides whether marginal distributions will be plotted on
+axes using <code>{ggside}</code> functions. The default is <code>TRUE</code>. The package
+<code>{ggside}</code> must already be installed by the user.</p></dd>
+
+
+<dt id="arg-rasterize-points">rasterize_points<a class="anchor" aria-label="anchor" href="#arg-rasterize-points"></a></dt>
+<dd><p>Whether to rasterize the points in the scatter plots.</p></dd>
+
+
+<dt id="arg-dpi">dpi<a class="anchor" aria-label="anchor" href="#arg-dpi"></a></dt>
+<dd><p>Resolution of image after rasterization.</p></dd>
+
+
+<dt id="arg-point-args">point.args<a class="anchor" aria-label="anchor" href="#arg-point-args"></a></dt>
+<dd><p>A list of additional aesthetic arguments to be passed to
+the <code><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">ggplot2::geom_point()</a></code>.</p></dd>
+
+
+<dt id="arg-stats-idx">stats_idx<a class="anchor" aria-label="anchor" href="#arg-stats-idx"></a></dt>
+<dd><p>Indices of statistics to keep in subtitle</p></dd>
+
+
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Additional arguments passed to <code>plot_density_cor</code>.</p></dd>
 
@@ -145,13 +178,23 @@ that contains the cell type variable to compare across.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 3 comparable celltypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 4 comparable phenotypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Generating plots.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Force new. Removing existing ancestor columns.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor', but this column does not exist to remove</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor_name', but this column does not exist to remove</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 18,082 IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 344 ancestors found at level 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 804 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Force new. Removing existing ancestor columns.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor', but this column does not exist to remove</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor_name', but this column does not exist to remove</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 18,082 IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 344 ancestors found at level 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 4 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering statistics.</span>
 <span class="r-in"><span><span class="co">#### Within CTD: across developmental stages ####</span></span></span>
@@ -170,13 +213,23 @@ that contains the cell type variable to compare across.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 9 comparable celltypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 14 comparable phenotypes @FDR&lt;0.05.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Generating plots.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Force new. Removing existing ancestor columns.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor', but this column does not exist to remove</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor_name', but this column does not exist to remove</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 18,082 IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 344 ancestors found at level 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 3,062 associations remain after filtering.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Force new. Removing existing ancestor columns.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor', but this column does not exist to remove</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tried to assign NULL to column 'ancestor_name', but this column does not exist to remove</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding level-3 ancestor to each HPO ID.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding ancestor metadata.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Ancestor metadata already present. Use force_new=TRUE to overwrite.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Getting absolute ontology level for 18,082 IDs.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 344 ancestors found at level 3</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Translating ontology terms to names.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 17 associations remain after filtering.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Gathering statistics.</span>
 </code></pre></div>
@@ -193,7 +246,7 @@ that contains the cell type variable to compare across.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>

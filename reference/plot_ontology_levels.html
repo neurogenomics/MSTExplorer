@@ -18,7 +18,7 @@ several other metrics."><!-- mathjax --><script src="https://cdnjs.cloudflare.co
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MSTExplorer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.10</span>
       </span>
     </div>
 
@@ -74,13 +74,15 @@ several other metrics.</p>
 <span>  ctd_list <span class="op">=</span> <span class="fu"><a href="load_example_CTD.html">load_example_ctd</a></span><span class="op">(</span>file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"ctd_"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">ctd</span><span class="op">)</span>, <span class="st">".rds"</span><span class="op">)</span>,</span>
 <span>    multi_dataset <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  x_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"genes"</span>, <span class="st">"cell types"</span>, <span class="st">"estimate"</span>, <span class="st">"mean_specificity"</span><span class="op">)</span>,</span>
-<span>  y_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"info_content"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x_vars</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  y_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"info_content_binned"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x_vars</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  log_vars <span class="op">=</span> <span class="va">x_vars</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"statistic"</span>, <span class="st">"F"</span>, <span class="st">"ges"</span>, <span class="st">"p"</span>, <span class="st">"effect"</span><span class="op">)</span>,</span>
 <span>  sig_vars <span class="op">=</span> <span class="va">x_vars</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"estimate"</span>, <span class="st">"statistic"</span>, <span class="st">"F"</span>, <span class="st">"ges"</span>, <span class="st">"p"</span>, <span class="st">"effect"</span>,</span>
 <span>    <span class="st">"cell types"</span>, <span class="st">"mean_specificity"</span><span class="op">)</span>,</span>
 <span>  neg_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"log2(p)"</span>, <span class="st">"log2(FDR)"</span><span class="op">)</span>,</span>
 <span>  group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hpo_id"</span>, <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">y_vars</span><span class="op">)</span>, <span class="st">"ctd"</span><span class="op">)</span>,</span>
 <span>  geom <span class="op">=</span> <span class="st">"ggscatterstats"</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"parametric"</span>,</span>
+<span>  stats_idx <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  q_threshold <span class="op">=</span> <span class="fl">0.05</span>,</span>
 <span>  min_value <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  label.x.npc <span class="op">=</span> <span class="fl">0.05</span>,</span>
@@ -94,7 +96,9 @@ several other metrics.</p>
 <span>  height <span class="op">=</span> <span class="fl">7</span>,</span>
 <span>  width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">x_vars</span><span class="op">)</span> <span class="op">*</span> <span class="fl">5.75</span>,</span>
 <span>  smooth.line.args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  return_data <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  return_data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  rasterize_points <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  dpi <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -157,6 +161,18 @@ give the geom as <code>"point"</code>.</p></li>
 <li><p>For more information and other ways to specify the geom, see the
 <a href="https://ggplot2.tidyverse.org/reference/layer_geoms.html" class="external-link">layer geom</a> documentation.</p></li>
 </ul></dd>
+
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p>A character specifying the type of statistical approach:</p><ul><li><p><code>"parametric"</code></p></li>
+<li><p><code>"nonparametric"</code></p></li>
+<li><p><code>"robust"</code></p></li>
+<li><p><code>"bayes"</code></p></li>
+</ul><p>You can specify just the initial letter.</p></dd>
+
+
+<dt id="arg-stats-idx">stats_idx<a class="anchor" aria-label="anchor" href="#arg-stats-idx"></a></dt>
+<dd><p>Indices of statistics to keep in subtitle</p></dd>
 
 
 <dt id="arg-q-threshold">q_threshold<a class="anchor" aria-label="anchor" href="#arg-q-threshold"></a></dt>
@@ -225,6 +241,14 @@ to <code>geom_smooth</code> geom used to display the regression line.</p></dd>
 <dt id="arg-return-data">return_data<a class="anchor" aria-label="anchor" href="#arg-return-data"></a></dt>
 <dd><p>Return the full long data used in the plots.</p></dd>
 
+
+<dt id="arg-rasterize-points">rasterize_points<a class="anchor" aria-label="anchor" href="#arg-rasterize-points"></a></dt>
+<dd><p>Whether to rasterize the points in the scatter plots.</p></dd>
+
+
+<dt id="arg-dpi">dpi<a class="anchor" aria-label="anchor" href="#arg-dpi"></a></dt>
+<dd><p>Resolution of image after rasterization.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
@@ -235,20 +259,22 @@ to <code>geom_smooth</code> geom used to display the regression line.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">plot_ontology_levels</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: gginnards</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required namespace: ggrastr</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding information_content scores.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Adding genes and disease IDs.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_DescartesHuman.rds</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading ctd_HumanCellLandscape.rds</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to max; returning -Inf</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to min; returning Inf</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Reading cached RDS file: phenotype_to_genes.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-05-06</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> + Version: v2025-11-24</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering q-values &lt; 0.05 : 'cell types'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering q-values &lt; 0.05 : 'estimate'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> log2 transforming x-axis: 'estimate'</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>NaNs produced</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Filtering q-values &lt; 0.05 : 'mean_specificity'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using formula = 'y ~ x'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using formula = 'y ~ x'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using formula = 'y ~ x'</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_smooth()` using formula = 'y ~ x'</span>
@@ -267,7 +293,7 @@ to <code>geom_smooth</code> geom used to display the regression line.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer></div>
