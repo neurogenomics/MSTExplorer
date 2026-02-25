@@ -14,6 +14,7 @@
 #' @inheritDotParams ggstatsplot::ggbetweenstats
 #' @export
 #' @examples
+#' \donttest{
 #' results <- load_example_results()
 #' ## Reduce the CTD list for example purposes
 #' ctd_list <- load_example_ctd("ctd_DescartesHuman.rds",
@@ -27,6 +28,7 @@
 #' p1 <- plot_differential_outcomes(results,
 #'                            facet_var = "disease_name",
 #'                            y_var = "severity_score_gpt")
+#' }
 plot_differential_outcomes <- function(results,
                                        filters = NULL,
                                        facet_var = "disease_name",
