@@ -12,6 +12,9 @@ vignette: >
 
 ```{r setup}
 library(MSTExplorer)
+
+# Set HPO version ID for reproducibility
+tag <- "v2024-02-08" 
 ```
 
 # Introduction
@@ -38,7 +41,7 @@ The MSTExplorer package requires the gene data to be in a particular format. It 
 Now we will get a dataset like this from the HPO.
 
 ```{r get_HPO_data}
-gene_data <- HPOExplorer::load_phenotype_to_genes()
+gene_data <- HPOExplorer::load_phenotype_to_genes(tag=tag)
 knitr::kable(head(gene_data))
 ```
 
@@ -168,7 +171,8 @@ So far, we've iterated over gene list grouped by phenotypes.
 But we can also do this at the level of diseases (which are composed of combinations of phenotypes).
 
 ```{r}
-gene_data <- HPOExplorer::load_phenotype_to_genes("genes_to_phenotype.txt")
+gene_data <- HPOExplorer::load_phenotype_to_genes("genes_to_phenotype.txt",
+                                                  tag = tag)
 #### Filter only to those with >=4 genes ####
 gene_counts <- gene_data[,list(genes=length(unique(gene_symbol))),
                          by="disease_id"][genes>=4]
