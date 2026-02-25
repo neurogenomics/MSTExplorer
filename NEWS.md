@@ -1,3 +1,9 @@
+# MSTExplorer 1.0.11
+
+## Bug fixes
+
+* `plot_ttd`: Add `fill=TRUE` when binding dts
+
 # MSTExplorer 1.0.10
 
 ## New features

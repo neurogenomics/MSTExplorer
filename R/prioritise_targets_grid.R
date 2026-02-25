@@ -57,7 +57,7 @@ prioritise_targets_grid <- function(top_targets,
   if(!is.null(keep_physical_malformations)){
     res_class <- res_class[physical_malformations %in% keep_physical_malformations]
   }
-  #### Filter by intersect between severity metdata and top_targets ####
+  #### Filter by intersect between severity metadata and top_targets ####
   select_phenos <- intersect(res_class$hpo_name,
                              unique(top_targets$hpo_name))
   res_class <- res_class[hpo_name %in% select_phenos]
@@ -134,14 +134,17 @@ prioritise_targets_grid <- function(top_targets,
                                    # non121_strategy="kbs",
                                    gene_output="column",
                                    method="homologene")
-    })|> data.table::rbindlist(idcol="species")
+    })|> data.table::rbindlist(idcol="species", fill = TRUE)
+
     orthology[,species:=factor(species,levels=species_list, ordered=TRUE)]
+
     dt <- merge(dat[variable=="gene_symbol"],
                 orthology,
                 by.x="value",
                 by.y="input_gene",
                 allow.cartesian=TRUE,
                 all.x=TRUE)
+
     gg <- ggplot2::ggplot(dt, ggplot2::aes(x=species, y=hpo_name,
                                            label=ortholog_gene)) +
       ggplot2::scale_x_discrete(labels=stringr::str_wrap(species_list,10),
